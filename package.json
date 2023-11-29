@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "swagger:download": "node libs/download-spec.js",
-    "swagger:generate": "openapi-generator-cli generate -g typescript-angular --type-mappings=set=Array --additional-properties=serviceSuffix=Api,serviceFileSuffix=.api,fileNaming=kebab-case,useSingleRequestParameter=true,useTags=true -i ./libs/openapi.json -o ./libs/api-client/",    
+    "swagger:generate": "openapi-generator-cli generate -g typescript-angular --type-mappings=set=Array --additional-properties=serviceSuffix=Api,serviceFileSuffix=.api,fileNaming=kebab-case,useSingleRequestParameter=true,useTags=true -i ./libs/openapi.json -o ./libs/api-client/",
     "swagger": "npm run swagger:download && npm run swagger:generate"
   },
   "private": true,
@@ -21,6 +21,10 @@
     "@angular/platform-browser": "^17.0.4",
     "@angular/platform-browser-dynamic": "^17.0.4",
     "@angular/router": "^17.0.4",
+    "@capacitor/android": "^5.5.1",
+    "@capacitor/core": "^5.5.1",
+    "@capacitor/ios": "^5.5.1",
+    "@ionic/angular": "^7.5.6",
     "@openapitools/openapi-generator-cli": "^2.7.0",
     "rxjs": "~7.8.1",
     "tslib": "^2.6.2"
@@ -29,6 +33,7 @@
     "@angular-devkit/build-angular": "^17.0.3",
     "@angular/cli": "^17.0.3",
     "@angular/compiler-cli": "^17.0.4",
+    "@capacitor/cli": "^5.5.1",
     "@types/jasmine": "~5.1.4",
     "jasmine-core": "~5.1.1",
     "karma": "~6.4.2",

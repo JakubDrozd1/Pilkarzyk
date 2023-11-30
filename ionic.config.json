@@ -1,0 +1,10 @@
+{
+  "defaultProject": "pilkarzyk",
+  "projects": {
+    "pilkarzyk": {
+      "name": "pilkarzyk",
+      "integrations": {},
+      "type": "angular"
+    }
+  }
+}

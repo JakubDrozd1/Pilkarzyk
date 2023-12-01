@@ -16,8 +16,8 @@
   height: 100%;
 }
 
-$background-color-normal: #598ddb;
-$background-color-hover: #b2eaeaed;
+$background-color-normal: var(--ion-color-primary);
+$background-color-hover: var(--ion-color-secondary);
 
 ion-tab-bar {
   background-color: $background-color-normal;
@@ -31,8 +31,7 @@ ion-tab-bar {
 
     ion-icon {
       font-size: 24px;
-      color: #fff;
-      --color-focused: #fff;
+      color: inherit;
     }
 
     &::before {
@@ -46,35 +45,31 @@ ion-tab-bar {
       transform-origin: bottom;
       transform: scaleX(0);
       transition: transform 0.4s ease-in-out;
-      color: #fff;
     }
 
     &:hover::before,
     &.tab-selected::before {
-      color: #fff;
       transform: scaleX(1);
     }
 
     &.tab-selected {
       --background: $background-color-hover;
       transform: scale(1.3);
-      color: #fff;
     }
+
     border-radius: 50px;
     opacity: 1;
-    transition: transform 0.4s ease-in-out, background-color 0.4s ease-in-out;
-    color: #fff;
+    transition: transform 0.4s ease-in-out, background-color 0.4s ease-in-out,
+      opacity 0.4s ease-in-out;
 
     &:hover {
       --background: $background-color-hover;
       transform: scale(1.3);
-      color: #fff;
     }
 
     &:not(:hover):not(.tab-selected) {
       opacity: 0.7;
       --background: $background-color-normal;
-      color: #fff;
     }
   }
 }

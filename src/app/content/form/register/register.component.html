@@ -1,0 +1,37 @@
+<div>
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+    <ion-list [inset]="true">
+      <ion-item>
+        <ion-input helperText="Wprowadź login (3-25) " errorText="Zły format loginu (3-25)" formControlName="login"
+          labelPlacement="floating" label="Login" placeholder="login"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input helperText="Wprowadź hasło (10-25)" errorText="Zły format hasła (10-25)" formControlName="password"
+          labelPlacement="floating" label="Hasło" type="password" placeholder="password"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input helperText="Wprowadź ponownie hasło" errorText="Hasło nie jest takie samo"
+          formControlName="confirmPassword" labelPlacement="floating" label="Powtórz hasło" type="password"
+          placeholder="password"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input helperText="Wprowadź imię" errorText="Imię nie może mieć cyfr" formControlName="firstName"
+          labelPlacement="floating" label="Imię" placeholder="Enter text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input helperText="Wprowadź nazwisko" errorText="Nazwisko nie może mieć cyfr" formControlName="lastName"
+          labelPlacement="floating" label="Nazwisko" placeholder="Enter text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input helperText="Wprowadź numer telefonu" errorText="Numer jest za krótki" formControlName="phoneNumber"
+          labelPlacement="floating" label="Numer telefonu" placeholder="+48 xxx-xxx-xxx" [maskito]="phoneMask"
+          [maskitoElement]="maskPredicate" type="tel"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input helperText="Wprowadź email" errorText="Zły format maila" formControlName="email"
+          labelPlacement="floating" label="Email" type="email" placeholder="email@domain.com"></ion-input>
+      </ion-item>
+    </ion-list>
+    <ion-button type="submit" expand="full">Submit</ion-button>
+  </form>
+</div>

@@ -1,7 +1,29 @@
 import { Routes } from '@angular/router';
 import { TabComponent } from './controller/tab/tab.component';
+import { AuthComponent } from './controller/auth/auth.component';
+import { LoginComponent } from './content/form/login/login.component';
+import { RegisterComponent } from './content/form/register/register.component';
 
 export const routes: Routes = [
+    {
+        path: '',
+        component: AuthComponent,
+        children: [
+            {
+                path: 'login',
+                component: LoginComponent,
+            },
+            {
+                path: 'register',
+                component: RegisterComponent,
+            },
+            {
+                path: '',
+                redirectTo: 'login',
+                pathMatch: 'full',
+            },
+        ],
+    }, 
     {
         path: '',
         component: TabComponent,
@@ -34,3 +56,56 @@ export const routes: Routes = [
         ],
     },
 ]
+
+// export const routes: Routes = [
+//     {
+//       path: '',
+//       component: AuthComponent,
+//       children: [
+//         {
+//           path: 'login',
+//           component: LoginComponent,
+//         },
+//         {
+//           path: 'register',
+//           component: RegisterComponent,
+//         },
+//         {
+//           path: '',
+//           redirectTo: 'login', // Domyślnie przekierowuj do /login
+//           pathMatch: 'full',
+//         },
+//       ],
+//     },
+//     {
+//       path: 'home',
+//       component: TabComponent,
+//       children: [
+//         {
+//           path: 'groups',
+//           loadChildren: () => import('./layout/groups-page/groups-page.module').then(m => m.GroupsPageModule),
+//         },
+//         {
+//           path: 'calendar',
+//           loadChildren: () => import('./layout/calendar-page/calendar-page.module').then(m => m.CalendarPageModule),
+//         },
+//         {
+//           path: 'profile',
+//           loadChildren: () => import('./layout/profile-page/profile-page.module').then(m => m.ProfilePageModule),
+//         },
+//         {
+//           path: 'settings',
+//           loadChildren: () => import('./layout/settings-page/settings-page.module').then(m => m.SettingsPageModule),
+//         },
+//         {
+//           path: '',
+//           redirectTo: 'groups', // Domyślnie przekierowuj do /home/groups
+//           pathMatch: 'full',
+//         },
+//       ],
+//     },
+//     {
+//       path: '**',
+//       redirectTo: 'login', // Przekieruj na /login dla dowolnego niepasującego URL-a
+//     },
+//   ];

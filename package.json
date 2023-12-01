@@ -26,6 +26,8 @@
     "@capacitor/ios": "^5.5.1",
     "@ionic/angular": "^7.5.7",
     "@ionic/core": "^7.5.7",
+    "@maskito/angular": "^1.9.0",
+    "@maskito/core": "^1.9.0",
     "@openapitools/openapi-generator-cli": "^2.7.0",
     "ionicons": "^7.2.1",
     "rxjs": "~7.8.1",
@@ -36,6 +38,7 @@
     "@angular/cli": "^17.0.3",
     "@angular/compiler-cli": "^17.0.4",
     "@capacitor/cli": "^5.5.1",
+    "@ionic/angular-toolkit": "latest",
     "@types/jasmine": "~5.1.4",
     "jasmine-core": "~5.1.1",
     "karma": "~6.4.2",
@@ -46,7 +49,6 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "karma-opera-launcher": "^1.0.0",
     "typescript": "^5.2.2",
-    "zone.js": "^0.14.2",
-    "@ionic/angular-toolkit": "latest"
+    "zone.js": "^0.14.2"
   }
 }

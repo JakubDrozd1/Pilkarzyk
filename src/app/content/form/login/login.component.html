@@ -1,10 +1,16 @@
-<div>
-  <ion-list [inset]="true">
-    <ion-item>
-      <ion-input label="Login" labelPlacement="floating" placeholder="Enter login"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-input label="Hasło" labelPlacement="floating" type="password" placeholder="Enter password"></ion-input>
-    </ion-item>
-  </ion-list>
-</div>
+<ion-content class="ion-padding">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <ion-list [inset]="true">
+      <ion-item>
+        <ion-input label="Login" labelPlacement="floating" placeholder="Enter login">
+        </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input label="Hasło" labelPlacement="floating" type="password" placeholder="Enter password">
+        </ion-input>
+      </ion-item>
+    </ion-list>
+    <ion-button type="submit" expand="full">Zaloguj
+    </ion-button>
+  </form>
+</ion-content>

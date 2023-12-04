@@ -10,10 +10,10 @@ import { IonicModule } from '@ionic/angular';
   standalone: true,
   imports: [IonicModule, CommonModule, RouterLink]
 })
-export class AuthComponent  implements OnInit {
+export class AuthComponent implements OnInit {
+  
+  constructor() {
+  }
 
-  constructor() { }
-
-  ngOnInit() {}
-
+  ngOnInit() { }
 }

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 @Component({
@@ -7,14 +8,25 @@ import { IonicModule } from '@ionic/angular';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule]
+  imports: [CommonModule, IonicModule, ReactiveFormsModule, FormsModule]
 })
-export class LoginComponent  implements OnInit {
+export class LoginComponent implements OnInit {
 
-  constructor() { 
-    console.log("xdd")
+  loginForm: FormGroup;
+  
+  constructor(
+    private fb: FormBuilder,
+  ) {
+    this.loginForm = this.fb.group({
+      login: ['', Validators.required],
+      password: ['', Validators.required],
+    });
+
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
+  onSubmit() {
+    throw new Error('Method not implemented.');
+  }
 }

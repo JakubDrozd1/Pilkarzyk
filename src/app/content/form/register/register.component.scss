@@ -1,4 +1,8 @@
-div {
-  margin-left: auto;
-  margin-right: auto;
+ion-button {
+  transition: transform 0.3s;
+}
+
+ion-button:active {
+  --background: var(--ion-color-tertiary);
+  transform: scale(0.9);
 }

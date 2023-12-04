@@ -24,6 +24,7 @@
     "@capacitor/android": "^5.5.1",
     "@capacitor/core": "^5.5.1",
     "@capacitor/ios": "^5.5.1",
+    "@capacitor/keyboard": "^5.0.6",
     "@ionic/angular": "^7.5.7",
     "@ionic/core": "^7.5.7",
     "@maskito/angular": "^1.9.0",
@@ -31,6 +32,7 @@
     "@openapitools/openapi-generator-cli": "^2.7.0",
     "ionicons": "^7.2.1",
     "rxjs": "~7.8.1",
+    "swiper": "^11.0.5",
     "tslib": "^2.6.2"
   },
   "devDependencies": {

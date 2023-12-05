@@ -62,7 +62,7 @@ export interface UpdateMeetingRequestParams {
 })
 export class MeetingsApi {
 
-    protected basePath = 'http://localhost';
+    protected basePath = 'http://localhost:27884';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
     public encoder: HttpParameterCodec;

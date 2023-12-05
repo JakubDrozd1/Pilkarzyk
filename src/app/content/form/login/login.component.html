@@ -1,12 +1,12 @@
 <ion-content class="ion-padding">
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <ion-list [inset]="true">
-      <ion-item>
-        <ion-input label="Login" labelPlacement="floating" placeholder="Enter login">
+      <ion-item lines="none">
+        <ion-input errorText="Login jest wymagany" label="Login" labelPlacement="floating" formControlName="login" placeholder="Enter login">
         </ion-input>
       </ion-item>
-      <ion-item>
-        <ion-input label="Hasło" labelPlacement="floating" type="password" placeholder="Enter password">
+      <ion-item lines="none">
+        <ion-input errorText="Hasło jest wymagane" label="Hasło" labelPlacement="floating" formControlName="password" type="password" placeholder="Enter password">
         </ion-input>
       </ion-item>
     </ion-list>

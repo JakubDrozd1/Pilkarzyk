@@ -22,18 +22,18 @@
         </ion-input>
       </ion-item>
       <ion-item lines="none">
-        <ion-input errorText="Imię nie może mieć cyfr" formControlName="firstName" labelPlacement="floating"
+        <ion-input errorText="Imię nie może mieć cyfr" formControlName="firstname" labelPlacement="floating"
           label="Imię">
         </ion-input>
       </ion-item>
       <ion-item lines="none">
-        <ion-input errorText="Nazwisko nie może mieć cyfr" formControlName="lastName" labelPlacement="floating"
+        <ion-input errorText="Nazwisko nie może mieć cyfr" formControlName="surname" labelPlacement="floating"
           label="Nazwisko">
         </ion-input>
       </ion-item>
       <ion-item lines="none">
         <ion-input errorText="Numer jest za krótki" formControlName="phoneNumber" labelPlacement="floating"
-          label="Numer telefonu" placeholder="+48 xxx-xxx-xxx" [maskito]="phoneMask" [maskitoElement]="maskPredicate"
+          label="Numer telefonu" placeholder="xxx-xxx-xxx" [maskito]="phoneMask" [maskitoElement]="maskPredicate"
           type="tel">
         </ion-input>
       </ion-item>

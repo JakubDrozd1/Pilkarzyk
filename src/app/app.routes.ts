@@ -1,8 +1,16 @@
-import { Routes } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, Routes, UrlTree } from '@angular/router';
 import { TabComponent } from './controller/tab/tab.component';
 import { AuthComponent } from './controller/auth/auth.component';
 import { LoginComponent } from './content/form/login/login.component';
 import { RegisterComponent } from './content/form/register/register.component';
+import { inject } from '@angular/core';
+import { IsLogged } from './service/auth/isLogged';
+
+const IsLoggedFn: CanActivateFn =
+(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+    return inject(IsLogged).canActivate(route, state);
+};
+
 
 export const routes: Routes = [
     {
@@ -23,9 +31,10 @@ export const routes: Routes = [
                 pathMatch: 'full',
             },
         ],
-    }, 
+    },
     {
-        path: '',
+        path: 'logged',
+        canActivate: [IsLoggedFn],
         component: TabComponent,
         children: [
             {
@@ -50,62 +59,14 @@ export const routes: Routes = [
             },
             {
                 path: '',
-                redirectTo: 'home',
+                redirectTo: 'logged/home',
                 pathMatch: 'full',
             },
         ],
     },
+    {
+        path: '**',
+        redirectTo: 'login',
+        pathMatch: 'full',
+    },
 ]
-
-// export const routes: Routes = [
-//     {
-//       path: '',
-//       component: AuthComponent,
-//       children: [
-//         {
-//           path: 'login',
-//           component: LoginComponent,
-//         },
-//         {
-//           path: 'register',
-//           component: RegisterComponent,
-//         },
-//         {
-//           path: '',
-//           redirectTo: 'login', // Domyślnie przekierowuj do /login
-//           pathMatch: 'full',
-//         },
-//       ],
-//     },
-//     {
-//       path: 'home',
-//       component: TabComponent,
-//       children: [
-//         {
-//           path: 'groups',
-//           loadChildren: () => import('./layout/groups-page/groups-page.module').then(m => m.GroupsPageModule),
-//         },
-//         {
-//           path: 'calendar',
-//           loadChildren: () => import('./layout/calendar-page/calendar-page.module').then(m => m.CalendarPageModule),
-//         },
-//         {
-//           path: 'profile',
-//           loadChildren: () => import('./layout/profile-page/profile-page.module').then(m => m.ProfilePageModule),
-//         },
-//         {
-//           path: 'settings',
-//           loadChildren: () => import('./layout/settings-page/settings-page.module').then(m => m.SettingsPageModule),
-//         },
-//         {
-//           path: '',
-//           redirectTo: 'groups', // Domyślnie przekierowuj do /home/groups
-//           pathMatch: 'full',
-//         },
-//       ],
-//     },
-//     {
-//       path: '**',
-//       redirectTo: 'login', // Przekieruj na /login dla dowolnego niepasującego URL-a
-//     },
-//   ];

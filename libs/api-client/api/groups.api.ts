@@ -58,7 +58,7 @@ export interface UpdateGroupRequestParams {
 })
 export class GroupsApi {
 
-    protected basePath = 'http://localhost';
+    protected basePath = 'http://localhost:27884';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
     public encoder: HttpParameterCodec;

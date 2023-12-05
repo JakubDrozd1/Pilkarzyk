@@ -4,6 +4,11 @@
     "title": "api.pilkarzyk",
     "version": "v1"
   },
+  "servers": [
+    {
+      "url": "http://localhost:27884"
+    }
+  ],
   "paths": {
     "/api/groups": {
       "get": {
@@ -1763,6 +1768,11 @@
             "nullable": true
           },
           "AccountType": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IdGroups": {
             "type": "integer",
             "format": "int32",
             "nullable": true

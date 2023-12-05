@@ -20,5 +20,6 @@ export interface GetGroupsUsersResponse {
     PhoneNumber?: number | null;
     IsAdmin?: boolean | null;
     AccountType?: number | null;
+    IdGroups?: number | null;
 }
 

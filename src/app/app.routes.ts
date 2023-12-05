@@ -34,12 +34,16 @@ export const routes: Routes = [
     },
     {
         path: 'logged',
-        canActivate: [IsLoggedFn],
+        // canActivate: [IsLoggedFn],
         component: TabComponent,
         children: [
             {
                 path: 'groups',
                 loadComponent: () => import('./layout/groups-page/groups-page.component').then(m => m.GroupsPageComponent),
+            },
+            {
+                path: 'groups/:idGroup',
+                loadComponent: () => import('./content/groups-content/groups-content.component').then(m => m.GroupsContentComponent),
             },
             {
                 path: 'calendar',

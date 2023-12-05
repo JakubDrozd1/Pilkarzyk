@@ -22,6 +22,7 @@ export class IsLogged {
                 if (isLoggedIn) {
                     return true;
                 } else {
+
                     this.router.navigate(['/login']);
                     return false;
                 }

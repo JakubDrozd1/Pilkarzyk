@@ -1,0 +1,40 @@
+@if(!isReady){
+<div style="text-align: center;">
+  <ion-spinner color="primary" name="crescent">
+  </ion-spinner>
+</div>
+}
+
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{nameGroup}}</ion-title>
+    <ion-button slot="end">
+      <ion-back-button defaultHref="/logged/groups">
+      </ion-back-button>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+@if(isReady){
+<ion-content>
+  <ion-list>
+    @for (item of meetings; track $index) {
+    <ion-item>
+      {{item.DATE_MEETING}}
+      {{item.DESCRIPTION}}
+      {{item.PLACE}}
+      {{item.QUANTITY}}
+    </ion-item>
+    }
+  </ion-list>
+  <ion-list>
+    @for (item of groupsUsers; track $index) {
+    <ion-item>
+      {{item.Firstname}}
+      {{item.Surname}}
+      {{item.PhoneNumber}}
+      {{item.Login}}
+    </ion-item>
+    }
+  </ion-list>
+</ion-content>
+}

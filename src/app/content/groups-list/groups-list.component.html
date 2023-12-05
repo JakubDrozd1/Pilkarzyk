@@ -1,0 +1,23 @@
+@if(!isReady){
+<div style="text-align: center;">
+  <ion-spinner color="primary" name="crescent">
+  </ion-spinner>
+</div>
+}
+
+@if(isReady){
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>Twoje grupy</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-list>
+      @for (item of groupsUsers; track $index) {
+      <ion-item [href]="'/logged/groups/'+item.IdGroups" button detail="true">
+        {{item.Name}}
+      </ion-item>
+      }
+    </ion-list>
+  </ion-card-content>
+</ion-card>
+}

@@ -7,9 +7,8 @@ const config: CapacitorConfig = {
   server: {
     url: 'http://192.168.88.20:4200',
     cleartext: true,
-    androidScheme: 'https'
+    androidScheme: 'http'
   },
-  bundledWebRuntime: false,
   plugins: {
     Keyboard:{
       resizeOnFullScreen:true

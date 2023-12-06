@@ -60,18 +60,22 @@ export class RegisterComponent implements OnInit {
         }
       )
         .subscribe({
-          next: async (response) => {
+          next: async () => {
             const alert = await this.alertController.create({
               header: 'OK',
               message: "Zarejestronano pomyślnie",
               buttons: ['Ok'],
-            });          },
+            });
+            await alert.present();
+          },
           error: async () => {
             const alert = await this.alertController.create({
               header: 'Błąd',
               message: "Wystąpił problem",
               buttons: ['Ok'],
-            });          }
+            });
+            await alert.present();
+          }
         })
     }
   }

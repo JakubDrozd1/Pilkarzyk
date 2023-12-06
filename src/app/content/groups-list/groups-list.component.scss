@@ -2,3 +2,6 @@ ion-spinner {
   width: 100px;
   height: 100px;
 }
+ion-item:active {
+  transform: scale(0.97);
+}

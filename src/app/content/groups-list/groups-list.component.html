@@ -11,9 +11,9 @@
     <ion-card-title>Twoje grupy</ion-card-title>
   </ion-card-header>
   <ion-card-content>
-    <ion-list>
+    <ion-list [inset]="true">
       @for (item of groupsUsers; track $index) {
-      <ion-item [href]="'/logged/groups/'+item.IdGroups" button detail="true">
+      <ion-item [routerLink]="['/logged/groups', item.IdGroup]" button detail="true">
         {{item.Name}}
       </ion-item>
       }

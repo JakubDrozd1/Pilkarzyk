@@ -21,6 +21,8 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { GetMessageRequest } from '../model/get-message-request';
 // @ts-ignore
+import { GetMessagesUsersMeetingsResponse } from '../model/get-messages-users-meetings-response';
+// @ts-ignore
 import { MESSAGES } from '../model/messages';
 
 // @ts-ignore
@@ -181,9 +183,9 @@ export class MessagesApi {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllMessages(requestParameters: GetAllMessagesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<MESSAGES>>;
-    public getAllMessages(requestParameters: GetAllMessagesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<MESSAGES>>>;
-    public getAllMessages(requestParameters: GetAllMessagesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<MESSAGES>>>;
+    public getAllMessages(requestParameters: GetAllMessagesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<GetMessagesUsersMeetingsResponse>>;
+    public getAllMessages(requestParameters: GetAllMessagesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<GetMessagesUsersMeetingsResponse>>>;
+    public getAllMessages(requestParameters: GetAllMessagesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<GetMessagesUsersMeetingsResponse>>>;
     public getAllMessages(requestParameters: GetAllMessagesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
         const page = requestParameters.page;
         if (page === null || page === undefined) {
@@ -258,7 +260,7 @@ export class MessagesApi {
         }
 
         let localVarPath = `/api/messages`;
-        return this.httpClient.request<Array<MESSAGES>>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<Array<GetMessagesUsersMeetingsResponse>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,

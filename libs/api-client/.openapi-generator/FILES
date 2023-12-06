@@ -16,8 +16,11 @@ index.ts
 model/get-group-request.ts
 model/get-groups-users-response.ts
 model/get-meeting-request.ts
+model/get-meeting-users-groups-response.ts
 model/get-message-request.ts
+model/get-messages-users-meetings-response.ts
 model/get-ranking-request.ts
+model/get-rankings-users-groups-response.ts
 model/get-token-request.ts
 model/get-token-response.ts
 model/get-user-request.ts

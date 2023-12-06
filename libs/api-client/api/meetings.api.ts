@@ -21,6 +21,8 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { GetMeetingRequest } from '../model/get-meeting-request';
 // @ts-ignore
+import { GetMeetingUsersGroupsResponse } from '../model/get-meeting-users-groups-response';
+// @ts-ignore
 import { MEETINGS } from '../model/meetings';
 
 // @ts-ignore
@@ -249,9 +251,9 @@ export class MeetingsApi {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllMeetings(requestParameters: GetAllMeetingsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<MEETINGS>>;
-    public getAllMeetings(requestParameters: GetAllMeetingsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<MEETINGS>>>;
-    public getAllMeetings(requestParameters: GetAllMeetingsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<MEETINGS>>>;
+    public getAllMeetings(requestParameters: GetAllMeetingsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<GetMeetingUsersGroupsResponse>>;
+    public getAllMeetings(requestParameters: GetAllMeetingsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<GetMeetingUsersGroupsResponse>>>;
+    public getAllMeetings(requestParameters: GetAllMeetingsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<GetMeetingUsersGroupsResponse>>>;
     public getAllMeetings(requestParameters: GetAllMeetingsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
         const page = requestParameters.page;
         if (page === null || page === undefined) {
@@ -336,7 +338,7 @@ export class MeetingsApi {
         }
 
         let localVarPath = `/api/meetings`;
-        return this.httpClient.request<Array<MEETINGS>>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<Array<GetMeetingUsersGroupsResponse>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,

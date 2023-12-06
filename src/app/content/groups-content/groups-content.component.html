@@ -4,37 +4,78 @@
   </ion-spinner>
 </div>
 }
-
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{nameGroup}}</ion-title>
-    <ion-button slot="end">
-      <ion-back-button defaultHref="/logged/groups">
+    <ion-title>{{nameGroup}}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-back-button text="" icon="arrow-back-outline" defaultHref="/logged/groups">
       </ion-back-button>
-    </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 @if(isReady){
 <ion-content>
-  <ion-list>
+  <ion-list [inset]="true">
+    <ion-label> Spotkania:
+    </ion-label>
     @for (item of meetings; track $index) {
-    <ion-item>
-      {{item.DATE_MEETING}}
-      {{item.DESCRIPTION}}
-      {{item.PLACE}}
-      {{item.QUANTITY}}
-    </ion-item>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          {{item.DateMeeting | date: 'dd.MM.yyyy HH:mm'}} {{item.Place}}
+        </ion-card-title>
+        <ion-card-subtitle>
+          <ion-label>
+            Ilość osób:
+          </ion-label>
+          {{item.Quantity}}
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        {{item.Description}}
+      </ion-card-content>
+    </ion-card>
     }
   </ion-list>
-  <ion-list>
+  <ion-list [inset]="true">
+    <ion-label>
+      Członkowie:
+    </ion-label>
     @for (item of groupsUsers; track $index) {
-    <ion-item>
-      {{item.Firstname}}
-      {{item.Surname}}
-      {{item.PhoneNumber}}
-      {{item.Login}}
-    </ion-item>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          {{item.Login}}
+        </ion-card-title>
+        <ion-card-subtitle>
+          {{item.Firstname}} {{item.Surname}}
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        @if(item.PhoneNumber!=null){
+        <ion-card-title>
+          {{item.PhoneNumber.toString().slice(0,3)}}-{{item.PhoneNumber.toString().slice(3,6)}}-{{item.PhoneNumber.toString().slice(6)}}
+        </ion-card-title>
+        }
+      </ion-card-content>
+    </ion-card>
     }
   </ion-list>
+  <ion-fab slot="fixed" vertical="top" horizontal="end">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="bottom">
+      <ion-fab-button expand="block" (click)="openModal()">
+        <ion-icon name="chatbubbles-outline">
+        </ion-icon>
+      </ion-fab-button>
+      <ion-fab-button>
+        <ion-icon name="person-add-outline">
+        </ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
 </ion-content>
 }

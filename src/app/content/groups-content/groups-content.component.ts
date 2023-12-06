@@ -1,30 +1,36 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AlertController, IonicModule } from '@ionic/angular';
-import { GetGroupsUsersResponse, GroupsUsersApi, MEETINGS, MeetingsApi } from 'libs/api-client';
-import { forkJoin } from 'rxjs';
+import { AlertController, IonicModule, ModalController } from '@ionic/angular';
+import { GetGroupsUsersResponse, GetMeetingUsersGroupsResponse, GroupsUsersApi, MeetingsApi } from 'libs/api-client';
+import { Subscription, forkJoin } from 'rxjs';
+import { MeetingComponent } from "../form/meeting/meeting.component";
+import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service';
 
 @Component({
   selector: 'app-groups-content',
   templateUrl: './groups-content.component.html',
   styleUrls: ['./groups-content.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule]
+  imports: [CommonModule, IonicModule, MeetingComponent]
 })
 export class GroupsContentComponent implements OnInit {
 
   idGroup: number | undefined;
   groupsUsers: GetGroupsUsersResponse[] = []
   isReady: boolean = false
-  meetings: MEETINGS[] = []
+  meetings: GetMeetingUsersGroupsResponse[] = []
   nameGroup: string | undefined | null
+  add: boolean = false
+  private subscription: Subscription = new Subscription()
 
   constructor(
     private route: ActivatedRoute,
     private groupsUsersApi: GroupsUsersApi,
     private alertController: AlertController,
-    private meetingsApi: MeetingsApi
+    private meetingsApi: MeetingsApi,
+    private modalCtrl: ModalController,
+    private RefreshDataService: RefreshDataService,
   ) { }
 
   ngOnInit() {
@@ -35,6 +41,15 @@ export class GroupsContentComponent implements OnInit {
           this.getDetails()
         }
       }
+    )
+    this.subscription.add(
+      this.RefreshDataService.refreshSubject.subscribe(
+        index => {
+          if (index === 'groups-content') {
+            this.getDetails()
+          }
+        }
+      )
     )
   }
 
@@ -51,12 +66,13 @@ export class GroupsContentComponent implements OnInit {
       meetings: this.meetingsApi.getAllMeetings({
         page: 0,
         onPage: -1,
-        sortColumn: 'NAME',
+        sortColumn: 'DATE_MEETING',
         sortMode: 'ASC',
         idGroup: this.idGroup
       })
     }).subscribe({
       next: (responses) => {
+        console.log(responses.meetings)
         this.groupsUsers = responses.groupsUsers;
         this.meetings = responses.meetings
         this.nameGroup = responses.groupsUsers[0].Name
@@ -76,4 +92,17 @@ export class GroupsContentComponent implements OnInit {
       }
     });
   }
+
+  async openModal() {
+    const modal = await this.modalCtrl.create({
+      component: MeetingComponent,
+      componentProps: {
+        idGroup: this.idGroup,
+        groupsUsers: this.groupsUsers,
+      }
+    });
+    modal.present();
+    await modal.onWillDismiss();
+  }
+
 }

@@ -11,16 +11,18 @@
  */
 
 
-export interface GetGroupsUsersResponse { 
+export interface GetMeetingUsersGroupsResponse { 
     Name?: string | null;
     Login?: string | null;
-    Email?: string | null;
     Firstname?: string | null;
     Surname?: string | null;
+    AccountType?: string | null;
+    Email?: string | null;
     PhoneNumber?: number | null;
+    DateMeeting?: string | null;
+    Place?: string | null;
+    Description?: string | null;
+    Quantity?: number | null;
     IsAdmin?: boolean | null;
-    AccountType?: number | null;
-    IdGroup?: number | null;
-    IdUser?: number | null;
 }
 

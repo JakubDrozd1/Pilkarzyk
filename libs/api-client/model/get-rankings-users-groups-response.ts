@@ -11,7 +11,9 @@
  */
 
 
-export interface GetGroupsUsersResponse { 
+export interface GetRankingsUsersGroupsResponse { 
+    DateMeeting?: string | null;
+    Point?: number | null;
     Name?: string | null;
     Login?: string | null;
     Email?: string | null;
@@ -19,8 +21,5 @@ export interface GetGroupsUsersResponse {
     Surname?: string | null;
     PhoneNumber?: number | null;
     IsAdmin?: boolean | null;
-    AccountType?: number | null;
-    IdGroup?: number | null;
-    IdUser?: number | null;
 }
 

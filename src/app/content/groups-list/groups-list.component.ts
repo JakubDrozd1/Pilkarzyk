@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { GetGroupsUsersResponse, GroupsUsersApi } from 'libs/api-client';
 import { UserService } from 'src/app/service/user/user.service';
@@ -9,7 +10,7 @@ import { UserService } from 'src/app/service/user/user.service';
   templateUrl: './groups-list.component.html',
   styleUrls: ['./groups-list.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule]
+  imports: [CommonModule, IonicModule, RouterLink]
 })
 export class GroupsListComponent implements OnInit {
 

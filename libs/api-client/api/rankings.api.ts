@@ -21,6 +21,8 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { GetRankingRequest } from '../model/get-ranking-request';
 // @ts-ignore
+import { GetRankingsUsersGroupsResponse } from '../model/get-rankings-users-groups-response';
+// @ts-ignore
 import { RANKINGS } from '../model/rankings';
 
 // @ts-ignore
@@ -249,9 +251,9 @@ export class RankingsApi {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllRankings(requestParameters: GetAllRankingsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<RANKINGS>>;
-    public getAllRankings(requestParameters: GetAllRankingsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<RANKINGS>>>;
-    public getAllRankings(requestParameters: GetAllRankingsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<RANKINGS>>>;
+    public getAllRankings(requestParameters: GetAllRankingsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<GetRankingsUsersGroupsResponse>>;
+    public getAllRankings(requestParameters: GetAllRankingsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<GetRankingsUsersGroupsResponse>>>;
+    public getAllRankings(requestParameters: GetAllRankingsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<GetRankingsUsersGroupsResponse>>>;
     public getAllRankings(requestParameters: GetAllRankingsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
         const page = requestParameters.page;
         if (page === null || page === undefined) {
@@ -336,7 +338,7 @@ export class RankingsApi {
         }
 
         let localVarPath = `/api/rankings`;
-        return this.httpClient.request<Array<RANKINGS>>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<Array<GetRankingsUsersGroupsResponse>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,

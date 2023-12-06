@@ -688,7 +688,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/MEETINGS"
+                    "$ref": "#/components/schemas/GetMeetingUsersGroupsResponse"
                   }
                 }
               },
@@ -696,7 +696,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/MEETINGS"
+                    "$ref": "#/components/schemas/GetMeetingUsersGroupsResponse"
                   }
                 }
               },
@@ -704,7 +704,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/MEETINGS"
+                    "$ref": "#/components/schemas/GetMeetingUsersGroupsResponse"
                   }
                 }
               }
@@ -913,7 +913,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/MESSAGES"
+                    "$ref": "#/components/schemas/GetMessagesUsersMeetingsResponse"
                   }
                 }
               },
@@ -921,7 +921,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/MESSAGES"
+                    "$ref": "#/components/schemas/GetMessagesUsersMeetingsResponse"
                   }
                 }
               },
@@ -929,7 +929,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/MESSAGES"
+                    "$ref": "#/components/schemas/GetMessagesUsersMeetingsResponse"
                   }
                 }
               }
@@ -1154,7 +1154,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/RANKINGS"
+                    "$ref": "#/components/schemas/GetRankingsUsersGroupsResponse"
                   }
                 }
               },
@@ -1162,7 +1162,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/RANKINGS"
+                    "$ref": "#/components/schemas/GetRankingsUsersGroupsResponse"
                   }
                 }
               },
@@ -1170,7 +1170,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/RANKINGS"
+                    "$ref": "#/components/schemas/GetRankingsUsersGroupsResponse"
                   }
                 }
               }
@@ -1772,7 +1772,12 @@
             "format": "int32",
             "nullable": true
           },
-          "IdGroups": {
+          "IdGroup": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IdUser": {
             "type": "integer",
             "format": "int32",
             "nullable": true
@@ -1814,6 +1819,63 @@
         },
         "additionalProperties": false
       },
+      "GetMeetingUsersGroupsResponse": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "Login": {
+            "type": "string",
+            "nullable": true
+          },
+          "Firstname": {
+            "type": "string",
+            "nullable": true
+          },
+          "Surname": {
+            "type": "string",
+            "nullable": true
+          },
+          "AccountType": {
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "type": "string",
+            "nullable": true
+          },
+          "PhoneNumber": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "DateMeeting": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "Place": {
+            "type": "string",
+            "nullable": true
+          },
+          "Description": {
+            "type": "string",
+            "nullable": true
+          },
+          "Quantity": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IsAdmin": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "GetMessageRequest": {
         "type": "object",
         "properties": {
@@ -1829,6 +1891,64 @@
           },
           "Answer": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetMessagesUsersMeetingsResponse": {
+        "type": "object",
+        "properties": {
+          "Answer": {
+            "type": "string",
+            "nullable": true
+          },
+          "DateAdd": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "DateMeeting": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "Place": {
+            "type": "string",
+            "nullable": true
+          },
+          "Quantity": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Description": {
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "type": "string",
+            "nullable": true
+          },
+          "Login": {
+            "type": "string",
+            "nullable": true
+          },
+          "Firstname": {
+            "type": "string",
+            "nullable": true
+          },
+          "Surname": {
+            "type": "string",
+            "nullable": true
+          },
+          "PhoneNumber": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IsAdmin": {
+            "type": "boolean",
             "nullable": true
           }
         },
@@ -1855,6 +1975,51 @@
           "Point": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetRankingsUsersGroupsResponse": {
+        "type": "object",
+        "properties": {
+          "DateMeeting": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "Point": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "Login": {
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "type": "string",
+            "nullable": true
+          },
+          "Firstname": {
+            "type": "string",
+            "nullable": true
+          },
+          "Surname": {
+            "type": "string",
+            "nullable": true
+          },
+          "PhoneNumber": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IsAdmin": {
+            "type": "boolean",
             "nullable": true
           }
         },

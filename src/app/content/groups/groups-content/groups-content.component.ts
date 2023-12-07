@@ -4,15 +4,16 @@ import { ActivatedRoute } from '@angular/router';
 import { AlertController, IonicModule, ModalController } from '@ionic/angular';
 import { GetGroupsUsersResponse, GetMeetingUsersGroupsResponse, GroupsUsersApi, MeetingsApi } from 'libs/api-client';
 import { Subscription, forkJoin } from 'rxjs';
-import { MeetingComponent } from "../form/meeting/meeting.component";
+import { MeetingComponent } from "../../form/meeting/meeting.component";
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service';
+import { MeetingContentComponent } from "../../meeting/meeting-content/meeting-content.component";
 
 @Component({
-  selector: 'app-groups-content',
-  templateUrl: './groups-content.component.html',
-  styleUrls: ['./groups-content.component.scss'],
-  standalone: true,
-  imports: [CommonModule, IonicModule, MeetingComponent]
+    selector: 'app-groups-content',
+    templateUrl: './groups-content.component.html',
+    styleUrls: ['./groups-content.component.scss'],
+    standalone: true,
+    imports: [CommonModule, IonicModule, MeetingComponent, MeetingContentComponent]
 })
 export class GroupsContentComponent implements OnInit {
 
@@ -55,6 +56,7 @@ export class GroupsContentComponent implements OnInit {
 
   getDetails() {
     this.groupsUsers = []
+    this.meetings = []
     forkJoin({
       groupsUsers: this.groupsUsersApi.getAllGroupsFromUserAsync({
         page: 0,
@@ -72,7 +74,6 @@ export class GroupsContentComponent implements OnInit {
       })
     }).subscribe({
       next: (responses) => {
-        console.log(responses.meetings)
         this.groupsUsers = responses.groupsUsers;
         this.meetings = responses.meetings
         this.nameGroup = responses.groupsUsers[0].Name

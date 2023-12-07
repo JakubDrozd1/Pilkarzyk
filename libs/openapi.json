@@ -1838,10 +1838,6 @@
             "type": "string",
             "nullable": true
           },
-          "AccountType": {
-            "type": "string",
-            "nullable": true
-          },
           "Email": {
             "type": "string",
             "nullable": true

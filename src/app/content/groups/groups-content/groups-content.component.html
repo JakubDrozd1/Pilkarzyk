@@ -15,27 +15,12 @@
   </ion-toolbar>
 </ion-header>
 @if(isReady){
-<ion-content>
+<ion-content class="ion-padding">
   <ion-list [inset]="true">
     <ion-label> Spotkania:
     </ion-label>
     @for (item of meetings; track $index) {
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>
-          {{item.DateMeeting | date: 'dd.MM.yyyy HH:mm'}} {{item.Place}}
-        </ion-card-title>
-        <ion-card-subtitle>
-          <ion-label>
-            Ilość osób:
-          </ion-label>
-          {{item.Quantity}}
-        </ion-card-subtitle>
-      </ion-card-header>
-      <ion-card-content>
-        {{item.Description}}
-      </ion-card-content>
-    </ion-card>
+    <app-meeting-content [meeting]="item"></app-meeting-content>
     }
   </ion-list>
   <ion-list [inset]="true">

@@ -1,0 +1,21 @@
+import { CommonModule } from '@angular/common';
+import { Component, OnInit, Input } from '@angular/core';
+import { IonicModule } from '@ionic/angular';
+import { GetMeetingUsersGroupsResponse } from 'libs/api-client';
+
+@Component({
+  selector: 'app-meeting-content',
+  templateUrl: './meeting-content.component.html',
+  styleUrls: ['./meeting-content.component.scss'],
+  standalone: true,
+  imports: [CommonModule, IonicModule]
+})
+export class MeetingContentComponent implements OnInit {
+
+  @Input() meeting!: GetMeetingUsersGroupsResponse;
+
+  constructor() { }
+
+  ngOnInit() { }
+
+}

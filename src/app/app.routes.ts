@@ -43,7 +43,7 @@ export const routes: Routes = [
             },
             {
                 path: 'groups/:idGroup',
-                loadComponent: () => import('./content/groups-content/groups-content.component').then(m => m.GroupsContentComponent),
+                loadComponent: () => import('./content/groups/groups-content/groups-content.component').then(m => m.GroupsContentComponent),
             },
             {
                 path: 'calendar',

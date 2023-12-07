@@ -1,0 +1,27 @@
+@if(!isReady){
+<div style="text-align: center;">
+  <ion-spinner color="primary" name="crescent">
+  </ion-spinner>
+</div>
+}
+@if(isReady){
+<ion-content class="ion-padding">
+  <ion-list [inset]="true">
+    <ion-datetime [(ngModel)]="selectedDate" (ngModelChange)="onDateChange($event)" presentation="date"
+      [highlightedDates]="highlightedDates" multiple="true"></ion-datetime>
+  </ion-list>
+  {{selectedDate}}
+  <ion-label>Twoje spotkania: </ion-label>
+
+  @if(selectedDate == null){
+  @for (item of meetings; track $index) {
+  <app-meeting-content [meeting]="item"></app-meeting-content>
+  }
+  }@else {
+  @for(date of selectedDate; track $index){
+  @for (item of meetingsSelected; track $index) {
+  <app-meeting-content [meeting]="item"></app-meeting-content>
+  }}
+  }
+</ion-content>
+}

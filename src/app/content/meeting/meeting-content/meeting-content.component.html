@@ -1,0 +1,16 @@
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>
+      {{meeting.DateMeeting | date: 'dd.MM.yyyy HH:mm'}} {{meeting.Place}}
+    </ion-card-title>
+    <ion-card-subtitle>
+      <ion-label>
+        Ilość osób:
+      </ion-label>
+      {{meeting.Quantity}}
+    </ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content>
+    {{meeting.Description}}
+  </ion-card-content>
+</ion-card>

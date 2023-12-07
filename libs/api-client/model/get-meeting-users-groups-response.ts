@@ -16,7 +16,6 @@ export interface GetMeetingUsersGroupsResponse {
     Login?: string | null;
     Firstname?: string | null;
     Surname?: string | null;
-    AccountType?: string | null;
     Email?: string | null;
     PhoneNumber?: number | null;
     DateMeeting?: string | null;

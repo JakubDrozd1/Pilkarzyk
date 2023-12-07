@@ -11,5 +11,5 @@ import { IonicModule } from '@ionic/angular';
   imports: [CommonModule, RouterModule, IonicModule]
 })
 export class AppComponent {
-  title = 'pilkarzyk';
+  title = 'pilkarzyk'
 }

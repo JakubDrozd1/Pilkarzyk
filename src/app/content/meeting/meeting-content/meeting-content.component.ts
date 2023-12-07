@@ -12,7 +12,7 @@ import { GetMeetingUsersGroupsResponse } from 'libs/api-client';
 })
 export class MeetingContentComponent implements OnInit {
 
-  @Input() meeting!: GetMeetingUsersGroupsResponse;
+  @Input() meeting!: GetMeetingUsersGroupsResponse
 
   constructor() { }
 

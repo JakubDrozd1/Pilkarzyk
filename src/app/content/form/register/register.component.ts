@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { MaskitoModule } from '@maskito/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import { UsersApi } from 'libs/api-client';
 import { compareValidator } from 'src/app/controller/auth/validateConfirmPasswd';
+import { AuthService } from 'src/app/service/auth/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -19,14 +21,16 @@ export class RegisterComponent implements OnInit {
   readonly phoneMask: MaskitoOptions =
     {
       mask: [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/,],
-    };
-  readonly maskPredicate: MaskitoElementPredicateAsync = async (el) => (el as HTMLIonInputElement).getInputElement();
-  registrationForm: FormGroup;
+    }
+  readonly maskPredicate: MaskitoElementPredicateAsync = async (el) => (el as HTMLIonInputElement).getInputElement()
+  registrationForm: FormGroup
 
   constructor(
     private fb: FormBuilder,
     private usersApi: UsersApi,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private authService: AuthService,
+    private router: Router,
   ) {
     this.registrationForm = this.fb.group({
       login: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]],
@@ -36,17 +40,20 @@ export class RegisterComponent implements OnInit {
       surname: ['', [Validators.required, Validators.pattern("^[a-zA-Z]+$"), Validators.minLength(3), Validators.maxLength(25)]],
       phoneNumber: ['', [Validators.required, Validators.minLength(11)]],
       email: ['', [Validators.required, Validators.email]],
-    });
-
+    })
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    if (this.authService.isLoggedIn) {
+      this.navigate()
+    }
+  }
 
   onSubmit() {
     this.registrationForm.markAllAsTouched()
     if (this.registrationForm.valid) {
-      let str: string = this.registrationForm.value.phoneNumber;
-      let intNumber: number = parseInt(str.replace(/-/g, ''), 10);
+      let str: string = this.registrationForm.value.phoneNumber
+      let intNumber: number = parseInt(str.replace(/-/g, ''), 10)
       this.usersApi.addUser(
         {
           getUserRequest: {
@@ -65,19 +72,21 @@ export class RegisterComponent implements OnInit {
               header: 'OK',
               message: "Zarejestronano pomyślnie",
               buttons: ['Ok'],
-            });
-            await alert.present();
+            })
+            await alert.present()
           },
           error: async () => {
             const alert = await this.alertController.create({
               header: 'Błąd',
               message: "Wystąpił problem",
               buttons: ['Ok'],
-            });
-            await alert.present();
+            })
+            await alert.present()
           }
         })
     }
   }
-
+  private navigate() {
+    this.router.navigate(["/logged/home"])
+  }
 }

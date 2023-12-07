@@ -1,7 +1,7 @@
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from "@angular/router"
 import { AuthService } from "./auth.service"
 import { Injectable } from "@angular/core"
-import { Observable, map, of, take } from "rxjs"
+import { Observable, catchError, map, of, take } from "rxjs"
 
 @Injectable({
     providedIn: 'root',
@@ -9,24 +9,33 @@ import { Observable, map, of, take } from "rxjs"
 export class IsLogged {
     constructor(
         private authService: AuthService,
-        private router: Router
+        private router: Router,
     ) { }
 
     canActivate(
-        route: ActivatedRouteSnapshot,
-        state: RouterStateSnapshot
+        _route: ActivatedRouteSnapshot,
+        _state: RouterStateSnapshot
     ): Observable<boolean> {
-        return this.authService.isLoggedIn.pipe(
-            take(1),
-            map((isLoggedIn) => {
-                if (isLoggedIn) {
-                    return true;
-                } else {
+        console.log(this.authService.isLoggedIn)
+        if (this.authService.isLoggedIn) {
+            return of(true)
+        }
 
-                    this.router.navigate(['/login']);
-                    return false;
-                }
-            })
-        );
+        return this.authService.refreshAccesToken(false)
+            .pipe(
+                catchError(() => {
+                    return of(false)
+                }),
+                map(
+                    (token) => {
+                        if (!token) {
+                            this.router.navigate(['login'])
+                            return false
+                        }
+                        this.authService.setLoggedIn(token.access_token, token.refresh_token)
+                        return true
+                    }
+                )
+            )
     }
 }

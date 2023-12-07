@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { GetGroupsUsersResponse, GroupsUsersApi } from 'libs/api-client';
-import { UserService } from 'src/app/service/user/user.service';
 
 @Component({
   selector: 'app-groups-list',
@@ -15,15 +14,16 @@ import { UserService } from 'src/app/service/user/user.service';
 export class GroupsListComponent implements OnInit {
 
   groupsUsers: GetGroupsUsersResponse[] = []
-  isReady: boolean = false;
+  isReady: boolean = false
+  idUser: number = 0
 
   constructor(
-    private userService: UserService,
     private groupsUsersApi: GroupsUsersApi,
     private alertController: AlertController,
   ) { }
 
   ngOnInit() {
+    this.idUser = Number(localStorage.getItem('user_id'))
     this.getGroups()
   }
 
@@ -34,7 +34,7 @@ export class GroupsListComponent implements OnInit {
       onPage: -1,
       sortColumn: 'NAME',
       sortMode: 'ASC',
-      idUser: this.userService.userDetails?.ID_USER,
+      idUser: this.idUser
     }).subscribe({
       next: (response) => {
         this.groupsUsers = response
@@ -45,8 +45,8 @@ export class GroupsListComponent implements OnInit {
           header: 'Błąd',
           message: 'Wystąpił błąd',
           buttons: ['Ok'],
-        });
-        await alert.present();
+        })
+        await alert.present()
       }
     })
   }

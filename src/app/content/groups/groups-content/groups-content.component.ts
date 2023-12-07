@@ -17,7 +17,7 @@ import { MeetingContentComponent } from "../../meeting/meeting-content/meeting-c
 })
 export class GroupsContentComponent implements OnInit {
 
-  idGroup: number | undefined;
+  idGroup: number | undefined
   groupsUsers: GetGroupsUsersResponse[] = []
   isReady: boolean = false
   meetings: GetMeetingUsersGroupsResponse[] = []
@@ -74,24 +74,24 @@ export class GroupsContentComponent implements OnInit {
       })
     }).subscribe({
       next: (responses) => {
-        this.groupsUsers = responses.groupsUsers;
+        this.groupsUsers = responses.groupsUsers
         this.meetings = responses.meetings
         this.nameGroup = responses.groupsUsers[0].Name
-        this.isReady = true;
+        this.isReady = true
       },
       error: async () => {
         const alert = await this.alertController.create({
           header: 'Błąd',
           message: 'Wystąpił błąd',
           buttons: ['Ok'],
-        });
+        })
         this.groupsUsers = []
         this.meetings = []
         this.nameGroup = ""
-        this.isReady = true;
-        await alert.present();
+        this.isReady = true
+        await alert.present()
       }
-    });
+    })
   }
 
   async openModal() {
@@ -101,9 +101,9 @@ export class GroupsContentComponent implements OnInit {
         idGroup: this.idGroup,
         groupsUsers: this.groupsUsers,
       }
-    });
-    modal.present();
-    await modal.onWillDismiss();
+    })
+    modal.present()
+    await modal.onWillDismiss()
   }
 
 }

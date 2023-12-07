@@ -7,34 +7,14 @@ import { inject } from '@angular/core';
 import { IsLogged } from './service/auth/isLogged';
 
 const IsLoggedFn: CanActivateFn =
-(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
-    return inject(IsLogged).canActivate(route, state);
-};
-
+    (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+        return inject(IsLogged).canActivate(route, state)
+    };
 
 export const routes: Routes = [
     {
-        path: '',
-        component: AuthComponent,
-        children: [
-            {
-                path: 'login',
-                component: LoginComponent,
-            },
-            {
-                path: 'register',
-                component: RegisterComponent,
-            },
-            {
-                path: '',
-                redirectTo: 'login',
-                pathMatch: 'full',
-            },
-        ],
-    },
-    {
         path: 'logged',
-        // canActivate: [IsLoggedFn],
+        canActivate: [IsLoggedFn],
         component: TabComponent,
         children: [
             {
@@ -64,6 +44,25 @@ export const routes: Routes = [
             {
                 path: '',
                 redirectTo: 'logged/home',
+                pathMatch: 'full',
+            },
+        ],
+    },
+    {
+        path: '',
+        component: AuthComponent,
+        children: [
+            {
+                path: 'login',
+                component: LoginComponent,
+            },
+            {
+                path: 'register',
+                component: RegisterComponent,
+            },
+            {
+                path: '',
+                redirectTo: 'login',
                 pathMatch: 'full',
             },
         ],

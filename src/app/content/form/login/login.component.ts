@@ -2,21 +2,24 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
 import { AlertController, IonicModule } from '@ionic/angular';
-import { UsersApi } from 'libs/api-client';
+import { TokenApi, UsersApi } from 'libs/api-client';
+import { forkJoin } from 'rxjs';
+import { AppConfig } from 'src/app/service/app-config';
 import { AuthService } from 'src/app/service/auth/auth.service';
-import { UserService } from 'src/app/service/user/user.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, ReactiveFormsModule, FormsModule]
+  imports: [CommonModule, IonicModule, ReactiveFormsModule, FormsModule],
+  providers: [JwtHelperService]
 })
 export class LoginComponent implements OnInit {
 
-  loginForm: FormGroup;
+  loginForm: FormGroup
 
   constructor(
     private fb: FormBuilder,
@@ -24,45 +27,74 @@ export class LoginComponent implements OnInit {
     private alertController: AlertController,
     private router: Router,
     private authService: AuthService,
-    public userService: UserService
+    private tokenApi: TokenApi
   ) {
     this.loginForm = this.fb.group({
       login: ['', Validators.required],
       password: ['', Validators.required],
-    });
+    })
 
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    if (this.authService.isLoggedIn) {
+      this.navigate()
+    }
+
+  }
 
   onSubmit() {
     this.loginForm.markAllAsTouched()
     if (this.loginForm.valid) {
-      this.usersApi.getUserByLoginAndPassword({
-        login: this.loginForm.value.login,
-        password: this.loginForm.value.password,
+      forkJoin({
+        users: this.usersApi.getUserByLoginAndPassword({
+          login: this.loginForm.value.login,
+          password: this.loginForm.value.password,
+        }),
+        token: this.tokenApi.generateToken({
+          grantType: 'password',
+          clientId: AppConfig.settings.clientId,
+          clientSecret: AppConfig.settings.clientSecretPublic,
+          username: this.loginForm.value.login,
+          password: this.loginForm.value.password
+        })
       }).subscribe({
-        next: (response) => {
-          this.userService.setUser(response)
-          this.authService.login()
-          this.router.navigate(['/logged/home'])
+        next: async (responses) => {
+          let success = false
+          if (responses.token.AccessToken != null && responses.token.RefreshToken != null) {
+            success = this.authService.setLoggedIn(responses.token.AccessToken, responses.token.RefreshToken)
+          }
+          console.log(success)
+          if (success) {
+            this.authService.login()
+            this.navigate()
+          }
+          else {
+            const alert = await this.alertController.create({
+              header: 'Błąd',
+              buttons: ['Ok'],
+            })
+          }
         },
         error: async (error) => {
-          let errorMessage = '';
-
+          let errorMessage = ''
           if (String(error.error).includes('User is null')) {
-            errorMessage = 'Dany użytkownik nie istnieje.';
+            errorMessage = 'Dany użytkownik nie istnieje.'
           } else if (String(error.error).includes('Password is not correct')) {
-            errorMessage = 'Podane hasło jest niepoprawne. ';
+            errorMessage = 'Podane hasło jest niepoprawne. '
           }
           const alert = await this.alertController.create({
             header: 'Błąd',
             message: errorMessage,
             buttons: ['Ok'],
-          });
-          await alert.present();
+          })
+          await alert.present()
         }
       })
     }
+  }
+
+  private navigate() {
+    this.router.navigate(["/logged/home"])
   }
 }

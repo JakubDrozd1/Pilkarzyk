@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AlertController, IonicModule } from '@ionic/angular';
 import { GetMeetingUsersGroupsResponse, MeetingsApi } from 'libs/api-client';
-import { UserService } from 'src/app/service/user/user.service';
 import { MeetingContentComponent } from '../../meeting/meeting-content/meeting-content.component';
 import * as moment from 'moment';
 
@@ -21,17 +20,18 @@ export class CalendarContentComponent implements OnInit {
   meetingsSelected: GetMeetingUsersGroupsResponse[] = []
   isReady: boolean = false
   highlightedDates: any
-  selectedDate: string[] | undefined;
+  selectedDate: string[] | undefined
+  idUser: number = 0
 
   constructor
     (
       private meetingsApi: MeetingsApi,
-      private userService: UserService,
       private alertController: AlertController,
       private datePipe: DatePipe
     ) { }
 
   ngOnInit() {
+    this.idUser = Number(localStorage.getItem('user_id'))
     this.getDetails()
   }
 
@@ -42,9 +42,10 @@ export class CalendarContentComponent implements OnInit {
       onPage: -1,
       sortColumn: 'DATE_MEETING',
       sortMode: 'ASC',
-      idUser: this.userService.userDetails?.ID_USER
+      idUser: this.idUser
     }).subscribe({
       next: (response) => {
+        console.log(this.idUser)
         this.meetings = response
         this.highlightedDates = response
           .map(item => ({
@@ -53,31 +54,31 @@ export class CalendarContentComponent implements OnInit {
             backgroundColor: 'var(--ion-color-secondary)'
           }))
           .filter((dateObj, index, self) => {
-            const dateStr = dateObj.date;
-            return self.findIndex(d => d.date === dateStr) === index;
-          });
-        this.isReady = true;
+            const dateStr = dateObj.date
+            return self.findIndex(d => d.date === dateStr) === index
+          })
+        this.isReady = true
       },
       error: async () => {
         const alert = await this.alertController.create({
           header: 'Błąd',
           message: 'Wystąpił błąd',
           buttons: ['Ok'],
-        });
+        })
         this.meetings = []
-        this.isReady = true;
-        await alert.present();
+        this.isReady = true
+        await alert.present()
       }
-    });
+    })
   }
 
   formatDate(date: string | null | undefined): string {
-    const formattedDate = this.datePipe.transform(date, 'yyyy-MM-dd');
-    return formattedDate || '';
+    const formattedDate = this.datePipe.transform(date, 'yyyy-MM-dd')
+    return formattedDate || ''
   }
 
   onDateChange(newDate: string[]) {
-    this.meetingsSelected = [];
+    this.meetingsSelected = []
     if (newDate != null) {
       for (let date of newDate) {
         const startOfDay = moment(date).startOf('day').format()
@@ -89,25 +90,25 @@ export class CalendarContentComponent implements OnInit {
           sortMode: 'ASC',
           dateFrom: startOfDay,
           dateTo: endOfDay,
-          idUser: this.userService.userDetails?.ID_USER
+          idUser: this.idUser
         }).subscribe({
           next: (response) => {
             for (let meeting of response) {
               this.meetingsSelected.push(meeting)
             }
-            this.isReady = true;
+            this.isReady = true
           },
           error: async () => {
             const alert = await this.alertController.create({
               header: 'Błąd',
               message: 'Wystąpił błąd',
               buttons: ['Ok'],
-            });
+            })
             this.meetingsSelected = []
-            this.isReady = true;
-            await alert.present();
+            this.isReady = true
+            await alert.present()
           }
-        });
+        })
       }
     }
   }

@@ -8,7 +8,7 @@ const config: CapacitorConfig = {
     url: 'http://192.168.88.20:4200',
     cleartext: true,
     androidScheme: 'http',
-    allowNavigation: ["http://localhost:27884"]
+    allowNavigation: ["http://localhost:27884",""]
   },
   plugins: {
     Keyboard:{

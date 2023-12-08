@@ -2058,19 +2058,19 @@
       "GetTokenResponse": {
         "type": "object",
         "properties": {
-          "AccessToken": {
+          "access_token": {
             "type": "string",
             "nullable": true
           },
-          "ExpiresIn": {
+          "expires_in": {
             "type": "number",
             "format": "double"
           },
-          "RefreshToken": {
+          "refresh_token": {
             "type": "string",
             "nullable": true
           },
-          "TokenType": {
+          "atoken_type": {
             "type": "string",
             "nullable": true,
             "readOnly": true
@@ -2281,9 +2281,8 @@
       }
     },
     "securitySchemes": {
-      "bearerAuth": {
+      "api-pilkarzyk-oauth2": {
         "type": "oauth2",
-        "description": "JWT Authorization header using the Bearer scheme.",
         "flows": {
           "password": {
             "tokenUrl": "/api/token/generate",
@@ -2292,5 +2291,10 @@
         }
       }
     }
-  }
+  },
+  "security": [
+    {
+      "api-pilkarzyk-oauth2": []
+    }
+  ]
 }

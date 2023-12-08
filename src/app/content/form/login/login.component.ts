@@ -61,8 +61,8 @@ export class LoginComponent implements OnInit {
       }).subscribe({
         next: async (responses) => {
           let success = false
-          if (responses.token.AccessToken != null && responses.token.RefreshToken != null) {
-            success = this.authService.setLoggedIn(responses.token.AccessToken, responses.token.RefreshToken)
+          if (responses.token.access_token != null && responses.token.refresh_token != null) {
+            success = this.authService.setLoggedIn(responses.token.access_token, responses.token.refresh_token)
           }
           console.log(success)
           if (success) {

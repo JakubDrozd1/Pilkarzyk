@@ -12,9 +12,9 @@
 
 
 export interface GetTokenResponse { 
-    AccessToken?: string | null;
-    ExpiresIn?: number;
-    RefreshToken?: string | null;
-    readonly TokenType?: string | null;
+    access_token?: string | null;
+    expires_in?: number;
+    refresh_token?: string | null;
+    readonly atoken_type?: string | null;
 }
 

@@ -45,7 +45,6 @@ export class CalendarContentComponent implements OnInit {
       idUser: this.idUser
     }).subscribe({
       next: (response) => {
-        console.log(this.idUser)
         this.meetings = response
         this.highlightedDates = response
           .map(item => ({

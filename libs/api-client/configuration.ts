@@ -87,9 +87,9 @@ export class Configuration {
             this.credentials = {};
         }
 
-        // init default bearerAuth credential
-        if (!this.credentials['bearerAuth']) {
-            this.credentials['bearerAuth'] = () => {
+        // init default api-pilkarzyk-oauth2 credential
+        if (!this.credentials['api-pilkarzyk-oauth2']) {
+            this.credentials['api-pilkarzyk-oauth2'] = () => {
                 return typeof this.accessToken === 'function'
                     ? this.accessToken()
                     : this.accessToken;

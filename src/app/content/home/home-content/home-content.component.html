@@ -1,0 +1,16 @@
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{currentTime}}</ion-card-title>
+    </ion-card-header>
+  </ion-card>
+
+  @if(meetings.length > 0){
+    <ion-label>Dzisiejsze spotkania:</ion-label>
+  @for(meeting of meetings; track $index){
+  <app-meeting-content [meeting]="meeting"></app-meeting-content>
+  }
+  }@else {
+  <ion-label>Nie masz dzisiaj żadnych spotkań</ion-label>
+  }
+</ion-content>

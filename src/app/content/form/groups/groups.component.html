@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">Anuluj</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <form [formGroup]="groupForm" (ngSubmit)="onSubmit()">
+    <ion-list [inset]="true">
+      <ion-item lines="none">
+        <ion-input errorText="Nazwa grupy jest wymagana" label="Nazwa grupy" labelPlacement="floating"
+          formControlName="name" type="text"></ion-input>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-input label="Organizator" labelPlacement="floating" formControlName="organizer"
+          (ngModelChange)="handleInput()" (ionBlur)="removeFocus()">
+        </ion-input>
+      </ion-item>
+      @for(user of results; track $index){
+      <ion-item lines="none" (click)="add(user)">
+        {{user.FIRSTNAME}} {{user.SURNAME}}
+      </ion-item>
+      }
+    </ion-list>
+    <ion-button type="submit" expand="full">Dodaj grupę
+    </ion-button>
+  </form>
+</ion-content>

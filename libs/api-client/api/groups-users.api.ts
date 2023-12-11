@@ -27,8 +27,9 @@ import { Configuration }                                     from '../configurat
 
 
 export interface AddUserToGroupAsyncRequestParams {
-    userId: number;
-    groupId: number;
+    idUser?: number;
+    idGroup?: number;
+    accountType?: number;
 }
 
 export interface DeleteAllGroupsFromUserRequestParams {
@@ -142,23 +143,22 @@ export class GroupsUsersApi {
     public addUserToGroupAsync(requestParameters: AddUserToGroupAsyncRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
     public addUserToGroupAsync(requestParameters: AddUserToGroupAsyncRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
     public addUserToGroupAsync(requestParameters: AddUserToGroupAsyncRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
-        const userId = requestParameters.userId;
-        if (userId === null || userId === undefined) {
-            throw new Error('Required parameter userId was null or undefined when calling addUserToGroupAsync.');
-        }
-        const groupId = requestParameters.groupId;
-        if (groupId === null || groupId === undefined) {
-            throw new Error('Required parameter groupId was null or undefined when calling addUserToGroupAsync.');
-        }
+        const idUser = requestParameters.idUser;
+        const idGroup = requestParameters.idGroup;
+        const accountType = requestParameters.accountType;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        if (userId !== undefined && userId !== null) {
+        if (idUser !== undefined && idUser !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>userId, 'userId');
+            <any>idUser, 'IdUser');
         }
-        if (groupId !== undefined && groupId !== null) {
+        if (idGroup !== undefined && idGroup !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>groupId, 'groupId');
+            <any>idGroup, 'IdGroup');
+        }
+        if (accountType !== undefined && accountType !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>accountType, 'AccountType');
         }
 
         let localVarHeaders = this.defaultHeaders;

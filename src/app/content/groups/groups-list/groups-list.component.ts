@@ -1,8 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AlertController, IonicModule } from '@ionic/angular';
+import { AlertController, IonicModule, ModalController } from '@ionic/angular';
 import { GetGroupsUsersResponse, GroupsUsersApi } from 'libs/api-client';
+import { GroupsComponent } from '../../form/groups/groups.component';
+import { Subscription } from 'rxjs';
+import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service';
 
 @Component({
   selector: 'app-groups-list',
@@ -16,13 +19,25 @@ export class GroupsListComponent implements OnInit {
   groupsUsers: GetGroupsUsersResponse[] = []
   isReady: boolean = false
   idUser: number = 0
+  private subscription: Subscription = new Subscription()
 
   constructor(
     private groupsUsersApi: GroupsUsersApi,
     private alertController: AlertController,
+    private modalCtrl: ModalController,
+    private refreshDataService: RefreshDataService,
   ) { }
 
   ngOnInit() {
+    this.subscription.add(
+      this.refreshDataService.refreshSubject.subscribe(
+        index => {
+          if (index === 'groups-list') {
+            this.getGroups()
+          }
+        }
+      )
+    )
     this.idUser = Number(localStorage.getItem('user_id'))
     this.getGroups()
   }
@@ -51,5 +66,12 @@ export class GroupsListComponent implements OnInit {
     })
   }
 
+  async openModal() {
+    const modal = await this.modalCtrl.create({
+      component: GroupsComponent,
+    })
+    modal.present()
+    await modal.onWillDismiss()
+  }
 
 }

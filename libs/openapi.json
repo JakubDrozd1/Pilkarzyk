@@ -227,18 +227,24 @@
         "operationId": "AddUserToGroupAsync",
         "parameters": [
           {
-            "name": "userId",
+            "name": "IdUser",
             "in": "query",
-            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
             }
           },
           {
-            "name": "groupId",
+            "name": "IdGroup",
             "in": "query",
-            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "AccountType",
+            "in": "query",
             "schema": {
               "type": "integer",
               "format": "int32"

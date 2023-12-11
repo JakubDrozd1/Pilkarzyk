@@ -4,7 +4,17 @@
   </ion-spinner>
 </div>
 }
-
+<ion-fab slot="fixed" vertical="top" horizontal="end">
+  <ion-fab-button>
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-list side="bottom">
+    <ion-fab-button expand="block" (click)="openModal()">
+      <ion-icon name="people-outline">
+      </ion-icon>
+    </ion-fab-button>
+  </ion-fab-list>
+</ion-fab>
 @if(isReady){
 <ion-card>
   <ion-card-header>

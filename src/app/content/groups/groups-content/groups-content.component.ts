@@ -31,7 +31,7 @@ export class GroupsContentComponent implements OnInit {
     private alertController: AlertController,
     private meetingsApi: MeetingsApi,
     private modalCtrl: ModalController,
-    private RefreshDataService: RefreshDataService,
+    private refreshDataService: RefreshDataService,
   ) { }
 
   ngOnInit() {
@@ -44,7 +44,7 @@ export class GroupsContentComponent implements OnInit {
       }
     )
     this.subscription.add(
-      this.RefreshDataService.refreshSubject.subscribe(
+      this.refreshDataService.refreshSubject.subscribe(
         index => {
           if (index === 'groups-content') {
             this.getDetails()

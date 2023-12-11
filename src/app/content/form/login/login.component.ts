@@ -64,7 +64,6 @@ export class LoginComponent implements OnInit {
           if (responses.token.access_token != null && responses.token.refresh_token != null) {
             success = this.authService.setLoggedIn(responses.token.access_token, responses.token.refresh_token)
           }
-          console.log(success)
           if (success) {
             this.authService.login()
             this.navigate()

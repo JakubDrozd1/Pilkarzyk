@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AlertController, IonicModule, ModalController } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 import { GetGroupsUsersResponse, GroupsUsersApi } from 'libs/api-client';
 import { GroupsComponent } from '../../form/groups/groups.component';
 import { Subscription } from 'rxjs';
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service';
+import { Alert } from 'src/app/helper/alert';
 
 @Component({
   selector: 'app-groups-list',
@@ -23,9 +24,9 @@ export class GroupsListComponent implements OnInit {
 
   constructor(
     private groupsUsersApi: GroupsUsersApi,
-    private alertController: AlertController,
     private modalCtrl: ModalController,
     private refreshDataService: RefreshDataService,
+    private alert: Alert
   ) { }
 
   ngOnInit() {
@@ -55,13 +56,8 @@ export class GroupsListComponent implements OnInit {
         this.groupsUsers = response
         this.isReady = true
       },
-      error: async () => {
-        const alert = await this.alertController.create({
-          header: 'Błąd',
-          message: 'Wystąpił błąd',
-          buttons: ['Ok'],
-        })
-        await alert.present()
+      error: () => {
+        this.alert.alertNotOk()
       }
     })
   }

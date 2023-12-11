@@ -43,6 +43,14 @@ export interface GetAllUsersRequestParams {
     sortMode?: string;
 }
 
+export interface GetAllUsersWithoutGroupAsyncRequestParams {
+    page: number;
+    onPage: number;
+    sortColumn?: string;
+    sortMode?: string;
+    idGroup?: number;
+}
+
 export interface GetUserByIdRequestParams {
     userId: number;
 }
@@ -338,6 +346,103 @@ export class UsersApi {
         }
 
         let localVarPath = `/api/users`;
+        return this.httpClient.request<Array<USERS>>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getAllUsersWithoutGroupAsync(requestParameters: GetAllUsersWithoutGroupAsyncRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<USERS>>;
+    public getAllUsersWithoutGroupAsync(requestParameters: GetAllUsersWithoutGroupAsyncRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<USERS>>>;
+    public getAllUsersWithoutGroupAsync(requestParameters: GetAllUsersWithoutGroupAsyncRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<USERS>>>;
+    public getAllUsersWithoutGroupAsync(requestParameters: GetAllUsersWithoutGroupAsyncRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+        const page = requestParameters.page;
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling getAllUsersWithoutGroupAsync.');
+        }
+        const onPage = requestParameters.onPage;
+        if (onPage === null || onPage === undefined) {
+            throw new Error('Required parameter onPage was null or undefined when calling getAllUsersWithoutGroupAsync.');
+        }
+        const sortColumn = requestParameters.sortColumn;
+        const sortMode = requestParameters.sortMode;
+        const idGroup = requestParameters.idGroup;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (page !== undefined && page !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>page, 'Page');
+        }
+        if (onPage !== undefined && onPage !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>onPage, 'OnPage');
+        }
+        if (sortColumn !== undefined && sortColumn !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sortColumn, 'SortColumn');
+        }
+        if (sortMode !== undefined && sortMode !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sortMode, 'SortMode');
+        }
+        if (idGroup !== undefined && idGroup !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>idGroup, 'IdGroup');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (api-pilkarzyk-oauth2) required
+        localVarCredential = this.configuration.lookupCredential('api-pilkarzyk-oauth2');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain',
+                'application/json',
+                'text/json'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/users/withoutGroup`;
         return this.httpClient.request<Array<USERS>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

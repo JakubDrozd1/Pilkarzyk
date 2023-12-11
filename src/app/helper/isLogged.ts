@@ -1,12 +1,13 @@
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from "@angular/router"
-import { AuthService } from "./auth.service"
+import { AuthService } from "../service/auth/auth.service"
 import { Injectable } from "@angular/core"
-import { Observable, catchError, map, of, take } from "rxjs"
+import { Observable, catchError, map, of } from "rxjs"
 
 @Injectable({
     providedIn: 'root',
 })
 export class IsLogged {
+
     constructor(
         private authService: AuthService,
         private router: Router,
@@ -16,7 +17,6 @@ export class IsLogged {
         _route: ActivatedRouteSnapshot,
         _state: RouterStateSnapshot
     ): Observable<boolean> {
-        console.log(this.authService.isLoggedIn)
         if (this.authService.isLoggedIn) {
             return of(true)
         }

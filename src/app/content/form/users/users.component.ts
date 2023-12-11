@@ -1,0 +1,117 @@
+import { CommonModule } from '@angular/common';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+import { Capacitor } from '@capacitor/core';
+import { Keyboard } from '@capacitor/keyboard';
+import { IonicModule, ModalController } from '@ionic/angular';
+import { GroupsUsersApi, USERS, UsersApi } from 'libs/api-client';
+import { Alert } from 'src/app/helper/alert';
+import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service';
+
+@Component({
+  selector: 'app-users',
+  templateUrl: './users.component.html',
+  styleUrls: ['./users.component.scss'],
+  standalone: true,
+  imports: [CommonModule, IonicModule, ReactiveFormsModule, FormsModule, RouterLink]
+})
+export class UsersComponent implements OnInit {
+
+  @Input() idGroup: number = 0
+
+  results: USERS[] = []
+  users: USERS[] = []
+  user: USERS | undefined
+  addExistingUserForm: FormGroup
+  idUser: number = 0
+
+  constructor
+    (
+      private modalCtrl: ModalController,
+      private fb: FormBuilder,
+      private usersApi: UsersApi,
+      private alert: Alert,
+      private groupsUsersApi: GroupsUsersApi,
+      private refreshDataService: RefreshDataService,
+    ) {
+    this.addExistingUserForm = this.fb.group({
+      user: ['', Validators.required],
+    })
+  }
+
+  ngOnInit() {
+    this.idUser = Number(localStorage.getItem("user_id"))
+    this.getUsers()
+  }
+
+  cancel() {
+    return this.modalCtrl.dismiss(null, 'cancel');
+  }
+
+  handleInput() {
+    let query = ''
+    query = this.addExistingUserForm.get('user')?.value.toLowerCase().trim()
+    this.results = this.users.filter((d) => {
+      const firstNameLowerCase = d.FIRSTNAME ? d.FIRSTNAME.toLowerCase() : ''
+      const surnameLowerCase = d.SURNAME ? d.SURNAME.toLowerCase() : ''
+      return firstNameLowerCase.indexOf(query) > -1 || surnameLowerCase.indexOf(query) > -1
+    })
+  }
+
+  removeFocus() {
+    if (Capacitor.isNativePlatform()) {
+      Keyboard.hide()
+    }
+  }
+
+  add(item: USERS) {
+    this.addExistingUserForm.get('user')?.setValue(item.FIRSTNAME + " " + item.SURNAME)
+    this.user = item
+    this.results = []
+  }
+
+  getUsers() {
+    this.users = []
+    this.usersApi.getAllUsersWithoutGroupAsync(
+      {
+        page: 0,
+        onPage: -1,
+        sortColumn: 'SURNAME',
+        sortMode: 'ASC',
+        idGroup: this.idGroup,
+      }
+    ).subscribe({
+      next: (response) => {
+        this.users = response
+      },
+      error: () => {
+        this.alert.alertNotOk()
+      }
+    })
+  }
+
+  onSubmit() {
+    this.addExistingUserForm.markAllAsTouched()
+    if (this.addExistingUserForm.valid) {
+      this.groupsUsersApi.addUserToGroupAsync({
+        idUser: this.user?.ID_USER,
+        idGroup: this.idGroup
+      }).subscribe({
+        next: () => {
+          this.alert.alertOk()
+          this.refreshDataService.refresh('groups-content')
+          this.cancel()
+          this.getUsers()
+          this.addExistingUserForm.get('user')?.setValue("")
+        },
+        error: () => {
+          this.alert.alertNotOk()
+          this.cancel()
+          this.addExistingUserForm.get('user')?.setValue("")
+        }
+      }
+      )
+    }
+  }
+}

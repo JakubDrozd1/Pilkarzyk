@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
-import { AlertController, IonicModule } from '@ionic/angular';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { IonicModule } from '@ionic/angular';
 import { TokenApi, UsersApi } from 'libs/api-client';
 import { forkJoin } from 'rxjs';
+import { Alert } from 'src/app/helper/alert';
 import { AppConfig } from 'src/app/service/app-config';
 import { AuthService } from 'src/app/service/auth/auth.service';
 
@@ -24,10 +25,10 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private usersApi: UsersApi,
-    private alertController: AlertController,
     private router: Router,
     private authService: AuthService,
-    private tokenApi: TokenApi
+    private tokenApi: TokenApi,
+    private alert: Alert
   ) {
     this.loginForm = this.fb.group({
       login: ['', Validators.required],
@@ -59,7 +60,7 @@ export class LoginComponent implements OnInit {
           password: this.loginForm.value.password
         })
       }).subscribe({
-        next: async (responses) => {
+        next: (responses) => {
           let success = false
           if (responses.token.access_token != null && responses.token.refresh_token != null) {
             success = this.authService.setLoggedIn(responses.token.access_token, responses.token.refresh_token)
@@ -69,25 +70,17 @@ export class LoginComponent implements OnInit {
             this.navigate()
           }
           else {
-            const alert = await this.alertController.create({
-              header: 'Błąd',
-              buttons: ['Ok'],
-            })
+            this.alert.alertNotOk()
           }
         },
-        error: async (error) => {
+        error: (error) => {
           let errorMessage = ''
           if (String(error.error).includes('User is null')) {
             errorMessage = 'Dany użytkownik nie istnieje.'
           } else if (String(error.error).includes('Password is not correct')) {
             errorMessage = 'Podane hasło jest niepoprawne. '
           }
-          const alert = await this.alertController.create({
-            header: 'Błąd',
-            message: errorMessage,
-            buttons: ['Ok'],
-          })
-          await alert.present()
+          this.alert.alertNotOk(errorMessage)
         }
       })
     }

@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Capacitor } from '@capacitor/core';
 import { Keyboard } from '@capacitor/keyboard';
-import { AlertController, IonicModule, ModalController } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 import { GroupsApi, GroupsUsersApi, USERS, UsersApi } from 'libs/api-client';
+import { Alert } from 'src/app/helper/alert';
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service';
 
 @Component({
@@ -29,8 +30,8 @@ export class GroupsComponent implements OnInit {
       private groupsApi: GroupsApi,
       private usersApi: UsersApi,
       private groupsUsersApi: GroupsUsersApi,
-      private alertController: AlertController,
       private refreshDataService: RefreshDataService,
+      private alert: Alert
     ) {
     this.groupForm = this.fb.group({
       name: ['', Validators.required],
@@ -57,40 +58,25 @@ export class GroupsComponent implements OnInit {
               idGroup: response.ID_GROUP,
               accountType: 1
             }).subscribe({
-              next: async () => {
-                const alert = await this.alertController.create({
-                  header: 'Ok',
-                  message: 'Pomyślnie dodano',
-                  buttons: ['Ok'],
-                })
-                await alert.present()
+              next: () => {
+                this.alert.alertOk()
                 this.cancel()
                 this.refreshDataService.refresh('groups-list')
               },
-              error: async () => {
-                const alert = await this.alertController.create({
-                  header: 'Błąd',
-                  message: 'Wystąpił błąd',
-                  buttons: ['Ok'],
-                })
-                await alert.present()
+              error: () => {
+                this.alert.alertNotOk()
                 this.cancel()
               }
             })
           }
           this.refreshDataService.refresh('groups-list')
         },
-        error: async (error) => {
+        error: (error) => {
           let errorMessage = ''
           if (String(error.error.message).includes('Group with this name already exists')) {
             errorMessage = 'Grupa z taką nazwą już istnieje.'
           }
-          const alert = await this.alertController.create({
-            header: 'Błąd',
-            message: errorMessage,
-            buttons: ['Ok'],
-          })
-          await alert.present()
+          this.alert.alertNotOk(errorMessage)
           this.cancel()
         }
       })
@@ -108,13 +94,8 @@ export class GroupsComponent implements OnInit {
         this.users = response
         this.isReady = true
       },
-      error: async () => {
-        const alert = await this.alertController.create({
-          header: 'Błąd',
-          message: 'Wystąpił błąd',
-          buttons: ['Ok'],
-        })
-        await alert.present()
+      error: () => {
+        this.alert.alertNotOk()
       }
     })
   }

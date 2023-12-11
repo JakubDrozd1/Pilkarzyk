@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AlertController, IonicModule, ModalController, NavParams } from '@ionic/angular';
+import { IonicModule, ModalController, NavParams } from '@ionic/angular';
 import { GetGroupsUsersResponse, MeetingsApi } from 'libs/api-client';
 import * as moment from 'moment';
-import { Subscription } from 'rxjs';
+import { Alert } from 'src/app/helper/alert';
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service';
 
 @Component({
@@ -27,8 +27,8 @@ export class MeetingComponent implements OnInit {
       private modalCtrl: ModalController,
       private meetingsApi: MeetingsApi,
       private navParams: NavParams,
-      private alertController: AlertController,
-      private refreshDataService: RefreshDataService
+      private refreshDataService: RefreshDataService,
+      private alert: Alert
     ) {
     this.meetingForm = this.fb.group({
       dateMeeting: ['', Validators.required],
@@ -63,23 +63,13 @@ export class MeetingComponent implements OnInit {
             }
           }
         ).subscribe({
-          next: async () => {
-            const alert = await this.alertController.create({
-              header: 'OK',
-              message: "Dodano pomyślnie",
-              buttons: ['Ok'],
-            });
-            await alert.present()
+          next: () => {
+            this.alert.alertOk()
             this.refreshDataService.refresh('groups-content')
             this.cancel()
           },
-          error: async () => {
-            const alert = await this.alertController.create({
-              header: 'Błąd',
-              message: "Wystąpił problem",
-              buttons: ['Ok'],
-            });
-            await alert.present()
+          error: () => {
+            this.alert.alertNotOk()
             this.cancel()
           }
         })

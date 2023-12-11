@@ -4,7 +4,7 @@ import { AuthComponent } from './controller/auth/auth.component';
 import { LoginComponent } from './content/form/login/login.component';
 import { RegisterComponent } from './content/form/register/register.component';
 import { inject } from '@angular/core';
-import { IsLogged } from './service/auth/isLogged';
+import { IsLogged } from './helper/isLogged';
 
 const IsLoggedFn: CanActivateFn =
     (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {

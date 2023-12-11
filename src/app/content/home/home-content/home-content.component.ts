@@ -1,17 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { AlertController, IonicModule } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 import { GetMeetingUsersGroupsResponse, MeetingsApi, USERS, UsersApi } from 'libs/api-client';
 import * as moment from 'moment';
 import { forkJoin } from 'rxjs';
 import { MeetingContentComponent } from "../../meeting/meeting-content/meeting-content.component";
+import { Alert } from 'src/app/helper/alert';
 
 @Component({
-    selector: 'app-home-content',
-    templateUrl: './home-content.component.html',
-    styleUrls: ['./home-content.component.scss'],
-    standalone: true,
-    imports: [CommonModule, IonicModule, MeetingContentComponent]
+  selector: 'app-home-content',
+  templateUrl: './home-content.component.html',
+  styleUrls: ['./home-content.component.scss'],
+  standalone: true,
+  imports: [CommonModule, IonicModule, MeetingContentComponent]
 })
 export class HomeContentComponent implements OnInit {
 
@@ -25,7 +26,7 @@ export class HomeContentComponent implements OnInit {
     (
       private usersApi: UsersApi,
       private meetingsApi: MeetingsApi,
-      private alertController: AlertController
+      private alert: Alert
     ) { }
 
   ngOnInit() {
@@ -53,18 +54,12 @@ export class HomeContentComponent implements OnInit {
       next: ([userResponse, meetingsResponse]) => {
         this.user = userResponse
         this.meetings = meetingsResponse;
-        this.isReady = true;
+        this.isReady = true
       },
-      error: async () => {
-        const alert = await this.alertController.create({
-          header: 'Błąd',
-          message: 'Wystąpił błąd',
-          buttons: ['Ok'],
-        });
-        this.meetings = [];
-        this.isReady = true;
-        await alert.present();
+      error: () => {
+        this.alert.alertNotOk()
+        this.isReady = true
       }
-    });
+    })
   }
 }

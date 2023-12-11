@@ -1,19 +1,21 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AlertController, IonicModule, ModalController } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 import { GetGroupsUsersResponse, GetMeetingUsersGroupsResponse, GroupsUsersApi, MeetingsApi } from 'libs/api-client';
 import { Subscription, forkJoin } from 'rxjs';
 import { MeetingComponent } from "../../form/meeting/meeting.component";
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service';
 import { MeetingContentComponent } from "../../meeting/meeting-content/meeting-content.component";
+import { UsersComponent } from '../../form/users/users.component';
+import { Alert } from 'src/app/helper/alert';
 
 @Component({
-    selector: 'app-groups-content',
-    templateUrl: './groups-content.component.html',
-    styleUrls: ['./groups-content.component.scss'],
-    standalone: true,
-    imports: [CommonModule, IonicModule, MeetingComponent, MeetingContentComponent]
+  selector: 'app-groups-content',
+  templateUrl: './groups-content.component.html',
+  styleUrls: ['./groups-content.component.scss'],
+  standalone: true,
+  imports: [CommonModule, IonicModule, MeetingComponent, MeetingContentComponent]
 })
 export class GroupsContentComponent implements OnInit {
 
@@ -28,10 +30,10 @@ export class GroupsContentComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private groupsUsersApi: GroupsUsersApi,
-    private alertController: AlertController,
     private meetingsApi: MeetingsApi,
     private modalCtrl: ModalController,
     private refreshDataService: RefreshDataService,
+    private alert: Alert
   ) { }
 
   ngOnInit() {
@@ -79,27 +81,33 @@ export class GroupsContentComponent implements OnInit {
         this.nameGroup = responses.groupsUsers[0].Name
         this.isReady = true
       },
-      error: async () => {
-        const alert = await this.alertController.create({
-          header: 'Błąd',
-          message: 'Wystąpił błąd',
-          buttons: ['Ok'],
-        })
+      error: () => {
+        this.alert.alertNotOk()
         this.groupsUsers = []
         this.meetings = []
         this.nameGroup = ""
         this.isReady = true
-        await alert.present()
       }
     })
   }
 
-  async openModal() {
+  async openModalAddMeeting() {
     const modal = await this.modalCtrl.create({
       component: MeetingComponent,
       componentProps: {
         idGroup: this.idGroup,
         groupsUsers: this.groupsUsers,
+      }
+    })
+    modal.present()
+    await modal.onWillDismiss()
+  }
+
+  async openModalAddUser() {
+    const modal = await this.modalCtrl.create({
+      component: UsersComponent,
+      componentProps: {
+        idGroup: this.idGroup,
       }
     })
     modal.present()

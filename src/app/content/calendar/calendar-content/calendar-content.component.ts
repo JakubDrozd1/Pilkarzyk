@@ -1,10 +1,11 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AlertController, IonicModule } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 import { GetMeetingUsersGroupsResponse, MeetingsApi } from 'libs/api-client';
 import { MeetingContentComponent } from '../../meeting/meeting-content/meeting-content.component';
 import * as moment from 'moment';
+import { Alert } from 'src/app/helper/alert';
 
 @Component({
   selector: 'app-calendar-content',
@@ -26,8 +27,8 @@ export class CalendarContentComponent implements OnInit {
   constructor
     (
       private meetingsApi: MeetingsApi,
-      private alertController: AlertController,
-      private datePipe: DatePipe
+      private datePipe: DatePipe,
+      private alert: Alert
     ) { }
 
   ngOnInit() {
@@ -58,15 +59,10 @@ export class CalendarContentComponent implements OnInit {
           })
         this.isReady = true
       },
-      error: async () => {
-        const alert = await this.alertController.create({
-          header: 'Błąd',
-          message: 'Wystąpił błąd',
-          buttons: ['Ok'],
-        })
+      error: () => {
+        this.alert.alertNotOk()
         this.meetings = []
         this.isReady = true
-        await alert.present()
       }
     })
   }
@@ -97,15 +93,10 @@ export class CalendarContentComponent implements OnInit {
             }
             this.isReady = true
           },
-          error: async () => {
-            const alert = await this.alertController.create({
-              header: 'Błąd',
-              message: 'Wystąpił błąd',
-              buttons: ['Ok'],
-            })
+          error: () => {
+            this.alert.alertNotOk()
             this.meetingsSelected = []
             this.isReady = true
-            await alert.present()
           }
         })
       }

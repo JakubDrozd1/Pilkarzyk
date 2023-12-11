@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController, IonicModule } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 import { MaskitoModule } from '@maskito/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import { UsersApi } from 'libs/api-client';
-import { compareValidator } from 'src/app/controller/auth/validateConfirmPasswd';
+import { Alert } from 'src/app/helper/alert';
+import { compareValidator } from 'src/app/helper/validateConfirmPasswd';
 import { AuthService } from 'src/app/service/auth/auth.service';
 
 @Component({
@@ -28,9 +29,9 @@ export class RegisterComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private usersApi: UsersApi,
-    private alertController: AlertController,
     private authService: AuthService,
     private router: Router,
+    private alert: Alert
   ) {
     this.registrationForm = this.fb.group({
       login: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]],
@@ -67,21 +68,11 @@ export class RegisterComponent implements OnInit {
         }
       )
         .subscribe({
-          next: async () => {
-            const alert = await this.alertController.create({
-              header: 'OK',
-              message: "Zarejestronano pomyślnie",
-              buttons: ['Ok'],
-            })
-            await alert.present()
+          next: () => {
+            this.alert.alertOk("Zarejestronano pomyślnie")
           },
-          error: async () => {
-            const alert = await this.alertController.create({
-              header: 'Błąd',
-              message: "Wystąpił problem",
-              buttons: ['Ok'],
-            })
-            await alert.present()
+          error: () => {
+            this.alert.alertNotOk()
           }
         })
     }

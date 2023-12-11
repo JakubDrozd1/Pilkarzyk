@@ -5,6 +5,8 @@ import { RouterLink } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 import { Keyboard } from '@capacitor/keyboard';
 import { IonicModule, ModalController } from '@ionic/angular';
+import { MaskitoModule } from '@maskito/angular';
+import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import { GroupsUsersApi, USERS, UsersApi } from 'libs/api-client';
 import { Alert } from 'src/app/helper/alert';
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service';
@@ -14,7 +16,7 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, ReactiveFormsModule, FormsModule, RouterLink]
+  imports: [CommonModule, IonicModule, ReactiveFormsModule, FormsModule, MaskitoModule, RouterLink]
 })
 export class UsersComponent implements OnInit {
 
@@ -25,6 +27,12 @@ export class UsersComponent implements OnInit {
   user: USERS | undefined
   addExistingUserForm: FormGroup
   idUser: number = 0
+  readonly phoneMask: MaskitoOptions =
+    {
+      mask: [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/,],
+    }
+  readonly maskPredicate: MaskitoElementPredicateAsync = async (el) => (el as HTMLIonInputElement).getInputElement()
+  addNewUserForm: FormGroup
 
   constructor
     (
@@ -37,6 +45,10 @@ export class UsersComponent implements OnInit {
     ) {
     this.addExistingUserForm = this.fb.group({
       user: ['', Validators.required],
+    })
+    this.addNewUserForm = this.fb.group({
+      email: ['', Validators.required],
+      phoneNumber: ['', Validators.required]
     })
   }
 
@@ -91,7 +103,7 @@ export class UsersComponent implements OnInit {
     })
   }
 
-  onSubmit() {
+  onSubmitExisting() {
     this.addExistingUserForm.markAllAsTouched()
     if (this.addExistingUserForm.valid) {
       this.groupsUsersApi.addUserToGroupAsync({
@@ -112,6 +124,13 @@ export class UsersComponent implements OnInit {
         }
       }
       )
+    }
+  }
+  
+  onSubmitNew() {
+    this.addExistingUserForm.markAllAsTouched()
+    if (this.addNewUserForm.valid) {
+
     }
   }
 }

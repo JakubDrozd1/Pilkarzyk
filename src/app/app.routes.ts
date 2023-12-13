@@ -5,6 +5,7 @@ import { LoginComponent } from './content/form/login/login.component';
 import { RegisterComponent } from './content/form/register/register.component';
 import { inject } from '@angular/core';
 import { IsLogged } from './helper/isLogged';
+import { RegisterLinkComponent } from './content/form/register-link/register-link.component';
 
 const IsLoggedFn: CanActivateFn =
     (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
@@ -66,6 +67,10 @@ export const routes: Routes = [
                 pathMatch: 'full',
             },
         ],
+    },
+    {
+        path: 'register/:idGroup',
+        component: RegisterLinkComponent,
     },
     {
         path: '**',

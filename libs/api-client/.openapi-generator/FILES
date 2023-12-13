@@ -13,6 +13,7 @@ configuration.ts
 encoder.ts
 git_push.sh
 index.ts
+model/get-email-sender-request.ts
 model/get-group-request.ts
 model/get-groups-users-response.ts
 model/get-meeting-request.ts

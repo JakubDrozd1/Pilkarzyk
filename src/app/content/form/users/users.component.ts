@@ -7,7 +7,8 @@ import { Keyboard } from '@capacitor/keyboard';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { MaskitoModule } from '@maskito/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
-import { GroupsUsersApi, USERS, UsersApi } from 'libs/api-client';
+import { GroupsApi, GroupsUsersApi, USERS, UsersApi } from 'libs/api-client';
+import { forkJoin } from 'rxjs';
 import { Alert } from 'src/app/helper/alert';
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service';
 
@@ -42,13 +43,14 @@ export class UsersComponent implements OnInit {
       private alert: Alert,
       private groupsUsersApi: GroupsUsersApi,
       private refreshDataService: RefreshDataService,
+      private groupsApi: GroupsApi
     ) {
     this.addExistingUserForm = this.fb.group({
       user: ['', Validators.required],
     })
     this.addNewUserForm = this.fb.group({
-      email: ['', Validators.required],
-      phoneNumber: ['', Validators.required]
+      email: [''],
+      phoneNumber: ['']
     })
   }
 
@@ -115,22 +117,56 @@ export class UsersComponent implements OnInit {
           this.refreshDataService.refresh('groups-content')
           this.cancel()
           this.getUsers()
-          this.addExistingUserForm.get('user')?.setValue("")
+          this.addExistingUserForm.reset()
         },
         error: () => {
           this.alert.alertNotOk()
           this.cancel()
-          this.addExistingUserForm.get('user')?.setValue("")
+          this.addExistingUserForm.reset()
         }
       }
       )
     }
   }
-  
+
   onSubmitNew() {
     this.addExistingUserForm.markAllAsTouched()
     if (this.addNewUserForm.valid) {
+      if (this.addNewUserForm.value.email) {
+        forkJoin({
+          user: this.usersApi.getUserById({
+            userId: this.idUser
+          }),
+          group: this.groupsApi.getGroupById({
+            groupId: this.idGroup
+          })
+        }).subscribe({
+          next: (responses) => {
+            this.usersApi.sendInvitationEmail({
+              getEmailSenderRequest: {
+                To: this.addNewUserForm.value.email,
+                Name: responses.user.FIRSTNAME,
+                Surname: responses.user.SURNAME,
+                GroupName: responses.group.NAME,
+                IdGroup: this.idGroup,
+              }
+            }).subscribe({
+              next: () => {
+                this.alert.alertOk("Wysłano emaila z zaproszeniem")
+              },
+              error: (error) => {
+                console.log(error)
+                this.alert.alertNotOk()
+              }
+            })
+          },
+          error: (error) => {
+            console.log(error)
 
+            this.alert.alertNotOk()
+          }
+        })
+      }
     }
   }
 }

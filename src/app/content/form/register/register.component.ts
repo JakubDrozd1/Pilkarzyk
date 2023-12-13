@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { MaskitoModule } from '@maskito/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
-import { UsersApi } from 'libs/api-client';
+import { USERS, UsersApi } from 'libs/api-client';
 import { Alert } from 'src/app/helper/alert';
 import { compareValidator } from 'src/app/helper/validateConfirmPasswd';
 import { AuthService } from 'src/app/service/auth/auth.service';
@@ -18,6 +18,8 @@ import { AuthService } from 'src/app/service/auth/auth.service';
   imports: [CommonModule, IonicModule, MaskitoModule, ReactiveFormsModule, FormsModule]
 })
 export class RegisterComponent implements OnInit {
+
+  @Output() userRegistered: EventEmitter<any> = new EventEmitter();
 
   readonly phoneMask: MaskitoOptions =
     {
@@ -68,8 +70,12 @@ export class RegisterComponent implements OnInit {
         }
       )
         .subscribe({
-          next: () => {
-            this.alert.alertOk("Zarejestronano pomyślnie")
+          next: (response) => {
+            this.alert.alertOk("Zarejestronano pomyślnie. Możesz się zalogować")
+            this.registrationForm.reset()
+            this.router.navigate(["/login"])
+            this.userRegistered.emit(response);
+
           },
           error: () => {
             this.alert.alertNotOk()

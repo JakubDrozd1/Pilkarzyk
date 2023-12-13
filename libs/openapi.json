@@ -1795,6 +1795,38 @@
           }
         }
       }
+    },
+    "/api/users/sendInvitationEmail": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "SendInvitationEmail",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetEmailSenderRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetEmailSenderRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetEmailSenderRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1809,6 +1841,46 @@
           },
           "NAME": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetEmailSenderRequest": {
+        "type": "object",
+        "properties": {
+          "To": {
+            "type": "string",
+            "nullable": true
+          },
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "Surname": {
+            "type": "string",
+            "nullable": true
+          },
+          "GroupName": {
+            "type": "string",
+            "nullable": true
+          },
+          "IdGroup": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "BlindCarbonCopy": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "CarbonCopy": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
             "nullable": true
           }
         },
@@ -2338,7 +2410,7 @@
             "type": "string",
             "nullable": true
           },
-          "PASSWORD": {
+          "USER_PASSWORD": {
             "type": "string",
             "nullable": true
           },

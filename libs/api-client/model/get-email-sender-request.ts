@@ -11,15 +11,13 @@
  */
 
 
-export interface USERS { 
-    ID_USER?: number;
-    LOGIN?: string | null;
-    USER_PASSWORD?: string | null;
-    EMAIL?: string | null;
-    FIRSTNAME?: string | null;
-    SURNAME?: string | null;
-    PHONE_NUMBER?: number;
-    IS_ADMIN?: boolean;
-    SALT?: string | null;
+export interface GetEmailSenderRequest { 
+    To?: string | null;
+    Name?: string | null;
+    Surname?: string | null;
+    GroupName?: string | null;
+    IdGroup?: number;
+    BlindCarbonCopy?: Array<string> | null;
+    CarbonCopy?: Array<string> | null;
 }
 

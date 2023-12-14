@@ -39,10 +39,6 @@ export const routes: Routes = [
                 loadComponent: () => import('./layout/profile-page/profile-page.component').then(m => m.ProfilePageComponent),
             },
             {
-                path: 'settings',
-                loadComponent: () => import('./layout/settings-page/settings-page.component').then(m => m.SettingsPageComponent),
-            },
-            {
                 path: '',
                 redirectTo: 'logged/home',
                 pathMatch: 'full',

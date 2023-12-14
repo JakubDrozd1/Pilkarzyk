@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { RegisterComponent } from "../register/register.component";
-import { GroupsUsersApi, USERS, UsersApi } from 'libs/api-client';
+import { GroupsUsersApi, UsersApi } from 'libs/api-client';
 import { ActivatedRoute } from '@angular/router';
 import { Alert } from 'src/app/helper/alert';
 

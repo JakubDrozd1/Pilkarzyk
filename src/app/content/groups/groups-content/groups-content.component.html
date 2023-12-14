@@ -1,9 +1,3 @@
-@if(!isReady){
-<div style="text-align: center;">
-  <ion-spinner color="primary" name="crescent">
-  </ion-spinner>
-</div>
-}
 <ion-header>
   <ion-toolbar>
     <ion-title>{{nameGroup}}
@@ -14,8 +8,46 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-@if(isReady){
+
+<ion-fab slot="fixed" vertical="bottom" horizontal="end">
+  <ion-fab-button>
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-list side="top">
+    <ion-fab-button expand="block" (click)="openModalAddMeeting()">
+      <ion-icon size="large" name="chatbubbles-outline">
+      </ion-icon>
+    </ion-fab-button>
+    <ion-fab-button expand="block" (click)="openModalAddUser()">
+      <ion-icon size="large" name="person-add-outline">
+      </ion-icon>
+    </ion-fab-button>
+  </ion-fab-list>
+</ion-fab>
+
+@if(!isReady){
+<div style="text-align: center;">
+  <ion-spinner color="primary" name="crescent">
+  </ion-spinner>
+</div>
+}
+
+<ion-segment [(ngModel)]="selectedSegment" swipeGesture="true">
+  <ion-segment-button vertical="top" value="meetings">
+    <ion-label>Spotkania</ion-label>
+  </ion-segment-button>
+  <ion-segment-button vertical="top" value="members">
+    <ion-label>Członkowie</ion-label>
+  </ion-segment-button>
+  <ion-segment-button vertical="top" value="ranking">
+    <ion-label>Ranking</ion-label>
+  </ion-segment-button>
+</ion-segment>
 <ion-content class="ion-padding">
+
+  @if(isReady){
+  @switch (selectedSegment) {
+  @case ("meetings") {
   <ion-list [inset]="true">
     <ion-label> Spotkania:
     </ion-label>
@@ -23,6 +55,8 @@
     <app-meeting-content [meeting]="item"></app-meeting-content>
     }
   </ion-list>
+  }
+  @case ("members") {
   <ion-list [inset]="true">
     <ion-label>
       Członkowie:
@@ -47,20 +81,7 @@
     </ion-card>
     }
   </ion-list>
-  <ion-fab slot="fixed" vertical="top" horizontal="end">
-    <ion-fab-button>
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-    <ion-fab-list side="bottom">
-      <ion-fab-button expand="block" (click)="openModalAddMeeting()">
-        <ion-icon name="chatbubbles-outline">
-        </ion-icon>
-      </ion-fab-button>
-      <ion-fab-button expand="block" (click)="openModalAddUser()">
-        <ion-icon name="person-add-outline">
-        </ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
-  </ion-fab>
+  }
+  }
+  }
 </ion-content>
-}

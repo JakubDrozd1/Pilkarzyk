@@ -9,13 +9,14 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
 import { MeetingContentComponent } from "../../meeting/meeting-content/meeting-content.component";
 import { UsersComponent } from '../../form/users/users.component';
 import { Alert } from 'src/app/helper/alert';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-groups-content',
   templateUrl: './groups-content.component.html',
   styleUrls: ['./groups-content.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, MeetingComponent, MeetingContentComponent]
+  imports: [CommonModule, IonicModule, MeetingComponent, MeetingContentComponent, FormsModule]
 })
 export class GroupsContentComponent implements OnInit {
 
@@ -26,6 +27,7 @@ export class GroupsContentComponent implements OnInit {
   nameGroup: string | undefined | null
   add: boolean = false
   private subscription: Subscription = new Subscription()
+  selectedSegment: string = 'meetings'
 
   constructor(
     private route: ActivatedRoute,

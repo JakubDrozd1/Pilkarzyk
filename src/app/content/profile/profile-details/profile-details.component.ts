@@ -6,6 +6,7 @@ import { Alert } from 'src/app/helper/alert';
 import { LogoutComponent } from "../../logout/logout.component";
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service';
 import { Subscription } from 'rxjs';
+import { ProfileComponent } from '../../form/profile/profile.component';
 
 @Component({
   selector: 'app-profile-details',
@@ -107,7 +108,7 @@ export class ProfileDetailsComponent implements OnInit {
         }).subscribe({
           next: () => {
             this.alert.alertOk("Udało się zmienić avatar")
-            this.refreshDataService.refresh('groups-list')
+            this.refreshDataService.refresh('profile-details')
           },
           error: () => {
             this.alert.alertNotOk()
@@ -134,4 +135,31 @@ export class ProfileDetailsComponent implements OnInit {
     })
   }
 
+  openModalEditMail() {
+    this.openModalEdit("mail", this.user?.EMAIL)
+  }
+
+  openModalEditPhoneNumber() {
+    this.openModalEdit("phone", String(this.user?.PHONE_NUMBER))
+  }
+
+  openModalAddLogin() {
+    this.openModalEdit("login", this.user?.LOGIN)
+  }
+
+  openModalEditName() {
+    this.openModalEdit("name", this.user?.FIRSTNAME + " " + this.user?.SURNAME)
+  }
+
+  async openModalEdit(mode: string, data: string | null | undefined) {
+    const modal = await this.modalCtrl.create({
+      component: ProfileComponent,
+      componentProps: {
+        inputEdit: mode,
+        data: data
+      }
+    })
+    modal.present()
+    await modal.onWillDismiss()
+  }
 }

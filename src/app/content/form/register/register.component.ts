@@ -19,7 +19,7 @@ import { AuthService } from 'src/app/service/auth/auth.service';
 })
 export class RegisterComponent implements OnInit {
 
-  @Output() userRegistered: EventEmitter<any> = new EventEmitter();
+  @Output() userRegistered: EventEmitter<any> = new EventEmitter()
 
   readonly phoneMask: MaskitoOptions =
     {
@@ -68,19 +68,17 @@ export class RegisterComponent implements OnInit {
             PhoneNumber: intNumber,
           }
         }
-      )
-        .subscribe({
-          next: (response) => {
-            this.alert.alertOk("Zarejestronano pomyślnie. Możesz się zalogować")
-            this.registrationForm.reset()
-            this.router.navigate(["/login"])
-            this.userRegistered.emit(response);
-
-          },
-          error: () => {
-            this.alert.alertNotOk()
-          }
-        })
+      ).subscribe({
+        next: (response) => {
+          this.alert.alertOk("Zarejestronano pomyślnie. Możesz się zalogować")
+          this.registrationForm.reset()
+          this.router.navigate(["/login"])
+          this.userRegistered.emit(response)
+        },
+        error: () => {
+          this.alert.alertNotOk()
+        }
+      })
     }
   }
   private navigate() {

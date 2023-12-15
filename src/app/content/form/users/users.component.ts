@@ -154,15 +154,12 @@ export class UsersComponent implements OnInit {
               next: () => {
                 this.alert.alertOk("Wysłano emaila z zaproszeniem")
               },
-              error: (error) => {
-                console.log(error)
+              error: () => {
                 this.alert.alertNotOk()
               }
             })
           },
-          error: (error) => {
-            console.log(error)
-
+          error: () => {
             this.alert.alertNotOk()
           }
         })

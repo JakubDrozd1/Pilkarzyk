@@ -7,6 +7,7 @@ import { LogoutComponent } from "../../logout/logout.component";
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service';
 import { Subscription } from 'rxjs';
 import { ProfileComponent } from '../../form/profile/profile.component';
+import { ProfilePasswordComponent } from '../../form/profile-password/profile-password.component';
 
 @Component({
   selector: 'app-profile-details',
@@ -67,6 +68,7 @@ export class ProfileDetailsComponent implements OnInit {
       },
       error: () => {
         this.alert.alertNotOk()
+        this.isReady = true
       }
     })
   }
@@ -96,7 +98,6 @@ export class ProfileDetailsComponent implements OnInit {
   onFileSelected(event: any) {
     const selectedFile = event.target.files[0]
     const maxSizeInBytes = 5 * 1024 * 1024
-    console.log(selectedFile)
     if (selectedFile && selectedFile.size <= maxSizeInBytes) {
       this.convertFileToBase64(selectedFile).then((base64String) => {
         this.usersApi.updateColumnUser({
@@ -162,4 +163,13 @@ export class ProfileDetailsComponent implements OnInit {
     modal.present()
     await modal.onWillDismiss()
   }
+
+  async openModalEditPassword() {
+    const modal = await this.modalCtrl.create({
+      component: ProfilePasswordComponent,
+    })
+    modal.present()
+    await modal.onWillDismiss()
+  }
+
 }

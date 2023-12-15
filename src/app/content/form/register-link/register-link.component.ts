@@ -38,7 +38,6 @@ export class RegisterLinkComponent implements OnInit {
   }
 
   onUserRegistered(user: any) {
-    console.log(user)
     this.usersApi.getUserByLoginAndPassword({
       login: user.Login ?? "",
       password: user.Password ?? "",

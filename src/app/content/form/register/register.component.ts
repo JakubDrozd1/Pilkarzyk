@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { MaskitoModule } from '@maskito/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
-import { USERS, UsersApi } from 'libs/api-client';
+import { UsersApi } from 'libs/api-client';
 import { Alert } from 'src/app/helper/alert';
 import { compareValidator } from 'src/app/helper/validateConfirmPasswd';
 import { AuthService } from 'src/app/service/auth/auth.service';

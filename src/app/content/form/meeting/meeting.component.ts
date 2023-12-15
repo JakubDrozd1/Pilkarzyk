@@ -65,6 +65,7 @@ export class MeetingComponent implements OnInit {
         ).subscribe({
           next: () => {
             this.alert.alertOk()
+            this.meetingForm.reset()
             this.refreshDataService.refresh('groups-content')
             this.cancel()
           },

@@ -1713,6 +1713,49 @@
         }
       }
     },
+    "/api/users/column-{userId}": {
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "UpdateColumnUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUpdateUserRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUpdateUserRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUpdateUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/users/withoutGroup": {
       "get": {
         "tags": [
@@ -2239,6 +2282,49 @@
         },
         "additionalProperties": false
       },
+      "GetUpdateUserRequest": {
+        "type": "object",
+        "properties": {
+          "LOGIN": {
+            "type": "string",
+            "nullable": true
+          },
+          "USER_PASSWORD": {
+            "type": "string",
+            "nullable": true
+          },
+          "EMAIL": {
+            "type": "string",
+            "nullable": true
+          },
+          "FIRSTNAME": {
+            "type": "string",
+            "nullable": true
+          },
+          "SURNAME": {
+            "type": "string",
+            "nullable": true
+          },
+          "PHONE_NUMBER": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "AVATAR": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "Column": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "GetUserRequest": {
         "type": "object",
         "properties": {
@@ -2434,6 +2520,10 @@
             "type": "boolean"
           },
           "SALT": {
+            "type": "string",
+            "nullable": true
+          },
+          "AVATAR": {
             "type": "string",
             "nullable": true
           }

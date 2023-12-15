@@ -10,6 +10,7 @@ export * from './get-ranking-request';
 export * from './get-rankings-users-groups-response';
 export * from './get-token-request';
 export * from './get-token-response';
+export * from './get-update-user-request';
 export * from './get-user-request';
 export * from './meetings';
 export * from './messages';

@@ -1,33 +1,35 @@
-@if(!isReady){
-<div style="text-align: center;">
-  <ion-spinner color="primary" name="crescent">
-  </ion-spinner>
-</div>
-}
-<ion-fab slot="fixed" vertical="bottom" horizontal="end">
-  <ion-fab-button>
-    <ion-icon name="add"></ion-icon>
-  </ion-fab-button>
-  <ion-fab-list side="top">
-    <ion-fab-button expand="block" (click)="openModal()">
-      <ion-icon size="large" name="people-outline">
-      </ion-icon>
-    </ion-fab-button>
-  </ion-fab-list>
-</ion-fab>
-@if(isReady){
-<ion-card>
-  <ion-card-header>
-    <ion-card-title>Twoje grupy</ion-card-title>
-  </ion-card-header>
-  <ion-card-content>
-    <ion-list [inset]="true">
-      @for (item of groupsUsers; track $index) {
-      <ion-item [routerLink]="['/logged/groups', item.IdGroup]" button detail="true">
+<ion-content>
+  @if(!isReady){
+  <div style="text-align: center;">
+    <ion-spinner color="primary" name="crescent">
+    </ion-spinner>
+  </div>
+  }
+
+  @if(isReady){
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Twoje grupy</ion-card-title>
+    </ion-card-header>
+    @for (item of groupsUsers; track $index) {
+    <ion-card-content>
+      <ion-item lines="full" [routerLink]="['/logged/groups', item.IdGroup]" button detail="true">
         {{item.Name}}
       </ion-item>
-      }
-    </ion-list>
-  </ion-card-content>
-</ion-card>
-}
+    </ion-card-content>
+    }
+  </ion-card>
+  }
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button expand="block" (click)="openModal()">
+        <ion-icon size="large" name="people-outline">
+        </ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+</ion-content>

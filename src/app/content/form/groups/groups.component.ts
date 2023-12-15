@@ -61,6 +61,7 @@ export class GroupsComponent implements OnInit {
               next: () => {
                 this.alert.alertOk()
                 this.cancel()
+                this.groupForm.reset()
                 this.refreshDataService.refresh('groups-list')
               },
               error: () => {

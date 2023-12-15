@@ -11,16 +11,14 @@
  */
 
 
-export interface USERS { 
-    ID_USER?: number;
+export interface GetUpdateUserRequest { 
     LOGIN?: string | null;
     USER_PASSWORD?: string | null;
     EMAIL?: string | null;
     FIRSTNAME?: string | null;
     SURNAME?: string | null;
-    PHONE_NUMBER?: number;
-    IS_ADMIN?: boolean;
-    SALT?: string | null;
+    PHONE_NUMBER?: number | null;
     AVATAR?: string | null;
+    Column?: Array<string> | null;
 }
 

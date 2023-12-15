@@ -1,0 +1,32 @@
+.avatar {
+  margin: auto;
+  width: auto !important;
+  height: auto !important;
+  max-width: 200px !important;
+  max-height: 200px !important;
+  margin-top: 10px !important;
+  min-width: 200px !important;
+  min-height: 200px !important;
+}
+.avatar:active {
+  filter: brightness(120%);
+}
+.title {
+  --border-color: var(--ion-color-secondary);
+}
+.title:active {
+  transform: scale(0.97);
+  filter: brightness(120%);
+}
+.label {
+  font-size: 13px;
+  color: var(--ion-color-tririary);
+}
+img{
+  min-width: 200px !important;
+  min-height: 200px !important;
+}
+ion-spinner {
+  width: 100px;
+  height: 100px;
+}

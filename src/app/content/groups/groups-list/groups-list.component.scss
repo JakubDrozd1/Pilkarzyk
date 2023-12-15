@@ -5,3 +5,6 @@ ion-spinner {
 ion-item:active {
   transform: scale(0.97);
 }
+ion-item {
+  --border-color: var(--ion-color-secondary);
+}

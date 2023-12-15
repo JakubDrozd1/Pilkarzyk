@@ -21,6 +21,8 @@ import { AuthService } from 'src/app/service/auth/auth.service';
 export class LoginComponent implements OnInit {
 
   loginForm: FormGroup
+  errorMessage: string = ''
+
 
   constructor(
     private fb: FormBuilder,
@@ -66,6 +68,7 @@ export class LoginComponent implements OnInit {
             success = this.authService.setLoggedIn(responses.token.access_token, responses.token.refresh_token)
           }
           if (success) {
+            this.loginForm.reset()
             this.authService.login()
             this.navigate()
           }
@@ -74,13 +77,15 @@ export class LoginComponent implements OnInit {
           }
         },
         error: (error) => {
-          let errorMessage = ''
           if (String(error.error).includes('User is null')) {
-            errorMessage = 'Dany użytkownik nie istnieje.'
+            this.errorMessage = 'Dany użytkownik nie istnieje.'
+            this.alert.alertNotOk(this.errorMessage)
           } else if (String(error.error).includes('Password is not correct')) {
-            errorMessage = 'Podane hasło jest niepoprawne. '
+            this.errorMessage = 'Podane hasło jest niepoprawne. '
+            this.alert.alertNotOk(this.errorMessage)
+          } else {
+            this.alert.alertNotOk()
           }
-          this.alert.alertNotOk(errorMessage)
         }
       })
     }

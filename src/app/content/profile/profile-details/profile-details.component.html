@@ -1,0 +1,113 @@
+@if(!isReady){
+  <div style="text-align: center;">
+    <ion-spinner color="primary" name="crescent">
+    </ion-spinner>
+  </div>
+  }
+@if(isReady){
+<ion-content>
+  <ion-avatar class="avatar">
+    <input type="file" id="fileInput" style="display: none" accept=".jpeg, .jpg, .png, .gif"
+      (change)="onFileSelected($event)" />
+    @if(image){
+      <img [src]="temp" alt="Przycisk" (click)="openFileInput()" style="cursor: pointer;" />
+    }@else{
+    <img src="https://ionicframework.com/docs/img/demos/avatar.svg" alt="Przycisk" (click)="openFileInput()"
+      style="cursor: pointer;" />
+    }
+  </ion-avatar>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-label>Ustawienia konta</ion-label>
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item lines="full" id="open-modal-edit-user" button detail="true" class="title">
+        <ion-label>Twoje dane</ion-label>
+      </ion-item>
+    </ion-card-content>
+    <ion-card-content>
+      <ion-item lines="full" id="open-modal-edit-user" button detail="true" class="title">
+        <ion-label>Powiadomienia</ion-label>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <ion-label>Bezpieczeństwo</ion-label>
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item lines="full" id="open-modal-edit-user" button detail="true" class="title">
+        <ion-label>Hasło</ion-label>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+  <div style="padding: 10px;">
+    <app-logout></app-logout>
+  </div>
+</ion-content>
+
+<ion-modal #modal trigger="open-modal-edit-user">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="cancel()">Anuluj</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      @if(user){
+      <ion-list>
+        <ion-card>
+          <ion-card-content>
+            <ion-item lines="none" class="label">
+              <ion-label>IMIĘ I NAZWISKO</ion-label>
+            </ion-item>
+            <ion-item lines="full" class="title" button detail="true">
+              <ion-label>{{user.FIRSTNAME}} {{user.SURNAME}}</ion-label>
+              <ion-icon slot="end" size="large" name="create-outline"></ion-icon>
+            </ion-item>
+          </ion-card-content>
+          <ion-card-content>
+            <ion-item lines="none" class="label">
+              <ion-label>E-MAIL</ion-label>
+            </ion-item>
+            <ion-item lines="full" class="title" button detail="true">
+              <ion-label>{{user.EMAIL}}</ion-label>
+              <ion-icon slot="end" size="large" name="create-outline"></ion-icon>
+            </ion-item>
+          </ion-card-content>
+          <ion-card-content>
+            <ion-item lines="none" class="label">
+              <ion-label>NUMER TELEFONU</ion-label>
+            </ion-item>
+            <ion-item lines="full" class="title" button detail="true">
+              @if(user.PHONE_NUMBER){
+              <ion-label>
+                {{user.PHONE_NUMBER.toString().slice(0,3)}}-{{user.PHONE_NUMBER.toString().slice(3,6)}}-{{user.PHONE_NUMBER.toString().slice(6)}}
+              </ion-label>
+              }
+              <ion-icon slot="end" size="large" name="create-outline"></ion-icon>
+            </ion-item>
+          </ion-card-content>
+          <ion-card-content>
+            <ion-item lines="none" class="label">
+              <ion-label>LOGIN</ion-label>
+            </ion-item>
+            <ion-item lines="full" class="title" button detail="true">
+              <ion-label>{{user.LOGIN}}</ion-label>
+              <ion-icon slot="end" size="large" name="create-outline"></ion-icon>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </ion-list>
+      }
+    </ion-content>
+  </ng-template>
+</ion-modal>
+}

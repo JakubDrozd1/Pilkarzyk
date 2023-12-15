@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { ProfileDetailsComponent } from "../../content/profile/profile-details/profile-details.component";
+import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service';
 
 @Component({
     selector: 'app-profile-page',
@@ -11,4 +12,13 @@ import { ProfileDetailsComponent } from "../../content/profile/profile-details/p
     imports: [CommonModule, IonicModule, ProfileDetailsComponent]
 })
 export class ProfilePageComponent {
+    
+    constructor(
+        private refreshDataService: RefreshDataService
+    ){
+    }
+
+    ionViewWillEnter() {
+        this.refreshDataService.refresh('profile-details')
+    }
 }

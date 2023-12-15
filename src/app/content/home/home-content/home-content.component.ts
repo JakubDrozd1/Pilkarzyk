@@ -3,9 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { GetMeetingUsersGroupsResponse, MeetingsApi, USERS, UsersApi } from 'libs/api-client';
 import * as moment from 'moment';
-import { forkJoin } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
 import { MeetingContentComponent } from "../../meeting/meeting-content/meeting-content.component";
 import { Alert } from 'src/app/helper/alert';
+import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service';
 
 @Component({
   selector: 'app-home-content',
@@ -21,15 +22,28 @@ export class HomeContentComponent implements OnInit {
   user: USERS | undefined
   isReady: boolean = false
   currentTime: string = ''
+  private subscription: Subscription = new Subscription()
 
   constructor
     (
       private usersApi: UsersApi,
       private meetingsApi: MeetingsApi,
-      private alert: Alert
+      private alert: Alert,
+      private refreshDataService: RefreshDataService,
     ) { }
 
   ngOnInit() {
+    this.subscription.add(
+      this.refreshDataService.refreshSubject.subscribe(
+        index => {
+          if (index === 'home') {
+            this.idUser = Number(localStorage.getItem("user_id"))
+            this.currentTime = moment().locale('pl').format('DD MMMM YYYY')
+            this.getDetails()
+          }
+        }
+      )
+    )
     this.idUser = Number(localStorage.getItem("user_id"))
     this.currentTime = moment().locale('pl').format('DD MMMM YYYY')
     this.getDetails()

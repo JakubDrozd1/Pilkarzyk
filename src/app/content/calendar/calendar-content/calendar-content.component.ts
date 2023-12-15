@@ -6,6 +6,8 @@ import { GetMeetingUsersGroupsResponse, MeetingsApi } from 'libs/api-client';
 import { MeetingContentComponent } from '../../meeting/meeting-content/meeting-content.component';
 import * as moment from 'moment';
 import { Alert } from 'src/app/helper/alert';
+import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-calendar-content',
@@ -23,15 +25,27 @@ export class CalendarContentComponent implements OnInit {
   highlightedDates: any
   selectedDate: string[] | undefined
   idUser: number = 0
+  private subscription: Subscription = new Subscription()
 
   constructor
     (
       private meetingsApi: MeetingsApi,
       private datePipe: DatePipe,
-      private alert: Alert
+      private alert: Alert,
+      private refreshDataService: RefreshDataService,
     ) { }
 
   ngOnInit() {
+    this.subscription.add(
+      this.refreshDataService.refreshSubject.subscribe(
+        index => {
+          if (index === 'calendar') {
+            this.idUser = Number(localStorage.getItem('user_id'))
+            this.getDetails()
+          }
+        }
+      )
+    )
     this.idUser = Number(localStorage.getItem('user_id'))
     this.getDetails()
   }

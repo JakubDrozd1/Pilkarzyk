@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { GroupsListComponent } from 'src/app/content/groups/groups-list/groups-list.component';
+import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service';
 
 @Component({
     selector: 'app-groups-page',
@@ -11,4 +12,13 @@ import { GroupsListComponent } from 'src/app/content/groups/groups-list/groups-l
     imports: [CommonModule, IonicModule, GroupsListComponent]
 })
 export class GroupsPageComponent {
+    
+    constructor(
+        private refreshDataService: RefreshDataService
+    ){
+    }
+
+    ionViewWillEnter() {
+        this.refreshDataService.refresh('groups-list')
+    }
 }

@@ -1,16 +1,16 @@
 @if(!isReady){
-  <div style="text-align: center;">
-    <ion-spinner color="primary" name="crescent">
-    </ion-spinner>
-  </div>
-  }
+<div style="text-align: center;">
+  <ion-spinner color="primary" name="crescent">
+  </ion-spinner>
+</div>
+}
 @if(isReady){
 <ion-content>
   <ion-avatar class="avatar">
     <input type="file" id="fileInput" style="display: none" accept=".jpeg, .jpg, .png, .gif"
       (change)="onFileSelected($event)" />
-    @if(image){
-      <img [src]="temp" alt="Przycisk" (click)="openFileInput()" style="cursor: pointer;" />
+    @if(temp){
+    <img [src]="temp" alt="Przycisk" (click)="openFileInput()" style="cursor: pointer;" />
     }@else{
     <img src="https://ionicframework.com/docs/img/demos/avatar.svg" alt="Przycisk" (click)="openFileInput()"
       style="cursor: pointer;" />
@@ -41,7 +41,8 @@
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-item (click)="openModalEditPassword()" lines="full" id="open-modal-edit-user" button detail="true" class="title">
+      <ion-item (click)="openModalEditPassword()" lines="full" id="open-modal-edit-user" button detail="true"
+        class="title">
         <ion-label>Hasło</ion-label>
       </ion-item>
     </ion-card-content>
@@ -63,7 +64,7 @@
     <ion-content>
       @if(user){
       <ion-list>
-        <ion-card >
+        <ion-card>
           <ion-card-content>
             <ion-item lines="none" class="label">
               <ion-label>IMIĘ I NAZWISKO</ion-label>

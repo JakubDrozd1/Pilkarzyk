@@ -38,6 +38,7 @@ export class ProfileDetailsComponent implements OnInit {
       this.refreshDataService.refreshSubject.subscribe(
         index => {
           if (index === 'profile-details') {
+            this.idUser = Number(localStorage.getItem('user_id'))
             this.getDetails()
           }
         }
@@ -64,6 +65,8 @@ export class ProfileDetailsComponent implements OnInit {
             reader.readAsDataURL(this.image)
             this.isReady = true
           })
+        } else {
+          this.isReady = true
         }
       },
       error: () => {

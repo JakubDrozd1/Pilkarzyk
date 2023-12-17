@@ -15,7 +15,6 @@ const IsLoggedFn: CanActivateFn =
 export const routes: Routes = [
     {
         path: 'logged',
-        canActivate: [IsLoggedFn],
         component: TabComponent,
         children: [
             {

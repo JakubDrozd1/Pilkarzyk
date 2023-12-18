@@ -6,7 +6,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:27884"
+      "url": "https://192.168.88.20:45462"
     }
   ],
   "paths": {
@@ -1984,6 +1984,10 @@
           "IdUser": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          },
+          "Avatar": {
+            "type": "string",
             "nullable": true
           }
         },

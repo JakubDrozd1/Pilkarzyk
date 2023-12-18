@@ -43,43 +43,47 @@
     <ion-label>Ranking</ion-label>
   </ion-segment-button>
 </ion-segment>
-<ion-content class="ion-padding">
+<ion-content>
 
   @if(isReady){
   @switch (selectedSegment) {
   @case ("meetings") {
-  <ion-list [inset]="true">
-    <ion-label> Spotkania:
-    </ion-label>
+  <ion-list>
     @for (item of meetings; track $index) {
     <app-meeting-content [meeting]="item"></app-meeting-content>
     }
   </ion-list>
   }
   @case ("members") {
-  <ion-list [inset]="true">
-    <ion-label>
-      Członkowie:
-    </ion-label>
-    @for (item of groupsUsers; track $index) {
+  <ion-list>
     <ion-card>
+      @for (item of groupsUsers; track $index) {
       <ion-card-header>
         <ion-card-title>
           {{item.Login}}
         </ion-card-title>
-        <ion-card-subtitle>
-          {{item.Firstname}} {{item.Surname}}
-        </ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
-        @if(item.PhoneNumber!=null){
-        <ion-card-title>
+        <ion-item lines="full" class="title">
+          @if(images[$index] == '0'){
+          <ion-avatar slot="start">
+            <img alt="img" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+          </ion-avatar>}
+          @else {
+          <ion-avatar slot="start">
+            <img alt="img" [src]="images[$index]" />
+          </ion-avatar>
+          }
+          <ion-label>
+            {{item.Firstname}} {{item.Surname}}
+          </ion-label>
+          @if(item.PhoneNumber!=null){
           {{item.PhoneNumber.toString().slice(0,3)}}-{{item.PhoneNumber.toString().slice(3,6)}}-{{item.PhoneNumber.toString().slice(6)}}
-        </ion-card-title>
-        }
+          }
+        </ion-item>
       </ion-card-content>
+      }
     </ion-card>
-    }
   </ion-list>
   }
   }

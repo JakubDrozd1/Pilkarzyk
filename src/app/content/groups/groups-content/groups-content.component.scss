@@ -10,3 +10,6 @@ ion-back-button:active {
   --background: var(--ion-color-tertiary);
   transform: scale(0.9);
 }
+.title {
+  --border-color: var(--ion-color-secondary);
+}

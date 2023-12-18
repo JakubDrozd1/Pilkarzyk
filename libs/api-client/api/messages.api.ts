@@ -62,7 +62,7 @@ export interface UpdateMessageRequestParams {
 })
 export class MessagesApi {
 
-    protected basePath = 'http://localhost:27884';
+    protected basePath = 'https://192.168.88.20:45462';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
     public encoder: HttpParameterCodec;

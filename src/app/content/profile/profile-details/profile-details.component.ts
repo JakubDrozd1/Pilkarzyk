@@ -8,6 +8,8 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
 import { Subscription } from 'rxjs';
 import { ProfileComponent } from '../../form/profile/profile.component';
 import { ProfilePasswordComponent } from '../../form/profile-password/profile-password.component';
+import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile';
+import { convertFileToBase64 } from 'src/app/helper/convertFileToBase64';
 
 @Component({
   selector: 'app-profile-details',
@@ -56,7 +58,7 @@ export class ProfileDetailsComponent implements OnInit {
         this.user = response
         const base64String = response.AVATAR
         if (base64String != null) {
-          this.convertBase64ToFile(base64String).then((file) => {
+          convertBase64ToFile(base64String).then((file) => {
             this.image = file
             const reader = new FileReader()
             reader.onload = () => {
@@ -76,20 +78,6 @@ export class ProfileDetailsComponent implements OnInit {
     })
   }
 
-  convertBase64ToFile(base64String: string): Promise<File> {
-    return new Promise((resolve) => {
-      const byteCharacters = atob(base64String)
-      const byteNumbers = new Array(byteCharacters.length)
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i)
-      }
-      const byteArray = new Uint8Array(byteNumbers)
-      const blob = new Blob([byteArray], { type: 'image/jpeg' })
-      const file = new File([blob], 'avatar.jpg', { type: 'image/jpeg' })
-      resolve(file)
-    })
-  }
-
   cancel() {
     return this.modalCtrl.dismiss(null, 'cancel')
   }
@@ -102,7 +90,7 @@ export class ProfileDetailsComponent implements OnInit {
     const selectedFile = event.target.files[0]
     const maxSizeInBytes = 5 * 1024 * 1024
     if (selectedFile && selectedFile.size <= maxSizeInBytes) {
-      this.convertFileToBase64(selectedFile).then((base64String) => {
+      convertFileToBase64(selectedFile).then((base64String) => {
         this.usersApi.updateColumnUser({
           userId: this.idUser,
           getUpdateUserRequest: {
@@ -122,21 +110,6 @@ export class ProfileDetailsComponent implements OnInit {
     } else {
       this.alert.alertNotOk("Plik jest za duży (maks 5MB)")
     }
-  }
-
-  convertFileToBase64(file: File): Promise<string> {
-    return new Promise((resolve) => {
-      const reader = new FileReader()
-      reader.onload = () => {
-        if (typeof reader.result === 'string') {
-          const base64String = reader.result.split(',')[1]
-          resolve(base64String)
-        } else {
-          console.error('Błąd konwersji pliku do base64.')
-        }
-      }
-      reader.readAsDataURL(file)
-    })
   }
 
   openModalEditMail() {

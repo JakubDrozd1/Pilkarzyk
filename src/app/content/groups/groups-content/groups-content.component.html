@@ -49,8 +49,12 @@
   @switch (selectedSegment) {
   @case ("meetings") {
   <ion-list>
+    @if(meetings.length!=0){
     @for (item of meetings; track $index) {
     <app-meeting-content [meeting]="item"></app-meeting-content>
+    }}
+    @else {
+    <ion-item class="header" lines="none">Brak nadchodzących spotkań</ion-item>
     }
   </ion-list>
   }
@@ -65,10 +69,11 @@
       </ion-card-header>
       <ion-card-content>
         <ion-item lines="full" class="title">
-          @if(images[$index] == '0'){
+          @if(images[$index] === '0'){
           <ion-avatar slot="start">
             <img alt="img" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
-          </ion-avatar>}
+          </ion-avatar>
+          }
           @else {
           <ion-avatar slot="start">
             <img alt="img" [src]="images[$index]" />

@@ -8,6 +8,7 @@ api/meetings.api.ts
 api/messages.api.ts
 api/rankings.api.ts
 api/token.api.ts
+api/users-meetings.api.ts
 api/users.api.ts
 configuration.ts
 encoder.ts
@@ -16,8 +17,9 @@ index.ts
 model/get-email-sender-request.ts
 model/get-group-request.ts
 model/get-groups-users-response.ts
+model/get-meeting-groups-response.ts
 model/get-meeting-request.ts
-model/get-meeting-users-groups-response.ts
+model/get-meeting-users-response.ts
 model/get-message-request.ts
 model/get-messages-users-meetings-response.ts
 model/get-ranking-request.ts

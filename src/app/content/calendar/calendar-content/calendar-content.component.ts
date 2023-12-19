@@ -2,12 +2,13 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { GetMeetingUsersGroupsResponse, MeetingsApi } from 'libs/api-client';
+import { MeetingsApi, UsersMeetingsApi } from 'libs/api-client';
 import { MeetingContentComponent } from '../../meeting/meeting-content/meeting-content.component';
 import * as moment from 'moment';
 import { Alert } from 'src/app/helper/alert';
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service';
 import { Subscription } from 'rxjs';
+import { GetMeetingUsersGroupsResponse } from 'libs/api-client/model/get-meeting-users-groups-response';
 
 @Component({
   selector: 'app-calendar-content',
@@ -33,6 +34,7 @@ export class CalendarContentComponent implements OnInit {
       private datePipe: DatePipe,
       private alert: Alert,
       private refreshDataService: RefreshDataService,
+      private usersMeetingsApi: UsersMeetingsApi
     ) { }
 
   ngOnInit() {
@@ -52,7 +54,7 @@ export class CalendarContentComponent implements OnInit {
 
   getDetails() {
     this.meetings = []
-    this.meetingsApi.getAllMeetings({
+    this.usersMeetingsApi.getListMeetingsUsersAsync({
       page: 0,
       onPage: -1,
       sortColumn: 'DATE_MEETING',
@@ -99,7 +101,6 @@ export class CalendarContentComponent implements OnInit {
           sortMode: 'ASC',
           dateFrom: startOfDay,
           dateTo: endOfDay,
-          idUser: this.idUser
         }).subscribe({
           next: (response) => {
             for (let meeting of response) {

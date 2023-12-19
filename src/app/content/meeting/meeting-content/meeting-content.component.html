@@ -31,12 +31,8 @@
         </ion-item>
       </ion-col>
     </ion-row>
+    @if(meeting.Description){
     <ion-row>
-      <ion-col>
-        <ion-card-header>
-          OPIS:
-        </ion-card-header>
-      </ion-col>
       <ion-col>
         <ion-item class="title" lines="full">
           <ion-card-header>
@@ -45,5 +41,6 @@
         </ion-item>
       </ion-col>
     </ion-row>
+    }
   </ion-grid>
 </ion-card>

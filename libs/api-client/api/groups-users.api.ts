@@ -75,7 +75,7 @@ export interface UpdateUserWithGroupsAsyncRequestParams {
 })
 export class GroupsUsersApi {
 
-    protected basePath = 'https://192.168.88.20:45462';
+    protected basePath = 'http://192.168.88.20:45455';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
     public encoder: HttpParameterCodec;

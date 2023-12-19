@@ -11,11 +11,16 @@
  */
 
 
-export interface GetMeetingRequest { 
+export interface GetMeetingUsersResponse { 
+    Login?: string | null;
+    Firstname?: string | null;
+    Surname?: string | null;
+    Email?: string | null;
+    PhoneNumber?: number | null;
     DateMeeting?: string | null;
     Place?: string | null;
-    Quantity?: number | null;
     Description?: string | null;
-    IdGroup?: number | null;
+    Quantity?: number | null;
+    IsAdmin?: boolean | null;
 }
 

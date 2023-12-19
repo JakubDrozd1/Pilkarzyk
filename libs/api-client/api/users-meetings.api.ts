@@ -19,49 +19,46 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { GetMeetingGroupsResponse } from '../model/get-meeting-groups-response';
+import { GetGroupsUsersResponse } from '../model/get-groups-users-response';
 // @ts-ignore
-import { GetMeetingRequest } from '../model/get-meeting-request';
-// @ts-ignore
-import { MEETINGS } from '../model/meetings';
+import { GetMeetingUsersResponse } from '../model/get-meeting-users-response';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
 
-export interface AddMeetingRequestParams {
-    getMeetingRequest?: GetMeetingRequest;
+export interface AddUserToMeetingAsyncRequestParams {
+    idMeeting: number;
+    idUser: number;
 }
 
-export interface DeleteMeetingRequestParams {
-    meetingId: number;
+export interface AddUsersToMeetingAsyncRequestParams {
+    idUsers?: Array<number>;
+    idMeeting?: number;
 }
 
-export interface GetAllMeetingsRequestParams {
+export interface GetListMeetingsUsersAsyncRequestParams {
     page: number;
     onPage: number;
     sortColumn?: string;
     sortMode?: string;
     dateFrom?: string;
     dateTo?: string;
-    idGroup?: number;
+    idMeeting?: number;
+    idUser?: number;
 }
 
-export interface GetMeetingByIdRequestParams {
+export interface GetUserWithMeetingRequestParams {
     meetingId: number;
-}
-
-export interface UpdateMeetingRequestParams {
-    meetingId: number;
-    getMeetingRequest?: GetMeetingRequest;
+    userId: number;
 }
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class MeetingsApi {
+export class UsersMeetingsApi {
 
     protected basePath = 'http://192.168.88.20:45455';
     public defaultHeaders = new HttpHeaders();
@@ -127,11 +124,28 @@ export class MeetingsApi {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public addMeeting(requestParameters: AddMeetingRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public addMeeting(requestParameters: AddMeetingRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public addMeeting(requestParameters: AddMeetingRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public addMeeting(requestParameters: AddMeetingRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
-        const getMeetingRequest = requestParameters.getMeetingRequest;
+    public addUserToMeetingAsync(requestParameters: AddUserToMeetingAsyncRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public addUserToMeetingAsync(requestParameters: AddUserToMeetingAsyncRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public addUserToMeetingAsync(requestParameters: AddUserToMeetingAsyncRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public addUserToMeetingAsync(requestParameters: AddUserToMeetingAsyncRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        const idMeeting = requestParameters.idMeeting;
+        if (idMeeting === null || idMeeting === undefined) {
+            throw new Error('Required parameter idMeeting was null or undefined when calling addUserToMeetingAsync.');
+        }
+        const idUser = requestParameters.idUser;
+        if (idUser === null || idUser === undefined) {
+            throw new Error('Required parameter idUser was null or undefined when calling addUserToMeetingAsync.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (idMeeting !== undefined && idMeeting !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>idMeeting, 'idMeeting');
+        }
+        if (idUser !== undefined && idUser !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>idUser, 'idUser');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -159,17 +173,6 @@ export class MeetingsApi {
         }
 
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'text/json',
-            'application/*+json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
             if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -181,11 +184,11 @@ export class MeetingsApi {
             }
         }
 
-        let localVarPath = `/api/meetings`;
+        let localVarPath = `/api/users-meetings/add`;
         return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: getMeetingRequest,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -200,13 +203,23 @@ export class MeetingsApi {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteMeeting(requestParameters: DeleteMeetingRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public deleteMeeting(requestParameters: DeleteMeetingRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public deleteMeeting(requestParameters: DeleteMeetingRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public deleteMeeting(requestParameters: DeleteMeetingRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
-        const meetingId = requestParameters.meetingId;
-        if (meetingId === null || meetingId === undefined) {
-            throw new Error('Required parameter meetingId was null or undefined when calling deleteMeeting.');
+    public addUsersToMeetingAsync(requestParameters: AddUsersToMeetingAsyncRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public addUsersToMeetingAsync(requestParameters: AddUsersToMeetingAsyncRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public addUsersToMeetingAsync(requestParameters: AddUsersToMeetingAsyncRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public addUsersToMeetingAsync(requestParameters: AddUsersToMeetingAsyncRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        const idUsers = requestParameters.idUsers;
+        const idMeeting = requestParameters.idMeeting;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (idUsers) {
+            idUsers.forEach((element) => {
+                localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+                  <any>element, 'IdUsers');
+            })
+        }
+        if (idMeeting !== undefined && idMeeting !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>idMeeting, 'IdMeeting');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -246,10 +259,11 @@ export class MeetingsApi {
             }
         }
 
-        let localVarPath = `/api/meetings/${this.configuration.encodeParam({name: "meetingId", value: meetingId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
-        return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
+        let localVarPath = `/api/users-meetings/adds`;
+        return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -264,23 +278,24 @@ export class MeetingsApi {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllMeetings(requestParameters: GetAllMeetingsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<GetMeetingGroupsResponse>>;
-    public getAllMeetings(requestParameters: GetAllMeetingsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<GetMeetingGroupsResponse>>>;
-    public getAllMeetings(requestParameters: GetAllMeetingsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<GetMeetingGroupsResponse>>>;
-    public getAllMeetings(requestParameters: GetAllMeetingsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+    public getListMeetingsUsersAsync(requestParameters: GetListMeetingsUsersAsyncRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<GetMeetingUsersResponse>>;
+    public getListMeetingsUsersAsync(requestParameters: GetListMeetingsUsersAsyncRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<GetMeetingUsersResponse>>>;
+    public getListMeetingsUsersAsync(requestParameters: GetListMeetingsUsersAsyncRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<GetMeetingUsersResponse>>>;
+    public getListMeetingsUsersAsync(requestParameters: GetListMeetingsUsersAsyncRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
         const page = requestParameters.page;
         if (page === null || page === undefined) {
-            throw new Error('Required parameter page was null or undefined when calling getAllMeetings.');
+            throw new Error('Required parameter page was null or undefined when calling getListMeetingsUsersAsync.');
         }
         const onPage = requestParameters.onPage;
         if (onPage === null || onPage === undefined) {
-            throw new Error('Required parameter onPage was null or undefined when calling getAllMeetings.');
+            throw new Error('Required parameter onPage was null or undefined when calling getListMeetingsUsersAsync.');
         }
         const sortColumn = requestParameters.sortColumn;
         const sortMode = requestParameters.sortMode;
         const dateFrom = requestParameters.dateFrom;
         const dateTo = requestParameters.dateTo;
-        const idGroup = requestParameters.idGroup;
+        const idMeeting = requestParameters.idMeeting;
+        const idUser = requestParameters.idUser;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (page !== undefined && page !== null) {
@@ -307,9 +322,13 @@ export class MeetingsApi {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>dateTo, 'DateTo');
         }
-        if (idGroup !== undefined && idGroup !== null) {
+        if (idMeeting !== undefined && idMeeting !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>idGroup, 'IdGroup');
+            <any>idMeeting, 'IdMeeting');
+        }
+        if (idUser !== undefined && idUser !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>idUser, 'IdUser');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -352,8 +371,8 @@ export class MeetingsApi {
             }
         }
 
-        let localVarPath = `/api/meetings`;
-        return this.httpClient.request<Array<GetMeetingGroupsResponse>>('get', `${this.configuration.basePath}${localVarPath}`,
+        let localVarPath = `/api/users-meetings/all`;
+        return this.httpClient.request<Array<GetMeetingUsersResponse>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -371,13 +390,27 @@ export class MeetingsApi {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMeetingById(requestParameters: GetMeetingByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<MEETINGS>;
-    public getMeetingById(requestParameters: GetMeetingByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<MEETINGS>>;
-    public getMeetingById(requestParameters: GetMeetingByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<MEETINGS>>;
-    public getMeetingById(requestParameters: GetMeetingByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+    public getUserWithMeeting(requestParameters: GetUserWithMeetingRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<GetGroupsUsersResponse>;
+    public getUserWithMeeting(requestParameters: GetUserWithMeetingRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<GetGroupsUsersResponse>>;
+    public getUserWithMeeting(requestParameters: GetUserWithMeetingRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<GetGroupsUsersResponse>>;
+    public getUserWithMeeting(requestParameters: GetUserWithMeetingRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
         const meetingId = requestParameters.meetingId;
         if (meetingId === null || meetingId === undefined) {
-            throw new Error('Required parameter meetingId was null or undefined when calling getMeetingById.');
+            throw new Error('Required parameter meetingId was null or undefined when calling getUserWithMeeting.');
+        }
+        const userId = requestParameters.userId;
+        if (userId === null || userId === undefined) {
+            throw new Error('Required parameter userId was null or undefined when calling getUserWithMeeting.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (meetingId !== undefined && meetingId !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>meetingId, 'meetingId');
+        }
+        if (userId !== undefined && userId !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>userId, 'userId');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -420,87 +453,11 @@ export class MeetingsApi {
             }
         }
 
-        let localVarPath = `/api/meetings/${this.configuration.encodeParam({name: "meetingId", value: meetingId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
-        return this.httpClient.request<MEETINGS>('get', `${this.configuration.basePath}${localVarPath}`,
+        let localVarPath = `/api/users-meetings`;
+        return this.httpClient.request<GetGroupsUsersResponse>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                responseType: <any>responseType_,
-                withCredentials: this.configuration.withCredentials,
-                headers: localVarHeaders,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public updateMeeting(requestParameters: UpdateMeetingRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public updateMeeting(requestParameters: UpdateMeetingRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public updateMeeting(requestParameters: UpdateMeetingRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public updateMeeting(requestParameters: UpdateMeetingRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
-        const meetingId = requestParameters.meetingId;
-        if (meetingId === null || meetingId === undefined) {
-            throw new Error('Required parameter meetingId was null or undefined when calling updateMeeting.');
-        }
-        const getMeetingRequest = requestParameters.getMeetingRequest;
-
-        let localVarHeaders = this.defaultHeaders;
-
-        let localVarCredential: string | undefined;
-        // authentication (api-pilkarzyk-oauth2) required
-        localVarCredential = this.configuration.lookupCredential('api-pilkarzyk-oauth2');
-        if (localVarCredential) {
-            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
-        }
-
-        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-        if (localVarHttpHeaderAcceptSelected === undefined) {
-            // to determine the Accept header
-            const httpHeaderAccepts: string[] = [
-            ];
-            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        }
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        let localVarHttpContext: HttpContext | undefined = options && options.context;
-        if (localVarHttpContext === undefined) {
-            localVarHttpContext = new HttpContext();
-        }
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'text/json',
-            'application/*+json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/api/meetings/${this.configuration.encodeParam({name: "meetingId", value: meetingId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
-        return this.httpClient.request<any>('put', `${this.configuration.basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: getMeetingRequest,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

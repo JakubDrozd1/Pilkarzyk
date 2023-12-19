@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
-import { GetGroupsUsersResponse, GetMeetingUsersGroupsResponse, GroupsUsersApi, MeetingsApi } from 'libs/api-client';
+import { GetGroupsUsersResponse, GroupsUsersApi, MeetingsApi } from 'libs/api-client';
 import { Subscription, forkJoin } from 'rxjs';
 import { MeetingComponent } from "../../form/meeting/meeting.component";
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service';
@@ -11,6 +11,8 @@ import { UsersComponent } from '../../form/users/users.component';
 import { Alert } from 'src/app/helper/alert';
 import { FormsModule } from '@angular/forms';
 import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile';
+import * as moment from 'moment';
+import { GetMeetingUsersGroupsResponse } from 'libs/api-client/model/get-meeting-users-groups-response';
 
 @Component({
   selector: 'app-groups-content',
@@ -67,6 +69,7 @@ export class GroupsContentComponent implements OnInit {
   getDetails() {
     this.groupsUsers = []
     this.meetings = []
+    this.images = []
     forkJoin({
       groupsUsers: this.groupsUsersApi.getAllGroupsFromUserAsync({
         page: 0,
@@ -81,13 +84,12 @@ export class GroupsContentComponent implements OnInit {
         sortColumn: 'DATE_MEETING',
         sortMode: 'ASC',
         idGroup: this.idGroup,
-        idUser: this.idUser
+        dateFrom: moment().format()
       })
     }).subscribe({
       next: (responses) => {
         this.groupsUsers = responses.groupsUsers
         this.meetings = responses.meetings
-        console.log(this.meetings)
         this.nameGroup = responses.groupsUsers[0].Name
         for (let user of responses.groupsUsers) {
           const base64String = user.Avatar
@@ -96,7 +98,7 @@ export class GroupsContentComponent implements OnInit {
               this.temp = file
               const reader = new FileReader()
               reader.onload = () => {
-                this.images.push(reader.result as string)
+                this.images.unshift(reader.result as string)
               }
               reader.readAsDataURL(this.temp)
               this.isReady = true

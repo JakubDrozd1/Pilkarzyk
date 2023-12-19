@@ -11,11 +11,11 @@
  */
 
 
-export interface GetMeetingRequest { 
+export interface GetMeetingGroupsResponse { 
+    Name?: string | null;
     DateMeeting?: string | null;
     Place?: string | null;
-    Quantity?: number | null;
     Description?: string | null;
-    IdGroup?: number | null;
+    Quantity?: number | null;
 }
 

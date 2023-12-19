@@ -30,6 +30,10 @@ import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables'
 import { Configuration }                                     from '../configuration';
 
 
+export interface AddMessageRequestParams {
+    getMessageRequest?: GetMessageRequest;
+}
+
 export interface DeleteMessageRequestParams {
     messageId: number;
 }
@@ -47,10 +51,6 @@ export interface GetMessageByIdRequestParams {
     messageId: number;
 }
 
-export interface GetMessageRequestRequestParams {
-    getMessageRequest?: GetMessageRequest;
-}
-
 export interface UpdateMessageRequestParams {
     messageId: number;
     getMessageRequest?: GetMessageRequest;
@@ -62,7 +62,7 @@ export interface UpdateMessageRequestParams {
 })
 export class MessagesApi {
 
-    protected basePath = 'https://192.168.88.20:45462';
+    protected basePath = 'http://192.168.88.20:45455';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
     public encoder: HttpParameterCodec;
@@ -119,6 +119,79 @@ export class MessagesApi {
             throw Error("key may not be null if value is not object or array");
         }
         return httpParams;
+    }
+
+    /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public addMessage(requestParameters: AddMessageRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public addMessage(requestParameters: AddMessageRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public addMessage(requestParameters: AddMessageRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public addMessage(requestParameters: AddMessageRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        const getMessageRequest = requestParameters.getMessageRequest;
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (api-pilkarzyk-oauth2) required
+        localVarCredential = this.configuration.lookupCredential('api-pilkarzyk-oauth2');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'text/json',
+            'application/*+json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/messages`;
+        return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: getMessageRequest,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**
@@ -345,79 +418,6 @@ export class MessagesApi {
         return this.httpClient.request<MESSAGES>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                responseType: <any>responseType_,
-                withCredentials: this.configuration.withCredentials,
-                headers: localVarHeaders,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getMessageRequest(requestParameters: GetMessageRequestRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public getMessageRequest(requestParameters: GetMessageRequestRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public getMessageRequest(requestParameters: GetMessageRequestRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public getMessageRequest(requestParameters: GetMessageRequestRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
-        const getMessageRequest = requestParameters.getMessageRequest;
-
-        let localVarHeaders = this.defaultHeaders;
-
-        let localVarCredential: string | undefined;
-        // authentication (api-pilkarzyk-oauth2) required
-        localVarCredential = this.configuration.lookupCredential('api-pilkarzyk-oauth2');
-        if (localVarCredential) {
-            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
-        }
-
-        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-        if (localVarHttpHeaderAcceptSelected === undefined) {
-            // to determine the Accept header
-            const httpHeaderAccepts: string[] = [
-            ];
-            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        }
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        let localVarHttpContext: HttpContext | undefined = options && options.context;
-        if (localVarHttpContext === undefined) {
-            localVarHttpContext = new HttpContext();
-        }
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'text/json',
-            'application/*+json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/api/messages`;
-        return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: getMessageRequest,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

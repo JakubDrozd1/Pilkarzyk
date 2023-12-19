@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IonicModule, ModalController, NavParams } from '@ionic/angular';
-import { GetGroupsUsersResponse, MeetingsApi } from 'libs/api-client';
+import { GetGroupsUsersResponse, MeetingsApi, MessagesApi, UsersMeetingsApi } from 'libs/api-client';
 import * as moment from 'moment';
 import { forkJoin } from 'rxjs';
 import { Alert } from 'src/app/helper/alert';
@@ -21,6 +21,7 @@ export class MeetingComponent implements OnInit {
   displayDate: any
   idGroup: number = 0
   groupsUsers: GetGroupsUsersResponse[] = []
+  idUsers: number[] = []
 
   constructor
     (
@@ -29,59 +30,76 @@ export class MeetingComponent implements OnInit {
       private meetingsApi: MeetingsApi,
       private navParams: NavParams,
       private refreshDataService: RefreshDataService,
-      private alert: Alert
+      private alert: Alert,
+      private messagesApi: MessagesApi,
+      private usersMeetingsApi: UsersMeetingsApi
     ) {
     this.meetingForm = this.fb.group({
       dateMeeting: ['', Validators.required],
       place: ['', Validators.required],
       quantity: ['', Validators.required],
       description: [''],
-    });
+    })
   }
 
   ngOnInit() {
-
     this.displayDate = moment().format()
-    this.idGroup = this.navParams.get('idGroup');
-    this.groupsUsers = this.navParams.get('groupsUsers');
+    this.idGroup = this.navParams.get('idGroup')
+    this.groupsUsers = this.navParams.get('groupsUsers')
     this.meetingForm.get('dateMeeting')?.setValue(moment().format())
-
   }
-
+  
   onSubmit() {
-    this.meetingForm.markAllAsTouched();
-
+    this.meetingForm.markAllAsTouched()
     if (this.meetingForm.valid) {
-      const requests = this.groupsUsers.map(user =>
-        this.meetingsApi.addMeeting({
-          getMeetingRequest: {
-            DateMeeting: this.meetingForm.value.dateMeeting,
-            Place: this.meetingForm.value.place,
-            Quantity: this.meetingForm.value.quantity,
-            Description: this.meetingForm.value.description,
-            IdUser: user.IdUser,
-            IdGroup: this.idGroup,
-          }
-        })
-      );
-
-      forkJoin(requests).subscribe({
-        next: () => {
-          this.alert.alertOk();
-          this.meetingForm.reset();
-          this.refreshDataService.refresh('groups-content');
-          this.cancel();
+      this.meetingsApi.addMeeting({
+        getMeetingRequest: {
+          DateMeeting: this.meetingForm.value.dateMeeting,
+          Place: this.meetingForm.value.place,
+          Quantity: this.meetingForm.value.quantity,
+          Description: this.meetingForm.value.description,
+          IdGroup: this.idGroup,
         },
-        error: () => {
-          this.alert.alertNotOk();
-          this.cancel();
-        }
-      });
+      }).subscribe({
+        next: (meetingResponse) => {
+          const meetingId = meetingResponse.ID_MEETING
+          for (let user of this.groupsUsers) {
+            this.idUsers.push(Number(user.IdUser))
+          }
+          this.usersMeetingsApi.addUsersToMeetingAsync({
+            idUsers: this.idUsers,
+            idMeeting: meetingId,
+          }).subscribe({
+            next: () => {
+              this.alert.alertOk()
+              this.meetingForm.reset()
+              this.refreshDataService.refresh('groups-content')
+              this.cancel()
+            },
+            error: (userError) => {
+              if (userError.error.includes('Event already exists')) {
+                this.alert.alertNotOk('Wydarzenie już istnieje')
+              } else {
+                this.alert.alertNotOk()
+              }
+              this.cancel()
+            },
+          })
+        },
+        error: (meetingError) => {
+          if (meetingError.error.includes('Event already exists')) {
+            this.alert.alertNotOk('Wydarzenie już istnieje')
+          } else {
+            this.alert.alertNotOk()
+          }
+          this.cancel()
+        },
+      })
     }
   }
 
   cancel() {
-    return this.modalCtrl.dismiss(null, 'cancel');
+    return this.modalCtrl.dismiss(null, 'cancel')
   }
 
 }

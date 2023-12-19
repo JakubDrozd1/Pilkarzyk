@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { GetMeetingUsersGroupsResponse } from 'libs/api-client';
+import { GetMeetingUsersGroupsResponse } from 'libs/api-client/model/get-meeting-users-groups-response';
 
 @Component({
   selector: 'app-meeting-content',

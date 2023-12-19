@@ -17,7 +17,6 @@ export interface MEETINGS {
     PLACE?: string | null;
     QUANTITY?: number | null;
     DESCRIPTION?: string | null;
-    IDUSER?: number | null;
     IDGROUP?: number | null;
 }
 

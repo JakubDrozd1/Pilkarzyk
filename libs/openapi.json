@@ -1070,6 +1070,38 @@
         }
       }
     },
+    "/api/messages/answer": {
+      "put": {
+        "tags": [
+          "Messages"
+        ],
+        "operationId": "UpdateAnswerMessageAsync",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetMessageRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetMessageRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetMessageRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/rankings": {
       "get": {
         "tags": [
@@ -2069,17 +2101,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetGroupsUsersResponse"
+                  "$ref": "#/components/schemas/GetMeetingUsersResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetGroupsUsersResponse"
+                  "$ref": "#/components/schemas/GetMeetingUsersResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetGroupsUsersResponse"
+                  "$ref": "#/components/schemas/GetMeetingUsersResponse"
                 }
               }
             }
@@ -2311,6 +2343,16 @@
           "IsAdmin": {
             "type": "boolean",
             "nullable": true
+          },
+          "IdUser": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IdMeeting": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2388,6 +2430,16 @@
           },
           "IsAdmin": {
             "type": "boolean",
+            "nullable": true
+          },
+          "IdUser": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IdMeeting": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           }
         },

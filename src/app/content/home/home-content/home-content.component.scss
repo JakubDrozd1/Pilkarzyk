@@ -1,7 +1,12 @@
 .header {
-  padding: 15px;
+  padding: 5px;
 }
 ion-spinner {
   width: 100px;
   height: 100px;
+}
+.title {
+  --border-color: var(--ion-color-danger);
+  color: var(--ion-color-danger);
+  --border-width: 2px;
 }

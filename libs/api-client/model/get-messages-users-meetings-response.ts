@@ -24,5 +24,7 @@ export interface GetMessagesUsersMeetingsResponse {
     Surname?: string | null;
     PhoneNumber?: number | null;
     IsAdmin?: boolean | null;
+    IdUser?: number | null;
+    IdMeeting?: number | null;
 }
 

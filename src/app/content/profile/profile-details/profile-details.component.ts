@@ -148,6 +148,7 @@ export class ProfileDetailsComponent implements OnInit {
   }
 
   reload() {
+    this.temp = ''
     this.idUser = Number(localStorage.getItem('user_id'))
     this.getDetails()
   }

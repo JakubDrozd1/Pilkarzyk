@@ -16,6 +16,7 @@ export const routes: Routes = [
     {
         path: 'logged',
         component: TabComponent,
+        canActivate: [IsLoggedFn],
         children: [
             {
                 path: 'groups',

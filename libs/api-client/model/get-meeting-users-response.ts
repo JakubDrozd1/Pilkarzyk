@@ -22,5 +22,7 @@ export interface GetMeetingUsersResponse {
     Description?: string | null;
     Quantity?: number | null;
     IsAdmin?: boolean | null;
+    IdUser?: number | null;
+    IdMeeting?: number | null;
 }
 

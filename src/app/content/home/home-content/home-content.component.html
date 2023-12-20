@@ -10,12 +10,27 @@
     </ion-spinner>
   </div>
   }
+  @if(messagesNotification.length>0){
+  @for(message of messagesNotification; track $index){
+  <ion-item class="title" lines="full">
+    <app-message-content [message]="message"></app-message-content>
+  </ion-item>
+  <ion-label color="danger">NOWE ZAPROSZENIE</ion-label>
+  }
+  }
+  @if(messages.length>0){
+  @for(message of messages; track $index){
+  <app-message-content [message]="message"></app-message-content>
+  }
+  }
+
   @if(meetings.length > 0){
-  <ion-label>Dzisiejsze spotkania:</ion-label>
+  <ion-item class="header">Dzisiejsze spotkania:</ion-item>
   @for(meeting of meetings; track $index){
   <app-meeting-content [meeting]="meeting"></app-meeting-content>
   }
   }@else {
   <ion-label>Nie masz dzisiaj żadnych spotkań</ion-label>
   }
+
 </ion-content>

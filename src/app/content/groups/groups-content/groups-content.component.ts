@@ -141,8 +141,4 @@ export class GroupsContentComponent implements OnInit {
     modal.present()
     await modal.onWillDismiss()
   }
-
-  decode() {
-
-  }
 }

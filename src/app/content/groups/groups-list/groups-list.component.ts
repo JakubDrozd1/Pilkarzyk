@@ -34,8 +34,7 @@ export class GroupsListComponent implements OnInit {
       this.refreshDataService.refreshSubject.subscribe(
         index => {
           if (index === 'groups-list') {
-            this.idUser = Number(localStorage.getItem('user_id'))
-            this.getGroups()
+            this.reload()
           }
         }
       )
@@ -71,4 +70,8 @@ export class GroupsListComponent implements OnInit {
     await modal.onWillDismiss()
   }
 
+  reload() {
+    this.idUser = Number(localStorage.getItem('user_id'))
+    this.getGroups()
+  }
 }

@@ -42,8 +42,7 @@ export class CalendarContentComponent implements OnInit {
       this.refreshDataService.refreshSubject.subscribe(
         index => {
           if (index === 'calendar') {
-            this.idUser = Number(localStorage.getItem('user_id'))
-            this.getDetails()
+            this.reload()
           }
         }
       )
@@ -62,13 +61,32 @@ export class CalendarContentComponent implements OnInit {
       idUser: this.idUser
     }).subscribe({
       next: (response) => {
-        this.meetings = response
+        this.meetings = response.filter(item => {
+          const currentDate = moment()
+          const meetingDate = moment(item.DateMeeting)
+          return meetingDate.isSameOrAfter(currentDate, 'day')
+        })
         this.highlightedDates = response
-          .map(item => ({
-            date: this.formatDate(item.DateMeeting),
-            textColor: 'var(--ion-color-secondary-contrast)',
-            backgroundColor: 'var(--ion-color-secondary)'
-          }))
+          .map(item => {
+            const meetingDate = moment(item.DateMeeting)
+            const currentDate = moment()
+            let textColor, backgroundColor
+            if (meetingDate.isBefore(currentDate, 'day')) {
+              textColor = 'var(--ion-color-tertiary-contrast)'
+              backgroundColor = 'var( --ion-color-tertiary)'
+            } else if (meetingDate.isAfter(currentDate, 'day')) {
+              textColor = 'var(--ion-color-secondary-contrast)'
+              backgroundColor = 'var(--ion-color-secondary)'
+            } else {
+              textColor = 'var(--ion-color-secondary-contrast)'
+              backgroundColor = 'var(--ion-color-secondary)'
+            }
+            return {
+              date: this.formatDate(item.DateMeeting),
+              textColor: textColor,
+              backgroundColor: backgroundColor
+            }
+          })
           .filter((dateObj, index, self) => {
             const dateStr = dateObj.date
             return self.findIndex(d => d.date === dateStr) === index
@@ -92,8 +110,8 @@ export class CalendarContentComponent implements OnInit {
     this.meetingsSelected = []
     if (newDate != null) {
       for (let date of newDate) {
-        const startOfDay = moment(date).startOf('day').format()
-        const endOfDay = moment(date).endOf('day').format()
+        const startOfDay = moment(date).startOf('day').add(1, 'hours').format()
+        const endOfDay = moment(date).endOf('day').add(1, 'hours').format()
         this.meetingsApi.getAllMeetings({
           page: 0,
           onPage: -1,
@@ -116,5 +134,10 @@ export class CalendarContentComponent implements OnInit {
         })
       }
     }
+  }
+
+  reload() {
+    this.idUser = Number(localStorage.getItem('user_id'))
+    this.getDetails()
   }
 }

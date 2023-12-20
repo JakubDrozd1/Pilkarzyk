@@ -40,8 +40,7 @@ export class ProfileDetailsComponent implements OnInit {
       this.refreshDataService.refreshSubject.subscribe(
         index => {
           if (index === 'profile-details') {
-            this.idUser = Number(localStorage.getItem('user_id'))
-            this.getDetails()
+            this.reload()
           }
         }
       )
@@ -148,4 +147,8 @@ export class ProfileDetailsComponent implements OnInit {
     await modal.onWillDismiss()
   }
 
+  reload() {
+    this.idUser = Number(localStorage.getItem('user_id'))
+    this.getDetails()
+  }
 }

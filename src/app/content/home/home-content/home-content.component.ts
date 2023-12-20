@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { UsersMeetingsApi } from 'libs/api-client';
+import { MessagesApi, UsersMeetingsApi } from 'libs/api-client';
 import * as moment from 'moment';
-import { Subscription } from 'rxjs';
+import { Subscription, interval } from 'rxjs';
 import { MeetingContentComponent } from "../../meeting/meeting-content/meeting-content.component";
 import { Alert } from 'src/app/helper/alert';
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service';
 import { GetMeetingUsersGroupsResponse } from 'libs/api-client/model/get-meeting-users-groups-response';
+import { TimeService } from 'src/app/service/time/time.service';
 
 @Component({
   selector: 'app-home-content',
@@ -16,19 +17,22 @@ import { GetMeetingUsersGroupsResponse } from 'libs/api-client/model/get-meeting
   standalone: true,
   imports: [CommonModule, IonicModule, MeetingContentComponent]
 })
-export class HomeContentComponent implements OnInit {
+export class HomeContentComponent implements OnInit, OnDestroy {
 
   idUser: number = 0
   meetings: GetMeetingUsersGroupsResponse[] = []
   isReady: boolean = false
   currentTime: string = ''
   private subscription: Subscription = new Subscription()
+  private intervalSubscription: Subscription | undefined
 
   constructor
     (
       private usersMeetingsApi: UsersMeetingsApi,
       private alert: Alert,
       private refreshDataService: RefreshDataService,
+      private timeService: TimeService,
+      private messagesApi: MessagesApi
     ) { }
 
   ngOnInit() {
@@ -36,16 +40,26 @@ export class HomeContentComponent implements OnInit {
       this.refreshDataService.refreshSubject.subscribe(
         index => {
           if (index === 'home') {
-            this.idUser = Number(localStorage.getItem("user_id"))
-            this.currentTime = moment().locale('pl').format('DD MMMM YYYY')
-            this.getDetails()
+            this.reload()
           }
         }
       )
     )
+    this.timeService.updateCurrentTime()
+    this.intervalSubscription = interval(1000).subscribe(() => {
+      this.timeService.updateCurrentTime()
+    })
+    this.timeService.currentTime$.subscribe((currentTime) => {
+      this.currentTime = currentTime
+    })
     this.idUser = Number(localStorage.getItem("user_id"))
-    this.currentTime = moment().locale('pl').format('DD MMMM YYYY')
     this.getDetails()
+  }
+
+  ngOnDestroy() {
+    if (this.intervalSubscription) {
+      this.intervalSubscription.unsubscribe()
+    }
   }
 
   getDetails() {
@@ -71,4 +85,10 @@ export class HomeContentComponent implements OnInit {
       }
     })
   }
+
+  reload() {
+    this.idUser = Number(localStorage.getItem("user_id"))
+    this.getDetails()
+  }
+  
 }

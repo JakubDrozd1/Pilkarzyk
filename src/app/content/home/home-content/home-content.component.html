@@ -4,9 +4,14 @@
       <ion-card-title>{{currentTime}}</ion-card-title>
     </ion-card-header>
   </ion-card>
-
+  @if(!isReady){
+  <div style="text-align: center;">
+    <ion-spinner color="primary" name="crescent">
+    </ion-spinner>
+  </div>
+  }
   @if(meetings.length > 0){
-    <ion-label>Dzisiejsze spotkania:</ion-label>
+  <ion-label>Dzisiejsze spotkania:</ion-label>
   @for(meeting of meetings; track $index){
   <app-meeting-content [meeting]="meeting"></app-meeting-content>
   }

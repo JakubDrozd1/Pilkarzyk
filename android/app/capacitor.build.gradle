@@ -12,6 +12,7 @@ dependencies {
     implementation project(':capacitor-background-runner')
     implementation project(':capacitor-filesystem')
     implementation project(':capacitor-keyboard')
+    implementation project(':capacitor-local-notifications')
     implementation project(':capacitor-push-notifications')
 
 }

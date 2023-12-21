@@ -28,6 +28,7 @@
     "@capacitor/filesystem": "^5.1.4",
     "@capacitor/ios": "^5.5.1",
     "@capacitor/keyboard": "^5.0.6",
+    "@capacitor/local-notifications": "^5.0.6",
     "@capacitor/push-notifications": "^5.1.0",
     "@ionic/angular": "^7.5.7",
     "@ionic/core": "^7.5.7",

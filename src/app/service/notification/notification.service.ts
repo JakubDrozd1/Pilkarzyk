@@ -3,6 +3,7 @@ import { HubConnection } from '@microsoft/signalr';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AppConfig } from '../app-config';
 import * as signalR from '@microsoft/signalr';
+import { LocalNotifications, ScheduleOptions } from '@capacitor/local-notifications';
 
 @Injectable({
     providedIn: 'root',
@@ -27,6 +28,19 @@ export class NotificationService {
 
         this.hubConnection.on('SendMessage', (userid: number, meetingid: number) => {
             const notification = { userid, meetingid }
+            let options:ScheduleOptions={
+                notifications:[{
+                    id:111,
+                    title:"jd",
+                    body:"xpp",
+                    largeBody: "get ",
+                    summaryText: "masno ni"
+                }
+                ]
+            }
+            
+            LocalNotifications.schedule(options)
+            
             this.meetingNotificationSubject.next(notification)
         })
     }

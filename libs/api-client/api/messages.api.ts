@@ -43,6 +43,8 @@ export interface GetAllMessagesRequestParams {
     onPage: number;
     sortColumn?: string;
     sortMode?: string;
+    dateFrom?: string;
+    dateTo?: string;
     idUser?: number;
     idMeeting?: number;
 }
@@ -281,6 +283,8 @@ export class MessagesApi {
         }
         const sortColumn = requestParameters.sortColumn;
         const sortMode = requestParameters.sortMode;
+        const dateFrom = requestParameters.dateFrom;
+        const dateTo = requestParameters.dateTo;
         const idUser = requestParameters.idUser;
         const idMeeting = requestParameters.idMeeting;
 
@@ -300,6 +304,14 @@ export class MessagesApi {
         if (sortMode !== undefined && sortMode !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>sortMode, 'SortMode');
+        }
+        if (dateFrom !== undefined && dateFrom !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>dateFrom, 'DateFrom');
+        }
+        if (dateTo !== undefined && dateTo !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>dateTo, 'DateTo');
         }
         if (idUser !== undefined && idUser !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,

@@ -676,6 +676,21 @@
               "type": "integer",
               "format": "int32"
             }
+          },
+          {
+            "name": "IdUser",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Answer",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -884,6 +899,22 @@
             "in": "query",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "DateFrom",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "DateTo",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
             }
           },
           {
@@ -2034,6 +2065,13 @@
               "type": "integer",
               "format": "int32"
             }
+          },
+          {
+            "name": "Answer",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2352,6 +2390,10 @@
           "IdMeeting": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          },
+          "Answer": {
+            "type": "string",
             "nullable": true
           }
         },

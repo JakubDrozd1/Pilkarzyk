@@ -4,9 +4,8 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { IonicModule, ModalController, NavParams } from '@ionic/angular';
 import { GetGroupsUsersResponse, MeetingsApi, MessagesApi, UsersMeetingsApi } from 'libs/api-client';
 import * as moment from 'moment';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Alert } from 'src/app/helper/alert';
-import { NotificationService } from 'src/app/service/notification/notification.service';
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service';
 
 @Component({
@@ -24,6 +23,7 @@ export class MeetingComponent implements OnInit {
   groupsUsers: GetGroupsUsersResponse[] = []
   idUsers: number[] = []
   meetingNotifications!: Observable<number>
+  delay: number = 2
 
   constructor
     (
@@ -33,7 +33,6 @@ export class MeetingComponent implements OnInit {
       private navParams: NavParams,
       private refreshDataService: RefreshDataService,
       private alert: Alert,
-      private messagesApi: MessagesApi,
       private usersMeetingsApi: UsersMeetingsApi,
     ) {
     this.meetingForm = this.fb.group({
@@ -45,12 +44,12 @@ export class MeetingComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.displayDate = moment().format()
+    this.displayDate = moment().add(this.delay, 'hours').format()
     this.idGroup = this.navParams.get('idGroup')
     this.groupsUsers = this.navParams.get('groupsUsers')
-    this.meetingForm.get('dateMeeting')?.setValue(moment().locale('pl').format())
+    this.meetingForm.get('dateMeeting')?.setValue(moment().locale('pl').add(this.delay, 'hours').format())
   }
-  
+
   onSubmit() {
     this.meetingForm.markAllAsTouched()
     if (this.meetingForm.valid) {

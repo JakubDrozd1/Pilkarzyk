@@ -46,6 +46,8 @@ export interface GetAllMeetingsRequestParams {
     dateFrom?: string;
     dateTo?: string;
     idGroup?: number;
+    idUser?: number;
+    answer?: string;
 }
 
 export interface GetMeetingByIdRequestParams {
@@ -281,6 +283,8 @@ export class MeetingsApi {
         const dateFrom = requestParameters.dateFrom;
         const dateTo = requestParameters.dateTo;
         const idGroup = requestParameters.idGroup;
+        const idUser = requestParameters.idUser;
+        const answer = requestParameters.answer;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (page !== undefined && page !== null) {
@@ -310,6 +314,14 @@ export class MeetingsApi {
         if (idGroup !== undefined && idGroup !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>idGroup, 'IdGroup');
+        }
+        if (idUser !== undefined && idUser !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>idUser, 'IdUser');
+        }
+        if (answer !== undefined && answer !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>answer, 'Answer');
         }
 
         let localVarHeaders = this.defaultHeaders;

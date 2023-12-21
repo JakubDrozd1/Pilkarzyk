@@ -29,7 +29,7 @@ export class GroupsListComponent implements OnInit {
     private modalCtrl: ModalController,
     private refreshDataService: RefreshDataService,
     private alert: Alert,
-    private notificationService: NotificationService
+    public notificationService: NotificationService
   ) { }
 
   ngOnInit() {

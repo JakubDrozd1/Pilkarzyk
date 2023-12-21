@@ -45,6 +45,7 @@ export interface GetListMeetingsUsersAsyncRequestParams {
     dateTo?: string;
     idMeeting?: number;
     idUser?: number;
+    answer?: string;
 }
 
 export interface GetUserWithMeetingRequestParams {
@@ -294,6 +295,7 @@ export class UsersMeetingsApi {
         const dateTo = requestParameters.dateTo;
         const idMeeting = requestParameters.idMeeting;
         const idUser = requestParameters.idUser;
+        const answer = requestParameters.answer;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (page !== undefined && page !== null) {
@@ -327,6 +329,10 @@ export class UsersMeetingsApi {
         if (idUser !== undefined && idUser !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>idUser, 'IdUser');
+        }
+        if (answer !== undefined && answer !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>answer, 'Answer');
         }
 
         let localVarHeaders = this.defaultHeaders;

@@ -11,6 +11,7 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
     standalone: true,
     imports: [CommonModule, IonicModule, HomeContentComponent]
 })
+
 export class HomePageComponent {
 
     constructor(
@@ -20,5 +21,9 @@ export class HomePageComponent {
 
     ionViewWillEnter() {
         this.refreshDataService.refresh('home')
+    }
+
+    ionViewWillLeave() {
+        this.refreshDataService.refresh('home-leave')
     }
 }

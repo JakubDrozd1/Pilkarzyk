@@ -6,6 +6,7 @@ import { RegisterComponent } from './content/form/register/register.component';
 import { inject } from '@angular/core';
 import { IsLogged } from './helper/isLogged';
 import { RegisterLinkComponent } from './content/form/register-link/register-link.component';
+import { HomePageComponent } from './layout/home-page/home-page.component';
 
 const IsLoggedFn: CanActivateFn =
     (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
@@ -32,7 +33,7 @@ export const routes: Routes = [
             },
             {
                 path: 'home',
-                loadComponent: () => import('./layout/home-page/home-page.component').then(m => m.HomePageComponent),
+                component: HomePageComponent,
             },
             {
                 path: 'profile',

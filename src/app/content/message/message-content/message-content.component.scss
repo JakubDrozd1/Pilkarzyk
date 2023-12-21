@@ -1,11 +1,14 @@
 .title {
   --border-color: var(--ion-color-secondary);
 }
+.button {
+  --border-color: var(--ion-color-secondary);
+}
 ion-card-header {
   width: 100%;
   text-align: center;
 }
-ion-item:active {
+.button:active {
   transform: scale(0.97);
   filter: brightness(120%);
 }

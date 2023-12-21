@@ -24,5 +24,6 @@ export interface GetMeetingUsersResponse {
     IsAdmin?: boolean | null;
     IdUser?: number | null;
     IdMeeting?: number | null;
+    Answer?: string | null;
 }
 

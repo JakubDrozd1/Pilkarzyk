@@ -10,3 +10,12 @@ ion-spinner {
   color: var(--ion-color-danger);
   --border-width: 2px;
 }
+ion-segment-button {
+  --color-checked: var(--ion-color-secondary);
+}
+ion-badge {
+  --background: var(--ion-color-secondary);
+  --padding-end: 5px;
+  --padding-start: 5px;
+  margin-left: 10px;
+}

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HubConnection } from '@microsoft/signalr';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { AppConfig } from '../app-config';
 import * as signalR from '@microsoft/signalr';
 

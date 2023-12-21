@@ -11,13 +11,15 @@ import { GetMeetingUsersGroupsResponse } from 'libs/api-client/model/get-meeting
 import { TimeService } from 'src/app/service/time/time.service';
 import { NotificationService } from 'src/app/service/notification/notification.service';
 import { MessageContentComponent } from "../../message/message-content/message-content.component";
+import { FormsModule } from '@angular/forms';
+import { DataService } from 'src/app/service/data/data.service';
 
 @Component({
   selector: 'app-home-content',
   templateUrl: './home-content.component.html',
   styleUrls: ['./home-content.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, MeetingContentComponent, MessageContentComponent]
+  imports: [CommonModule, IonicModule, MeetingContentComponent, MessageContentComponent, FormsModule]
 })
 export class HomeContentComponent implements OnInit, OnDestroy {
 
@@ -31,6 +33,8 @@ export class HomeContentComponent implements OnInit, OnDestroy {
   private meetingNotificationSubscription: Subscription = new Subscription()
   messagesNotification: GetMeetingUsersResponse[] = []
   messages: GetMessagesUsersMeetingsResponse[] = []
+  selectedSegment: string = 'notification'
+  delay: number = 2
 
   constructor
     (
@@ -39,7 +43,8 @@ export class HomeContentComponent implements OnInit, OnDestroy {
       private refreshDataService: RefreshDataService,
       private timeService: TimeService,
       private messagesApi: MessagesApi,
-      private notificationService: NotificationService
+      public notificationService: NotificationService,
+      private dataService: DataService,
     ) { }
 
   ngOnInit() {
@@ -48,6 +53,15 @@ export class HomeContentComponent implements OnInit, OnDestroy {
         index => {
           if (index === 'home') {
             this.reload()
+          }
+        }
+      )
+    )
+    this.subscription.add(
+      this.refreshDataService.refreshSubject.subscribe(
+        index => {
+          if (index === 'home-leave') {
+            this.leave()
           }
         }
       )
@@ -76,9 +90,9 @@ export class HomeContentComponent implements OnInit, OnDestroy {
   }
 
   getDetails() {
-    this.meetings = [];
-    const startOfDay = moment().startOf('day').format();
-    const endOfDay = moment().endOf('day').format();
+    this.meetings = []
+    const startOfDay = moment().startOf('day').format()
+    const endOfDay = moment().endOf('day').format()
 
     forkJoin([
       this.usersMeetingsApi.getListMeetingsUsersAsync({
@@ -88,7 +102,8 @@ export class HomeContentComponent implements OnInit, OnDestroy {
         sortMode: 'ASC',
         dateFrom: startOfDay,
         dateTo: endOfDay,
-        idUser: this.idUser
+        idUser: this.idUser,
+        answer: "yes"
       }),
       this.messagesApi.getAllMessages({
         idUser: this.idUser,
@@ -96,24 +111,44 @@ export class HomeContentComponent implements OnInit, OnDestroy {
         onPage: -1,
         sortColumn: 'DATE_MEETING',
         sortMode: 'ASC',
+        dateFrom: moment().add(this.delay, 'hours').format()
       })
     ]).subscribe({
       next: ([meetingsResponse, messagesResponse]) => {
         this.meetings = meetingsResponse
-        this.messages = messagesResponse.filter(message => message.Answer === null)
-
-        this.isReady = true;
+        this.messages = messagesResponse.filter(message => message.Answer === "readed")
+        this.isReady = true
       },
       error: () => {
-        this.alert.alertNotOk();
-        this.isReady = true;
+        this.alert.alertNotOk()
+        this.isReady = true
       }
-    });
+    })
   }
 
   reload() {
     this.idUser = Number(localStorage.getItem("user_id"))
     this.getDetails()
+  }
+
+  leave() {
+    for (let message of this.messagesNotification) {
+      this.messagesApi.updateAnswerMessageAsync({
+        getMessageRequest: {
+          IdMeeting: message.IdMeeting,
+          IdUser: message.IdUser,
+          Answer: "readed"
+        }
+      }).subscribe({
+        next: () => {
+          this.messagesNotification = []
+          this.dataService.sendData(this.messagesNotification.length)
+        },
+        error: () => {
+          this.alert.alertNotOk()
+        }
+      })
+    }
   }
 
   getNotification(idUserNotification: number, idMeetingNotification: number) {
@@ -124,8 +159,19 @@ export class HomeContentComponent implements OnInit, OnDestroy {
       }).subscribe({
         next: (response) => {
           this.messagesNotification.push(response)
+          this.dataService.sendData(this.messagesNotification.length)
         }
       })
     }
   }
+
+  updateNotification($event: GetMeetingUsersResponse) {
+    const indexToRemove = this.messagesNotification.findIndex((item) => {
+      return (Object.keys($event) as Array<keyof GetMeetingUsersResponse>).every(key => $event[key] === item[key]);
+    });
+    if (indexToRemove !== -1) {
+      this.messagesNotification.splice(indexToRemove, 1);
+    }
+  }
+
 }

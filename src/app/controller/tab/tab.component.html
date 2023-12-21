@@ -2,19 +2,23 @@
   <ion-tab-bar slot="bottom">
     <ion-tab-button class="hoverText" tab="home">
       <ion-icon name="home-outline"></ion-icon>
-      <div class="hoverText">Start</div>
+      <div class="hoverText">START</div>
+      @if(receivedData>0){
+      <ion-badge>{{receivedData}}
+      </ion-badge>
+      }
     </ion-tab-button>
     <ion-tab-button class="hoverText" tab="groups">
       <ion-icon name="people-outline"></ion-icon>
-      <div class="hoverText">Grupy</div>
+      <div class="hoverText">GRUPY</div>
     </ion-tab-button>
     <ion-tab-button class="hoverText" tab="calendar">
       <ion-icon name="calendar-outline"></ion-icon>
-      <div class="hoverText">Kalendarz</div>
+      <div class="hoverText">KALENDARZ</div>
     </ion-tab-button>
     <ion-tab-button class="hoverText" tab="profile">
       <ion-icon name="person-outline"></ion-icon>
-      <div class="hoverText">Profil</div>
+      <div class="hoverText">PROFIL</div>
     </ion-tab-button>
   </ion-tab-bar>
 </ion-tabs>

@@ -9,6 +9,7 @@ import { Alert } from 'src/app/helper/alert';
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service';
 import { Subscription } from 'rxjs';
 import { GetMeetingUsersGroupsResponse } from 'libs/api-client/model/get-meeting-users-groups-response';
+import { NotificationService } from 'src/app/service/notification/notification.service';
 
 @Component({
   selector: 'app-calendar-content',
@@ -27,14 +28,15 @@ export class CalendarContentComponent implements OnInit {
   selectedDate: string[] | undefined
   idUser: number = 0
   private subscription: Subscription = new Subscription()
-
+  
   constructor
     (
       private meetingsApi: MeetingsApi,
       private datePipe: DatePipe,
       private alert: Alert,
       private refreshDataService: RefreshDataService,
-      private usersMeetingsApi: UsersMeetingsApi
+      private usersMeetingsApi: UsersMeetingsApi,
+      public notificationService: NotificationService,
     ) { }
 
   ngOnInit() {
@@ -58,7 +60,8 @@ export class CalendarContentComponent implements OnInit {
       onPage: -1,
       sortColumn: 'DATE_MEETING',
       sortMode: 'ASC',
-      idUser: this.idUser
+      idUser: this.idUser,
+      answer: "yes"
     }).subscribe({
       next: (response) => {
         this.meetings = response.filter(item => {
@@ -119,6 +122,8 @@ export class CalendarContentComponent implements OnInit {
           sortMode: 'ASC',
           dateFrom: startOfDay,
           dateTo: endOfDay,
+          answer: "yes",
+          idUser: this.idUser
         }).subscribe({
           next: (response) => {
             for (let meeting of response) {

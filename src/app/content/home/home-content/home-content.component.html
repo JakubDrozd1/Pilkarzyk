@@ -1,4 +1,4 @@
-<ion-content class="ion-padding">
+<ion-content>
   <ion-card>
     <ion-card-header>
       <ion-card-title>{{currentTime}}</ion-card-title>
@@ -10,10 +10,26 @@
     </ion-spinner>
   </div>
   }
+
+  <ion-segment [(ngModel)]="selectedSegment" swipeGesture="true">
+    <ion-segment-button vertical="top" value="notification">
+      <ion-label>Zaproszenia
+        @if(messagesNotification.length+messages.length>0){
+        <ion-badge>{{messagesNotification.length+messages.length}}
+        </ion-badge>}
+      </ion-label>
+    </ion-segment-button>
+    <ion-segment-button vertical="top" value="meetings">
+      <ion-label>Spotkania</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  @switch (selectedSegment) {
+  @case ("notification") {
   @if(messagesNotification.length>0){
   @for(message of messagesNotification; track $index){
   <ion-item class="title" lines="full">
-    <app-message-content [message]="message"></app-message-content>
+    <app-message-content (messageUpdate)="updateNotification($event)" [message]="message"></app-message-content>
   </ion-item>
   <ion-label color="danger">NOWE ZAPROSZENIE</ion-label>
   }
@@ -23,14 +39,18 @@
   <app-message-content [message]="message"></app-message-content>
   }
   }
-
+  @if(messages.length==0&&messagesNotification.length==0){
+  <ion-item class="header" lines="none">NIE MASZ ŻADNYCH ZAPROSZEŃ</ion-item>
+  }
+  }
+  @case ("meetings") {
   @if(meetings.length > 0){
-  <ion-item class="header">Dzisiejsze spotkania:</ion-item>
+  <ion-item class="header" lines="none">DZISIEJSZE SPOTKANIA</ion-item>
   @for(meeting of meetings; track $index){
   <app-meeting-content [meeting]="meeting"></app-meeting-content>
   }
   }@else {
-  <ion-label>Nie masz dzisiaj żadnych spotkań</ion-label>
+  <ion-item class="header" lines="none">NIE MASZ DZISIAJ ŻADNYCH SPOTKAŃ</ion-item>
   }
-
-</ion-content>
+  }
+  }

@@ -10,6 +10,7 @@ import { ProfileComponent } from '../../form/profile/profile.component';
 import { ProfilePasswordComponent } from '../../form/profile-password/profile-password.component';
 import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile';
 import { convertFileToBase64 } from 'src/app/helper/convertFileToBase64';
+import { NotificationService } from 'src/app/service/notification/notification.service';
 
 @Component({
   selector: 'app-profile-details',
@@ -33,6 +34,7 @@ export class ProfileDetailsComponent implements OnInit {
     private alert: Alert,
     private modalCtrl: ModalController,
     private refreshDataService: RefreshDataService,
+    public notificationService: NotificationService
   ) { }
 
   ngOnInit() {

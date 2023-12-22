@@ -1,28 +1,37 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { IonicModule, ModalController } from '@ionic/angular';
-import { GetGroupsUsersResponse, GroupsUsersApi, MeetingsApi } from 'libs/api-client';
-import { Subscription, forkJoin } from 'rxjs';
-import { MeetingComponent } from "../../form/meeting/meeting.component";
-import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service';
-import { MeetingContentComponent } from "../../meeting/meeting-content/meeting-content.component";
-import { UsersComponent } from '../../form/users/users.component';
-import { Alert } from 'src/app/helper/alert';
-import { FormsModule } from '@angular/forms';
-import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile';
-import * as moment from 'moment';
-import { GetMeetingUsersGroupsResponse } from 'libs/api-client/model/get-meeting-users-groups-response';
+import { CommonModule } from '@angular/common'
+import { Component, OnInit } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
+import { IonicModule, ModalController } from '@ionic/angular'
+import {
+  GetGroupsUsersResponse,
+  GroupsUsersApi,
+  MeetingsApi,
+} from 'libs/api-client'
+import { Subscription, forkJoin } from 'rxjs'
+import { MeetingComponent } from '../../form/meeting/meeting.component'
+import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
+import { MeetingContentComponent } from '../../meeting/meeting-content/meeting-content.component'
+import { UsersComponent } from '../../form/users/users.component'
+import { Alert } from 'src/app/helper/alert'
+import { FormsModule } from '@angular/forms'
+import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
+import * as moment from 'moment'
+import { GetMeetingUsersGroupsResponse } from 'libs/api-client/model/get-meeting-users-groups-response'
 
 @Component({
   selector: 'app-groups-content',
   templateUrl: './groups-content.component.html',
   styleUrls: ['./groups-content.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, MeetingComponent, MeetingContentComponent, FormsModule]
+  imports: [
+    CommonModule,
+    IonicModule,
+    MeetingComponent,
+    MeetingContentComponent,
+    FormsModule,
+  ],
 })
 export class GroupsContentComponent implements OnInit {
-
   idGroup: number | undefined
   groupsUsers: GetGroupsUsersResponse[] = []
   isReady: boolean = false
@@ -42,28 +51,24 @@ export class GroupsContentComponent implements OnInit {
     private modalCtrl: ModalController,
     private refreshDataService: RefreshDataService,
     private alert: Alert
-  ) { }
+  ) {}
 
   ngOnInit() {
-    this.idUser = Number(localStorage.getItem("user_id"))
+    this.idUser = Number(localStorage.getItem('user_id'))
     this.subscription.add(
-      this.refreshDataService.refreshSubject.subscribe(
-        index => {
-          if (index === 'groups-content') {
-            this.idUser = Number(localStorage.getItem("user_id"))
-            this.getDetails()
-          }
-        }
-      )
-    )
-    this.route.params.subscribe(
-      (params) => {
-        if (params?.['idGroup'] > 0) {
-          this.idGroup = parseInt(params?.['idGroup'])
+      this.refreshDataService.refreshSubject.subscribe((index) => {
+        if (index === 'groups-content') {
+          this.idUser = Number(localStorage.getItem('user_id'))
           this.getDetails()
         }
-      }
+      })
     )
+    this.route.params.subscribe((params) => {
+      if (params?.['idGroup'] > 0) {
+        this.idGroup = parseInt(params?.['idGroup'])
+        this.getDetails()
+      }
+    })
   }
 
   getDetails() {
@@ -84,8 +89,9 @@ export class GroupsContentComponent implements OnInit {
         sortColumn: 'DATE_MEETING',
         sortMode: 'ASC',
         idGroup: this.idGroup,
-        dateFrom: moment().format()
-      })
+        dateFrom: moment().format(),
+        idUser: this.idUser,
+      }),
     }).subscribe({
       next: (responses) => {
         this.groupsUsers = responses.groupsUsers
@@ -113,9 +119,9 @@ export class GroupsContentComponent implements OnInit {
         this.alert.alertNotOk()
         this.groupsUsers = []
         this.meetings = []
-        this.nameGroup = ""
+        this.nameGroup = ''
         this.isReady = true
-      }
+      },
     })
   }
 
@@ -125,7 +131,7 @@ export class GroupsContentComponent implements OnInit {
       componentProps: {
         idGroup: this.idGroup,
         groupsUsers: this.groupsUsers,
-      }
+      },
     })
     modal.present()
     await modal.onWillDismiss()
@@ -136,7 +142,7 @@ export class GroupsContentComponent implements OnInit {
       component: UsersComponent,
       componentProps: {
         idGroup: this.idGroup,
-      }
+      },
     })
     modal.present()
     await modal.onWillDismiss()

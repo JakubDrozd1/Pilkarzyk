@@ -1,17 +1,15 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Injectable } from '@angular/core'
+import { Subject } from 'rxjs'
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RefreshDataService {
-
   refreshSubject: Subject<string> = new Subject()
 
-  constructor() { }
+  constructor() {}
 
   public refresh(index: string = '') {
     this.refreshSubject.next(index)
   }
-  
 }

@@ -3,9 +3,12 @@
     <ion-tab-button class="hoverText" tab="home">
       <ion-icon name="home-outline"></ion-icon>
       <div class="hoverText">Start</div>
+    </ion-tab-button>
+    <ion-tab-button class="hoverText" tab="notification">
+      <ion-icon name="notifications-outline"></ion-icon>
+      <div class="hoverText">Zaproszenia</div>
       @if(receivedData>0){
-      <ion-badge>{{receivedData}}
-      </ion-badge>
+      <ion-badge>{{ receivedData }} </ion-badge>
       }
     </ion-tab-button>
     <ion-tab-button class="hoverText" tab="groups">

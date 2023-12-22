@@ -1,24 +1,24 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
+import { IonicModule } from '@ionic/angular'
 
-import { MessageContentComponent } from './message-content.component';
+import { MessageContentComponent } from './message-content.component'
 
 describe('MessageContentComponent', () => {
-  let component: MessageContentComponent;
-  let fixture: ComponentFixture<MessageContentComponent>;
+  let component: MessageContentComponent
+  let fixture: ComponentFixture<MessageContentComponent>
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ MessageContentComponent ],
-      imports: [IonicModule.forRoot()]
-    }).compileComponents();
+      declarations: [MessageContentComponent],
+      imports: [IonicModule.forRoot()],
+    }).compileComponents()
 
-    fixture = TestBed.createComponent(MessageContentComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+    fixture = TestBed.createComponent(MessageContentComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  }))
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

@@ -7,8 +7,8 @@ ion-button:active {
   transform: scale(0.97);
 }
 ion-input {
-  --border-color: var(--ion-color-secondary);
+  --border-color: var(--ion-color-tertiary);
 }
-ion-textarea {
-  --border-color: var(--ion-color-secondary);
+ion-textarea{
+  --border-color: var(--ion-color-tertiary);
 }

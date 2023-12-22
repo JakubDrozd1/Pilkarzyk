@@ -1,26 +1,38 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-import { Capacitor } from '@capacitor/core';
-import { Keyboard } from '@capacitor/keyboard';
-import { IonicModule, ModalController } from '@ionic/angular';
-import { MaskitoModule } from '@maskito/angular';
-import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
-import { GroupsApi, GroupsUsersApi, USERS, UsersApi } from 'libs/api-client';
-import { forkJoin } from 'rxjs';
-import { Alert } from 'src/app/helper/alert';
-import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service';
+import { CommonModule } from '@angular/common'
+import { Component, Input, OnInit } from '@angular/core'
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms'
+import { RouterLink } from '@angular/router'
+import { Capacitor } from '@capacitor/core'
+import { Keyboard } from '@capacitor/keyboard'
+import { IonicModule, ModalController } from '@ionic/angular'
+import { MaskitoModule } from '@maskito/angular'
+import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core'
+import { GroupsApi, GroupsUsersApi, USERS, UsersApi } from 'libs/api-client'
+import { forkJoin } from 'rxjs'
+import { Alert } from 'src/app/helper/alert'
+import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, ReactiveFormsModule, FormsModule, MaskitoModule, RouterLink]
+  imports: [
+    CommonModule,
+    IonicModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MaskitoModule,
+    RouterLink,
+  ],
 })
 export class UsersComponent implements OnInit {
-
   @Input() idGroup: number = 0
 
   results: USERS[] = []
@@ -28,39 +40,38 @@ export class UsersComponent implements OnInit {
   user: USERS | undefined
   addExistingUserForm: FormGroup
   idUser: number = 0
-  readonly phoneMask: MaskitoOptions =
-    {
-      mask: [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/,],
-    }
-  readonly maskPredicate: MaskitoElementPredicateAsync = async (el) => (el as HTMLIonInputElement).getInputElement()
+  readonly phoneMask: MaskitoOptions = {
+    mask: [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/],
+  }
+  readonly maskPredicate: MaskitoElementPredicateAsync = async (el) =>
+    (el as HTMLIonInputElement).getInputElement()
   addNewUserForm: FormGroup
 
-  constructor
-    (
-      private modalCtrl: ModalController,
-      private fb: FormBuilder,
-      private usersApi: UsersApi,
-      private alert: Alert,
-      private groupsUsersApi: GroupsUsersApi,
-      private refreshDataService: RefreshDataService,
-      private groupsApi: GroupsApi
-    ) {
+  constructor(
+    private modalCtrl: ModalController,
+    private fb: FormBuilder,
+    private usersApi: UsersApi,
+    private alert: Alert,
+    private groupsUsersApi: GroupsUsersApi,
+    private refreshDataService: RefreshDataService,
+    private groupsApi: GroupsApi
+  ) {
     this.addExistingUserForm = this.fb.group({
       user: ['', Validators.required],
     })
     this.addNewUserForm = this.fb.group({
       email: [''],
-      phoneNumber: ['']
+      phoneNumber: [''],
     })
   }
 
   ngOnInit() {
-    this.idUser = Number(localStorage.getItem("user_id"))
+    this.idUser = Number(localStorage.getItem('user_id'))
     this.getUsers()
   }
 
   cancel() {
-    return this.modalCtrl.dismiss(null, 'cancel');
+    return this.modalCtrl.dismiss(null, 'cancel')
   }
 
   handleInput() {
@@ -69,7 +80,10 @@ export class UsersComponent implements OnInit {
     this.results = this.users.filter((d) => {
       const firstNameLowerCase = d.FIRSTNAME ? d.FIRSTNAME.toLowerCase() : ''
       const surnameLowerCase = d.SURNAME ? d.SURNAME.toLowerCase() : ''
-      return firstNameLowerCase.indexOf(query) > -1 || surnameLowerCase.indexOf(query) > -1
+      return (
+        firstNameLowerCase.indexOf(query) > -1 ||
+        surnameLowerCase.indexOf(query) > -1
+      )
     })
   }
 
@@ -80,52 +94,55 @@ export class UsersComponent implements OnInit {
   }
 
   add(item: USERS) {
-    this.addExistingUserForm.get('user')?.setValue(item.FIRSTNAME + " " + item.SURNAME)
+    this.addExistingUserForm
+      .get('user')
+      ?.setValue(item.FIRSTNAME + ' ' + item.SURNAME)
     this.user = item
     this.results = []
   }
 
   getUsers() {
     this.users = []
-    this.usersApi.getAllUsersWithoutGroupAsync(
-      {
+    this.usersApi
+      .getAllUsersWithoutGroupAsync({
         page: 0,
         onPage: -1,
         sortColumn: 'SURNAME',
         sortMode: 'ASC',
         idGroup: this.idGroup,
-      }
-    ).subscribe({
-      next: (response) => {
-        this.users = response
-      },
-      error: () => {
-        this.alert.alertNotOk()
-      }
-    })
+      })
+      .subscribe({
+        next: (response) => {
+          this.users = response
+        },
+        error: () => {
+          this.alert.alertNotOk()
+        },
+      })
   }
 
   onSubmitExisting() {
     this.addExistingUserForm.markAllAsTouched()
     if (this.addExistingUserForm.valid) {
-      this.groupsUsersApi.addUserToGroupAsync({
-        idUser: this.user?.ID_USER,
-        idGroup: this.idGroup
-      }).subscribe({
-        next: () => {
-          this.alert.alertOk()
-          this.refreshDataService.refresh('groups-content')
-          this.cancel()
-          this.getUsers()
-          this.addExistingUserForm.reset()
-        },
-        error: () => {
-          this.alert.alertNotOk()
-          this.cancel()
-          this.addExistingUserForm.reset()
-        }
-      }
-      )
+      this.groupsUsersApi
+        .addUserToGroupAsync({
+          idUser: this.user?.ID_USER,
+          idGroup: this.idGroup,
+        })
+        .subscribe({
+          next: () => {
+            this.alert.alertOk()
+            this.refreshDataService.refresh('groups-content')
+            this.cancel()
+            this.getUsers()
+            this.addExistingUserForm.reset()
+          },
+          error: () => {
+            this.alert.alertNotOk()
+            this.cancel()
+            this.addExistingUserForm.reset()
+          },
+        })
     }
   }
 
@@ -135,33 +152,35 @@ export class UsersComponent implements OnInit {
       if (this.addNewUserForm.value.email) {
         forkJoin({
           user: this.usersApi.getUserById({
-            userId: this.idUser
+            userId: this.idUser,
           }),
           group: this.groupsApi.getGroupById({
-            groupId: this.idGroup
-          })
+            groupId: this.idGroup,
+          }),
         }).subscribe({
           next: (responses) => {
-            this.usersApi.sendInvitationEmail({
-              getEmailSenderRequest: {
-                To: this.addNewUserForm.value.email,
-                Name: responses.user.FIRSTNAME,
-                Surname: responses.user.SURNAME,
-                GroupName: responses.group.NAME,
-                IdGroup: this.idGroup,
-              }
-            }).subscribe({
-              next: () => {
-                this.alert.alertOk("Wysłano emaila z zaproszeniem")
-              },
-              error: () => {
-                this.alert.alertNotOk()
-              }
-            })
+            this.usersApi
+              .sendInvitationEmail({
+                getEmailSenderRequest: {
+                  To: this.addNewUserForm.value.email,
+                  Name: responses.user.FIRSTNAME,
+                  Surname: responses.user.SURNAME,
+                  GroupName: responses.group.NAME,
+                  IdGroup: this.idGroup,
+                },
+              })
+              .subscribe({
+                next: () => {
+                  this.alert.alertOk('Wysłano emaila z zaproszeniem')
+                },
+                error: () => {
+                  this.alert.alertNotOk()
+                },
+              })
           },
           error: () => {
             this.alert.alertNotOk()
-          }
+          },
         })
       }
     }

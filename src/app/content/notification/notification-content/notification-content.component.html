@@ -1,0 +1,27 @@
+<ion-segment [(ngModel)]="selectedSegment" swipeGesture="true">
+  <ion-segment-button vertical="top" value="meetings">
+    <ion-label
+      >Spotkania @if(messagesNotification.length+messages.length>0){
+      <ion-badge>{{ messagesNotification.length + messages.length }} </ion-badge
+      >}
+    </ion-label>
+  </ion-segment-button>
+  <ion-segment-button vertical="top" value="groups">
+    <ion-label>Grupa</ion-label>
+  </ion-segment-button>
+</ion-segment>
+@switch (selectedSegment) { @case ("meetings") {
+@if(messagesNotification.length>0){ @for(message of messagesNotification; track
+$index){
+<ion-item class="title" lines="full">
+  <app-message-content
+    (messageUpdate)="updateNotification($event)"
+    [message]="message"
+  ></app-message-content>
+</ion-item>
+<ion-label color="danger">NOWE ZAPROSZENIE</ion-label>
+} } @if(messages.length>0){ @for(message of messages; track $index){
+<app-message-content [message]="message"></app-message-content>
+} } @if(messages.length==0&&messagesNotification.length==0){
+<ion-item class="header" lines="none">Nie masz żadnych zaproszeń</ion-item>
+} } @case ("groups") { } }

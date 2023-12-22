@@ -1,17 +1,15 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import * as moment from 'moment';
+import { Injectable } from '@angular/core'
+import { BehaviorSubject, Observable } from 'rxjs'
+import * as moment from 'moment'
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class TimeService {
-  
   private currentTimeSubject: BehaviorSubject<string> = new BehaviorSubject('')
   currentTime$: Observable<string> = this.currentTimeSubject.asObservable()
 
-  constructor() { }
+  constructor() {}
 
   updateCurrentTime() {
     const currentTime = moment().locale('pl').format('DD MMMM YYYY HH:mm:ss')

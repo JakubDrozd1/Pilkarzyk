@@ -1,31 +1,42 @@
-import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
-import { MaskitoModule } from '@maskito/angular';
-import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
-import { UsersApi } from 'libs/api-client';
-import { Alert } from 'src/app/helper/alert';
-import { compareValidator } from 'src/app/helper/validateConfirmPasswd';
-import { AuthService } from 'src/app/service/auth/auth.service';
+import { CommonModule } from '@angular/common'
+import { Component, EventEmitter, OnInit, Output } from '@angular/core'
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms'
+import { Router } from '@angular/router'
+import { IonicModule } from '@ionic/angular'
+import { MaskitoModule } from '@maskito/angular'
+import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core'
+import { UsersApi } from 'libs/api-client'
+import { Alert } from 'src/app/helper/alert'
+import { compareValidator } from 'src/app/helper/validateConfirmPasswd'
+import { AuthService } from 'src/app/service/auth/auth.service'
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, MaskitoModule, ReactiveFormsModule, FormsModule]
+  imports: [
+    CommonModule,
+    IonicModule,
+    MaskitoModule,
+    ReactiveFormsModule,
+    FormsModule,
+  ],
 })
 export class RegisterComponent implements OnInit {
-
   @Output() userRegistered: EventEmitter<any> = new EventEmitter()
 
-  readonly phoneMask: MaskitoOptions =
-    {
-      mask: [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/,],
-    }
-  readonly maskPredicate: MaskitoElementPredicateAsync = async (el) => (el as HTMLIonInputElement).getInputElement()
+  readonly phoneMask: MaskitoOptions = {
+    mask: [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/],
+  }
+  readonly maskPredicate: MaskitoElementPredicateAsync = async (el) =>
+    (el as HTMLIonInputElement).getInputElement()
   registrationForm: FormGroup
 
   constructor(
@@ -36,11 +47,44 @@ export class RegisterComponent implements OnInit {
     private alert: Alert
   ) {
     this.registrationForm = this.fb.group({
-      login: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]],
-      password: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(25)]],
-      confirmPassword: ['', [Validators.required, compareValidator('password')]],
-      firstname: ['', [Validators.required, Validators.pattern("^[a-zA-Z]+$"), Validators.minLength(3), Validators.maxLength(25)]],
-      surname: ['', [Validators.required, Validators.pattern("^[a-zA-Z]+$"), Validators.minLength(3), Validators.maxLength(25)]],
+      login: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(25),
+        ],
+      ],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(25),
+        ],
+      ],
+      confirmPassword: [
+        '',
+        [Validators.required, compareValidator('password')],
+      ],
+      firstname: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('^[a-zA-Z]+$'),
+          Validators.minLength(3),
+          Validators.maxLength(25),
+        ],
+      ],
+      surname: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('^[a-zA-Z]+$'),
+          Validators.minLength(3),
+          Validators.maxLength(25),
+        ],
+      ],
       phoneNumber: ['', [Validators.required, Validators.minLength(11)]],
       email: ['', [Validators.required, Validators.email]],
     })
@@ -57,8 +101,8 @@ export class RegisterComponent implements OnInit {
     if (this.registrationForm.valid) {
       let str: string = this.registrationForm.value.phoneNumber
       let intNumber: number = parseInt(str.replace(/-/g, ''), 10)
-      this.usersApi.addUser(
-        {
+      this.usersApi
+        .addUser({
           getUserRequest: {
             Login: this.registrationForm.value.login,
             Password: this.registrationForm.value.password,
@@ -66,22 +110,22 @@ export class RegisterComponent implements OnInit {
             Firstname: this.registrationForm.value.firstname,
             Surname: this.registrationForm.value.surname,
             PhoneNumber: intNumber,
-          }
-        }
-      ).subscribe({
-        next: (response) => {
-          this.alert.alertOk("Zarejestronano pomyślnie. Możesz się zalogować")
-          this.registrationForm.reset()
-          this.router.navigate(["/login"])
-          this.userRegistered.emit(response)
-        },
-        error: () => {
-          this.alert.alertNotOk()
-        }
-      })
+          },
+        })
+        .subscribe({
+          next: (response) => {
+            this.alert.alertOk('Zarejestronano pomyślnie. Możesz się zalogować')
+            this.registrationForm.reset()
+            this.router.navigate(['/login'])
+            this.userRegistered.emit(response)
+          },
+          error: () => {
+            this.alert.alertNotOk()
+          },
+        })
     }
   }
   private navigate() {
-    this.router.navigate(["/logged/home"])
+    this.router.navigate(['/logged/home'])
   }
 }

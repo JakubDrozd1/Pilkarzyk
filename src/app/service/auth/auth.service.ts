@@ -1,26 +1,25 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { Injectable } from '@angular/core'
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs'
 import { JwtHelperService } from '@auth0/angular-jwt'
-import { TokenApi } from 'libs/api-client';
-import { AppConfig } from '../app-config';
+import { TokenApi } from 'libs/api-client'
+import { AppConfig } from '../app-config'
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class AuthService {
   private loggedIn = new BehaviorSubject<boolean>(false)
 
-  constructor(
-    private jwt: JwtHelperService,
-    private tokenApi: TokenApi,
-  ) { }
+  constructor(private jwt: JwtHelperService, private tokenApi: TokenApi) {}
 
   get isLoggedIn() {
-    if (this.jwt.isTokenExpired() || localStorage.getItem('refresh_token') == null || localStorage.getItem('access_token') == null) {
+    if (
+      this.jwt.isTokenExpired() ||
+      localStorage.getItem('refresh_token') == null ||
+      localStorage.getItem('access_token') == null
+    ) {
       this.loggedIn.next(false)
-    }
-    else {
+    } else {
       this.loggedIn.next(true)
     }
     return this.loggedIn.getValue()
@@ -37,8 +36,7 @@ export class AuthService {
       }
 
       return false
-    }
-    catch (error) {
+    } catch (error) {
       return false
     }
   }
@@ -64,7 +62,7 @@ export class AuthService {
         grantType: 'refresh_token',
         clientId: AppConfig.settings.clientId,
         clientSecret: AppConfig.settings.clientSecretPublic,
-        refreshToken: refreshToken
+        refreshToken: refreshToken,
       })
     }
     if (errorThrow) {

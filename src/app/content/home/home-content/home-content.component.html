@@ -1,56 +1,35 @@
 <ion-content>
   <ion-card>
     <ion-card-header>
-      <ion-card-title>{{currentTime}}</ion-card-title>
+      <ion-card-title>{{ currentTime }}</ion-card-title>
     </ion-card-header>
   </ion-card>
   @if(!isReady){
-  <div style="text-align: center;">
-    <ion-spinner color="primary" name="crescent">
-    </ion-spinner>
+  <div style="text-align: center">
+    <ion-spinner color="primary" name="crescent"> </ion-spinner>
   </div>
   }
-
   <ion-segment [(ngModel)]="selectedSegment" swipeGesture="true">
-    <ion-segment-button vertical="top" value="notification">
-      <ion-label>Zaproszenia
-        @if(messagesNotification.length+messages.length>0){
-        <ion-badge>{{messagesNotification.length+messages.length}}
-        </ion-badge>}
-      </ion-label>
+    <ion-segment-button vertical="top" value="waiting">
+      <ion-label>Oczekujące</ion-label>
     </ion-segment-button>
     <ion-segment-button vertical="top" value="meetings">
-      <ion-label>Spotkania</ion-label>
+      <ion-label>spotkania</ion-label>
     </ion-segment-button>
   </ion-segment>
-
-  @switch (selectedSegment) {
-  @case ("notification") {
-  @if(messagesNotification.length>0){
-  @for(message of messagesNotification; track $index){
-  <ion-item class="title" lines="full">
-    <app-message-content (messageUpdate)="updateNotification($event)" [message]="message"></app-message-content>
-  </ion-item>
-  <ion-label color="danger">NOWE ZAPROSZENIE</ion-label>
-  }
-  }
-  @if(messages.length>0){
-  @for(message of messages; track $index){
-  <app-message-content [message]="message"></app-message-content>
-  }
-  }
-  @if(messages.length==0&&messagesNotification.length==0){
-  <ion-item class="header" lines="none">Nie masz żadnych zaproszeń</ion-item>
-  }
-  }
-  @case ("meetings") {
-  @if(meetings.length > 0){
-  <ion-item class="header" lines="none">DZISIEJSZE SPOTKANIA</ion-item>
-  @for(meeting of meetings; track $index){
+  @switch (selectedSegment) { @case ("waiting") { @if(meetingsWaiting.length >
+  0){ @for(meeting of meetingsWaiting; track $index){
+  <app-message-waiting-content
+    [message]="meeting"
+  ></app-message-waiting-content>
+  } }@else {
+  <ion-item class="header" lines="none">Nie masz oczekujących spotkań</ion-item>
+  } } @case ("meetings") { @if(meetings.length > 0){ @for(meeting of meetings;
+  track $index){
   <app-meeting-content [meeting]="meeting"></app-meeting-content>
-  }
-  }@else {
-  <ion-item class="header" lines="none">Nie masz dzisiaj żadnych spotkań</ion-item>
-  }
-  }
-  }
+  } }@else {
+  <ion-item class="header" lines="none"
+    >Nie masz dzisiaj żadnych spotkań</ion-item
+  >
+  } } }</ion-content
+>

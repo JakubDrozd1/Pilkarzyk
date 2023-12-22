@@ -25,5 +25,6 @@ export interface GetMeetingUsersResponse {
     IdUser?: number | null;
     IdMeeting?: number | null;
     Answer?: string | null;
+    WaitingTime?: string | null;
 }
 

@@ -1,32 +1,30 @@
 <ion-card>
   <ion-grid>
     <ion-card-header>
-      <ion-card-title>{{message.DateMeeting | date: 'dd.MM.yyyy HH:mm'}}</ion-card-title>
+      <ion-card-title>{{
+        message.DateMeeting | date : "dd.MM.yyyy HH:mm"
+      }}</ion-card-title>
     </ion-card-header>
     <ion-row>
       <ion-col>
-        <ion-card-header>
-          MIEJSCE:
-        </ion-card-header>
+        <ion-card-header> MIEJSCE: </ion-card-header>
       </ion-col>
       <ion-col>
         <ion-item class="title" lines="full">
           <ion-card-header>
-            {{message.Place}}
+            {{ message.Place }}
           </ion-card-header>
         </ion-item>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-card-header>
-          ILOŚĆ OSÓB:
-        </ion-card-header>
+        <ion-card-header> ILOŚĆ OSÓB: </ion-card-header>
       </ion-col>
       <ion-col>
         <ion-item class="title" lines="full">
           <ion-card-header>
-            {{message.Quantity}}
+            {{ message.Quantity }}
           </ion-card-header>
         </ion-item>
       </ion-col>
@@ -36,7 +34,7 @@
       <ion-col>
         <ion-item class="title" lines="full">
           <ion-card-header>
-            {{message.Description}}
+            {{ message.Description }}
           </ion-card-header>
         </ion-item>
       </ion-col>
@@ -58,7 +56,7 @@
         </ion-item>
       </ion-col>
       <ion-col>
-        <ion-item class="button" lines="full" (click)="onSubmit('wait')">
+        <ion-item id="open-date" class="button" lines="full">
           <ion-card-header>
             <ion-label color="warning">DAJ MI CZAS</ion-label>
           </ion-card-header>
@@ -67,3 +65,31 @@
     </ion-row>
   </ion-grid>
 </ion-card>
+
+<ion-modal trigger="open-date">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="cancel()">Anuluj</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <form [formGroup]="messageForm" (ngSubmit)="onSubmitWait()">
+        <ion-datetime-button datetime="datetime"> </ion-datetime-button>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime
+              [min]="displayDate"
+              [max]="maxDate"
+              id="datetime"
+              formControlName="dateMeeting"
+            ></ion-datetime>
+          </ng-template>
+        </ion-modal>
+        <ion-button type="submit" expand="full">Czekaj </ion-button>
+      </form>
+    </ion-content>
+  </ng-template>
+</ion-modal>

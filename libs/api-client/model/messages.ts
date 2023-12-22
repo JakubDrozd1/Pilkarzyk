@@ -17,5 +17,6 @@ export interface MESSAGES {
     IDUSER?: number | null;
     ANSWER?: string | null;
     DATE_ADD?: string | null;
+    WAITING_TIME?: string | null;
 }
 

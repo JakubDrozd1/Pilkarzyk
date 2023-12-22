@@ -1,14 +1,20 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { JwtHelperService } from '@auth0/angular-jwt';
-import { IonicModule } from '@ionic/angular';
-import { TokenApi, UsersApi } from 'libs/api-client';
-import { forkJoin } from 'rxjs';
-import { Alert } from 'src/app/helper/alert';
-import { AppConfig } from 'src/app/service/app-config';
-import { AuthService } from 'src/app/service/auth/auth.service';
+import { CommonModule } from '@angular/common'
+import { Component, OnInit } from '@angular/core'
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms'
+import { Router } from '@angular/router'
+import { JwtHelperService } from '@auth0/angular-jwt'
+import { IonicModule } from '@ionic/angular'
+import { TokenApi, UsersApi } from 'libs/api-client'
+import { forkJoin } from 'rxjs'
+import { Alert } from 'src/app/helper/alert'
+import { AppConfig } from 'src/app/service/app-config'
+import { AuthService } from 'src/app/service/auth/auth.service'
 
 @Component({
   selector: 'app-login',
@@ -16,13 +22,11 @@ import { AuthService } from 'src/app/service/auth/auth.service';
   styleUrls: ['./login.component.scss'],
   standalone: true,
   imports: [CommonModule, IonicModule, ReactiveFormsModule, FormsModule],
-  providers: [JwtHelperService]
+  providers: [JwtHelperService],
 })
 export class LoginComponent implements OnInit {
-
   loginForm: FormGroup
   errorMessage: string = ''
-
 
   constructor(
     private fb: FormBuilder,
@@ -36,14 +40,12 @@ export class LoginComponent implements OnInit {
       login: ['', Validators.required],
       password: ['', Validators.required],
     })
-
   }
 
   ngOnInit() {
     if (this.authService.isLoggedIn) {
       this.navigate()
     }
-
   }
 
   onSubmit() {
@@ -59,20 +61,25 @@ export class LoginComponent implements OnInit {
           clientId: AppConfig.settings.clientId,
           clientSecret: AppConfig.settings.clientSecretPublic,
           username: this.loginForm.value.login,
-          password: this.loginForm.value.password
-        })
+          password: this.loginForm.value.password,
+        }),
       }).subscribe({
         next: (responses) => {
           let success = false
-          if (responses.token.access_token != null && responses.token.refresh_token != null) {
-            success = this.authService.setLoggedIn(responses.token.access_token, responses.token.refresh_token)
+          if (
+            responses.token.access_token != null &&
+            responses.token.refresh_token != null
+          ) {
+            success = this.authService.setLoggedIn(
+              responses.token.access_token,
+              responses.token.refresh_token
+            )
           }
           if (success) {
             this.loginForm.reset()
             this.authService.login()
             this.navigate()
-          }
-          else {
+          } else {
             this.alert.alertNotOk()
           }
         },
@@ -86,12 +93,12 @@ export class LoginComponent implements OnInit {
           } else {
             this.alert.alertNotOk()
           }
-        }
+        },
       })
     }
   }
 
   private navigate() {
-    this.router.navigate(["/logged/home"])
+    this.router.navigate(['/logged/home'])
   }
 }

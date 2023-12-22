@@ -26,5 +26,6 @@ export interface GetMessagesUsersMeetingsResponse {
     IsAdmin?: boolean | null;
     IdUser?: number | null;
     IdMeeting?: number | null;
+    WaitingTime?: string | null;
 }
 

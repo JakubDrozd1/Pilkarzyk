@@ -6,3 +6,6 @@ ion-spinner {
   width: 100px;
   height: 100px;
 }
+ion-input {
+  --border-color: var(--ion-color-secondary);
+}

@@ -24,7 +24,7 @@
         <ion-list [inset]="true">
           <ion-label>Zaproś istniejącego użytkownika</ion-label>
           <ion-item lines="none">
-            <ion-input label="Imię i nazwisko" labelPlacement="floating" formControlName="user"
+            <ion-input helperText=" " label="Imię i nazwisko" labelPlacement="floating" formControlName="user"
               (ngModelChange)="handleInput()" (ionBlur)="removeFocus()">
             </ion-input>
           </ion-item>

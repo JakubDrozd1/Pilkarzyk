@@ -40,7 +40,7 @@
   }
   }
   @if(messages.length==0&&messagesNotification.length==0){
-  <ion-item class="header" lines="none">NIE MASZ ŻADNYCH ZAPROSZEŃ</ion-item>
+  <ion-item class="header" lines="none">Nie masz żadnych zaproszeń</ion-item>
   }
   }
   @case ("meetings") {
@@ -50,7 +50,7 @@
   <app-meeting-content [meeting]="meeting"></app-meeting-content>
   }
   }@else {
-  <ion-item class="header" lines="none">NIE MASZ DZISIAJ ŻADNYCH SPOTKAŃ</ion-item>
+  <ion-item class="header" lines="none">Nie masz dzisiaj żadnych spotkań</ion-item>
   }
   }
   }

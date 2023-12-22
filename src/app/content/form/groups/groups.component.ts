@@ -108,11 +108,16 @@ export class GroupsComponent implements OnInit {
   handleInput() {
     let query = ''
     query = this.groupForm.get('organizer')?.value.toLowerCase().trim()
-    this.results = this.users.filter((d) => {
-      const firstNameLowerCase = d.FIRSTNAME ? d.FIRSTNAME.toLowerCase() : ''
-      const surnameLowerCase = d.SURNAME ? d.SURNAME.toLowerCase() : ''
-      return firstNameLowerCase.indexOf(query) > -1 || surnameLowerCase.indexOf(query) > -1
-    })
+    if (query != '') {
+      console.log(query)
+      this.results = this.users.filter((d) => {
+        const firstNameLowerCase = d.FIRSTNAME ? d.FIRSTNAME.toLowerCase() : ''
+        const surnameLowerCase = d.SURNAME ? d.SURNAME.toLowerCase() : ''
+        return firstNameLowerCase.indexOf(query) > -1 || surnameLowerCase.indexOf(query) > -1
+      })
+    } else {
+      this.results = []
+    }
   }
 
   removeFocus() {

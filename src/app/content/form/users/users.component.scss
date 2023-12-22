@@ -3,4 +3,7 @@ ion-button:active {
     transition: 0.2s ease-in-out;
     transform: scale(0.97);
   }
+  ion-input {
+    --border-color: var(--ion-color-secondary);
+  }
   

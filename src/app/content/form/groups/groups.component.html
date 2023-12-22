@@ -13,12 +13,12 @@
           formControlName="name" type="text"></ion-input>
       </ion-item>
       <ion-item lines="none">
-        <ion-input label="Organizator" labelPlacement="floating" formControlName="organizer"
-          (ngModelChange)="handleInput()" (ionBlur)="removeFocus()">
+        <ion-input helperText=" " label="Organizator" labelPlacement="floating" formControlName="organizer"
+          (ngModelChange)="handleInput()" (ionBlur)="removeFocus()" type="text">
         </ion-input>
       </ion-item>
       @for(user of results; track $index){
-      <ion-item lines="none" (click)="add(user)">
+      <ion-item label-placement="fixed" lines="full" (click)="add(user)">
         {{user.FIRSTNAME}} {{user.SURNAME}}
       </ion-item>
       }

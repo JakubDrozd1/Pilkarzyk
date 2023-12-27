@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common'
 import { Component } from '@angular/core'
 import { RouterModule } from '@angular/router'
+import { BackgroundRunner } from '@capacitor/background-runner'
+import { Capacitor } from '@capacitor/core'
 import { IonicModule } from '@ionic/angular'
 
 @Component({
@@ -12,4 +14,29 @@ import { IonicModule } from '@ionic/angular'
 })
 export class AppComponent {
   title = 'pilkarzyk'
+  constructor() {
+    this.init()
+    this.testSave()
+  }
+
+  async init() {
+    if (Capacitor.isNativePlatform()) {
+      try {
+        const permissions = await BackgroundRunner.requestPermissions({
+          apis: ['notifications'],
+        })
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }
+  async testSave() {
+    if (Capacitor.isNativePlatform()) {
+      const result = await BackgroundRunner.dispatchEvent({
+        label: 'com.proman.pilkarzyk.notification',
+        event: 'push-notification',
+        details: {},
+      })
+    }
+  }
 }

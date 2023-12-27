@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">Anuluj</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <form [formGroup]="messageForm" (ngSubmit)="onSubmitWait()">
+    <ion-datetime-button datetime="datetime"> </ion-datetime-button>
+    <ion-modal [keepContentsMounted]="true">
+      <ng-template>
+        <ion-datetime
+          [min]="displayDate"
+          [max]="maxDate"
+          id="datetime"
+          formControlName="dateMeeting"
+        ></ion-datetime>
+      </ng-template>
+    </ion-modal>
+    <ion-button type="submit" expand="full">Czekaj </ion-button>
+  </form>
+</ion-content>

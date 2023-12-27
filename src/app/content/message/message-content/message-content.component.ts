@@ -12,6 +12,7 @@ import { GetMeetingUsersResponse, MessagesApi } from 'libs/api-client'
 import * as moment from 'moment'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
+import { MessageAnswerModalComponent } from '../../message-answer-modal/message-answer-modal.component'
 
 @Component({
   selector: 'app-message-content',
@@ -26,32 +27,14 @@ export class MessageContentComponent implements OnInit {
 
   @Input() message!: GetMeetingUsersResponse
 
-  displayDate: string = ''
-  messageForm: FormGroup
-  maxDate: string = ''
-
   constructor(
     private messagesApi: MessagesApi,
     private alert: Alert,
     private refreshDataService: RefreshDataService,
-    private fb: FormBuilder,
     private modalCtrl: ModalController
-  ) {
-    this.messageForm = this.fb.group({
-      dateMeeting: ['', Validators.required],
-    })
-  }
+  ) {}
 
-  ngOnInit() {
-    this.displayDate = moment().format()
-    this.maxDate = moment(this.message.DateMeeting)
-      .clone()
-      .subtract(2, 'hours')
-      .format()
-    this.messageForm
-      .get('dateMeeting')
-      ?.setValue(moment().locale('pl').format())
-  }
+  ngOnInit() {}
 
   onSubmit(answer: string) {
     this.messagesApi
@@ -74,34 +57,18 @@ export class MessageContentComponent implements OnInit {
       })
   }
 
-  onSubmitWait() {
-    this.messageForm.markAllAsTouched()
-    if (this.messageForm.valid) {
-      this.messagesApi
-        .updateAnswerMessageAsync({
-          getMessageRequest: {
-            IdMeeting: this.message.IdMeeting,
-            IdUser: this.message.IdUser,
-            Answer: 'wait',
-            WaitingTime: this.messageForm.value.dateMeeting,
-          },
-        })
-        .subscribe({
-          next: () => {
-            this.alert.alertOk('Odpowiedziano pomyślnie')
-            this.messageUpdate.emit(this.message)
-            this.refreshDataService.refresh('notification')
-            this.cancel()
-          },
-          error: () => {
-            this.alert.alertNotOk()
-            this.cancel()
-          },
-        })
-    }
-  }
-
-  cancel() {
-    return this.modalCtrl.dismiss(null, 'cancel')
+  async openModalAddWaitingTime() {
+    const modal = await this.modalCtrl.create({
+      component: MessageAnswerModalComponent,
+      componentProps: {
+        message: this.message,
+      },
+    })
+    modal.present()
+    await modal.onWillDismiss()
+    modal.onDidDismiss().then((data) => {
+      console.log(data.data)
+      this.messageUpdate.emit(data.data)
+    })
   }
 }

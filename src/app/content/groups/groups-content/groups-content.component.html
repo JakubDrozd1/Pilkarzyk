@@ -49,7 +49,7 @@
     @if(meetings.length!=0){ @for (item of meetings; track $index) {
     <app-meeting-content [meeting]="item"></app-meeting-content>
     }} @else {
-    <ion-item class="header" lines="none">Brak nadchodzących spotkań</ion-item>
+    <ion-item lines="none">Brak nadchodzących spotkań</ion-item>
     }
   </ion-list>
   } @case ("members") {

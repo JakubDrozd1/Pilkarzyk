@@ -57,4 +57,23 @@ export class NotificationService {
   getMeetingNotifications(): Observable<{ userid: number; meetingid: number }> {
     return this.meetingNotificationSubject.asObservable()
   }
+
+  handleRemoteNotification() {
+    const notification = { userid: 0, meetingid: 0 }
+    let options: ScheduleOptions = {
+      notifications: [
+        {
+          id: 111,
+          title: 'jd',
+          body: 'xpp',
+          largeBody: 'get ',
+          summaryText: 'masno ni',
+        },
+      ],
+    }
+
+    LocalNotifications.schedule(options)
+
+    this.meetingNotificationSubject.next(notification)
+  }
 }

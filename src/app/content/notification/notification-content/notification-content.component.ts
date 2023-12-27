@@ -94,7 +94,6 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
   }
 
   updateNotification($event: GetMeetingUsersResponse) {
-    console.log(1)
     const indexToRemove = this.messagesNotification.findIndex((item) => {
       return (
         Object.keys($event) as Array<keyof GetMeetingUsersResponse>

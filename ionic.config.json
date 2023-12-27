@@ -3,7 +3,9 @@
   "projects": {
     "pilkarzyk": {
       "name": "pilkarzyk",
-      "integrations": {},
+      "integrations": {
+        "capacitor": {}
+      },
       "type": "angular"
     }
   }

@@ -12,7 +12,7 @@ import { GetMeetingUsersResponse, MessagesApi } from 'libs/api-client'
 import * as moment from 'moment'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
-import { MessageAnswerModalComponent } from '../../message-answer-modal/message-answer-modal.component'
+import { MessageAnswerModalComponent } from '../message-answer-modal/message-answer-modal.component'
 
 @Component({
   selector: 'app-message-content',

@@ -2,9 +2,14 @@ import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { IonicModule, ModalController } from '@ionic/angular'
-import { GetGroupsUsersResponse, GroupsUsersApi } from 'libs/api-client'
+import {
+  GetGroupsUsersResponse,
+  GroupsUsersApi,
+  USERS,
+  UsersApi,
+} from 'libs/api-client'
 import { GroupsComponent } from '../../form/groups/groups.component'
-import { Observable, Subscription } from 'rxjs'
+import { Observable, Subscription, forkJoin } from 'rxjs'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { Alert } from 'src/app/helper/alert'
 import { NotificationService } from 'src/app/service/notification/notification.service'
@@ -22,13 +27,15 @@ export class GroupsListComponent implements OnInit {
   idUser: number = 0
   private subscription: Subscription = new Subscription()
   meetingNotifications!: Observable<number>
+  loggedUser!: USERS
 
   constructor(
     private groupsUsersApi: GroupsUsersApi,
     private modalCtrl: ModalController,
     private refreshDataService: RefreshDataService,
     private alert: Alert,
-    public notificationService: NotificationService
+    public notificationService: NotificationService,
+    private userApi: UsersApi
   ) {}
 
   ngOnInit() {
@@ -45,23 +52,27 @@ export class GroupsListComponent implements OnInit {
 
   getGroups() {
     this.groupsUsers = []
-    this.groupsUsersApi
-      .getAllGroupsFromUserAsync({
+    forkJoin([
+      this.groupsUsersApi.getAllGroupsFromUserAsync({
         page: 0,
         onPage: -1,
         sortColumn: 'NAME',
         sortMode: 'ASC',
         idUser: this.idUser,
-      })
-      .subscribe({
-        next: (response) => {
-          this.groupsUsers = response
-          this.isReady = true
-        },
-        error: () => {
-          this.alert.alertNotOk()
-        },
-      })
+      }),
+      this.userApi.getUserById({
+        userId: this.idUser,
+      }),
+    ]).subscribe({
+      next: ([groupResponse, userResponse]) => {
+        this.loggedUser = userResponse
+        this.groupsUsers = groupResponse
+        this.isReady = true
+      },
+      error: () => {
+        this.alert.alertNotOk()
+      },
+    })
   }
 
   async openModal() {

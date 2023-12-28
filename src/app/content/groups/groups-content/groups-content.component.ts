@@ -6,6 +6,8 @@ import {
   GetGroupsUsersResponse,
   GroupsUsersApi,
   MeetingsApi,
+  USERS,
+  UsersApi,
 } from 'libs/api-client'
 import { Subscription, forkJoin } from 'rxjs'
 import { MeetingComponent } from '../../form/meeting/meeting.component'
@@ -43,6 +45,7 @@ export class GroupsContentComponent implements OnInit {
   temp: File | null = null
   images: string[] = []
   idUser: number = 0
+  loggedUser!: USERS
 
   constructor(
     private route: ActivatedRoute,
@@ -50,7 +53,8 @@ export class GroupsContentComponent implements OnInit {
     private meetingsApi: MeetingsApi,
     private modalCtrl: ModalController,
     private refreshDataService: RefreshDataService,
-    private alert: Alert
+    private alert: Alert,
+    private userApi: UsersApi
   ) {}
 
   ngOnInit() {
@@ -92,8 +96,13 @@ export class GroupsContentComponent implements OnInit {
         dateFrom: moment().format(),
         idUser: this.idUser,
       }),
+      user: this.userApi.getUserById({
+        userId: this.idUser,
+      }),
     }).subscribe({
       next: (responses) => {
+        this.loggedUser = responses.user
+        console.log(this.loggedUser)
         this.groupsUsers = responses.groupsUsers
         this.meetings = responses.meetings
         this.nameGroup = responses.groupsUsers[0].Name

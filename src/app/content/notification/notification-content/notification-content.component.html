@@ -24,4 +24,8 @@ $index){
 <app-message-content [message]="message"></app-message-content>
 } } @if(messages.length==0&&messagesNotification.length==0){
 <ion-item class="header" lines="none">Nie masz żadnych zaproszeń</ion-item>
-} } @case ("groups") { } }
+} } @case ("groups") { @if(invite.length>0){ @for(item of invite; track $index){
+<app-groups-invite [invite]="item"></app-groups-invite>
+} }@else {
+<ion-item class="header" lines="none">Nie masz żadnych zaproszeń</ion-item>
+} } }

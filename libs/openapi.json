@@ -10,6 +10,112 @@
     }
   ],
   "paths": {
+    "/api/group-invites/{userId}": {
+      "get": {
+        "tags": [
+          "GroupInvites"
+        ],
+        "operationId": "GetGroupInviteByIdUserAsync",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetGroupInviteResponse"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetGroupInviteResponse"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetGroupInviteResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/group-invites": {
+      "post": {
+        "tags": [
+          "GroupInvites"
+        ],
+        "operationId": "AddGroupInviteAsync",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetGroupInviteRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetGroupInviteRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetGroupInviteRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/group-invites/{groupInvitedId}": {
+      "delete": {
+        "tags": [
+          "GroupInvites"
+        ],
+        "operationId": "DeleteGroupInviteAsync",
+        "parameters": [
+          {
+            "name": "groupInvitedId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/groups": {
       "get": {
         "tags": [
@@ -227,7 +333,7 @@
         "operationId": "AddUserToGroupAsync",
         "parameters": [
           {
-            "name": "IdUser",
+            "name": "IDUSER",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -235,7 +341,7 @@
             }
           },
           {
-            "name": "IdGroup",
+            "name": "IDGROUP",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -243,7 +349,7 @@
             }
           },
           {
-            "name": "AccountType",
+            "name": "ACCOUNT_TYPE",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -1939,39 +2045,6 @@
         "tags": [
           "UsersMeetings"
         ],
-        "operationId": "AddUserToMeetingAsync",
-        "parameters": [
-          {
-            "name": "idMeeting",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "idUser",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
-    "/api/users-meetings/adds": {
-      "post": {
-        "tags": [
-          "UsersMeetings"
-        ],
         "operationId": "AddUsersToMeetingAsync",
         "parameters": [
           {
@@ -2219,6 +2292,54 @@
               "type": "string"
             },
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetGroupInviteRequest": {
+        "type": "object",
+        "properties": {
+          "IdGroup": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "IdUser": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "IdAuthor": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetGroupInviteResponse": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "IdGroupInvite": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "IdGroup": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "IdUser": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "IdAuthor": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "DateAdd": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "additionalProperties": false
@@ -2710,6 +2831,10 @@
           },
           "IsAdmin": {
             "type": "boolean"
+          },
+          "Salt": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

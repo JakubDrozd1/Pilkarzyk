@@ -13,7 +13,13 @@ import { Keyboard } from '@capacitor/keyboard'
 import { IonicModule, ModalController } from '@ionic/angular'
 import { MaskitoModule } from '@maskito/angular'
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core'
-import { GroupsApi, GroupsUsersApi, USERS, UsersApi } from 'libs/api-client'
+import {
+  GroupInvitesApi,
+  GroupsApi,
+  GroupsUsersApi,
+  USERS,
+  UsersApi,
+} from 'libs/api-client'
 import { forkJoin } from 'rxjs'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
@@ -54,7 +60,8 @@ export class UsersComponent implements OnInit {
     private alert: Alert,
     private groupsUsersApi: GroupsUsersApi,
     private refreshDataService: RefreshDataService,
-    private groupsApi: GroupsApi
+    private groupsApi: GroupsApi,
+    private groupInviteApi: GroupInvitesApi
   ) {
     this.addExistingUserForm = this.fb.group({
       user: ['', Validators.required],
@@ -124,23 +131,29 @@ export class UsersComponent implements OnInit {
   onSubmitExisting() {
     this.addExistingUserForm.markAllAsTouched()
     if (this.addExistingUserForm.valid) {
-      this.groupsUsersApi
-        .addUserToGroupAsync({
-          idUser: this.user?.ID_USER,
-          idGroup: this.idGroup,
+      // this.groupsUsersApi
+      //   .addUserToGroupAsync({
+      //     iDUSER: this.user?.ID_USER,
+      //     iDGROUP: this.idGroup,
+      //   })
+
+      this.groupInviteApi
+        .addGroupInviteAsync({
+          getGroupInviteRequest: {
+            IdGroup: this.idGroup,
+            IdUser: this.user?.ID_USER,
+            IdAuthor: this.idUser,
+          },
         })
         .subscribe({
           next: () => {
-            this.alert.alertOk()
+            this.alert.alertOk('Zaproszono pomyślnie')
             this.refreshDataService.refresh('groups-content')
             this.cancel()
-            this.getUsers()
-            this.addExistingUserForm.reset()
           },
           error: () => {
             this.alert.alertNotOk()
             this.cancel()
-            this.addExistingUserForm.reset()
           },
         })
     }

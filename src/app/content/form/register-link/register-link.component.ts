@@ -46,8 +46,8 @@ export class RegisterLinkComponent implements OnInit {
         next: (response) => {
           this.groupsUsersApi
             .addUserToGroupAsync({
-              idGroup: this.idGroup,
-              idUser: response.ID_USER,
+              iDGROUP: this.idGroup,
+              iDUSER: response.ID_USER,
             })
             .subscribe({
               next: () => {},

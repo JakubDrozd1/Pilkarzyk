@@ -2,8 +2,10 @@ import { CommonModule } from '@angular/common'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { IonicModule } from '@ionic/angular'
 import {
+  GetGroupInviteResponse,
   GetMeetingUsersResponse,
   GetMessagesUsersMeetingsResponse,
+  GroupInvitesApi,
   MessagesApi,
   UsersMeetingsApi,
 } from 'libs/api-client'
@@ -15,13 +17,20 @@ import { NotificationService } from 'src/app/service/notification/notification.s
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import * as moment from 'moment'
 import { FormsModule } from '@angular/forms'
+import { GroupsInviteComponent } from '../../groups/groups-invite/groups-invite.component'
 
 @Component({
   selector: 'app-notification-content',
   templateUrl: './notification-content.component.html',
   styleUrls: ['./notification-content.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, MessageContentComponent, FormsModule],
+  imports: [
+    CommonModule,
+    IonicModule,
+    MessageContentComponent,
+    FormsModule,
+    GroupsInviteComponent,
+  ],
 })
 export class NotificationContentComponent implements OnInit, OnDestroy {
   messagesNotification: GetMeetingUsersResponse[] = []
@@ -33,6 +42,7 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
   isReady: boolean = false
   selectedSegment: string = 'meetings'
   delay: number = 2
+  invite: GetGroupInviteResponse[] = []
 
   constructor(
     private usersMeetingsApi: UsersMeetingsApi,
@@ -40,7 +50,8 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
     private refreshDataService: RefreshDataService,
     private messagesApi: MessagesApi,
     public notificationService: NotificationService,
-    private dataService: DataService
+    private dataService: DataService,
+    private groupInvite: GroupInvitesApi
   ) {}
 
   ngOnDestroy(): void {
@@ -137,11 +148,15 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
         sortMode: 'ASC',
         dateFrom: moment().add(this.delay, 'hours').format(),
       }),
+      this.groupInvite.getGroupInviteByIdUserAsync({
+        userId: this.idUser,
+      }),
     ]).subscribe({
-      next: ([messagesResponse]) => {
+      next: ([messagesResponse, inviteResponse]) => {
         this.messages = messagesResponse.filter(
           (message) => message.Answer === 'readed'
         )
+        this.invite = inviteResponse
         this.isReady = true
       },
       error: () => {

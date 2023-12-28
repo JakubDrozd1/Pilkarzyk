@@ -11,10 +11,12 @@
  */
 
 
-export interface GetMessageRequest { 
-    IdMeeting?: number | null;
-    IdUser?: number | null;
-    Answer?: string | null;
-    WaitingTime?: string | null;
+export interface GetGroupInviteResponse { 
+    Name?: string | null;
+    IdGroupInvite?: number;
+    IdGroup?: number;
+    IdUser?: number;
+    IdAuthor?: number;
+    DateAdd?: string;
 }
 

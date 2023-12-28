@@ -19,5 +19,6 @@ export interface GetUserRequest {
     Surname?: string | null;
     PhoneNumber?: number;
     IsAdmin?: boolean;
+    Salt?: string | null;
 }
 

@@ -1,0 +1,36 @@
+@if(isReady){
+<ion-card>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-card-header>
+          Zaproszenie do grupy {{ group.NAME }}
+        </ion-card-header>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-card-header>
+          Wysłane przez {{ user.FIRSTNAME }} {{ user.SURNAME }}
+        </ion-card-header>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item class="button" lines="full" (click)="onSubmit('yes')" button>
+          <ion-card-header>
+            <ion-label color="success">AKCEPTUJ</ion-label>
+          </ion-card-header>
+        </ion-item>
+      </ion-col>
+      <ion-col>
+        <ion-item class="button" lines="full" (click)="onSubmit('no')" button>
+          <ion-card-header>
+            <ion-label color="danger">ODRZUĆ</ion-label>
+          </ion-card-header>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-card>
+}

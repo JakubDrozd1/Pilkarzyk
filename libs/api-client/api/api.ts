@@ -1,3 +1,5 @@
+export * from './group-invites.api';
+import { GroupInvitesApi } from './group-invites.api';
 export * from './groups.api';
 import { GroupsApi } from './groups.api';
 export * from './groups-users.api';
@@ -14,4 +16,4 @@ export * from './users.api';
 import { UsersApi } from './users.api';
 export * from './users-meetings.api';
 import { UsersMeetingsApi } from './users-meetings.api';
-export const APIS = [GroupsApi, GroupsUsersApi, MeetingsApi, MessagesApi, RankingsApi, TokenApi, UsersApi, UsersMeetingsApi];
+export const APIS = [GroupInvitesApi, GroupsApi, GroupsUsersApi, MeetingsApi, MessagesApi, RankingsApi, TokenApi, UsersApi, UsersMeetingsApi];

@@ -11,7 +11,6 @@ import { IonicModule, ModalController, NavParams } from '@ionic/angular'
 import {
   GetGroupsUsersResponse,
   MeetingsApi,
-  MessagesApi,
   UsersMeetingsApi,
 } from 'libs/api-client'
 import * as moment from 'moment'

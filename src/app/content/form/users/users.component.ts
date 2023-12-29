@@ -58,7 +58,6 @@ export class UsersComponent implements OnInit {
     private fb: FormBuilder,
     private usersApi: UsersApi,
     private alert: Alert,
-    private groupsUsersApi: GroupsUsersApi,
     private refreshDataService: RefreshDataService,
     private groupsApi: GroupsApi,
     private groupInviteApi: GroupInvitesApi
@@ -84,14 +83,18 @@ export class UsersComponent implements OnInit {
   handleInput() {
     let query = ''
     query = this.addExistingUserForm.get('user')?.value.toLowerCase().trim()
-    this.results = this.users.filter((d) => {
-      const firstNameLowerCase = d.FIRSTNAME ? d.FIRSTNAME.toLowerCase() : ''
-      const surnameLowerCase = d.SURNAME ? d.SURNAME.toLowerCase() : ''
-      return (
-        firstNameLowerCase.indexOf(query) > -1 ||
-        surnameLowerCase.indexOf(query) > -1
-      )
-    })
+    if (query != '') {
+      this.results = this.users.filter((d) => {
+        const firstNameLowerCase = d.FIRSTNAME ? d.FIRSTNAME.toLowerCase() : ''
+        const surnameLowerCase = d.SURNAME ? d.SURNAME.toLowerCase() : ''
+        return (
+          firstNameLowerCase.indexOf(query) > -1 ||
+          surnameLowerCase.indexOf(query) > -1
+        )
+      })
+    } else {
+      this.results = []
+    }
   }
 
   removeFocus() {
@@ -131,12 +134,6 @@ export class UsersComponent implements OnInit {
   onSubmitExisting() {
     this.addExistingUserForm.markAllAsTouched()
     if (this.addExistingUserForm.valid) {
-      // this.groupsUsersApi
-      //   .addUserToGroupAsync({
-      //     iDUSER: this.user?.ID_USER,
-      //     iDGROUP: this.idGroup,
-      //   })
-
       this.groupInviteApi
         .addGroupInviteAsync({
           getGroupInviteRequest: {

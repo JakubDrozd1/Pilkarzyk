@@ -45,7 +45,7 @@ export class GroupsContentComponent implements OnInit {
   temp: File | null = null
   images: string[] = []
   idUser: number = 0
-  loggedUser!: USERS
+  loggedUser!: GetGroupsUsersResponse
 
   constructor(
     private route: ActivatedRoute,
@@ -96,13 +96,13 @@ export class GroupsContentComponent implements OnInit {
         dateFrom: moment().format(),
         idUser: this.idUser,
       }),
-      user: this.userApi.getUserById({
+      user: this.groupsUsersApi.getUserWithGroup({
         userId: this.idUser,
+        groupId: this.idGroup ?? 0,
       }),
     }).subscribe({
       next: (responses) => {
         this.loggedUser = responses.user
-        console.log(this.loggedUser)
         this.groupsUsers = responses.groupsUsers
         this.meetings = responses.meetings
         this.nameGroup = responses.groupsUsers[0].Name

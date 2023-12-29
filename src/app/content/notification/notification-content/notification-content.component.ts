@@ -154,7 +154,7 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
     ]).subscribe({
       next: ([messagesResponse, inviteResponse]) => {
         this.messages = messagesResponse.filter(
-          (message) => message.Answer === 'readed'
+          (message) => message.Answer === 'readed' || message.Answer === null
         )
         this.invite = inviteResponse
         this.isReady = true

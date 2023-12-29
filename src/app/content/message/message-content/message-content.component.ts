@@ -67,7 +67,6 @@ export class MessageContentComponent implements OnInit {
     modal.present()
     await modal.onWillDismiss()
     modal.onDidDismiss().then((data) => {
-      console.log(data.data)
       this.messageUpdate.emit(data.data)
     })
   }

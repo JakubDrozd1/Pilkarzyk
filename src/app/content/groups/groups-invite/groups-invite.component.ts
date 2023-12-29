@@ -5,15 +5,11 @@ import { IonicModule } from '@ionic/angular'
 import { MeetingComponent } from '../../form/meeting/meeting.component'
 import { MeetingContentComponent } from '../../meeting/meeting-content/meeting-content.component'
 import {
-  GROUPS,
   GetGroupInviteResponse,
+  GetGroupsUsersResponse,
   GroupInvitesApi,
-  GroupsApi,
   GroupsUsersApi,
-  USERS,
-  UsersApi,
 } from 'libs/api-client'
-import { forkJoin } from 'rxjs'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 
@@ -32,16 +28,13 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
 })
 export class GroupsInviteComponent implements OnInit {
   @Input() invite!: GetGroupInviteResponse
-  user!: USERS
-  group!: GROUPS
+  groupUser!: GetGroupsUsersResponse
   isReady: boolean = false
   constructor(
-    private userApi: UsersApi,
-    private groupApi: GroupsApi,
     private alert: Alert,
-    private groupUser: GroupsUsersApi,
     private refreshDataService: RefreshDataService,
-    private groupInvite: GroupInvitesApi
+    private groupInvite: GroupInvitesApi,
+    private groupUserApi: GroupsUsersApi
   ) {}
 
   ngOnInit() {
@@ -49,29 +42,26 @@ export class GroupsInviteComponent implements OnInit {
   }
 
   getDetails() {
-    forkJoin([
-      this.userApi.getUserById({
+    this.groupUserApi
+      .getUserWithGroup({
         userId: this.invite.IdAuthor ?? 0,
-      }),
-      this.groupApi.getGroupById({
         groupId: this.invite.IdGroup ?? 0,
-      }),
-    ]).subscribe({
-      next: ([userResponse, groupResponse]) => {
-        this.user = userResponse
-        this.group = groupResponse
-        this.isReady = true
-      },
-      error: () => {
-        this.alert.alertNotOk()
-        this.isReady = true
-      },
-    })
+      })
+      .subscribe({
+        next: (response) => {
+          this.groupUser = response
+          this.isReady = true
+        },
+        error: () => {
+          this.alert.alertNotOk()
+          this.isReady = true
+        },
+      })
   }
 
   onSubmit(answer: string) {
     if (answer == 'yes') {
-      this.groupUser
+      this.groupUserApi
         .addUserToGroupAsync({
           iDGROUP: this.invite.IdGroup ?? 0,
           iDUSER: this.invite.IdUser ?? 0,

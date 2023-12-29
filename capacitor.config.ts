@@ -5,13 +5,14 @@ const config: CapacitorConfig = {
   appName: 'pilkarzyk',
   webDir: 'dist/pilkarzyk',
   server: {
-    url: 'http://192.168.88.20:4200', //http://192.168.1.114:4200  http://192.168.88.20:4200
+    url: 'http://192.168.88.224:4200', //http://192.168.1.114:4200  http://192.168.88.20:4200
     cleartext: true,
     androidScheme: 'http',
     allowNavigation: [
       'http://localhost:27884',
       'http://192.168.88.20:45455',
       'https://192.168.88.20:45462',
+      'http://192.168.88.224:27885',
     ],
   },
   plugins: {

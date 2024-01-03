@@ -1,7 +1,12 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnInit, Input } from '@angular/core'
 import { IonicModule } from '@ionic/angular'
-import { GetMeetingUsersGroupsResponse } from 'libs/api-client/model/get-meeting-users-groups-response'
+import {
+  GetMeetingGroupsResponse,
+  GetMessagesUsersMeetingsResponse,
+  MessagesApi,
+} from 'libs/api-client'
+import { Alert } from 'src/app/helper/alert'
 
 @Component({
   selector: 'app-meeting-content',
@@ -11,9 +16,29 @@ import { GetMeetingUsersGroupsResponse } from 'libs/api-client/model/get-meeting
   imports: [CommonModule, IonicModule],
 })
 export class MeetingContentComponent implements OnInit {
-  @Input() meeting!: GetMeetingUsersGroupsResponse
+  @Input() meeting!: GetMeetingGroupsResponse
+  acceptMeeting: Number = 0
+  filteredMessages: GetMessagesUsersMeetingsResponse[] = []
 
-  constructor() {}
+  constructor(private messagesApi: MessagesApi, private alert: Alert) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.messagesApi
+      .getAllMessages({
+        idMeeting: Number(this.meeting.IdMeeting),
+        page: 0,
+        onPage: -1,
+      })
+      .subscribe({
+        next: (response) => {
+          this.filteredMessages = response.filter(
+            (message) => message.Answer === 'yes'
+          )
+          this.acceptMeeting = this.filteredMessages.length
+        },
+        error: () => {
+          this.alert.alertNotOk()
+        },
+      })
+  }
 }

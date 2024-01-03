@@ -61,9 +61,9 @@ export class GroupsComponent implements OnInit {
             if (this.groupForm.value.organizer != null && this.user?.ID_USER) {
               this.groupsUsersApi
                 .addUserToGroupAsync({
-                  iDUSER: this.user.ID_USER,
-                  iDGROUP: response.ID_GROUP,
-                  aCCOUNTTYPE: 1,
+                  idUser: this.user.ID_USER,
+                  idGroup: response.ID_GROUP,
+                  accountType: 1,
                 })
                 .subscribe({
                   next: () => {

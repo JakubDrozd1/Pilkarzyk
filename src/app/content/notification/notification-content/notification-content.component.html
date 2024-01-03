@@ -7,7 +7,10 @@
     </ion-label>
   </ion-segment-button>
   <ion-segment-button vertical="top" value="groups">
-    <ion-label>Grupa</ion-label>
+    <ion-label
+      >Grupa@if(invite.length>0){
+      <ion-badge>{{ invite.length }} </ion-badge>}</ion-label
+    >
   </ion-segment-button>
 </ion-segment>
 @switch (selectedSegment) { @case ("meetings") {

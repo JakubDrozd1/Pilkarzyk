@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router'
 import { IonicModule, ModalController } from '@ionic/angular'
 import {
   GetGroupsUsersResponse,
+  GetMeetingGroupsResponse,
+  GroupsApi,
   GroupsUsersApi,
   MeetingsApi,
   USERS,
@@ -16,9 +18,9 @@ import { MeetingContentComponent } from '../../meeting/meeting-content/meeting-c
 import { UsersComponent } from '../../form/users/users.component'
 import { Alert } from 'src/app/helper/alert'
 import { FormsModule } from '@angular/forms'
-import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
 import * as moment from 'moment'
-import { GetMeetingUsersGroupsResponse } from 'libs/api-client/model/get-meeting-users-groups-response'
+import { GroupsOrganizerComponent } from '../groups-organizer/groups-organizer.component'
+import { GroupsUserListComponent } from '../groups-user-list/groups-user-list.component'
 
 @Component({
   selector: 'app-groups-content',
@@ -31,21 +33,21 @@ import { GetMeetingUsersGroupsResponse } from 'libs/api-client/model/get-meeting
     MeetingComponent,
     MeetingContentComponent,
     FormsModule,
+    GroupsUserListComponent,
   ],
 })
 export class GroupsContentComponent implements OnInit {
   idGroup: number | undefined
   groupsUsers: GetGroupsUsersResponse[] = []
   isReady: boolean = false
-  meetings: GetMeetingUsersGroupsResponse[] = []
+  meetings: GetMeetingGroupsResponse[] = []
   nameGroup: string | undefined | null
   add: boolean = false
   private subscription: Subscription = new Subscription()
   selectedSegment: string = 'meetings'
-  temp: File | null = null
-  images: string[] = []
   idUser: number = 0
-  loggedUser!: GetGroupsUsersResponse
+  loggedUser!: USERS
+  groupUser!: GetGroupsUsersResponse
 
   constructor(
     private route: ActivatedRoute,
@@ -54,7 +56,8 @@ export class GroupsContentComponent implements OnInit {
     private modalCtrl: ModalController,
     private refreshDataService: RefreshDataService,
     private alert: Alert,
-    private userApi: UsersApi
+    private groupsApi: GroupsApi,
+    private usersApi: UsersApi
   ) {}
 
   ngOnInit() {
@@ -78,12 +81,12 @@ export class GroupsContentComponent implements OnInit {
   getDetails() {
     this.groupsUsers = []
     this.meetings = []
-    this.images = []
+
     forkJoin({
       groupsUsers: this.groupsUsersApi.getAllGroupsFromUserAsync({
         page: 0,
         onPage: -1,
-        sortColumn: 'NAME',
+        sortColumn: 'SURNAME',
         sortMode: 'ASC',
         idGroup: this.idGroup,
       }),
@@ -96,33 +99,24 @@ export class GroupsContentComponent implements OnInit {
         dateFrom: moment().format(),
         idUser: this.idUser,
       }),
-      user: this.groupsUsersApi.getUserWithGroup({
+      groupUser: this.groupsUsersApi.getUserWithGroup({
         userId: this.idUser,
         groupId: this.idGroup ?? 0,
+      }),
+      group: this.groupsApi.getGroupById({
+        groupId: this.idGroup ?? 0,
+      }),
+      user: this.usersApi.getUserById({
+        userId: this.idUser,
       }),
     }).subscribe({
       next: (responses) => {
         this.loggedUser = responses.user
         this.groupsUsers = responses.groupsUsers
         this.meetings = responses.meetings
-        this.nameGroup = responses.groupsUsers[0].Name
-        for (let user of responses.groupsUsers) {
-          const base64String = user.Avatar
-          if (base64String != null) {
-            convertBase64ToFile(base64String).then((file) => {
-              this.temp = file
-              const reader = new FileReader()
-              reader.onload = () => {
-                this.images.unshift(reader.result as string)
-              }
-              reader.readAsDataURL(this.temp)
-              this.isReady = true
-            })
-          } else {
-            this.images.push('0')
-            this.isReady = true
-          }
-        }
+        this.nameGroup = responses.group.NAME
+        this.groupUser = responses.groupUser
+        this.isReady = true
       },
       error: () => {
         this.alert.alertNotOk()
@@ -149,6 +143,17 @@ export class GroupsContentComponent implements OnInit {
   async openModalAddUser() {
     const modal = await this.modalCtrl.create({
       component: UsersComponent,
+      componentProps: {
+        idGroup: this.idGroup,
+      },
+    })
+    modal.present()
+    await modal.onWillDismiss()
+  }
+
+  async openModalAddOrganizer() {
+    const modal = await this.modalCtrl.create({
+      component: GroupsOrganizerComponent,
       componentProps: {
         idGroup: this.idGroup,
       },

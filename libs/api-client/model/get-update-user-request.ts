@@ -12,13 +12,13 @@
 
 
 export interface GetUpdateUserRequest { 
-    LOGIN?: string | null;
-    USER_PASSWORD?: string | null;
-    EMAIL?: string | null;
-    FIRSTNAME?: string | null;
-    SURNAME?: string | null;
-    PHONE_NUMBER?: number | null;
-    AVATAR?: string | null;
+    Login?: string | null;
+    UserPassword?: string | null;
+    Email?: string | null;
+    Firstname?: string | null;
+    Surname?: string | null;
+    PhoneNumber?: number | null;
+    Avatar?: string | null;
     Column?: Array<string> | null;
 }
 

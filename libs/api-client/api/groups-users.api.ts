@@ -27,9 +27,9 @@ import { Configuration }                                     from '../configurat
 
 
 export interface AddUserToGroupAsyncRequestParams {
-    iDUSER?: number;
-    iDGROUP?: number;
-    aCCOUNTTYPE?: number;
+    idUser?: number;
+    idGroup?: number;
+    accountType?: number;
 }
 
 export interface DeleteAllGroupsFromUserRequestParams {
@@ -62,6 +62,12 @@ export interface GetUserWithGroupRequestParams {
 export interface UpdateGroupWithUsersAsyncRequestParams {
     groupId: number;
     requestBody?: Array<number>;
+}
+
+export interface UpdatePermissionRequestParams {
+    idUser?: number;
+    idGroup?: number;
+    accountType?: number;
 }
 
 export interface UpdateUserWithGroupsAsyncRequestParams {
@@ -143,22 +149,22 @@ export class GroupsUsersApi {
     public addUserToGroupAsync(requestParameters: AddUserToGroupAsyncRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
     public addUserToGroupAsync(requestParameters: AddUserToGroupAsyncRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
     public addUserToGroupAsync(requestParameters: AddUserToGroupAsyncRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
-        const iDUSER = requestParameters.iDUSER;
-        const iDGROUP = requestParameters.iDGROUP;
-        const aCCOUNTTYPE = requestParameters.aCCOUNTTYPE;
+        const idUser = requestParameters.idUser;
+        const idGroup = requestParameters.idGroup;
+        const accountType = requestParameters.accountType;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        if (iDUSER !== undefined && iDUSER !== null) {
+        if (idUser !== undefined && idUser !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>iDUSER, 'IDUSER');
+            <any>idUser, 'IdUser');
         }
-        if (iDGROUP !== undefined && iDGROUP !== null) {
+        if (idGroup !== undefined && idGroup !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>iDGROUP, 'IDGROUP');
+            <any>idGroup, 'IdGroup');
         }
-        if (aCCOUNTTYPE !== undefined && aCCOUNTTYPE !== null) {
+        if (accountType !== undefined && accountType !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>aCCOUNTTYPE, 'ACCOUNT_TYPE');
+            <any>accountType, 'AccountType');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -669,6 +675,84 @@ export class GroupsUsersApi {
             {
                 context: localVarHttpContext,
                 body: requestBody,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public updatePermission(requestParameters: UpdatePermissionRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public updatePermission(requestParameters: UpdatePermissionRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public updatePermission(requestParameters: UpdatePermissionRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public updatePermission(requestParameters: UpdatePermissionRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        const idUser = requestParameters.idUser;
+        const idGroup = requestParameters.idGroup;
+        const accountType = requestParameters.accountType;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (idUser !== undefined && idUser !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>idUser, 'IdUser');
+        }
+        if (idGroup !== undefined && idGroup !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>idGroup, 'IdGroup');
+        }
+        if (accountType !== undefined && accountType !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>accountType, 'AccountType');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (api-pilkarzyk-oauth2) required
+        localVarCredential = this.configuration.lookupCredential('api-pilkarzyk-oauth2');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/groups-users/permission`;
+        return this.httpClient.request<any>('put', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

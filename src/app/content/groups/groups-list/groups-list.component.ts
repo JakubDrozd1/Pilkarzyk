@@ -3,13 +3,15 @@ import { Component, OnInit } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { IonicModule, ModalController } from '@ionic/angular'
 import {
+  GROUPS,
   GetGroupsUsersResponse,
+  GroupsApi,
   GroupsUsersApi,
   USERS,
   UsersApi,
 } from 'libs/api-client'
 import { GroupsComponent } from '../../form/groups/groups.component'
-import { Observable, Subscription, forkJoin } from 'rxjs'
+import { Observable, Subscription, forkJoin, mergeMap } from 'rxjs'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { Alert } from 'src/app/helper/alert'
 import { NotificationService } from 'src/app/service/notification/notification.service'
@@ -35,7 +37,8 @@ export class GroupsListComponent implements OnInit {
     private refreshDataService: RefreshDataService,
     private alert: Alert,
     public notificationService: NotificationService,
-    private userApi: UsersApi
+    private userApi: UsersApi,
+    private groupApi: GroupsApi
   ) {}
 
   ngOnInit() {
@@ -52,25 +55,53 @@ export class GroupsListComponent implements OnInit {
 
   getGroups() {
     this.groupsUsers = []
-    forkJoin([
-      this.groupsUsersApi.getAllGroupsFromUserAsync({
-        page: 0,
-        onPage: -1,
-        sortColumn: 'NAME',
-        sortMode: 'ASC',
-        idUser: this.idUser,
-      }),
-      this.userApi.getUserById({
-        userId: this.idUser,
-      }),
-    ]).subscribe({
-      next: ([groupResponse, userResponse]) => {
-        this.loggedUser = userResponse
-        this.groupsUsers = groupResponse
-        this.isReady = true
+
+    this.userApi.getUserById({ userId: this.idUser }).subscribe({
+      next: (response) => {
+        this.loggedUser = response
+        this.loggedUser.IS_ADMIN
+          ? this.groupApi
+              .getAllGroups({
+                page: 0,
+                onPage: -1,
+                sortColumn: 'NAME',
+                sortMode: 'ASC',
+              })
+              .subscribe({
+                next: (groupResponse) => {
+                  this.groupsUsers = groupResponse.map((item) => ({
+                    Name: item.NAME,
+                    IdGroup: item.ID_GROUP,
+                  }))
+                  this.isReady = true
+                },
+                error: () => {
+                  this.alert.alertNotOk()
+                  this.isReady = true
+                },
+              })
+          : this.groupsUsersApi
+              .getAllGroupsFromUserAsync({
+                page: 0,
+                onPage: -1,
+                sortColumn: 'NAME',
+                sortMode: 'ASC',
+                idUser: this.idUser,
+              })
+              .subscribe({
+                next: (groupResponse) => {
+                  this.groupsUsers = groupResponse
+                  this.isReady = true
+                },
+                error: () => {
+                  this.alert.alertNotOk()
+                  this.isReady = true
+                },
+              })
       },
       error: () => {
         this.alert.alertNotOk()
+        this.isReady = true
       },
     })
   }

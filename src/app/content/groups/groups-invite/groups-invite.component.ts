@@ -63,9 +63,9 @@ export class GroupsInviteComponent implements OnInit {
     if (answer == 'yes') {
       this.groupUserApi
         .addUserToGroupAsync({
-          iDGROUP: this.invite.IdGroup ?? 0,
-          iDUSER: this.invite.IdUser ?? 0,
-          aCCOUNTTYPE: 0,
+          idGroup: this.invite.IdGroup ?? 0,
+          idUser: this.invite.IdUser ?? 0,
+          accountType: 0,
         })
         .subscribe({
           next: () => {

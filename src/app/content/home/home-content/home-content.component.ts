@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { IonicModule } from '@ionic/angular'
 import {
+  GetMeetingGroupsResponse,
   GetMessagesUsersMeetingsResponse,
   UsersMeetingsApi,
 } from 'libs/api-client'
@@ -10,7 +11,6 @@ import { Subscription, forkJoin, interval } from 'rxjs'
 import { MeetingContentComponent } from '../../meeting/meeting-content/meeting-content.component'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
-import { GetMeetingUsersGroupsResponse } from 'libs/api-client/model/get-meeting-users-groups-response'
 import { TimeService } from 'src/app/service/time/time.service'
 import { NotificationService } from 'src/app/service/notification/notification.service'
 import { MessageContentComponent } from '../../message/message-content/message-content.component'
@@ -33,8 +33,8 @@ import { MessageWaitingContentComponent } from '../../message/message-waiting-co
 })
 export class HomeContentComponent implements OnInit, OnDestroy {
   idUser: number = 0
-  meetings: GetMeetingUsersGroupsResponse[] = []
-  meetingsWaiting: GetMeetingUsersGroupsResponse[] = []
+  meetings: GetMeetingGroupsResponse[] = []
+  meetingsWaiting: GetMeetingGroupsResponse[] = []
   isReady: boolean = false
   currentTime: string = ''
   private subscription: Subscription = new Subscription()

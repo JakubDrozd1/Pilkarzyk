@@ -2,13 +2,16 @@ import { CommonModule, DatePipe } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { IonicModule } from '@ionic/angular'
-import { MeetingsApi, UsersMeetingsApi } from 'libs/api-client'
+import {
+  GetMeetingGroupsResponse,
+  MeetingsApi,
+  UsersMeetingsApi,
+} from 'libs/api-client'
 import { MeetingContentComponent } from '../../meeting/meeting-content/meeting-content.component'
 import * as moment from 'moment'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { Subscription } from 'rxjs'
-import { GetMeetingUsersGroupsResponse } from 'libs/api-client/model/get-meeting-users-groups-response'
 import { NotificationService } from 'src/app/service/notification/notification.service'
 
 @Component({
@@ -20,8 +23,8 @@ import { NotificationService } from 'src/app/service/notification/notification.s
   providers: [DatePipe],
 })
 export class CalendarContentComponent implements OnInit {
-  meetings: GetMeetingUsersGroupsResponse[] = []
-  meetingsSelected: GetMeetingUsersGroupsResponse[] = []
+  meetings: GetMeetingGroupsResponse[] = []
+  meetingsSelected: GetMeetingGroupsResponse[] = []
   isReady: boolean = false
   highlightedDates: any
   selectedDate: string[] | undefined

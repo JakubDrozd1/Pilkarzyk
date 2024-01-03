@@ -11,7 +11,7 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-@if(loggedUser){ @if(loggedUser.AccountType==1){
+@if(loggedUser|| groupUser){ @if(loggedUser.IS_ADMIN || groupUser.AccountType){
 <ion-fab slot="fixed" vertical="bottom" horizontal="end">
   <ion-fab-button>
     <ion-icon name="add"></ion-icon>
@@ -23,13 +23,16 @@
     <ion-fab-button expand="block" (click)="openModalAddUser()">
       <ion-icon size="large" name="person-add-outline"> </ion-icon>
     </ion-fab-button>
+    @if(loggedUser.IS_ADMIN){
+    <ion-fab-button expand="block" (click)="openModalAddOrganizer()">
+      <ion-icon
+        size="large"
+        name="settings-outline"
+      ></ion-icon> </ion-fab-button
+    >}
   </ion-fab-list>
 </ion-fab>
-} } @if(!isReady){
-<div style="text-align: center">
-  <ion-spinner color="primary" name="crescent"> </ion-spinner>
-</div>
-}
+} }
 
 <ion-segment [(ngModel)]="selectedSegment" swipeGesture="true">
   <ion-segment-button vertical="top" value="meetings">
@@ -43,47 +46,25 @@
   </ion-segment-button>
 </ion-segment>
 <ion-content>
-  @if(isReady){ @switch (selectedSegment) { @case ("meetings") {
+  @if(!isReady){
+  <div style="text-align: center">
+    <ion-spinner color="primary" name="crescent"> </ion-spinner>
+  </div>
+  } @if(isReady){ @switch (selectedSegment) { @case ("meetings") {
   <ion-list>
     @if(meetings.length!=0){ @for (item of meetings; track $index) {
     <app-meeting-content [meeting]="item"></app-meeting-content>
-    }} @else {
+    } } @else {
     <ion-item lines="none">Brak nadchodzących spotkań</ion-item>
     }
   </ion-list>
-  } @case ("members") {
+  } @case ("members") { @if(groupsUsers.length>0){
   <ion-list>
-    <ion-card>
-      @for (item of groupsUsers; track $index) {
-      <ion-card-header>
-        <ion-card-title>
-          {{ item.Login }}
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-item lines="full" class="title">
-          @if(images[$index] === '0'){
-          <ion-avatar slot="start">
-            <img
-              alt="img"
-              src="https://ionicframework.com/docs/img/demos/avatar.svg"
-            />
-          </ion-avatar>
-          } @else {
-          <ion-avatar slot="start">
-            <img alt="img" [src]="images[$index]" />
-          </ion-avatar>
-          }
-          <ion-label> {{ item.Firstname }} {{ item.Surname }} </ion-label>
-          @if(item.PhoneNumber!=null){
-          {{ item.PhoneNumber.toString().slice(0, 3) }}-{{
-            item.PhoneNumber.toString().slice(3, 6)
-          }}-{{ item.PhoneNumber.toString().slice(6) }}
-          }
-        </ion-item>
-      </ion-card-content>
-      }
-    </ion-card>
+    @for (item of groupsUsers; track $index) {
+    <app-groups-user-list [user]="item"></app-groups-user-list>
+    }
   </ion-list>
-  } } }
+  }@else{
+  <ion-item lines="none">Brak członków</ion-item>
+  } } }}
 </ion-content>

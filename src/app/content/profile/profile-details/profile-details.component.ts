@@ -96,7 +96,7 @@ export class ProfileDetailsComponent implements OnInit {
             userId: this.idUser,
             getUpdateUserRequest: {
               Column: ['AVATAR'],
-              AVATAR: base64String,
+              Avatar: base64String,
             },
           })
           .subscribe({

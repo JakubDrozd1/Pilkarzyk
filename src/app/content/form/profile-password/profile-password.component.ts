@@ -68,7 +68,7 @@ export class ProfilePasswordComponent implements OnInit {
           userId: this.idUser,
           getUpdateUserRequest: {
             Column: ['USER_PASSWORD'],
-            USER_PASSWORD: this.profilePasswordForm.value.password,
+            UserPassword: this.profilePasswordForm.value.password,
           },
         })
         .subscribe({

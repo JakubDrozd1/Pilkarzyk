@@ -17,5 +17,6 @@ export interface GetMeetingGroupsResponse {
     Place?: string | null;
     Description?: string | null;
     Quantity?: number | null;
+    IdMeeting?: number | null;
 }
 

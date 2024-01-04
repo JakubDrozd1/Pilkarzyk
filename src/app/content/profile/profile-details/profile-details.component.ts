@@ -11,6 +11,7 @@ import { ProfilePasswordComponent } from '../../form/profile-password/profile-pa
 import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
 import { convertFileToBase64 } from 'src/app/helper/convertFileToBase64'
 import { NotificationService } from 'src/app/service/notification/notification.service'
+import { UserService } from 'src/app/service/user/user.service'
 
 @Component({
   selector: 'app-profile-details',
@@ -20,7 +21,6 @@ import { NotificationService } from 'src/app/service/notification/notification.s
   imports: [CommonModule, IonicModule, LogoutComponent],
 })
 export class ProfileDetailsComponent implements OnInit {
-  idUser: number = 0
   user: USERS | undefined
   selectedFile: File | null = null
   image: File | null = null
@@ -33,7 +33,8 @@ export class ProfileDetailsComponent implements OnInit {
     private alert: Alert,
     private modalCtrl: ModalController,
     private refreshDataService: RefreshDataService,
-    public notificationService: NotificationService
+    public notificationService: NotificationService,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
@@ -44,14 +45,13 @@ export class ProfileDetailsComponent implements OnInit {
         }
       })
     )
-    this.idUser = Number(localStorage.getItem('user_id'))
     this.getDetails()
   }
 
   getDetails() {
     this.usersApi
       .getUserById({
-        userId: this.idUser,
+        userId: Number(this.userService.loggedUser.ID_USER),
       })
       .subscribe({
         next: (response) => {
@@ -93,7 +93,7 @@ export class ProfileDetailsComponent implements OnInit {
       convertFileToBase64(selectedFile).then((base64String) => {
         this.usersApi
           .updateColumnUser({
-            userId: this.idUser,
+            userId: Number(this.userService.loggedUser.ID_USER),
             getUpdateUserRequest: {
               Column: ['AVATAR'],
               Avatar: base64String,
@@ -152,7 +152,6 @@ export class ProfileDetailsComponent implements OnInit {
 
   reload() {
     this.temp = ''
-    this.idUser = Number(localStorage.getItem('user_id'))
     this.getDetails()
   }
 }

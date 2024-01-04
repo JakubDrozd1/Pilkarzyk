@@ -13,6 +13,7 @@ import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core'
 import { UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
+import { UserService } from 'src/app/service/user/user.service'
 
 @Component({
   selector: 'app-profile',
@@ -38,18 +39,17 @@ export class ProfileComponent implements OnInit {
     (el as HTMLIonInputElement).getInputElement()
   profileForm!: FormGroup
   isReady: boolean = true
-  idUser: number = 0
 
   constructor(
     private fb: FormBuilder,
     private modalCtrl: ModalController,
     private alert: Alert,
     private usersApi: UsersApi,
-    private refreshDataService: RefreshDataService
+    private refreshDataService: RefreshDataService,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
-    this.idUser = Number(localStorage.getItem('user_id'))
     this.inicializeForm()
   }
 
@@ -134,7 +134,7 @@ export class ProfileComponent implements OnInit {
 
     if (this.profileForm.valid) {
       let updateColumnUserRequest: any = {
-        userId: this.idUser,
+        userId: this.userService.loggedUser.ID_USER,
       }
       switch (this.inputEdit) {
         case 'mail':

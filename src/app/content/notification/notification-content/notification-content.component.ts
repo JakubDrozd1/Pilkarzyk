@@ -18,6 +18,7 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
 import * as moment from 'moment'
 import { FormsModule } from '@angular/forms'
 import { GroupsInviteComponent } from '../../groups/groups-invite/groups-invite.component'
+import { UserService } from 'src/app/service/user/user.service'
 
 @Component({
   selector: 'app-notification-content',
@@ -38,7 +39,6 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription()
   meetingNotifications!: Observable<number>
   private meetingNotificationSubscription: Subscription = new Subscription()
-  idUser: number = 0
   isReady: boolean = false
   selectedSegment: string = 'meetings'
   delay: number = 2
@@ -51,7 +51,8 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
     private messagesApi: MessagesApi,
     public notificationService: NotificationService,
     private dataService: DataService,
-    private groupInvite: GroupInvitesApi
+    private groupInvite: GroupInvitesApi,
+    private userService: UserService
   ) {}
 
   ngOnDestroy(): void {
@@ -79,17 +80,18 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
         this.getNotification(notification.userid, notification.meetingid)
       })
 
-    this.idUser = Number(localStorage.getItem('user_id'))
     this.getDetails()
   }
 
   reload() {
-    this.idUser = Number(localStorage.getItem('user_id'))
     this.getDetails()
   }
 
   getNotification(idUserNotification: number, idMeetingNotification: number) {
-    if (idUserNotification == this.idUser && idMeetingNotification != 0) {
+    if (
+      idUserNotification == this.userService.loggedUser.ID_USER &&
+      idMeetingNotification != 0
+    ) {
       this.usersMeetingsApi
         .getUserWithMeeting({
           userId: idUserNotification,
@@ -141,7 +143,7 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
   getDetails() {
     forkJoin([
       this.messagesApi.getAllMessages({
-        idUser: this.idUser,
+        idUser: this.userService.loggedUser.ID_USER,
         page: 0,
         onPage: -1,
         sortColumn: 'DATE_MEETING',
@@ -149,7 +151,7 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
         dateFrom: moment().add(this.delay, 'hours').format(),
       }),
       this.groupInvite.getGroupInviteByIdUserAsync({
-        userId: this.idUser,
+        userId: Number(this.userService.loggedUser.ID_USER),
       }),
     ]).subscribe({
       next: ([messagesResponse, inviteResponse]) => {

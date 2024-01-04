@@ -15,6 +15,7 @@ import { Observable, Subscription, forkJoin, mergeMap } from 'rxjs'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { Alert } from 'src/app/helper/alert'
 import { NotificationService } from 'src/app/service/notification/notification.service'
+import { UserService } from 'src/app/service/user/user.service'
 
 @Component({
   selector: 'app-groups-list',
@@ -26,7 +27,6 @@ import { NotificationService } from 'src/app/service/notification/notification.s
 export class GroupsListComponent implements OnInit {
   groupsUsers: GetGroupsUsersResponse[] = []
   isReady: boolean = false
-  idUser: number = 0
   private subscription: Subscription = new Subscription()
   meetingNotifications!: Observable<number>
   loggedUser!: USERS
@@ -37,8 +37,8 @@ export class GroupsListComponent implements OnInit {
     private refreshDataService: RefreshDataService,
     private alert: Alert,
     public notificationService: NotificationService,
-    private userApi: UsersApi,
-    private groupApi: GroupsApi
+    private groupApi: GroupsApi,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
@@ -49,61 +49,50 @@ export class GroupsListComponent implements OnInit {
         }
       })
     )
-    this.idUser = Number(localStorage.getItem('user_id'))
     this.getGroups()
   }
 
   getGroups() {
     this.groupsUsers = []
-
-    this.userApi.getUserById({ userId: this.idUser }).subscribe({
-      next: (response) => {
-        this.loggedUser = response
-        this.loggedUser.IS_ADMIN
-          ? this.groupApi
-              .getAllGroups({
-                page: 0,
-                onPage: -1,
-                sortColumn: 'NAME',
-                sortMode: 'ASC',
-              })
-              .subscribe({
-                next: (groupResponse) => {
-                  this.groupsUsers = groupResponse.map((item) => ({
-                    Name: item.NAME,
-                    IdGroup: item.ID_GROUP,
-                  }))
-                  this.isReady = true
-                },
-                error: () => {
-                  this.alert.alertNotOk()
-                  this.isReady = true
-                },
-              })
-          : this.groupsUsersApi
-              .getAllGroupsFromUserAsync({
-                page: 0,
-                onPage: -1,
-                sortColumn: 'NAME',
-                sortMode: 'ASC',
-                idUser: this.idUser,
-              })
-              .subscribe({
-                next: (groupResponse) => {
-                  this.groupsUsers = groupResponse
-                  this.isReady = true
-                },
-                error: () => {
-                  this.alert.alertNotOk()
-                  this.isReady = true
-                },
-              })
-      },
-      error: () => {
-        this.alert.alertNotOk()
-        this.isReady = true
-      },
-    })
+    this.userService.loggedUser.IS_ADMIN
+      ? this.groupApi
+          .getAllGroups({
+            page: 0,
+            onPage: -1,
+            sortColumn: 'NAME',
+            sortMode: 'ASC',
+          })
+          .subscribe({
+            next: (groupResponse) => {
+              this.groupsUsers = groupResponse.map((item) => ({
+                Name: item.NAME,
+                IdGroup: item.ID_GROUP,
+              }))
+              this.isReady = true
+            },
+            error: () => {
+              this.alert.alertNotOk()
+              this.isReady = true
+            },
+          })
+      : this.groupsUsersApi
+          .getAllGroupsFromUserAsync({
+            page: 0,
+            onPage: -1,
+            sortColumn: 'NAME',
+            sortMode: 'ASC',
+            idUser: this.userService.loggedUser.ID_USER,
+          })
+          .subscribe({
+            next: (groupResponse) => {
+              this.groupsUsers = groupResponse
+              this.isReady = true
+            },
+            error: () => {
+              this.alert.alertNotOk()
+              this.isReady = true
+            },
+          })
   }
 
   async openModal() {
@@ -115,7 +104,6 @@ export class GroupsListComponent implements OnInit {
   }
 
   reload() {
-    this.idUser = Number(localStorage.getItem('user_id'))
     this.getGroups()
   }
 }

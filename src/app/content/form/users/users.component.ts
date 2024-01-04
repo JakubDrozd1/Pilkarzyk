@@ -23,6 +23,7 @@ import {
 import { forkJoin } from 'rxjs'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
+import { UserService } from 'src/app/service/user/user.service'
 
 @Component({
   selector: 'app-users',
@@ -45,7 +46,6 @@ export class UsersComponent implements OnInit {
   users: USERS[] = []
   user: USERS | undefined
   addExistingUserForm: FormGroup
-  idUser: number = 0
   readonly phoneMask: MaskitoOptions = {
     mask: [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/],
   }
@@ -60,7 +60,8 @@ export class UsersComponent implements OnInit {
     private alert: Alert,
     private refreshDataService: RefreshDataService,
     private groupsApi: GroupsApi,
-    private groupInviteApi: GroupInvitesApi
+    private groupInviteApi: GroupInvitesApi,
+    private userService: UserService
   ) {
     this.addExistingUserForm = this.fb.group({
       user: ['', Validators.required],
@@ -72,7 +73,6 @@ export class UsersComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.idUser = Number(localStorage.getItem('user_id'))
     this.getUsers()
   }
 
@@ -139,7 +139,7 @@ export class UsersComponent implements OnInit {
           getGroupInviteRequest: {
             IdGroup: this.idGroup,
             IdUser: this.user?.ID_USER,
-            IdAuthor: this.idUser,
+            IdAuthor: this.userService.loggedUser.ID_USER,
           },
         })
         .subscribe({
@@ -160,38 +160,35 @@ export class UsersComponent implements OnInit {
     this.addExistingUserForm.markAllAsTouched()
     if (this.addNewUserForm.valid) {
       if (this.addNewUserForm.value.email) {
-        forkJoin({
-          user: this.usersApi.getUserById({
-            userId: this.idUser,
-          }),
-          group: this.groupsApi.getGroupById({
+        this.groupsApi
+          .getGroupById({
             groupId: this.idGroup,
-          }),
-        }).subscribe({
-          next: (responses) => {
-            this.usersApi
-              .sendInvitationEmail({
-                getEmailSenderRequest: {
-                  To: this.addNewUserForm.value.email,
-                  Name: responses.user.FIRSTNAME,
-                  Surname: responses.user.SURNAME,
-                  GroupName: responses.group.NAME,
-                  IdGroup: this.idGroup,
-                },
-              })
-              .subscribe({
-                next: () => {
-                  this.alert.alertOk('Wysłano emaila z zaproszeniem')
-                },
-                error: () => {
-                  this.alert.alertNotOk()
-                },
-              })
-          },
-          error: () => {
-            this.alert.alertNotOk()
-          },
-        })
+          })
+          .subscribe({
+            next: (response) => {
+              this.usersApi
+                .sendInvitationEmail({
+                  getEmailSenderRequest: {
+                    To: this.addNewUserForm.value.email,
+                    Name: this.userService.loggedUser.FIRSTNAME,
+                    Surname: this.userService.loggedUser.SURNAME,
+                    GroupName: response.NAME,
+                    IdGroup: this.idGroup,
+                  },
+                })
+                .subscribe({
+                  next: () => {
+                    this.alert.alertOk('Wysłano emaila z zaproszeniem')
+                  },
+                  error: () => {
+                    this.alert.alertNotOk()
+                  },
+                })
+            },
+            error: () => {
+              this.alert.alertNotOk()
+            },
+          })
       }
     }
   }

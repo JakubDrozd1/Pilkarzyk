@@ -4,13 +4,14 @@ import { RouterModule } from '@angular/router'
 import { BackgroundRunner } from '@capacitor/background-runner'
 import { Capacitor } from '@capacitor/core'
 import { IonicModule } from '@ionic/angular'
+import { HttpClientModule } from '@angular/common/http'
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   standalone: true,
-  imports: [CommonModule, RouterModule, IonicModule],
+  imports: [CommonModule, RouterModule, IonicModule, HttpClientModule],
 })
 export class AppComponent {
   title = 'pilkarzyk'

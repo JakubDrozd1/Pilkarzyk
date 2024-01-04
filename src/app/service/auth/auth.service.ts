@@ -31,10 +31,8 @@ export class AuthService {
       if (decodedToken.idUser > 0) {
         localStorage.setItem('access_token', token)
         localStorage.setItem('refresh_token', refreshToken)
-        localStorage.setItem('user_id', decodedToken.idUser)
         return true
       }
-
       return false
     } catch (error) {
       return false
@@ -51,8 +49,8 @@ export class AuthService {
   logout() {
     localStorage.removeItem('access_token')
     localStorage.removeItem('refresh_token')
-    localStorage.removeItem('user_id')
     this.loggedIn.next(false)
+    //window.location.reload()
   }
 
   refreshAccesToken(errorThrow: boolean = true): Observable<any> {
@@ -67,10 +65,12 @@ export class AuthService {
     }
     if (errorThrow) {
       let error = new Error('refresh_token_missing')
-
       return throwError(() => error)
     }
-
     return of(false)
+  }
+
+  getAccessToken() {
+    return localStorage.getItem('access_token')
   }
 }

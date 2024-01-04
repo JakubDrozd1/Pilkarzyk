@@ -12,6 +12,7 @@ import { MaskitoModule } from '@maskito/angular'
 import { UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { compareValidator } from 'src/app/helper/validateConfirmPasswd'
+import { UserService } from 'src/app/service/user/user.service'
 
 @Component({
   selector: 'app-profile-password',
@@ -28,13 +29,13 @@ import { compareValidator } from 'src/app/helper/validateConfirmPasswd'
 })
 export class ProfilePasswordComponent implements OnInit {
   profilePasswordForm: FormGroup
-  idUser: number = 0
 
   constructor(
     private fb: FormBuilder,
     private modalCtrl: ModalController,
     private usersApi: UsersApi,
-    private alert: Alert
+    private alert: Alert,
+    private userService: UserService
   ) {
     this.profilePasswordForm = this.fb.group({
       password: [
@@ -52,9 +53,7 @@ export class ProfilePasswordComponent implements OnInit {
     })
   }
 
-  ngOnInit() {
-    this.idUser = Number(localStorage.getItem('user_id'))
-  }
+  ngOnInit() {}
 
   cancel() {
     return this.modalCtrl.dismiss(null, 'cancel')
@@ -65,7 +64,7 @@ export class ProfilePasswordComponent implements OnInit {
     if (this.profilePasswordForm.valid) {
       this.usersApi
         .updateColumnUser({
-          userId: this.idUser,
+          userId: Number(this.userService.loggedUser.ID_USER),
           getUpdateUserRequest: {
             Column: ['USER_PASSWORD'],
             UserPassword: this.profilePasswordForm.value.password,

@@ -34,6 +34,7 @@ export class MeetingContentComponent implements OnInit {
           this.filteredMessages = response.filter(
             (message) => message.Answer === 'yes'
           )
+          console.log(this.meeting.IdMeeting)
           this.acceptMeeting = this.filteredMessages.length
         },
         error: () => {

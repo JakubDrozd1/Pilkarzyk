@@ -21,6 +21,7 @@ import { FormsModule } from '@angular/forms'
 import * as moment from 'moment'
 import { GroupsOrganizerComponent } from '../groups-organizer/groups-organizer.component'
 import { GroupsUserListComponent } from '../groups-user-list/groups-user-list.component'
+import { UserService } from 'src/app/service/user/user.service'
 
 @Component({
   selector: 'app-groups-content',
@@ -45,8 +46,6 @@ export class GroupsContentComponent implements OnInit {
   add: boolean = false
   private subscription: Subscription = new Subscription()
   selectedSegment: string = 'meetings'
-  idUser: number = 0
-  loggedUser!: USERS
   groupUser!: GetGroupsUsersResponse
 
   constructor(
@@ -57,15 +56,13 @@ export class GroupsContentComponent implements OnInit {
     private refreshDataService: RefreshDataService,
     private alert: Alert,
     private groupsApi: GroupsApi,
-    private usersApi: UsersApi
+    public userService: UserService
   ) {}
 
   ngOnInit() {
-    this.idUser = Number(localStorage.getItem('user_id'))
     this.subscription.add(
       this.refreshDataService.refreshSubject.subscribe((index) => {
         if (index === 'groups-content') {
-          this.idUser = Number(localStorage.getItem('user_id'))
           this.getDetails()
         }
       })
@@ -97,21 +94,17 @@ export class GroupsContentComponent implements OnInit {
         sortMode: 'ASC',
         idGroup: this.idGroup,
         dateFrom: moment().format(),
-        idUser: this.idUser,
+        idUser: this.userService.loggedUser.ID_USER,
       }),
       groupUser: this.groupsUsersApi.getUserWithGroup({
-        userId: this.idUser,
+        userId: Number(this.userService.loggedUser.ID_USER),
         groupId: this.idGroup ?? 0,
       }),
       group: this.groupsApi.getGroupById({
         groupId: this.idGroup ?? 0,
       }),
-      user: this.usersApi.getUserById({
-        userId: this.idUser,
-      }),
     }).subscribe({
       next: (responses) => {
-        this.loggedUser = responses.user
         this.groupsUsers = responses.groupsUsers
         this.meetings = responses.meetings
         this.nameGroup = responses.group.NAME

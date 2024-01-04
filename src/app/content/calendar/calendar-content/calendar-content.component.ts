@@ -13,6 +13,7 @@ import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { Subscription } from 'rxjs'
 import { NotificationService } from 'src/app/service/notification/notification.service'
+import { UserService } from 'src/app/service/user/user.service'
 
 @Component({
   selector: 'app-calendar-content',
@@ -28,7 +29,6 @@ export class CalendarContentComponent implements OnInit {
   isReady: boolean = false
   highlightedDates: any
   selectedDate: string[] | undefined
-  idUser: number = 0
   private subscription: Subscription = new Subscription()
 
   constructor(
@@ -37,7 +37,8 @@ export class CalendarContentComponent implements OnInit {
     private alert: Alert,
     private refreshDataService: RefreshDataService,
     private usersMeetingsApi: UsersMeetingsApi,
-    public notificationService: NotificationService
+    public notificationService: NotificationService,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
@@ -48,7 +49,6 @@ export class CalendarContentComponent implements OnInit {
         }
       })
     )
-    this.idUser = Number(localStorage.getItem('user_id'))
     this.getDetails()
   }
 
@@ -60,7 +60,7 @@ export class CalendarContentComponent implements OnInit {
         onPage: -1,
         sortColumn: 'DATE_MEETING',
         sortMode: 'ASC',
-        idUser: this.idUser,
+        idUser: this.userService.loggedUser.ID_USER,
         answer: 'yes',
       })
       .subscribe({
@@ -125,13 +125,14 @@ export class CalendarContentComponent implements OnInit {
             dateFrom: startOfDay,
             dateTo: endOfDay,
             answer: 'yes',
-            idUser: this.idUser,
+            idUser: this.userService.loggedUser.ID_USER,
           })
           .subscribe({
             next: (response) => {
               for (let meeting of response) {
                 this.meetingsSelected.push(meeting)
               }
+              console.log(this.meetingsSelected)
               this.isReady = true
             },
             error: () => {
@@ -145,7 +146,6 @@ export class CalendarContentComponent implements OnInit {
   }
 
   reload() {
-    this.idUser = Number(localStorage.getItem('user_id'))
     this.getDetails()
   }
 }

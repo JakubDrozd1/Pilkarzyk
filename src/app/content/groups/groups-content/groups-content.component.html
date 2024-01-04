@@ -11,7 +11,8 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-@if(loggedUser|| groupUser){ @if(loggedUser.IS_ADMIN || groupUser.AccountType){
+@if(userService.loggedUser|| groupUser){ @if(userService.loggedUser.IS_ADMIN ||
+groupUser.AccountType){
 <ion-fab slot="fixed" vertical="bottom" horizontal="end">
   <ion-fab-button>
     <ion-icon name="add"></ion-icon>
@@ -23,7 +24,7 @@
     <ion-fab-button expand="block" (click)="openModalAddUser()">
       <ion-icon size="large" name="person-add-outline"> </ion-icon>
     </ion-fab-button>
-    @if(loggedUser.IS_ADMIN){
+    @if(userService.loggedUser.IS_ADMIN){
     <ion-fab-button expand="block" (click)="openModalAddOrganizer()">
       <ion-icon
         size="large"

@@ -16,6 +16,7 @@ import { NotificationService } from 'src/app/service/notification/notification.s
 import { MessageContentComponent } from '../../message/message-content/message-content.component'
 import { FormsModule } from '@angular/forms'
 import { MessageWaitingContentComponent } from '../../message/message-waiting-content/message-waiting-content.component'
+import { UserService } from 'src/app/service/user/user.service'
 
 @Component({
   selector: 'app-home-content',
@@ -32,7 +33,6 @@ import { MessageWaitingContentComponent } from '../../message/message-waiting-co
   ],
 })
 export class HomeContentComponent implements OnInit, OnDestroy {
-  idUser: number = 0
   meetings: GetMeetingGroupsResponse[] = []
   meetingsWaiting: GetMeetingGroupsResponse[] = []
   isReady: boolean = false
@@ -47,7 +47,8 @@ export class HomeContentComponent implements OnInit, OnDestroy {
     private alert: Alert,
     private refreshDataService: RefreshDataService,
     private timeService: TimeService,
-    public notificationService: NotificationService
+    public notificationService: NotificationService,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
@@ -65,7 +66,6 @@ export class HomeContentComponent implements OnInit, OnDestroy {
     this.timeService.currentTime$.subscribe((currentTime) => {
       this.currentTime = currentTime
     })
-    this.idUser = Number(localStorage.getItem('user_id'))
     this.getDetails()
   }
 
@@ -88,7 +88,7 @@ export class HomeContentComponent implements OnInit, OnDestroy {
         sortMode: 'ASC',
         dateFrom: startOfDay,
         dateTo: endOfDay,
-        idUser: this.idUser,
+        idUser: this.userService.loggedUser.ID_USER,
         answer: 'yes',
       }),
       this.usersMeetingsApi.getListMeetingsUsersAsync({
@@ -96,7 +96,7 @@ export class HomeContentComponent implements OnInit, OnDestroy {
         onPage: -1,
         sortColumn: 'DATE_MEETING',
         sortMode: 'ASC',
-        idUser: this.idUser,
+        idUser: this.userService.loggedUser.ID_USER,
         dateFrom: moment().add(2, 'hours').format(),
         answer: 'wait',
       }),
@@ -114,7 +114,6 @@ export class HomeContentComponent implements OnInit, OnDestroy {
   }
 
   reload() {
-    this.idUser = Number(localStorage.getItem('user_id'))
     this.getDetails()
   }
 }

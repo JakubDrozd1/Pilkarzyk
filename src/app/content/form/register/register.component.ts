@@ -38,6 +38,7 @@ export class RegisterComponent implements OnInit {
   readonly maskPredicate: MaskitoElementPredicateAsync = async (el) =>
     (el as HTMLIonInputElement).getInputElement()
   registrationForm: FormGroup
+  isReady: boolean = true
 
   constructor(
     private fb: FormBuilder,
@@ -59,7 +60,7 @@ export class RegisterComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.minLength(10),
+          Validators.minLength(6),
           Validators.maxLength(25),
         ],
       ],
@@ -99,6 +100,7 @@ export class RegisterComponent implements OnInit {
   onSubmit() {
     this.registrationForm.markAllAsTouched()
     if (this.registrationForm.valid) {
+      this.isReady = false
       let str: string = this.registrationForm.value.phoneNumber
       let intNumber: number = parseInt(str.replace(/-/g, ''), 10)
       this.usersApi
@@ -115,11 +117,13 @@ export class RegisterComponent implements OnInit {
         .subscribe({
           next: (response) => {
             this.alert.alertOk('Zarejestronano pomyślnie. Możesz się zalogować')
+            this.isReady = true
             this.registrationForm.reset()
             this.router.navigate(['/login'])
             this.userRegistered.emit(response)
           },
           error: () => {
+            this.isReady = true
             this.alert.alertNotOk()
           },
         })

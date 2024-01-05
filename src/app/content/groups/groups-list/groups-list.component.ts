@@ -3,15 +3,13 @@ import { Component, OnInit } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { IonicModule, ModalController } from '@ionic/angular'
 import {
-  GROUPS,
   GetGroupsUsersResponse,
   GroupsApi,
   GroupsUsersApi,
   USERS,
-  UsersApi,
 } from 'libs/api-client'
 import { GroupsComponent } from '../../form/groups/groups.component'
-import { Observable, Subscription, forkJoin, mergeMap } from 'rxjs'
+import { Observable, Subscription } from 'rxjs'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { Alert } from 'src/app/helper/alert'
 import { NotificationService } from 'src/app/service/notification/notification.service'
@@ -29,7 +27,6 @@ export class GroupsListComponent implements OnInit {
   isReady: boolean = false
   private subscription: Subscription = new Subscription()
   meetingNotifications!: Observable<number>
-  loggedUser!: USERS
 
   constructor(
     private groupsUsersApi: GroupsUsersApi,
@@ -38,7 +35,7 @@ export class GroupsListComponent implements OnInit {
     private alert: Alert,
     public notificationService: NotificationService,
     private groupApi: GroupsApi,
-    private userService: UserService
+    public userService: UserService
   ) {}
 
   ngOnInit() {
@@ -104,6 +101,7 @@ export class GroupsListComponent implements OnInit {
   }
 
   reload() {
+    this.isReady = false
     this.getGroups()
   }
 }

@@ -129,10 +129,10 @@ export class ProfileComponent implements OnInit {
   }
 
   onSubmit() {
-    this.isReady = false
     this.profileForm.markAllAsTouched()
-
     if (this.profileForm.valid) {
+      this.isReady = false
+
       let updateColumnUserRequest: any = {
         userId: this.userService.loggedUser.ID_USER,
       }
@@ -179,9 +179,11 @@ export class ProfileComponent implements OnInit {
           this.refreshDataService.refresh('profile-details')
           this.cancel()
           this.alert.alertOk('Zaktualizowano pomyślnie')
+        },
+        error: () => {
+          this.alert.alertNotOk()
           this.isReady = true
         },
-        error: () => this.alert.alertNotOk(),
       })
     }
   }

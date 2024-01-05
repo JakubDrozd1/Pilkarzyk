@@ -27,6 +27,7 @@ import { AuthService } from 'src/app/service/auth/auth.service'
 export class LoginComponent implements OnInit {
   loginForm: FormGroup
   errorMessage: string = ''
+  isReady: boolean = true
 
   constructor(
     private fb: FormBuilder,
@@ -51,6 +52,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.loginForm.markAllAsTouched()
     if (this.loginForm.valid) {
+      this.isReady = false
       forkJoin({
         users: this.usersApi.getUserByLoginAndPassword({
           login: this.loginForm.value.login,
@@ -81,6 +83,7 @@ export class LoginComponent implements OnInit {
             this.navigate()
           } else {
             this.alert.alertNotOk()
+            this.isReady = true
           }
         },
         error: (error) => {
@@ -93,6 +96,7 @@ export class LoginComponent implements OnInit {
           } else {
             this.alert.alertNotOk()
           }
+          this.isReady = true
         },
       })
     }

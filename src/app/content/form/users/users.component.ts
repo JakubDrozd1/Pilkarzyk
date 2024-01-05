@@ -52,6 +52,7 @@ export class UsersComponent implements OnInit {
   readonly maskPredicate: MaskitoElementPredicateAsync = async (el) =>
     (el as HTMLIonInputElement).getInputElement()
   addNewUserForm: FormGroup
+  isReady: boolean = true
 
   constructor(
     private modalCtrl: ModalController,
@@ -134,6 +135,7 @@ export class UsersComponent implements OnInit {
   onSubmitExisting() {
     this.addExistingUserForm.markAllAsTouched()
     if (this.addExistingUserForm.valid) {
+      this.isReady = false
       this.groupInviteApi
         .addGroupInviteAsync({
           getGroupInviteRequest: {
@@ -151,6 +153,7 @@ export class UsersComponent implements OnInit {
           error: () => {
             this.alert.alertNotOk()
             this.cancel()
+            this.isReady = true
           },
         })
     }
@@ -159,6 +162,7 @@ export class UsersComponent implements OnInit {
   onSubmitNew() {
     this.addExistingUserForm.markAllAsTouched()
     if (this.addNewUserForm.valid) {
+      this.isReady = false
       if (this.addNewUserForm.value.email) {
         this.groupsApi
           .getGroupById({
@@ -179,14 +183,19 @@ export class UsersComponent implements OnInit {
                 .subscribe({
                   next: () => {
                     this.alert.alertOk('Wysłano emaila z zaproszeniem')
+                    this.cancel()
                   },
                   error: () => {
+                    this.cancel()
                     this.alert.alertNotOk()
+                    this.isReady = true
                   },
                 })
             },
             error: () => {
+              this.cancel()
               this.alert.alertNotOk()
+              this.isReady = true
             },
           })
       }

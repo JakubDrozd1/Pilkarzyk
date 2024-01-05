@@ -13,7 +13,11 @@
     >
   </ion-segment-button>
 </ion-segment>
-@switch (selectedSegment) { @case ("meetings") {
+@if(!isReady){
+<div style="text-align: center">
+  <ion-spinner color="primary" name="crescent"> </ion-spinner>
+</div>
+} @if(isReady){ @switch (selectedSegment) { @case ("meetings") {
 @if(messagesNotification.length>0){ @for(message of messagesNotification; track
 $index){
 <ion-item class="title" lines="full">
@@ -31,4 +35,4 @@ $index){
 <app-groups-invite [invite]="item"></app-groups-invite>
 } }@else {
 <ion-item class="header" lines="none">Nie masz żadnych zaproszeń</ion-item>
-} } }
+} } } }

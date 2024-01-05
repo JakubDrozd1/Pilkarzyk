@@ -63,6 +63,7 @@ export class GroupsContentComponent implements OnInit {
     this.subscription.add(
       this.refreshDataService.refreshSubject.subscribe((index) => {
         if (index === 'groups-content') {
+          this.isReady = false
           this.getDetails()
         }
       })

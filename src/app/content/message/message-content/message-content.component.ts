@@ -1,15 +1,8 @@
 import { CommonModule } from '@angular/common'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { IonicModule, ModalController } from '@ionic/angular'
 import { GetMeetingUsersResponse, MessagesApi } from 'libs/api-client'
-import * as moment from 'moment'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { MessageAnswerModalComponent } from '../message-answer-modal/message-answer-modal.component'
@@ -27,6 +20,8 @@ export class MessageContentComponent implements OnInit {
 
   @Input() message!: GetMeetingUsersResponse
 
+  isReady: boolean = true
+
   constructor(
     private messagesApi: MessagesApi,
     private alert: Alert,
@@ -37,6 +32,7 @@ export class MessageContentComponent implements OnInit {
   ngOnInit() {}
 
   onSubmit(answer: string) {
+    this.isReady = false
     this.messagesApi
       .updateAnswerMessageAsync({
         getMessageRequest: {
@@ -50,9 +46,11 @@ export class MessageContentComponent implements OnInit {
           this.alert.alertOk('Odpowiedziano pomyślnie')
           this.messageUpdate.emit(this.message)
           this.refreshDataService.refresh('notification')
+          this.isReady = true
         },
         error: () => {
           this.alert.alertNotOk()
+          this.isReady = true
         },
       })
   }

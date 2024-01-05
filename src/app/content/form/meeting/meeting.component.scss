@@ -9,6 +9,10 @@ ion-button:active {
 ion-input {
   --border-color: var(--ion-color-tertiary);
 }
-ion-textarea{
+ion-textarea {
   --border-color: var(--ion-color-tertiary);
+}
+ion-spinner {
+  width: 100px;
+  height: 100px;
 }

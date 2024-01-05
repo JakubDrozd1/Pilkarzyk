@@ -114,6 +114,7 @@ export class HomeContentComponent implements OnInit, OnDestroy {
   }
 
   reload() {
+    this.isReady = false
     this.getDetails()
   }
 }

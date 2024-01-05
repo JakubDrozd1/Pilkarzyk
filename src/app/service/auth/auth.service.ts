@@ -50,7 +50,7 @@ export class AuthService {
     localStorage.removeItem('access_token')
     localStorage.removeItem('refresh_token')
     this.loggedIn.next(false)
-    //window.location.reload()
+    window.location.reload()
   }
 
   refreshAccesToken(errorThrow: boolean = true): Observable<any> {

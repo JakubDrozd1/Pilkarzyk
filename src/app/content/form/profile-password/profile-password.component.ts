@@ -29,6 +29,7 @@ import { UserService } from 'src/app/service/user/user.service'
 })
 export class ProfilePasswordComponent implements OnInit {
   profilePasswordForm: FormGroup
+  isReady: boolean = true
 
   constructor(
     private fb: FormBuilder,
@@ -42,7 +43,7 @@ export class ProfilePasswordComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.minLength(10),
+          Validators.minLength(6),
           Validators.maxLength(25),
         ],
       ],
@@ -62,6 +63,7 @@ export class ProfilePasswordComponent implements OnInit {
   onSubmit() {
     this.profilePasswordForm.markAllAsTouched()
     if (this.profilePasswordForm.valid) {
+      this.isReady = false
       this.usersApi
         .updateColumnUser({
           userId: Number(this.userService.loggedUser.ID_USER),
@@ -78,6 +80,7 @@ export class ProfilePasswordComponent implements OnInit {
           error: () => {
             this.alert.alertNotOk()
             this.cancel()
+            this.isReady = true
           },
         })
     }

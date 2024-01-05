@@ -152,6 +152,7 @@ export class ProfileDetailsComponent implements OnInit {
 
   reload() {
     this.temp = ''
+    this.isReady = false
     this.getDetails()
   }
 }

@@ -33,6 +33,7 @@ export class MeetingComponent implements OnInit {
   idUsers: number[] = []
   meetingNotifications!: Observable<number>
   delay: number = 3
+  isReady: boolean = true
 
   constructor(
     private fb: FormBuilder,
@@ -63,6 +64,7 @@ export class MeetingComponent implements OnInit {
   onSubmit() {
     this.meetingForm.markAllAsTouched()
     if (this.meetingForm.valid) {
+      this.isReady = false
       this.meetingsApi
         .addMeeting({
           getMeetingRequest: {
@@ -98,6 +100,7 @@ export class MeetingComponent implements OnInit {
                     this.alert.alertNotOk()
                   }
                   this.cancel()
+                  this.isReady = true
                 },
               })
           },
@@ -108,6 +111,7 @@ export class MeetingComponent implements OnInit {
               this.alert.alertNotOk()
             }
             this.cancel()
+            this.isReady = true
           },
         })
     }

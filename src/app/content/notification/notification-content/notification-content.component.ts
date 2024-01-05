@@ -84,6 +84,7 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
   }
 
   reload() {
+    this.isReady = false
     this.getDetails()
   }
 

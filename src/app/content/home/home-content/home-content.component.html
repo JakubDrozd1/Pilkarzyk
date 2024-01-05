@@ -4,21 +4,21 @@
       <ion-card-title>{{ currentTime }}</ion-card-title>
     </ion-card-header>
   </ion-card>
-  @if(!isReady){
-  <div style="text-align: center">
-    <ion-spinner color="primary" name="crescent"> </ion-spinner>
-  </div>
-  }
   <ion-segment [(ngModel)]="selectedSegment" swipeGesture="true">
     <ion-segment-button vertical="top" value="waiting">
       <ion-label>Oczekujące</ion-label>
     </ion-segment-button>
     <ion-segment-button vertical="top" value="meetings">
-      <ion-label>spotkania</ion-label>
+      <ion-label>Spotkania</ion-label>
     </ion-segment-button>
   </ion-segment>
-  @switch (selectedSegment) { @case ("waiting") { @if(meetingsWaiting.length >
-  0){ @for(meeting of meetingsWaiting; track $index){
+  @if(!isReady){
+  <div style="text-align: center">
+    <ion-spinner color="primary" name="crescent"> </ion-spinner>
+  </div>
+  } @if(isReady){@switch (selectedSegment) { @case ("waiting") {
+  @if(meetingsWaiting.length > 0){ @for(meeting of meetingsWaiting; track
+  $index){
   <app-message-waiting-content
     [message]="meeting"
   ></app-message-waiting-content>
@@ -31,5 +31,5 @@
   <ion-item class="header" lines="none"
     >Nie masz dzisiaj żadnych spotkań</ion-item
   >
-  } } }</ion-content
+  } } }}</ion-content
 >

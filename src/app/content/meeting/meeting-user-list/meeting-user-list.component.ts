@@ -1,21 +1,22 @@
 import { CommonModule } from '@angular/common'
 import { Component, Input, OnInit } from '@angular/core'
 import { IonicModule } from '@ionic/angular'
-import { GetGroupsUsersResponse } from 'libs/api-client'
+import { GetMessagesUsersMeetingsResponse } from 'libs/api-client'
 import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
 
 @Component({
-  selector: 'app-groups-user-list',
-  templateUrl: './groups-user-list.component.html',
-  styleUrls: ['./groups-user-list.component.scss'],
+  selector: 'app-meeting-user-list',
+  templateUrl: './meeting-user-list.component.html',
+  styleUrls: ['./meeting-user-list.component.scss'],
   standalone: true,
   imports: [CommonModule, IonicModule],
 })
-export class GroupsUserListComponent implements OnInit {
-  @Input() user!: GetGroupsUsersResponse
+export class MeetingUserListComponent implements OnInit {
+  @Input() user!: GetMessagesUsersMeetingsResponse
   temp: File | null = null
   images: string = ''
   isReady: boolean = false
+  color: string = ''
 
   constructor() {}
 
@@ -33,6 +34,28 @@ export class GroupsUserListComponent implements OnInit {
       })
     } else {
       this.isReady = true
+    }
+    switch (this.user.Answer) {
+      case 'yes': {
+        this.color = 'success'
+        break
+      }
+      case 'no': {
+        this.color = 'danger'
+        break
+      }
+      case 'wait': {
+        this.color = 'warning'
+        break
+      }
+      case 'readed': {
+        this.color = 'medium'
+        break
+      }
+      default: {
+        this.color = ''
+        break
+      }
     }
   }
 }

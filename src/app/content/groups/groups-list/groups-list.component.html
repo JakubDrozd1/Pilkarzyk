@@ -19,7 +19,7 @@
     </ion-card-content>
     }
   </ion-card>
-  } @if(loggedUser){ @if(loggedUser.IS_ADMIN){
+  } @if(userService.loggedUser){ @if(userService.loggedUser.IS_ADMIN){
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button>
       <ion-icon name="add"></ion-icon>

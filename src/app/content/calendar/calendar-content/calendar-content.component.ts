@@ -132,7 +132,6 @@ export class CalendarContentComponent implements OnInit {
               for (let meeting of response) {
                 this.meetingsSelected.push(meeting)
               }
-              console.log(this.meetingsSelected)
               this.isReady = true
             },
             error: () => {
@@ -146,6 +145,7 @@ export class CalendarContentComponent implements OnInit {
   }
 
   reload() {
+    this.isReady = false
     this.getDetails()
   }
 }

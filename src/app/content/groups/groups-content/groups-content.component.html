@@ -53,7 +53,7 @@ groupUser.AccountType){
   </div>
   } @if(isReady){ @switch (selectedSegment) { @case ("meetings") {
   <ion-list>
-    @if(meetings.length!=0){ @for (item of meetings; track $index) {
+    @if(meetings.length>0){ @for (item of meetings; track $index) {
     <app-meeting-content [meeting]="item"></app-meeting-content>
     } } @else {
     <ion-item lines="none">Brak nadchodzących spotkań</ion-item>

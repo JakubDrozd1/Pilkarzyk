@@ -5,6 +5,9 @@ import { BackgroundRunner } from '@capacitor/background-runner'
 import { Capacitor } from '@capacitor/core'
 import { IonicModule } from '@ionic/angular'
 import { HttpClientModule } from '@angular/common/http'
+import { register } from 'swiper/element/bundle'
+
+register()
 
 @Component({
   selector: 'app-root',

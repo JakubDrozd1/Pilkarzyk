@@ -1,4 +1,8 @@
-<ion-segment [(ngModel)]="selectedSegment" swipeGesture="true">
+<ion-segment
+  (ngModelChange)="onSegmentChange()"
+  [(ngModel)]="selectedSegment"
+  swipeGesture="true"
+>
   <ion-segment-button vertical="top" value="meetings">
     <ion-label
       >Spotkania @if(messagesNotification.length+messages.length>0){

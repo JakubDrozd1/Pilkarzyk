@@ -76,45 +76,62 @@ export class HomeContentComponent implements OnInit, OnDestroy {
   }
 
   getDetails() {
-    this.meetings = []
-    const startOfDay = moment().startOf('day').format()
-    const endOfDay = moment().endOf('day').format()
-
-    forkJoin([
-      this.usersMeetingsApi.getListMeetingsUsersAsync({
-        page: 0,
-        onPage: -1,
-        sortColumn: 'DATE_MEETING',
-        sortMode: 'ASC',
-        dateFrom: startOfDay,
-        dateTo: endOfDay,
-        idUser: this.userService.loggedUser.ID_USER,
-        answer: 'yes',
-      }),
-      this.usersMeetingsApi.getListMeetingsUsersAsync({
-        page: 0,
-        onPage: -1,
-        sortColumn: 'DATE_MEETING',
-        sortMode: 'ASC',
-        idUser: this.userService.loggedUser.ID_USER,
-        dateFrom: moment().add(2, 'hours').format(),
-        answer: 'wait',
-      }),
-    ]).subscribe({
-      next: ([meetingsResponse, meetingWaitResponse]) => {
-        this.meetings = meetingsResponse
-        this.meetingsWaiting = meetingWaitResponse
-        this.isReady = true
-      },
-      error: () => {
-        this.alert.alertNotOk()
-        this.isReady = true
-      },
-    })
+    if (this.selectedSegment == 'waiting') {
+      this.meetingsWaiting = []
+      this.usersMeetingsApi
+        .getListMeetingsUsersAsync({
+          page: 0,
+          onPage: -1,
+          sortColumn: 'DATE_MEETING',
+          sortMode: 'ASC',
+          idUser: this.userService.loggedUser.ID_USER,
+          dateFrom: moment().add(2, 'hours').format(),
+          answer: 'wait',
+        })
+        .subscribe({
+          next: (response) => {
+            this.meetingsWaiting = response
+            this.isReady = true
+          },
+          error: () => {
+            this.alert.alertNotOk()
+            this.isReady = true
+          },
+        })
+    } else if (this.selectedSegment == 'meetings') {
+      this.meetings = []
+      const startOfDay = moment().startOf('day').format()
+      const endOfDay = moment().endOf('day').format()
+      this.usersMeetingsApi
+        .getListMeetingsUsersAsync({
+          page: 0,
+          onPage: -1,
+          sortColumn: 'DATE_MEETING',
+          sortMode: 'ASC',
+          dateFrom: startOfDay,
+          dateTo: endOfDay,
+          idUser: this.userService.loggedUser.ID_USER,
+          answer: 'yes',
+        })
+        .subscribe({
+          next: (response) => {
+            this.meetings = response
+            this.isReady = true
+          },
+          error: () => {
+            this.alert.alertNotOk()
+            this.isReady = true
+          },
+        })
+    }
   }
 
   reload() {
     this.isReady = false
     this.getDetails()
+  }
+
+  onSegmentChange() {
+    this.reload()
   }
 }

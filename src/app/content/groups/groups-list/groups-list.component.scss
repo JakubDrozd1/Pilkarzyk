@@ -8,3 +8,6 @@ ion-item:active {
 ion-item {
   --border-color: var(--ion-color-secondary);
 }
+ion-segment-button {
+  --color-checked: var(--ion-color-secondary);
+}

@@ -1,7 +1,22 @@
 @if(!isReady){
-<div style="text-align: center">
-  <ion-spinner color="primary" name="crescent"> </ion-spinner>
-</div>
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>
+      <ion-skeleton-text
+        [animated]="true"
+        style="width: 100%"
+      ></ion-skeleton-text>
+    </ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-item lines="full" class="title">
+      <ion-skeleton-text
+        [animated]="true"
+        style="width: 100%"
+      ></ion-skeleton-text>
+    </ion-item>
+  </ion-card-content>
+</ion-card>
 } @if(isReady){
 <ion-card>
   <ion-card-header>

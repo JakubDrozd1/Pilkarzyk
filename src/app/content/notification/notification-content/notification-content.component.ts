@@ -121,6 +121,7 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
 
   leave() {
     for (let message of this.messagesNotification) {
+      this.isReady = false
       this.messagesApi
         .updateAnswerMessageAsync({
           getMessageRequest: {
@@ -142,30 +143,51 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
   }
 
   getDetails() {
-    forkJoin([
-      this.messagesApi.getAllMessages({
-        idUser: this.userService.loggedUser.ID_USER,
-        page: 0,
-        onPage: -1,
-        sortColumn: 'DATE_MEETING',
-        sortMode: 'ASC',
-        dateFrom: moment().add(this.delay, 'hours').format(),
-      }),
-      this.groupInvite.getGroupInviteByIdUserAsync({
-        userId: Number(this.userService.loggedUser.ID_USER),
-      }),
-    ]).subscribe({
-      next: ([messagesResponse, inviteResponse]) => {
-        this.messages = messagesResponse.filter(
-          (message) => message.Answer === 'readed' || message.Answer === null
-        )
-        this.invite = inviteResponse
-        this.isReady = true
-      },
-      error: () => {
-        this.alert.alertNotOk()
-        this.isReady = true
-      },
-    })
+    if (this.selectedSegment == 'meetings') {
+      this.isReady = false
+      this.messagesApi
+        .getAllMessages({
+          idUser: this.userService.loggedUser.ID_USER,
+          page: 0,
+          onPage: -1,
+          sortColumn: 'DATE_MEETING',
+          sortMode: 'ASC',
+          dateFrom: moment().add(this.delay, 'hours').format(),
+        })
+        .subscribe({
+          next: (response) => {
+            this.messages = response.filter(
+              (message) =>
+                message.Answer === 'readed' || message.Answer === null
+            )
+            this.isReady = true
+          },
+          error: () => {
+            this.alert.alertNotOk()
+            this.isReady = true
+          },
+        })
+    } else if (this.selectedSegment == 'groups') {
+      this.groupInvite
+        .getGroupInviteByIdUserAsync({
+          userId: Number(this.userService.loggedUser.ID_USER),
+        })
+        .subscribe({
+          next: (response) => {
+            this.invite = response
+            this.isReady = true
+          },
+          error: () => {
+            this.alert.alertNotOk()
+            this.isReady = true
+          },
+        })
+    }
+  }
+
+  onSegmentChange() {
+    this.isReady = false
+    this.leave()
+    this.reload()
   }
 }

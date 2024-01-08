@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, Input, OnInit } from '@angular/core'
 import {
   FormBuilder,
   FormGroup,
@@ -10,6 +10,7 @@ import {
 import { IonicModule, ModalController, NavParams } from '@ionic/angular'
 import {
   GetGroupsUsersResponse,
+  GroupsUsersApi,
   MeetingsApi,
   UsersMeetingsApi,
 } from 'libs/api-client'
@@ -26,10 +27,11 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
   imports: [CommonModule, IonicModule, ReactiveFormsModule, FormsModule],
 })
 export class MeetingComponent implements OnInit {
+  @Input() idGroup: number = 0
+  @Input() groupsUsers: GetGroupsUsersResponse[] = []
+
   meetingForm: FormGroup
   displayDate: any
-  idGroup: number = 0
-  groupsUsers: GetGroupsUsersResponse[] = []
   idUsers: number[] = []
   meetingNotifications!: Observable<number>
   delay: number = 3
@@ -39,10 +41,10 @@ export class MeetingComponent implements OnInit {
     private fb: FormBuilder,
     private modalCtrl: ModalController,
     private meetingsApi: MeetingsApi,
-    private navParams: NavParams,
     private refreshDataService: RefreshDataService,
     private alert: Alert,
-    private usersMeetingsApi: UsersMeetingsApi
+    private usersMeetingsApi: UsersMeetingsApi,
+    private groupsUsersApi: GroupsUsersApi
   ) {
     this.meetingForm = this.fb.group({
       dateMeeting: ['', Validators.required],
@@ -54,11 +56,34 @@ export class MeetingComponent implements OnInit {
 
   ngOnInit() {
     this.displayDate = moment().add(this.delay, 'hours').format()
-    this.idGroup = this.navParams.get('idGroup')
-    this.groupsUsers = this.navParams.get('groupsUsers')
     this.meetingForm
       .get('dateMeeting')
       ?.setValue(moment().locale('pl').add(this.delay, 'hours').format())
+    if (this.groupsUsers.length <= 0) {
+      this.getGroupUsers()
+    }
+  }
+
+  getGroupUsers() {
+    this.groupsUsersApi
+      .getAllGroupsFromUserAsync({
+        page: 0,
+        onPage: -1,
+        sortColumn: 'SURNAME',
+        sortMode: 'ASC',
+        idGroup: this.idGroup,
+      })
+      .subscribe({
+        next: (response) => {
+          this.groupsUsers = response
+          this.isReady = true
+        },
+        error: () => {
+          this.alert.alertNotOk()
+          this.groupsUsers = []
+          this.isReady = true
+        },
+      })
   }
 
   onSubmit() {

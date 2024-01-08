@@ -8,8 +8,6 @@ import {
   GroupsApi,
   GroupsUsersApi,
   MeetingsApi,
-  USERS,
-  UsersApi,
 } from 'libs/api-client'
 import { Subscription, forkJoin } from 'rxjs'
 import { MeetingComponent } from '../../form/meeting/meeting.component'
@@ -77,49 +75,66 @@ export class GroupsContentComponent implements OnInit {
   }
 
   getDetails() {
-    this.groupsUsers = []
-    this.meetings = []
-
-    forkJoin({
-      groupsUsers: this.groupsUsersApi.getAllGroupsFromUserAsync({
-        page: 0,
-        onPage: -1,
-        sortColumn: 'SURNAME',
-        sortMode: 'ASC',
-        idGroup: this.idGroup,
-      }),
-      meetings: this.meetingsApi.getAllMeetings({
-        page: 0,
-        onPage: -1,
-        sortColumn: 'DATE_MEETING',
-        sortMode: 'ASC',
-        idGroup: this.idGroup,
-        dateFrom: moment().format(),
-        idUser: this.userService.loggedUser.ID_USER,
-      }),
-      groupUser: this.groupsUsersApi.getUserWithGroup({
-        userId: Number(this.userService.loggedUser.ID_USER),
-        groupId: this.idGroup ?? 0,
-      }),
-      group: this.groupsApi.getGroupById({
-        groupId: this.idGroup ?? 0,
-      }),
-    }).subscribe({
-      next: (responses) => {
-        this.groupsUsers = responses.groupsUsers
-        this.meetings = responses.meetings
-        this.nameGroup = responses.group.NAME
-        this.groupUser = responses.groupUser
-        this.isReady = true
-      },
-      error: () => {
-        this.alert.alertNotOk()
-        this.groupsUsers = []
-        this.meetings = []
-        this.nameGroup = ''
-        this.isReady = true
-      },
-    })
+    if (this.selectedSegment == 'meetings') {
+      this.isReady = false
+      this.meetings = []
+      forkJoin({
+        meetings: this.meetingsApi.getAllMeetings({
+          page: 0,
+          onPage: -1,
+          sortColumn: 'DATE_MEETING',
+          sortMode: 'ASC',
+          idGroup: this.idGroup,
+          dateFrom: moment().format(),
+          idUser: this.userService.loggedUser.ID_USER,
+        }),
+        group: this.groupsApi.getGroupById({
+          groupId: this.idGroup ?? 0,
+        }),
+      }).subscribe({
+        next: (responses) => {
+          this.meetings = responses.meetings
+          this.nameGroup = responses.group.NAME
+          this.isReady = true
+        },
+        error: () => {
+          this.alert.alertNotOk()
+          this.groupsUsers = []
+          this.meetings = []
+          this.nameGroup = ''
+          this.isReady = true
+        },
+      })
+    } else if (this.selectedSegment == 'members') {
+      this.groupsUsers = []
+      this.isReady = false
+      forkJoin({
+        groupsUsers: this.groupsUsersApi.getAllGroupsFromUserAsync({
+          page: 0,
+          onPage: -1,
+          sortColumn: 'SURNAME',
+          sortMode: 'ASC',
+          idGroup: this.idGroup,
+        }),
+        groupUser: this.groupsUsersApi.getUserWithGroup({
+          userId: Number(this.userService.loggedUser.ID_USER),
+          groupId: this.idGroup ?? 0,
+        }),
+      }).subscribe({
+        next: (responses) => {
+          this.groupsUsers = responses.groupsUsers
+          this.groupUser = responses.groupUser
+          this.isReady = true
+        },
+        error: () => {
+          this.alert.alertNotOk()
+          this.groupsUsers = []
+          this.meetings = []
+          this.nameGroup = ''
+          this.isReady = true
+        },
+      })
+    }
   }
 
   async openModalAddMeeting() {
@@ -154,5 +169,10 @@ export class GroupsContentComponent implements OnInit {
     })
     modal.present()
     await modal.onWillDismiss()
+  }
+
+  onSegmentChange() {
+    this.isReady = false
+    this.getDetails()
   }
 }

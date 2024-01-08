@@ -1,10 +1,22 @@
 <ion-content>
-  @if(!isReady){
+  @if(userService.loggedUser.IS_ADMIN){
+  <ion-segment
+    (ngModelChange)="onSegmentChange($event)"
+    [(ngModel)]="selectedSegment"
+    swipeGesture="true"
+  >
+    <ion-segment-button vertical="top" value="groups">
+      <ion-label>Grupy</ion-label>
+    </ion-segment-button>
+    <ion-segment-button vertical="top" value="members">
+      <ion-label>Członkowie</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+  } @if(!isReadyGroups || !isReadyMembers){
   <div style="text-align: center">
     <ion-spinner color="primary" name="crescent"> </ion-spinner>
   </div>
-
-  } @if(isReady){
+  } @if(selectedSegment=="groups"){ @if(isReadyGroups){
   <ion-card>
     @for (item of groupsUsers; track $index) {
     <ion-card-content>
@@ -15,11 +27,13 @@
         detail="true"
       >
         {{ item.Name }}
-      </ion-item>
-    </ion-card-content>
-    }
+      </ion-item></ion-card-content
+    >}
   </ion-card>
-  } @if(userService.loggedUser){ @if(userService.loggedUser.IS_ADMIN){
+  } } @else if(selectedSegment=="members"){ @if(isReadyMembers){ @for (item of
+  users; track $index) {
+  <app-groups-user-list [user]="item"></app-groups-user-list>}} }
+  @if(userService.loggedUser){ @if(userService.loggedUser.IS_ADMIN){
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button>
       <ion-icon name="add"></ion-icon>

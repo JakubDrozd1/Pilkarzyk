@@ -35,7 +35,11 @@ groupUser.AccountType){
 </ion-fab>
 } }
 
-<ion-segment [(ngModel)]="selectedSegment" swipeGesture="true">
+<ion-segment
+  [(ngModel)]="selectedSegment"
+  (ngModelChange)="onSegmentChange()"
+  swipeGesture="true"
+>
   <ion-segment-button vertical="top" value="meetings">
     <ion-label>Spotkania</ion-label>
   </ion-segment-button>

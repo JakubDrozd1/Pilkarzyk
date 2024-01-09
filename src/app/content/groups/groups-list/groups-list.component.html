@@ -1,38 +1,61 @@
+@if(userService.loggedUser.IS_ADMIN){
+<ion-segment
+  (ngModelChange)="onSegmentChange($event)"
+  [(ngModel)]="selectedSegment"
+  swipeGesture="true"
+>
+  <ion-segment-button vertical="top" [value]="segmentList[0]">
+    <ion-label>Grupy</ion-label>
+  </ion-segment-button>
+  <ion-segment-button vertical="top" [value]="segmentList[1]">
+    <ion-label>Członkowie</ion-label>
+  </ion-segment-button>
+</ion-segment>
+}
 <ion-content>
-  @if(userService.loggedUser.IS_ADMIN){
-  <ion-segment
-    (ngModelChange)="onSegmentChange($event)"
-    [(ngModel)]="selectedSegment"
-    swipeGesture="true"
+  <ion-refresher
+    slot="fixed"
+    [pullFactor]="0.5"
+    [pullMin]="100"
+    [pullMax]="200"
+    (ionRefresh)="handleRefresh($event)"
   >
-    <ion-segment-button vertical="top" value="groups">
-      <ion-label>Grupy</ion-label>
-    </ion-segment-button>
-    <ion-segment-button vertical="top" value="members">
-      <ion-label>Członkowie</ion-label>
-    </ion-segment-button>
-  </ion-segment>
-  } @if(!isReadyGroups || !isReadyMembers){
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  @if(!isReadyGroups || !isReadyMembers){
   <div style="text-align: center">
     <ion-spinner color="primary" name="crescent"> </ion-spinner>
   </div>
-  } @if(selectedSegment=="groups"){ @if(isReadyGroups){
-  <ion-card>
-    @for (item of groupsUsers; track $index) {
-    <ion-card-content>
-      <ion-item
-        lines="full"
-        [routerLink]="['/logged/groups', item.IdGroup]"
-        button
-        detail="true"
-      >
-        {{ item.Name }}
-      </ion-item></ion-card-content
-    >}
-  </ion-card>
-  } } @else if(selectedSegment=="members"){ @if(isReadyMembers){ @for (item of
-  users; track $index) {
-  <app-groups-user-list [user]="item"></app-groups-user-list>}} }
+  }
+
+  <swiper-container
+    #swiperContainer
+    (swiperslidechange)="swiperSlideChange()"
+    appSwiper
+  >
+    <swiper-slide>
+      @if(isReadyGroups){
+      <ion-card>
+        @for (item of groupsUsers; track $index) {
+        <ion-card-content>
+          <ion-item
+            lines="full"
+            [routerLink]="['/logged/groups', item.IdGroup]"
+            button
+            detail="true"
+          >
+            {{ item.Name }}
+          </ion-item></ion-card-content
+        >}
+      </ion-card>
+      }
+    </swiper-slide>
+    <swiper-slide>
+      @if(isReadyMembers){ @for (item of users; track $index) {
+      <app-groups-user-list [user]="item"></app-groups-user-list>}}
+    </swiper-slide>
+  </swiper-container>
+
   @if(userService.loggedUser){ @if(userService.loggedUser.IS_ADMIN){
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button>

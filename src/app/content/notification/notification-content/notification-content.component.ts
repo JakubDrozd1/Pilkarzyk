@@ -1,6 +1,13 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnDestroy, OnInit } from '@angular/core'
-import { IonicModule } from '@ionic/angular'
+import {
+  CUSTOM_ELEMENTS_SCHEMA,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core'
+import { IonicModule, RefresherEventDetail } from '@ionic/angular'
 import {
   GetGroupInviteResponse,
   GetMeetingUsersResponse,
@@ -19,6 +26,8 @@ import * as moment from 'moment'
 import { FormsModule } from '@angular/forms'
 import { GroupsInviteComponent } from '../../groups/groups-invite/groups-invite.component'
 import { UserService } from 'src/app/service/user/user.service'
+import { SwiperContainer } from 'swiper/element'
+import { IonRefresherCustomEvent } from '@ionic/core'
 
 @Component({
   selector: 'app-notification-content',
@@ -32,17 +41,22 @@ import { UserService } from 'src/app/service/user/user.service'
     FormsModule,
     GroupsInviteComponent,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NotificationContentComponent implements OnInit, OnDestroy {
+  @ViewChild('swiperContainer', { read: ElementRef, static: false })
+  swiperContainer!: ElementRef<SwiperContainer>
+
   messagesNotification: GetMeetingUsersResponse[] = []
   messages: GetMessagesUsersMeetingsResponse[] = []
   private subscription: Subscription = new Subscription()
   meetingNotifications!: Observable<number>
   private meetingNotificationSubscription: Subscription = new Subscription()
   isReady: boolean = false
-  selectedSegment: string = 'meetings'
   delay: number = 2
   invite: GetGroupInviteResponse[] = []
+  segmentList: Array<string> = ['meetings', 'groups']
+  selectedSegment: string = this.segmentList[0]
 
   constructor(
     private usersMeetingsApi: UsersMeetingsApi,
@@ -144,7 +158,6 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
 
   getDetails() {
     if (this.selectedSegment == 'meetings') {
-      this.isReady = false
       this.messagesApi
         .getAllMessages({
           idUser: this.userService.loggedUser.ID_USER,
@@ -185,9 +198,26 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSegmentChange() {
-    this.isReady = false
+  onSegmentChange(select: string) {
+    this.swiperContainer.nativeElement.swiper.slideTo(
+      this.segmentList.indexOf(select)
+    )
+    this.selectedSegment = select
     this.leave()
-    this.reload()
+  }
+
+  swiperSlideChange() {
+    if (this.swiperContainer.nativeElement.swiper.activeIndex != null) {
+      this.selectedSegment =
+        this.segmentList[this.swiperContainer.nativeElement.swiper.activeIndex]
+    }
+    this.leave()
+  }
+
+  handleRefresh($event: IonRefresherCustomEvent<RefresherEventDetail>) {
+    setTimeout(() => {
+      this.reload()
+      $event.target.complete()
+    }, 2000)
   }
 }

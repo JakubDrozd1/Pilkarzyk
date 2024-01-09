@@ -1,7 +1,13 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import {
+  CUSTOM_ELEMENTS_SCHEMA,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core'
 import { RouterLink } from '@angular/router'
-import { IonicModule, ModalController } from '@ionic/angular'
+import { IonicModule, ModalController, RefresherEventDetail } from '@ionic/angular'
 import {
   GetGroupsUsersResponse,
   GroupsApi,
@@ -17,6 +23,8 @@ import { NotificationService } from 'src/app/service/notification/notification.s
 import { UserService } from 'src/app/service/user/user.service'
 import { FormsModule } from '@angular/forms'
 import { GroupsUserListComponent } from '../groups-user-list/groups-user-list.component'
+import { SwiperContainer } from 'swiper/element'
+import { IonRefresherCustomEvent } from '@ionic/core'
 
 function convertUsersToGetGroupsUsersResponse(
   users: USERS[]
@@ -46,15 +54,20 @@ function convertUsersToGetGroupsUsersResponse(
     FormsModule,
     GroupsUserListComponent,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class GroupsListComponent implements OnInit {
+  @ViewChild('swiperContainer', { read: ElementRef, static: false })
+  swiperContainer!: ElementRef<SwiperContainer>
+
   groupsUsers: GetGroupsUsersResponse[] = []
   isReadyGroups: boolean = false
   isReadyMembers: boolean = false
   private subscription: Subscription = new Subscription()
   meetingNotifications!: Observable<number>
-  selectedSegment: string = 'groups'
   users: GetGroupsUsersResponse[] = []
+  segmentList: Array<string> = ['groups', 'members']
+  selectedSegment: string = this.segmentList[0]
 
   constructor(
     private groupsUsersApi: GroupsUsersApi,
@@ -161,7 +174,23 @@ export class GroupsListComponent implements OnInit {
   }
 
   onSegmentChange(select: string) {
+    this.swiperContainer.nativeElement.swiper.slideTo(
+      this.segmentList.indexOf(select)
+    )
     this.selectedSegment = select
-    this.reload()
+  }
+
+  swiperSlideChange() {
+    if (this.swiperContainer.nativeElement.swiper.activeIndex != null) {
+      this.selectedSegment =
+        this.segmentList[this.swiperContainer.nativeElement.swiper.activeIndex]
+    }
+  }
+
+  handleRefresh($event: IonRefresherCustomEvent<RefresherEventDetail>) {
+    setTimeout(() => {
+      this.reload()
+      $event.target.complete()
+    }, 2000)
   }
 }

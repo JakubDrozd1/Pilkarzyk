@@ -11,7 +11,7 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-@if(userService.loggedUser|| groupUser){ @if(userService.loggedUser.IS_ADMIN ||
+@if(userService.loggedUser && groupUser){ @if(userService.loggedUser.IS_ADMIN ||
 groupUser.AccountType){
 <ion-fab slot="fixed" vertical="bottom" horizontal="end">
   <ion-fab-button>
@@ -37,7 +37,7 @@ groupUser.AccountType){
 
 <ion-segment
   [(ngModel)]="selectedSegment"
-  (ngModelChange)="onSegmentChange()"
+  (ngModelChange)="onSegmentChange(selectedSegment)"
   swipeGesture="true"
 >
   <ion-segment-button vertical="top" value="meetings">
@@ -50,26 +50,52 @@ groupUser.AccountType){
     <ion-label>Ranking</ion-label>
   </ion-segment-button>
 </ion-segment>
+
 <ion-content>
+  <ion-refresher
+    slot="fixed"
+    [pullFactor]="0.5"
+    [pullMin]="100"
+    [pullMax]="200"
+    (ionRefresh)="handleRefresh($event)"
+  >
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   @if(!isReady){
   <div style="text-align: center">
     <ion-spinner color="primary" name="crescent"> </ion-spinner>
   </div>
-  } @if(isReady){ @switch (selectedSegment) { @case ("meetings") {
-  <ion-list>
-    @if(meetings.length>0){ @for (item of meetings; track $index) {
-    <app-meeting-content [meeting]="item"></app-meeting-content>
-    } } @else {
-    <ion-item lines="none">Brak nadchodzących spotkań</ion-item>
-    }
-  </ion-list>
-  } @case ("members") { @if(groupsUsers.length>0){
-  <ion-list>
-    @for (item of groupsUsers; track $index) {
-    <app-groups-user-list [user]="item"></app-groups-user-list>
-    }
-  </ion-list>
-  }@else{
-  <ion-item lines="none">Brak członków</ion-item>
-  } } }}
+  }
+  <swiper-container
+    #swiperContainer
+    (swiperslidechange)="swiperSlideChange()"
+    appSwiper
+  >
+    <swiper-slide>
+      @if(isReady){ @if(meetings.length>0){ @for (item of meetings; track
+      $index) {
+      <ion-list>
+        <app-meeting-content [meeting]="item"></app-meeting-content>
+      </ion-list>
+      } } @else {
+      <ion-item class="header" lines="none"
+        >Brak nadchodzących spotkań
+      </ion-item>
+      } }
+    </swiper-slide>
+    <swiper-slide>
+      @if(isReady){ @if(groupsUsers.length>0){
+      <ion-list>
+        @for (item of groupsUsers; track $index) {
+        <app-groups-user-list [user]="item"></app-groups-user-list>
+        }
+      </ion-list>
+      }@else{
+      <ion-item class="header" lines="none">Brak członków</ion-item>
+      }}
+    </swiper-slide>
+    <swiper-slide>
+      <ion-item class="header" lines="none">Brak rankingu</ion-item>
+    </swiper-slide>
+  </swiper-container>
 </ion-content>

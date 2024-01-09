@@ -1,13 +1,20 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnDestroy, OnInit } from '@angular/core'
-import { IonicModule } from '@ionic/angular'
+import {
+  CUSTOM_ELEMENTS_SCHEMA,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core'
+import { IonicModule, RefresherEventDetail } from '@ionic/angular'
 import {
   GetMeetingGroupsResponse,
   GetMessagesUsersMeetingsResponse,
   UsersMeetingsApi,
 } from 'libs/api-client'
 import * as moment from 'moment'
-import { Subscription, forkJoin, interval } from 'rxjs'
+import { Subscription, interval } from 'rxjs'
 import { MeetingContentComponent } from '../../meeting/meeting-content/meeting-content.component'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
@@ -17,6 +24,8 @@ import { MessageContentComponent } from '../../message/message-content/message-c
 import { FormsModule } from '@angular/forms'
 import { MessageWaitingContentComponent } from '../../message/message-waiting-content/message-waiting-content.component'
 import { UserService } from 'src/app/service/user/user.service'
+import { SwiperContainer } from 'swiper/element'
+import { IonRefresherCustomEvent } from '@ionic/core'
 
 @Component({
   selector: 'app-home-content',
@@ -31,8 +40,12 @@ import { UserService } from 'src/app/service/user/user.service'
     FormsModule,
     MessageWaitingContentComponent,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class HomeContentComponent implements OnInit, OnDestroy {
+  @ViewChild('swiperContainer', { read: ElementRef, static: false })
+  swiperContainer!: ElementRef<SwiperContainer>
+
   meetings: GetMeetingGroupsResponse[] = []
   meetingsWaiting: GetMeetingGroupsResponse[] = []
   isReady: boolean = false
@@ -40,7 +53,8 @@ export class HomeContentComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription()
   private intervalSubscription: Subscription | undefined
   messages: GetMessagesUsersMeetingsResponse[] = []
-  selectedSegment: string = 'waiting'
+  segmentList: Array<string> = ['waiting', 'meetings']
+  selectedSegment: string = this.segmentList[0]
 
   constructor(
     private usersMeetingsApi: UsersMeetingsApi,
@@ -131,7 +145,26 @@ export class HomeContentComponent implements OnInit, OnDestroy {
     this.getDetails()
   }
 
-  onSegmentChange() {
+  onSegmentChange(select: string) {
+    this.swiperContainer.nativeElement.swiper.slideTo(
+      this.segmentList.indexOf(select)
+    )
+    this.selectedSegment = select
     this.reload()
+  }
+
+  swiperSlideChange() {
+    if (this.swiperContainer.nativeElement.swiper.activeIndex != null) {
+      this.selectedSegment =
+        this.segmentList[this.swiperContainer.nativeElement.swiper.activeIndex]
+    }
+    this.reload()
+  }
+
+  handleRefresh($event: IonRefresherCustomEvent<RefresherEventDetail>) {
+    setTimeout(() => {
+      this.reload()
+      $event.target.complete()
+    }, 2000)
   }
 }

@@ -11,6 +11,7 @@ import { Router } from '@angular/router'
 import { IonicModule } from '@ionic/angular'
 import { MaskitoModule } from '@maskito/angular'
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { compareValidator } from 'src/app/helper/validateConfirmPasswd'
@@ -27,6 +28,7 @@ import { AuthService } from 'src/app/service/auth/auth.service'
     MaskitoModule,
     ReactiveFormsModule,
     FormsModule,
+    TranslateModule,
   ],
 })
 export class RegisterComponent implements OnInit {
@@ -45,7 +47,8 @@ export class RegisterComponent implements OnInit {
     private usersApi: UsersApi,
     private authService: AuthService,
     private router: Router,
-    private alert: Alert
+    private alert: Alert,
+    public translate: TranslateService
   ) {
     this.registrationForm = this.fb.group({
       login: [
@@ -116,7 +119,9 @@ export class RegisterComponent implements OnInit {
         })
         .subscribe({
           next: (response) => {
-            this.alert.alertOk('Zarejestronano pomyślnie. Możesz się zalogować')
+            this.alert.alertOk(
+              this.translate.instant('Registered successfully. You can log in.')
+            )
             this.isReady = true
             this.registrationForm.reset()
             this.router.navigate(['/login'])

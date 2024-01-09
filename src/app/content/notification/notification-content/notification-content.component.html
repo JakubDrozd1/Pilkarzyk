@@ -4,17 +4,24 @@
   swipeGesture="true"
 >
   <ion-segment-button vertical="top" [value]="segmentList[0]">
-    <ion-label
-      >Spotkania @if(messagesNotification.length+messages.length>0){
-      <ion-badge>{{ messagesNotification.length + messages.length }} </ion-badge
-      >}
+    <ion-label>
+      {{ "Meetings" | translate }}
+      @if(messagesNotification.length+messages.length>0){
+      <ion-badge>
+        {{ messagesNotification.length + messages.length }}
+      </ion-badge>
+      }
     </ion-label>
   </ion-segment-button>
   <ion-segment-button vertical="top" [value]="segmentList[1]">
-    <ion-label
-      >Grupa@if(invite.length>0){
-      <ion-badge>{{ invite.length }} </ion-badge>}</ion-label
-    >
+    <ion-label>
+      {{ "Group" | translate }}
+      @if(invite.length>0){
+      <ion-badge>
+        {{ invite.length }}
+      </ion-badge>
+      }
+    </ion-label>
   </ion-segment-button>
 </ion-segment>
 <ion-refresher
@@ -48,22 +55,22 @@
           [message]="message"
         ></app-message-content>
       </ion-item>
-      <ion-label color="danger">NOWE ZAPROSZENIE</ion-label>
+      <ion-label color="danger"> {{ "NEW INVITATION" | translate }} </ion-label>
       } } @if(messages.length>0){ @for(message of messages; track $index){
       <app-message-content [message]="message"></app-message-content>
       } } @if(messages.length==0&&messagesNotification.length==0){
-      <ion-item class="header" lines="none"
-        >Nie masz żadnych zaproszeń</ion-item
-      >
+      <ion-item class="header" lines="none">
+        {{ "You have no invitations" | translate }}
+      </ion-item>
       }}
     </swiper-slide>
     <swiper-slide>
       @if(isReady){ @if(invite.length>0){ @for(item of invite; track $index){
       <app-groups-invite [invite]="item"></app-groups-invite>
       } }@else {
-      <ion-item class="header" lines="none"
-        >Nie masz żadnych zaproszeń</ion-item
-      >
+      <ion-item class="header" lines="none">
+        {{ "You have no invitations" | translate }}
+      </ion-item>
       } }
     </swiper-slide>
   </swiper-container>

@@ -41,13 +41,13 @@ groupUser.AccountType){
   swipeGesture="true"
 >
   <ion-segment-button vertical="top" value="meetings">
-    <ion-label>Spotkania</ion-label>
+    <ion-label>{{ "Meetings" | translate }}</ion-label>
   </ion-segment-button>
   <ion-segment-button vertical="top" value="members">
-    <ion-label>Członkowie</ion-label>
+    <ion-label>{{ "Members" | translate }}</ion-label>
   </ion-segment-button>
   <ion-segment-button vertical="top" value="ranking">
-    <ion-label>Ranking</ion-label>
+    <ion-label>{{ "Ranking" | translate }}</ion-label>
   </ion-segment-button>
 </ion-segment>
 
@@ -78,8 +78,8 @@ groupUser.AccountType){
         <app-meeting-content [meeting]="item"></app-meeting-content>
       </ion-list>
       } } @else {
-      <ion-item class="header" lines="none"
-        >Brak nadchodzących spotkań
+      <ion-item class="header" lines="none">
+        {{ "No upcoming meetings" | translate }}
       </ion-item>
       } }
     </swiper-slide>
@@ -91,11 +91,11 @@ groupUser.AccountType){
         }
       </ion-list>
       }@else{
-      <ion-item class="header" lines="none">Brak członków</ion-item>
+      <ion-item class="header" lines="none">{{ "No members" | translate }}</ion-item>
       }}
     </swiper-slide>
     <swiper-slide>
-      <ion-item class="header" lines="none">Brak rankingu</ion-item>
+      <ion-item class="header" lines="none">{{ "No ranking" | translate }}</ion-item>
     </swiper-slide>
   </swiper-container>
 </ion-content>

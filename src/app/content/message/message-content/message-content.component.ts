@@ -6,13 +6,20 @@ import { GetMeetingUsersResponse, MessagesApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { MessageAnswerModalComponent } from '../message-answer-modal/message-answer-modal.component'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-message-content',
   templateUrl: './message-content.component.html',
   styleUrls: ['./message-content.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, ReactiveFormsModule, FormsModule],
+  imports: [
+    CommonModule,
+    IonicModule,
+    ReactiveFormsModule,
+    FormsModule,
+    TranslateModule,
+  ],
 })
 export class MessageContentComponent implements OnInit {
   @Output() messageUpdate: EventEmitter<GetMeetingUsersResponse> =
@@ -26,7 +33,8 @@ export class MessageContentComponent implements OnInit {
     private messagesApi: MessagesApi,
     private alert: Alert,
     private refreshDataService: RefreshDataService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {}
@@ -43,7 +51,7 @@ export class MessageContentComponent implements OnInit {
       })
       .subscribe({
         next: () => {
-          this.alert.alertOk('Odpowiedziano pomyślnie')
+          this.alert.alertOk(this.translate.instant('Answered successfully'))
           this.messageUpdate.emit(this.message)
           this.refreshDataService.refresh('notification')
           this.isReady = true

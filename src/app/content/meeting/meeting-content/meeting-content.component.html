@@ -11,7 +11,7 @@
     </ion-card-header>
     <ion-row>
       <ion-col>
-        <ion-card-header> MIEJSCE: </ion-card-header>
+        <ion-card-header> {{ "PLACE" | translate }}: </ion-card-header>
       </ion-col>
       <ion-col>
         <ion-item class="title" lines="full">
@@ -26,7 +26,9 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-card-header> ILOŚĆ OSÓB: </ion-card-header>
+        <ion-card-header>
+          {{ "NUMBER OF PEOPLE" | translate }}:
+        </ion-card-header>
       </ion-col>
       <ion-col>
         <ion-item class="button" lines="full">
@@ -65,7 +67,7 @@
     </ion-card-header>
     <ion-row>
       <ion-col>
-        <ion-card-header> MIEJSCE: </ion-card-header>
+        <ion-card-header> {{ "PLACE" | translate }}: </ion-card-header>
       </ion-col>
       <ion-col>
         <ion-item class="title" lines="full">
@@ -77,7 +79,9 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-card-header> ILOŚĆ OSÓB: </ion-card-header>
+        <ion-card-header>
+          {{ "NUMBER OF PEOPLE" | translate }}:
+        </ion-card-header>
       </ion-col>
       <ion-col>
         <ion-item
@@ -114,7 +118,7 @@
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-button (click)="cancel()">Anuluj</ion-button>
+          <ion-button (click)="cancel()">{{ "Cancel" | translate }}</ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>

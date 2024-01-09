@@ -6,6 +6,7 @@ import {
   ToggleChangeEventDetail,
 } from '@ionic/angular'
 import { IonToggleCustomEvent } from '@ionic/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { GetGroupsUsersResponse, GroupsUsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
@@ -15,7 +16,7 @@ import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
   templateUrl: './groups-organizer.component.html',
   styleUrls: ['./groups-organizer.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule],
+  imports: [CommonModule, IonicModule, TranslateModule],
 })
 export class GroupsOrganizerComponent implements OnInit {
   @Input() idGroup: number = 0
@@ -26,7 +27,8 @@ export class GroupsOrganizerComponent implements OnInit {
   constructor(
     private groupsUserApi: GroupsUsersApi,
     private alert: Alert,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {

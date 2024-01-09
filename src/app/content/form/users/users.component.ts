@@ -13,14 +13,8 @@ import { Keyboard } from '@capacitor/keyboard'
 import { IonicModule, ModalController } from '@ionic/angular'
 import { MaskitoModule } from '@maskito/angular'
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core'
-import {
-  GroupInvitesApi,
-  GroupsApi,
-  GroupsUsersApi,
-  USERS,
-  UsersApi,
-} from 'libs/api-client'
-import { forkJoin } from 'rxjs'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { GroupInvitesApi, GroupsApi, USERS, UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { UserService } from 'src/app/service/user/user.service'
@@ -37,6 +31,7 @@ import { UserService } from 'src/app/service/user/user.service'
     FormsModule,
     MaskitoModule,
     RouterLink,
+    TranslateModule,
   ],
 })
 export class UsersComponent implements OnInit {
@@ -62,7 +57,8 @@ export class UsersComponent implements OnInit {
     private refreshDataService: RefreshDataService,
     private groupsApi: GroupsApi,
     private groupInviteApi: GroupInvitesApi,
-    private userService: UserService
+    private userService: UserService,
+    public translate: TranslateService
   ) {
     this.addExistingUserForm = this.fb.group({
       user: ['', Validators.required],
@@ -146,7 +142,7 @@ export class UsersComponent implements OnInit {
         })
         .subscribe({
           next: () => {
-            this.alert.alertOk('Zaproszono pomyślnie')
+            this.alert.alertOk(this.translate.instant('Successfully joined'))
             this.refreshDataService.refresh('groups-content')
             this.cancel()
           },
@@ -182,7 +178,11 @@ export class UsersComponent implements OnInit {
                 })
                 .subscribe({
                   next: () => {
-                    this.alert.alertOk('Wysłano emaila z zaproszeniem')
+                    this.alert.alertOk(
+                      this.translate.instant(
+                        'An invitation email has been sent'
+                      )
+                    )
                     this.cancel()
                   },
                   error: () => {

@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms'
 import { IonicModule, ModalController, NavParams } from '@ionic/angular'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import {
   GetGroupsUsersResponse,
   GroupsUsersApi,
@@ -24,7 +25,13 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
   templateUrl: './meeting.component.html',
   styleUrls: ['./meeting.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, ReactiveFormsModule, FormsModule],
+  imports: [
+    CommonModule,
+    IonicModule,
+    ReactiveFormsModule,
+    FormsModule,
+    TranslateModule,
+  ],
 })
 export class MeetingComponent implements OnInit {
   @Input() idGroup: number = 0
@@ -44,7 +51,8 @@ export class MeetingComponent implements OnInit {
     private refreshDataService: RefreshDataService,
     private alert: Alert,
     private usersMeetingsApi: UsersMeetingsApi,
-    private groupsUsersApi: GroupsUsersApi
+    private groupsUsersApi: GroupsUsersApi,
+    public translate: TranslateService
   ) {
     this.meetingForm = this.fb.group({
       dateMeeting: ['', Validators.required],
@@ -58,7 +66,7 @@ export class MeetingComponent implements OnInit {
     this.displayDate = moment().add(this.delay, 'hours').format()
     this.meetingForm
       .get('dateMeeting')
-      ?.setValue(moment().locale('pl').add(this.delay, 'hours').format())
+      ?.setValue(moment().add(this.delay, 'hours').format())
     if (this.groupsUsers.length <= 0) {
       this.getGroupUsers()
     }
@@ -120,7 +128,9 @@ export class MeetingComponent implements OnInit {
                 },
                 error: (userError) => {
                   if (userError.error.includes('Event already exists')) {
-                    this.alert.alertNotOk('Wydarzenie już istnieje')
+                    this.alert.alertNotOk(
+                      this.translate.instant('Event already exists')
+                    )
                   } else {
                     this.alert.alertNotOk()
                   }
@@ -131,7 +141,9 @@ export class MeetingComponent implements OnInit {
           },
           error: (meetingError) => {
             if (meetingError.error.includes('Event already exists')) {
-              this.alert.alertNotOk('Wydarzenie już istnieje')
+              this.alert.alertNotOk(
+                this.translate.instant('Event already exists')
+              )
             } else {
               this.alert.alertNotOk()
             }

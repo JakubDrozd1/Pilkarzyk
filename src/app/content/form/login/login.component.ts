@@ -10,6 +10,7 @@ import {
 import { Router } from '@angular/router'
 import { JwtHelperService } from '@auth0/angular-jwt'
 import { IonicModule } from '@ionic/angular'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { TokenApi, UsersApi } from 'libs/api-client'
 import { forkJoin } from 'rxjs'
 import { Alert } from 'src/app/helper/alert'
@@ -21,7 +22,13 @@ import { AuthService } from 'src/app/service/auth/auth.service'
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, ReactiveFormsModule, FormsModule],
+  imports: [
+    CommonModule,
+    IonicModule,
+    ReactiveFormsModule,
+    FormsModule,
+    TranslateModule,
+  ],
   providers: [JwtHelperService],
 })
 export class LoginComponent implements OnInit {
@@ -35,7 +42,8 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private tokenApi: TokenApi,
-    private alert: Alert
+    private alert: Alert,
+    public translate: TranslateService
   ) {
     this.loginForm = this.fb.group({
       login: ['', Validators.required],
@@ -88,10 +96,14 @@ export class LoginComponent implements OnInit {
         },
         error: (error) => {
           if (String(error.error).includes('User is null')) {
-            this.errorMessage = 'Dany użytkownik nie istnieje.'
+            this.errorMessage = this.translate.instant(
+              'The given user does not exist.'
+            )
             this.alert.alertNotOk(this.errorMessage)
           } else if (String(error.error).includes('Password is not correct')) {
-            this.errorMessage = 'Podane hasło jest niepoprawne. '
+            this.errorMessage = this.translate.instant(
+              'Password is not correct.'
+            )
             this.alert.alertNotOk(this.errorMessage)
           } else {
             this.alert.alertNotOk()

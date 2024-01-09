@@ -10,6 +10,7 @@ import {
 import { Capacitor } from '@capacitor/core'
 import { Keyboard } from '@capacitor/keyboard'
 import { IonicModule, ModalController } from '@ionic/angular'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { GroupsApi, GroupsUsersApi, USERS, UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
@@ -19,7 +20,13 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
   templateUrl: './groups.component.html',
   styleUrls: ['./groups.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, ReactiveFormsModule, FormsModule],
+  imports: [
+    CommonModule,
+    IonicModule,
+    ReactiveFormsModule,
+    FormsModule,
+    TranslateModule,
+  ],
 })
 export class GroupsComponent implements OnInit {
   groupForm: FormGroup
@@ -35,7 +42,8 @@ export class GroupsComponent implements OnInit {
     private usersApi: UsersApi,
     private groupsUsersApi: GroupsUsersApi,
     private refreshDataService: RefreshDataService,
-    private alert: Alert
+    private alert: Alert,
+    public translate: TranslateService
   ) {
     this.groupForm = this.fb.group({
       name: ['', Validators.required],
@@ -87,7 +95,9 @@ export class GroupsComponent implements OnInit {
                 'Group with this name already exists'
               )
             ) {
-              errorMessage = 'Grupa z taką nazwą już istnieje.'
+              errorMessage = this.translate.instant(
+                'Group with this name already exists.'
+              )
             }
             this.alert.alertNotOk(errorMessage)
             this.cancel()

@@ -11,7 +11,7 @@
     </ion-card-header>
     <ion-row>
       <ion-col>
-        <ion-card-header> MIEJSCE: </ion-card-header>
+        <ion-card-header> {{ "PLACE" | translate }}: </ion-card-header>
       </ion-col>
       <ion-col>
         <ion-item class="title" lines="full">
@@ -26,7 +26,9 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-card-header> ILOŚĆ OSÓB: </ion-card-header>
+        <ion-card-header>
+          {{ "NUMBER OF PEOPLE" | translate }}:
+        </ion-card-header>
       </ion-col>
       <ion-col>
         <ion-item class="title" lines="full">
@@ -65,7 +67,7 @@
     </ion-card-header>
     <ion-row>
       <ion-col>
-        <ion-card-header> MIEJSCE: </ion-card-header>
+        <ion-card-header> {{ "PLACE" | translate }}: </ion-card-header>
       </ion-col>
       <ion-col>
         <ion-item class="title" lines="full">
@@ -77,7 +79,9 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-card-header> ILOŚĆ OSÓB: </ion-card-header>
+        <ion-card-header>
+          {{ "NUMBER OF PEOPLE" | translate }}:
+        </ion-card-header>
       </ion-col>
       <ion-col>
         <ion-item class="title" lines="full">
@@ -102,23 +106,27 @@
       <ion-col>
         <ion-item class="button" lines="full" (click)="onSubmit('yes')" button>
           <ion-card-header>
-            <ion-label color="success">BĘDĘ</ion-label>
+            <ion-label color="success">
+              {{ "I WILL COME" | translate }}
+            </ion-label>
           </ion-card-header>
         </ion-item>
       </ion-col>
       <ion-col>
         <ion-item class="button" lines="full" (click)="onSubmit('no')" button>
           <ion-card-header>
-            <ion-label color="danger">NIE BĘDĘ</ion-label>
+            <ion-label color="danger">
+              {{ "I WON'T COME" | translate }}
+            </ion-label>
           </ion-card-header>
         </ion-item>
       </ion-col>
       <ion-col>
         <ion-item class="button" lines="full">
           <ion-card-header>
-            <ion-label color="warning" (click)="openModalAddWaitingTime()"
-              >DAJ MI CZAS</ion-label
-            >
+            <ion-label color="warning" (click)="openModalAddWaitingTime()">
+              {{ "GIVE ME TIME" | translate }}
+            </ion-label>
           </ion-card-header>
         </ion-item>
       </ion-col>

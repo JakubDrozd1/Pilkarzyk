@@ -10,6 +10,7 @@ import {
 import { IonicModule, ModalController } from '@ionic/angular'
 import { MaskitoModule } from '@maskito/angular'
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
@@ -26,6 +27,7 @@ import { UserService } from 'src/app/service/user/user.service'
     MaskitoModule,
     ReactiveFormsModule,
     FormsModule,
+    TranslateModule,
   ],
 })
 export class ProfileComponent implements OnInit {
@@ -46,7 +48,8 @@ export class ProfileComponent implements OnInit {
     private alert: Alert,
     private usersApi: UsersApi,
     private refreshDataService: RefreshDataService,
-    private userService: UserService
+    private userService: UserService,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {
@@ -178,7 +181,7 @@ export class ProfileComponent implements OnInit {
         next: () => {
           this.refreshDataService.refresh('profile-details')
           this.cancel()
-          this.alert.alertOk('Zaktualizowano pomyślnie')
+          this.alert.alertOk(this.translate.instant('Updated successfully'))
         },
         error: () => {
           this.alert.alertNotOk()

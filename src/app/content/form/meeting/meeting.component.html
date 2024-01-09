@@ -1,7 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button color="medium" (click)="cancel()">Anuluj</ion-button>
+      <ion-button color="medium" (click)="cancel()">
+        {{ "Cancel" | translate }}
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -14,7 +16,7 @@
   <form [formGroup]="meetingForm" (ngSubmit)="onSubmit()">
     <ion-list [inset]="true">
       <ion-item lines="none">
-        <ion-label>Data spotkania</ion-label>
+        <ion-label> {{ "Date of meeting" | translate }} </ion-label>
         <ion-datetime-button datetime="datetime"> </ion-datetime-button>
       </ion-item>
       <ion-modal [keepContentsMounted]="true">
@@ -30,7 +32,7 @@
       <ion-item lines="none">
         <ion-input
           helperText=" "
-          label="Miejsce"
+          [label]="'Place' | translate"
           labelPlacement="floating"
           formControlName="place"
           type="text"
@@ -41,7 +43,7 @@
         <ion-input
           min="1"
           helperText=" "
-          label="Ilość osób"
+          [label]="'Number of people' | translate"
           labelPlacement="floating"
           formControlName="quantity"
           type="number"
@@ -51,7 +53,7 @@
       <ion-item lines="none">
         <ion-textarea
           helperText=" "
-          label="Opis"
+          [label]="'Description' | translate"
           labelPlacement="floating"
           formControlName="description"
           type="text"
@@ -59,7 +61,9 @@
         </ion-textarea>
       </ion-item>
     </ion-list>
-    <ion-button type="submit" expand="full">Dodaj </ion-button>
+    <ion-button type="submit" expand="full">
+      {{ "Add" | translate }}
+    </ion-button>
   </form>
   }
 </ion-content>

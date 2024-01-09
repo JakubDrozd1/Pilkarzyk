@@ -26,6 +26,7 @@ import { MessageWaitingContentComponent } from '../../message/message-waiting-co
 import { UserService } from 'src/app/service/user/user.service'
 import { SwiperContainer } from 'swiper/element'
 import { IonRefresherCustomEvent } from '@ionic/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-home-content',
@@ -39,6 +40,7 @@ import { IonRefresherCustomEvent } from '@ionic/core'
     MessageContentComponent,
     FormsModule,
     MessageWaitingContentComponent,
+    TranslateModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -62,7 +64,8 @@ export class HomeContentComponent implements OnInit, OnDestroy {
     private refreshDataService: RefreshDataService,
     private timeService: TimeService,
     public notificationService: NotificationService,
-    private userService: UserService
+    private userService: UserService,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {

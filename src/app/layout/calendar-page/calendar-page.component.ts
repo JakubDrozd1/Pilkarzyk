@@ -3,16 +3,25 @@ import { Component } from '@angular/core'
 import { IonicModule } from '@ionic/angular'
 import { CalendarContentComponent } from '../../content/calendar/calendar-content/calendar-content.component'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-calendar-page',
   standalone: true,
   templateUrl: './calendar-page.component.html',
   styleUrl: './calendar-page.component.scss',
-  imports: [CommonModule, IonicModule, CalendarContentComponent],
+  imports: [
+    CommonModule,
+    IonicModule,
+    CalendarContentComponent,
+    TranslateModule,
+  ],
 })
 export class CalendarPageComponent {
-  constructor(private refreshDataService: RefreshDataService) {}
+  constructor(
+    private refreshDataService: RefreshDataService,
+    public translate: TranslateService
+  ) {}
 
   ionViewWillEnter() {
     this.refreshDataService.refresh('calendar')

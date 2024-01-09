@@ -9,6 +9,7 @@ import {
 } from '@angular/forms'
 import { IonicModule, ModalController } from '@ionic/angular'
 import { MaskitoModule } from '@maskito/angular'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { compareValidator } from 'src/app/helper/validateConfirmPasswd'
@@ -25,6 +26,7 @@ import { UserService } from 'src/app/service/user/user.service'
     MaskitoModule,
     ReactiveFormsModule,
     FormsModule,
+    TranslateModule,
   ],
 })
 export class ProfilePasswordComponent implements OnInit {
@@ -36,7 +38,8 @@ export class ProfilePasswordComponent implements OnInit {
     private modalCtrl: ModalController,
     private usersApi: UsersApi,
     private alert: Alert,
-    private userService: UserService
+    private userService: UserService,
+    public translate: TranslateService
   ) {
     this.profilePasswordForm = this.fb.group({
       password: [
@@ -74,7 +77,9 @@ export class ProfilePasswordComponent implements OnInit {
         })
         .subscribe({
           next: () => {
-            this.alert.alertOk('Pomyślnie zmieniono hasło')
+            this.alert.alertOk(
+              this.translate.instant('Password changed successfully')
+            )
             this.cancel()
           },
           error: () => {

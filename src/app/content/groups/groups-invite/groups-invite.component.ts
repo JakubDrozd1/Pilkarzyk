@@ -12,6 +12,7 @@ import {
 } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-groups-invite',
@@ -24,17 +25,20 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
     MeetingComponent,
     MeetingContentComponent,
     FormsModule,
+    TranslateModule,
   ],
 })
 export class GroupsInviteComponent implements OnInit {
   @Input() invite!: GetGroupInviteResponse
   groupUser!: GetGroupsUsersResponse
   isReady: boolean = false
+
   constructor(
     private alert: Alert,
     private refreshDataService: RefreshDataService,
     private groupInvite: GroupInvitesApi,
-    private groupUserApi: GroupsUsersApi
+    private groupUserApi: GroupsUsersApi,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {
@@ -76,6 +80,7 @@ export class GroupsInviteComponent implements OnInit {
               .subscribe({
                 next: () => {
                   this.alert.alertOk('Pomyslnie dołaczono')
+                  this.translate.instant('Invited successfully')
                   this.refreshDataService.refresh('notification')
                   this.getDetails()
                 },
@@ -97,7 +102,7 @@ export class GroupsInviteComponent implements OnInit {
         })
         .subscribe({
           next: () => {
-            this.alert.alertOk('Pomyslnie odrzucono')
+            this.alert.alertOk(this.translate.instant('Successfully rejected'))
             this.refreshDataService.refresh('notification')
             this.getDetails()
           },

@@ -12,13 +12,14 @@ import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
 import { convertFileToBase64 } from 'src/app/helper/convertFileToBase64'
 import { NotificationService } from 'src/app/service/notification/notification.service'
 import { UserService } from 'src/app/service/user/user.service'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-profile-details',
   templateUrl: './profile-details.component.html',
   styleUrls: ['./profile-details.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, LogoutComponent],
+  imports: [CommonModule, IonicModule, LogoutComponent, TranslateModule],
 })
 export class ProfileDetailsComponent implements OnInit {
   user: USERS | undefined
@@ -34,7 +35,8 @@ export class ProfileDetailsComponent implements OnInit {
     private modalCtrl: ModalController,
     private refreshDataService: RefreshDataService,
     public notificationService: NotificationService,
-    private userService: UserService
+    private userService: UserService,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {
@@ -101,7 +103,11 @@ export class ProfileDetailsComponent implements OnInit {
           })
           .subscribe({
             next: () => {
-              this.alert.alertOk('Udało się zmienić avatar')
+              this.alert.alertOk(
+                this.translate.instant(
+                  'You have successfully changed your avatar.'
+                )
+              )
               this.refreshDataService.refresh('profile-details')
             },
             error: () => {
@@ -110,7 +116,9 @@ export class ProfileDetailsComponent implements OnInit {
           })
       })
     } else {
-      this.alert.alertNotOk('Plik jest za duży (maks 5MB)')
+      this.alert.alertNotOk(
+        this.translate.instant('The file is too large (max 5MB)')
+      )
     }
   }
 

@@ -8,8 +8,8 @@
     <ion-list [inset]="true">
       <ion-item lines="none">
         <ion-input
-          errorText="Login jest wymagany"
-          label="Login"
+          [errorText]="'Login is required' | translate"
+          [label]="'Login' | translate"
           labelPlacement="floating"
           formControlName="login"
           placeholder="Enter login"
@@ -18,8 +18,8 @@
       </ion-item>
       <ion-item lines="none">
         <ion-input
-          errorText="Hasło jest wymagane"
-          label="Hasło"
+          [errorText]="'Password is required' | translate"
+          [label]="'Password' | translate"
           labelPlacement="floating"
           formControlName="password"
           type="password"
@@ -28,7 +28,9 @@
         </ion-input>
       </ion-item>
     </ion-list>
-    <ion-button type="submit" expand="full">Zaloguj </ion-button>
+    <ion-button type="submit" expand="full">
+      {{ "Log in" | translate }}
+    </ion-button>
   </form>
   }
 </ion-content>

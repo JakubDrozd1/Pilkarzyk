@@ -8,13 +8,19 @@ import {
 } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { MeetingUserListComponent } from '../meeting-user-list/meeting-user-list.component'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-meeting-content',
   templateUrl: './meeting-content.component.html',
   styleUrls: ['./meeting-content.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, MeetingUserListComponent],
+  imports: [
+    CommonModule,
+    IonicModule,
+    MeetingUserListComponent,
+    TranslateModule,
+  ],
 })
 export class MeetingContentComponent implements OnInit {
   @Input() meeting!: GetMeetingGroupsResponse
@@ -26,7 +32,8 @@ export class MeetingContentComponent implements OnInit {
   constructor(
     private messagesApi: MessagesApi,
     private alert: Alert,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {

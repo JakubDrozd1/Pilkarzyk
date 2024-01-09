@@ -2,18 +2,19 @@ import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { IonicModule } from '@ionic/angular'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { AuthService } from 'src/app/service/auth/auth.service'
 
 @Component({
   selector: 'app-logout',
   templateUrl: './logout.component.html',
   standalone: true,
-  imports: [CommonModule, IonicModule],
+  imports: [CommonModule, IonicModule, TranslateModule],
 })
 export class LogoutComponent implements OnInit {
   public alertButtons = [
     {
-      text: 'Anuluj',
+      text: this.translate.instant('Cancel'),
       role: 'cancel',
       handler: () => {},
     },
@@ -26,7 +27,11 @@ export class LogoutComponent implements OnInit {
     },
   ]
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    public translate: TranslateService
+  ) {}
 
   ngOnInit() {}
 

@@ -6,13 +6,14 @@ import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { CountdownComponent } from '../../../helper/countdown/countdown.component'
 import * as moment from 'moment'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-message-waiting-content',
   templateUrl: './message-waiting-content.component.html',
   styleUrls: ['./message-waiting-content.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, CountdownComponent],
+  imports: [CommonModule, IonicModule, CountdownComponent, TranslateModule],
 })
 export class MessageWaitingContentComponent implements OnInit {
   @Input() message!: GetMeetingUsersResponse
@@ -22,7 +23,8 @@ export class MessageWaitingContentComponent implements OnInit {
   constructor(
     private messagesApi: MessagesApi,
     private alert: Alert,
-    private refreshDataService: RefreshDataService
+    private refreshDataService: RefreshDataService,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {
@@ -44,7 +46,7 @@ export class MessageWaitingContentComponent implements OnInit {
       })
       .subscribe({
         next: () => {
-          this.alert.alertOk('Odpowiedziano pomyślnie')
+          this.alert.alertOk(this.translate.instant('Answered successfully'))
           this.refreshDataService.refresh('home')
         },
         error: () => {

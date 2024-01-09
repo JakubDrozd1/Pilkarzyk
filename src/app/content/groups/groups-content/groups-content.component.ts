@@ -28,6 +28,7 @@ import { GroupsUserListComponent } from '../groups-user-list/groups-user-list.co
 import { UserService } from 'src/app/service/user/user.service'
 import { SwiperContainer } from 'swiper/element'
 import { IonRefresherCustomEvent, RefresherEventDetail } from '@ionic/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-groups-content',
@@ -41,6 +42,7 @@ import { IonRefresherCustomEvent, RefresherEventDetail } from '@ionic/core'
     MeetingContentComponent,
     FormsModule,
     GroupsUserListComponent,
+    TranslateModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -67,7 +69,8 @@ export class GroupsContentComponent implements OnInit {
     private refreshDataService: RefreshDataService,
     private alert: Alert,
     private groupsApi: GroupsApi,
-    public userService: UserService
+    public userService: UserService,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {

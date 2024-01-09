@@ -25,6 +25,7 @@ import { FormsModule } from '@angular/forms'
 import { GroupsUserListComponent } from '../groups-user-list/groups-user-list.component'
 import { SwiperContainer } from 'swiper/element'
 import { IonRefresherCustomEvent } from '@ionic/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 function convertUsersToGetGroupsUsersResponse(
   users: USERS[]
@@ -53,6 +54,7 @@ function convertUsersToGetGroupsUsersResponse(
     RouterLink,
     FormsModule,
     GroupsUserListComponent,
+    TranslateModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -77,7 +79,8 @@ export class GroupsListComponent implements OnInit {
     public notificationService: NotificationService,
     private groupApi: GroupsApi,
     public userService: UserService,
-    private usersApi: UsersApi
+    private usersApi: UsersApi,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {

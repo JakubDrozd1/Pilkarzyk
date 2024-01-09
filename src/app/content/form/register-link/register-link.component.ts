@@ -5,13 +5,14 @@ import { RegisterComponent } from '../register/register.component'
 import { GroupsUsersApi, UsersApi } from 'libs/api-client'
 import { ActivatedRoute } from '@angular/router'
 import { Alert } from 'src/app/helper/alert'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-register-link',
   templateUrl: './register-link.component.html',
   styleUrls: ['./register-link.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, RegisterComponent],
+  imports: [CommonModule, IonicModule, RegisterComponent, TranslateModule],
 })
 export class RegisterLinkComponent implements OnInit {
   idGroup: number | undefined
@@ -20,7 +21,8 @@ export class RegisterLinkComponent implements OnInit {
     private usersApi: UsersApi,
     private groupsUsersApi: GroupsUsersApi,
     private route: ActivatedRoute,
-    private alert: Alert
+    private alert: Alert,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {
@@ -53,13 +55,19 @@ export class RegisterLinkComponent implements OnInit {
               next: () => {},
               error: () => {
                 this.alert.alertNotOk(
-                  'Nie dodano do grupy. Spróbuj ponownie później'
+                  this.translate.instant(
+                    'Not added to group. Please try again later.'
+                  )
                 )
               },
             })
         },
         error: () => {
-          this.alert.alertNotOk('Nie dodano do grupy. Spróbuj ponownie później')
+          this.alert.alertNotOk(
+            this.translate.instant(
+              'Not added to group. Please try again later.'
+            )
+          )
         },
       })
   }

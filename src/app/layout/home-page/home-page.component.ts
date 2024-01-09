@@ -3,16 +3,20 @@ import { Component } from '@angular/core'
 import { IonicModule } from '@ionic/angular'
 import { HomeContentComponent } from '../../content/home/home-content/home-content.component'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
   standalone: true,
-  imports: [CommonModule, IonicModule, HomeContentComponent],
+  imports: [CommonModule, IonicModule, HomeContentComponent, TranslateModule],
 })
 export class HomePageComponent {
-  constructor(private refreshDataService: RefreshDataService) {}
+  constructor(
+    private refreshDataService: RefreshDataService,
+    public translate: TranslateService
+  ) {}
 
   ionViewWillEnter() {
     this.refreshDataService.refresh('home')

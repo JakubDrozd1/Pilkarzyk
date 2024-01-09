@@ -28,6 +28,7 @@ import { GroupsInviteComponent } from '../../groups/groups-invite/groups-invite.
 import { UserService } from 'src/app/service/user/user.service'
 import { SwiperContainer } from 'swiper/element'
 import { IonRefresherCustomEvent } from '@ionic/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 @Component({
   selector: 'app-notification-content',
@@ -40,6 +41,7 @@ import { IonRefresherCustomEvent } from '@ionic/core'
     MessageContentComponent,
     FormsModule,
     GroupsInviteComponent,
+    TranslateModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -66,7 +68,8 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
     public notificationService: NotificationService,
     private dataService: DataService,
     private groupInvite: GroupInvitesApi,
-    private userService: UserService
+    private userService: UserService,
+    public translate: TranslateService
   ) {}
 
   ngOnDestroy(): void {

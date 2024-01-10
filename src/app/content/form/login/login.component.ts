@@ -16,20 +16,22 @@ import { forkJoin } from 'rxjs'
 import { Alert } from 'src/app/helper/alert'
 import { AppConfig } from 'src/app/service/app-config'
 import { AuthService } from 'src/app/service/auth/auth.service'
+import { SpinnerComponent } from "../../../helper/spinner/spinner.component";
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    IonicModule,
-    ReactiveFormsModule,
-    FormsModule,
-    TranslateModule,
-  ],
-  providers: [JwtHelperService],
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
+    standalone: true,
+    providers: [JwtHelperService],
+    imports: [
+        CommonModule,
+        IonicModule,
+        ReactiveFormsModule,
+        FormsModule,
+        TranslateModule,
+        SpinnerComponent
+    ]
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup

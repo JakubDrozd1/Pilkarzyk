@@ -7,7 +7,11 @@ import {
   ViewChild,
 } from '@angular/core'
 import { RouterLink } from '@angular/router'
-import { IonicModule, ModalController, RefresherEventDetail } from '@ionic/angular'
+import {
+  IonicModule,
+  ModalController,
+  RefresherEventDetail,
+} from '@ionic/angular'
 import {
   GetGroupsUsersResponse,
   GroupsApi,
@@ -26,6 +30,7 @@ import { GroupsUserListComponent } from '../groups-user-list/groups-user-list.co
 import { SwiperContainer } from 'swiper/element'
 import { IonRefresherCustomEvent } from '@ionic/core'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
 
 function convertUsersToGetGroupsUsersResponse(
   users: USERS[]
@@ -55,6 +60,7 @@ function convertUsersToGetGroupsUsersResponse(
     FormsModule,
     GroupsUserListComponent,
     TranslateModule,
+    SpinnerComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -70,6 +76,8 @@ export class GroupsListComponent implements OnInit {
   users: GetGroupsUsersResponse[] = []
   segmentList: Array<string> = ['groups', 'members']
   selectedSegment: string = this.segmentList[0]
+  visitedGroups: boolean = true
+  visitedMembers: boolean = true
 
   constructor(
     private groupsUsersApi: GroupsUsersApi,
@@ -95,7 +103,7 @@ export class GroupsListComponent implements OnInit {
   }
 
   getGroups() {
-    if (this.selectedSegment == 'groups') {
+    if (this.selectedSegment == 'groups' && this.visitedGroups) {
       this.groupsUsers = []
       this.isReadyGroups = false
       this.isReadyMembers = true
@@ -114,10 +122,12 @@ export class GroupsListComponent implements OnInit {
                   IdGroup: item.ID_GROUP,
                 }))
                 this.isReadyGroups = true
+                this.visitedGroups = false
               },
               error: () => {
                 this.alert.alertNotOk()
                 this.isReadyGroups = true
+                this.visitedGroups = false
               },
             })
         : this.groupsUsersApi
@@ -132,13 +142,15 @@ export class GroupsListComponent implements OnInit {
               next: (groupResponse) => {
                 this.groupsUsers = groupResponse
                 this.isReadyGroups = true
+                this.visitedGroups = false
               },
               error: () => {
                 this.alert.alertNotOk()
                 this.isReadyGroups = true
+                this.visitedGroups = false
               },
             })
-    } else if (this.selectedSegment == 'members') {
+    } else if (this.selectedSegment == 'members' && this.visitedMembers) {
       this.isReadyMembers = false
       this.isReadyGroups = true
       this.users = []
@@ -153,10 +165,12 @@ export class GroupsListComponent implements OnInit {
           next: (response) => {
             this.users = convertUsersToGetGroupsUsersResponse(response)
             this.isReadyMembers = true
+            this.visitedMembers = false
           },
           error: () => {
             this.alert.alertNotOk()
             this.isReadyMembers = true
+            this.visitedMembers = false
           },
         })
     }
@@ -173,6 +187,8 @@ export class GroupsListComponent implements OnInit {
   reload() {
     this.isReadyMembers = false
     this.isReadyGroups = false
+    this.visitedGroups = true
+    this.visitedMembers = true
     this.getGroups()
   }
 
@@ -181,12 +197,14 @@ export class GroupsListComponent implements OnInit {
       this.segmentList.indexOf(select)
     )
     this.selectedSegment = select
+    this.getGroups()
   }
 
   swiperSlideChange() {
     if (this.swiperContainer.nativeElement.swiper.activeIndex != null) {
       this.selectedSegment =
         this.segmentList[this.swiperContainer.nativeElement.swiper.activeIndex]
+      this.getGroups()
     }
   }
 

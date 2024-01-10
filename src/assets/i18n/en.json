@@ -63,7 +63,7 @@
   "PHONE NUMBER": "PHONE NUMBER",
   "Are you sure?": "Are you sure?",
   "Group": "Group",
-  "I WILL COME": "BĘDĘ",
+  "I WILL COME": "I WILL COME",
   "Answered successfully": "Answered successfully",
   "An error occured": "An error occured",
   "Error": "Error",
@@ -80,7 +80,7 @@
   "Save": "Save",
   "Updated successfully": "Updated successfully",
   "Event already exists": "Event already exists",
-  "Number of people": "Ilość osób",
+  "Number of people": "Number of people",
   "Place": "Place",
   "The given user does not exist.": "The given user does not exist.",
   "Password is not correct.": "Password is not correct.",
@@ -94,5 +94,5 @@
   "Registration": "Registration",
   "You have successfully changed your avatar.": "You have successfully changed your avatar.",
   "The file is too large (max 5MB)": "The file is too large (max 5MB)",
-  "Date of meeting": "Data spotkania"
+  "Date of meeting": "Date of meeting"
 }

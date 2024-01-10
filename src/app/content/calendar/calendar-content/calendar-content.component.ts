@@ -14,14 +14,15 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
 import { Subscription } from 'rxjs'
 import { NotificationService } from 'src/app/service/notification/notification.service'
 import { UserService } from 'src/app/service/user/user.service'
+import { SpinnerComponent } from "../../../helper/spinner/spinner.component";
 
 @Component({
-  selector: 'app-calendar-content',
-  templateUrl: './calendar-content.component.html',
-  styleUrls: ['./calendar-content.component.scss'],
-  standalone: true,
-  imports: [CommonModule, IonicModule, FormsModule, MeetingContentComponent],
-  providers: [DatePipe],
+    selector: 'app-calendar-content',
+    templateUrl: './calendar-content.component.html',
+    styleUrls: ['./calendar-content.component.scss'],
+    standalone: true,
+    providers: [DatePipe],
+    imports: [CommonModule, IonicModule, FormsModule, MeetingContentComponent, SpinnerComponent]
 })
 export class CalendarContentComponent implements OnInit {
   meetings: GetMeetingGroupsResponse[] = []

@@ -14,20 +14,22 @@ import { UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { compareValidator } from 'src/app/helper/validateConfirmPasswd'
 import { UserService } from 'src/app/service/user/user.service'
+import { SpinnerComponent } from "../../../helper/spinner/spinner.component";
 
 @Component({
-  selector: 'app-profile-password',
-  templateUrl: './profile-password.component.html',
-  styleUrls: ['./profile-password.component.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    IonicModule,
-    MaskitoModule,
-    ReactiveFormsModule,
-    FormsModule,
-    TranslateModule,
-  ],
+    selector: 'app-profile-password',
+    templateUrl: './profile-password.component.html',
+    styleUrls: ['./profile-password.component.scss'],
+    standalone: true,
+    imports: [
+        CommonModule,
+        IonicModule,
+        MaskitoModule,
+        ReactiveFormsModule,
+        FormsModule,
+        TranslateModule,
+        SpinnerComponent
+    ]
 })
 export class ProfilePasswordComponent implements OnInit {
   profilePasswordForm: FormGroup

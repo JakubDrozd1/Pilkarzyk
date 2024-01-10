@@ -10,13 +10,14 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { GetGroupsUsersResponse, GroupsUsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
+import { SpinnerComponent } from "../../../helper/spinner/spinner.component";
 
 @Component({
-  selector: 'app-groups-organizer',
-  templateUrl: './groups-organizer.component.html',
-  styleUrls: ['./groups-organizer.component.scss'],
-  standalone: true,
-  imports: [CommonModule, IonicModule, TranslateModule],
+    selector: 'app-groups-organizer',
+    templateUrl: './groups-organizer.component.html',
+    styleUrls: ['./groups-organizer.component.scss'],
+    standalone: true,
+    imports: [CommonModule, IonicModule, TranslateModule, SpinnerComponent]
 })
 export class GroupsOrganizerComponent implements OnInit {
   @Input() idGroup: number = 0

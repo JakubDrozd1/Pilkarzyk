@@ -19,19 +19,21 @@ import * as moment from 'moment'
 import { Observable } from 'rxjs'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
+import { SpinnerComponent } from "../../../helper/spinner/spinner.component";
 
 @Component({
-  selector: 'app-meeting',
-  templateUrl: './meeting.component.html',
-  styleUrls: ['./meeting.component.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    IonicModule,
-    ReactiveFormsModule,
-    FormsModule,
-    TranslateModule,
-  ],
+    selector: 'app-meeting',
+    templateUrl: './meeting.component.html',
+    styleUrls: ['./meeting.component.scss'],
+    standalone: true,
+    imports: [
+        CommonModule,
+        IonicModule,
+        ReactiveFormsModule,
+        FormsModule,
+        TranslateModule,
+        SpinnerComponent
+    ]
 })
 export class MeetingComponent implements OnInit {
   @Input() idGroup: number = 0

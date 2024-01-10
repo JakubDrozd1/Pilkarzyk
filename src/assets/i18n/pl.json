@@ -63,7 +63,7 @@
   "PHONE NUMBER": "NUMER TELEFONU",
   "Are you sure?": "Na pewno?",
   "Group": "Grupa",
-  "I WILL COME": "I WILL COME",
+  "I WILL COME": "BĘDĘ",
   "Answered successfully": "Odpowiedziano pomyślnie",
   "An error occured": "Wystąpił błąd",
   "Error": "Błąd",
@@ -80,7 +80,7 @@
   "Save": "Zapisz",
   "Updated successfully": "Zaktualizowano pomyślnie",
   "Event already exists": "Wydarzenie już istnieje",
-  "Number of people": "Number of people",
+  "Number of people": "Ilość osób",
   "Place": "Miejsce",
   "The given user does not exist.": "Dany użytkownik nie istnieje.",
   "Password is not correct.": "Podane hasło jest niepoprawne.",
@@ -94,5 +94,5 @@
   "Registration": "Rejestracja",
   "You have successfully changed your avatar.": "Udało się zmienić avatar.",
   "The file is too large (max 5MB)": "Plik jest za duży (maks 5MB)",
-  "Date of meeting": "Date of meeting"
+  "Date of meeting": "Data spotkania"
 }

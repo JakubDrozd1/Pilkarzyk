@@ -2,11 +2,16 @@ import { CommonModule } from '@angular/common'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { IonicModule, ModalController } from '@ionic/angular'
-import { GetMeetingUsersResponse, MessagesApi } from 'libs/api-client'
+import {
+  GetMeetingUsersResponse,
+  GetMessagesUsersMeetingsResponse,
+  MessagesApi,
+} from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { MessageAnswerModalComponent } from '../message-answer-modal/message-answer-modal.component'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { MeetingUserListComponent } from '../../meeting/meeting-user-list/meeting-user-list.component'
 
 @Component({
   selector: 'app-message-content',
@@ -19,6 +24,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
     ReactiveFormsModule,
     FormsModule,
     TranslateModule,
+    MeetingUserListComponent,
   ],
 })
 export class MessageContentComponent implements OnInit {
@@ -26,7 +32,9 @@ export class MessageContentComponent implements OnInit {
     new EventEmitter()
 
   @Input() message!: GetMeetingUsersResponse
-
+  acceptMeeting: Number = 0
+  filteredMessages: GetMessagesUsersMeetingsResponse[] = []
+  messages: GetMessagesUsersMeetingsResponse[] = []
   isReady: boolean = true
 
   constructor(
@@ -37,7 +45,28 @@ export class MessageContentComponent implements OnInit {
     public translate: TranslateService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.isReady = false
+    this.messagesApi
+      .getAllMessages({
+        idMeeting: Number(this.message.IdMeeting),
+        page: 0,
+        onPage: -1,
+      })
+      .subscribe({
+        next: (response) => {
+          this.messages = response
+          this.filteredMessages = response.filter(
+            (message) => message.Answer === 'yes'
+          )
+          this.acceptMeeting = this.filteredMessages.length
+          this.isReady = true
+        },
+        error: () => {
+          this.alert.alertNotOk()
+        },
+      })
+  }
 
   onSubmit(answer: string) {
     this.isReady = false
@@ -52,8 +81,8 @@ export class MessageContentComponent implements OnInit {
       .subscribe({
         next: () => {
           this.alert.alertOk(this.translate.instant('Answered successfully'))
-          this.messageUpdate.emit(this.message)
           this.refreshDataService.refresh('notification')
+          this.messageUpdate.emit(this.message)
           this.isReady = true
         },
         error: () => {
@@ -75,5 +104,9 @@ export class MessageContentComponent implements OnInit {
     modal.onDidDismiss().then((data) => {
       this.messageUpdate.emit(data.data)
     })
+  }
+
+  cancel() {
+    return this.modalCtrl.dismiss(null, 'cancel')
   }
 }

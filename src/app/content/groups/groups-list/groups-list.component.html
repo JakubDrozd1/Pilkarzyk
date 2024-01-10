@@ -1,18 +1,19 @@
-@if(userService.loggedUser.IS_ADMIN){
-<ion-segment
-  (ngModelChange)="onSegmentChange($event)"
-  [(ngModel)]="selectedSegment"
-  swipeGesture="true"
->
-  <ion-segment-button vertical="top" [value]="segmentList[0]">
-    <ion-label>{{ "Group" | translate }}</ion-label>
-  </ion-segment-button>
-  <ion-segment-button vertical="top" [value]="segmentList[1]">
-    <ion-label>{{ "Members" | translate }}</ion-label>
-  </ion-segment-button>
-</ion-segment>
-}
 <ion-content>
+  @if(userService.loggedUser.IS_ADMIN){
+  <ion-segment
+    (ngModelChange)="onSegmentChange($event)"
+    [(ngModel)]="selectedSegment"
+    swipeGesture="true"
+  >
+    <ion-segment-button vertical="top" [value]="segmentList[0]">
+      <ion-label>{{ "Group" | translate }}</ion-label>
+    </ion-segment-button>
+    <ion-segment-button vertical="top" [value]="segmentList[1]">
+      <ion-label>{{ "Members" | translate }}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+  }
+
   <ion-refresher
     slot="fixed"
     [pullFactor]="0.5"
@@ -20,13 +21,10 @@
     [pullMax]="200"
     (ionRefresh)="handleRefresh($event)"
   >
-    <ion-refresher-content></ion-refresher-content>
+    <app-spinner [isReady]="true"></app-spinner>
   </ion-refresher>
-  @if(!isReadyGroups || !isReadyMembers){
-  <div style="text-align: center">
-    <ion-spinner color="primary" name="crescent"> </ion-spinner>
-  </div>
-  }
+
+  <app-spinner [isReady]="!isReadyGroups || !isReadyMembers"></app-spinner>
 
   <swiper-container
     #swiperContainer
@@ -55,7 +53,6 @@
       <app-groups-user-list [user]="item"></app-groups-user-list>}}
     </swiper-slide>
   </swiper-container>
-
   @if(userService.loggedUser){ @if(userService.loggedUser.IS_ADMIN){
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button>

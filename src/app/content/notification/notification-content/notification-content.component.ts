@@ -29,6 +29,7 @@ import { UserService } from 'src/app/service/user/user.service'
 import { SwiperContainer } from 'swiper/element'
 import { IonRefresherCustomEvent } from '@ionic/core'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
 
 @Component({
   selector: 'app-notification-content',
@@ -42,6 +43,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
     FormsModule,
     GroupsInviteComponent,
     TranslateModule,
+    SpinnerComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -49,7 +51,6 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
   @ViewChild('swiperContainer', { read: ElementRef, static: false })
   swiperContainer!: ElementRef<SwiperContainer>
 
-  messagesNotification: GetMeetingUsersResponse[] = []
   messages: GetMessagesUsersMeetingsResponse[] = []
   private subscription: Subscription = new Subscription()
   meetingNotifications!: Observable<number>
@@ -59,6 +60,8 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
   invite: GetGroupInviteResponse[] = []
   segmentList: Array<string> = ['meetings', 'groups']
   selectedSegment: string = this.segmentList[0]
+  visitedMeetings: boolean = true
+  visitedGroups: boolean = true
 
   constructor(
     private usersMeetingsApi: UsersMeetingsApi,
@@ -102,6 +105,8 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
 
   reload() {
     this.isReady = false
+    this.visitedGroups = true
+    this.visitedMeetings = true
     this.getDetails()
   }
 
@@ -117,50 +122,51 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
         })
         .subscribe({
           next: (response) => {
-            this.messagesNotification.push(response)
-            this.dataService.sendData(this.messagesNotification.length)
+            this.messages.unshift(response)
+            this.dataService.sendData(
+              this.messages.filter((message) => message.Answer === null).length
+            )
           },
         })
     }
   }
 
-  updateNotification($event: GetMeetingUsersResponse) {
-    const indexToRemove = this.messagesNotification.findIndex((item) => {
-      return (
-        Object.keys($event) as Array<keyof GetMeetingUsersResponse>
-      ).every((key) => $event[key] === item[key])
-    })
-    if (indexToRemove !== -1) {
-      this.messagesNotification.splice(indexToRemove, 1)
-      this.dataService.sendData(this.messagesNotification.length)
-    }
+  updateNotification() {
+    this.dataService.sendData(
+      this.messages.filter((message) => message.Answer == null).length
+    )
   }
 
   leave() {
-    for (let message of this.messagesNotification) {
-      this.isReady = false
-      this.messagesApi
-        .updateAnswerMessageAsync({
-          getMessageRequest: {
-            IdMeeting: message.IdMeeting,
-            IdUser: message.IdUser,
-            Answer: 'readed',
-          },
-        })
-        .subscribe({
-          next: () => {
-            this.messagesNotification = []
-            this.dataService.sendData(this.messagesNotification.length)
-          },
-          error: () => {
-            this.alert.alertNotOk()
-          },
-        })
+    if (this.messages.filter((message) => message.Answer === null).length > 0) {
+      for (let message of this.messages.filter(
+        (message) => message.Answer === null
+      )) {
+        this.isReady = false
+        this.messagesApi
+          .updateAnswerMessageAsync({
+            getMessageRequest: {
+              IdMeeting: message.IdMeeting,
+              IdUser: message.IdUser,
+              Answer: 'readed',
+            },
+          })
+          .subscribe({
+            next: () => {
+              this.dataService.sendData(0)
+            },
+            error: () => {
+              this.alert.alertNotOk()
+            },
+          })
+      }
+    } else {
+      this.dataService.sendData(0)
     }
   }
 
   getDetails() {
-    if (this.selectedSegment == 'meetings') {
+    if (this.selectedSegment == 'meetings' && this.visitedMeetings) {
       this.messagesApi
         .getAllMessages({
           idUser: this.userService.loggedUser.ID_USER,
@@ -176,14 +182,17 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
               (message) =>
                 message.Answer === 'readed' || message.Answer === null
             )
+            this.updateNotification()
+            this.visitedMeetings = false
             this.isReady = true
           },
           error: () => {
             this.alert.alertNotOk()
             this.isReady = true
+            this.visitedMeetings = false
           },
         })
-    } else if (this.selectedSegment == 'groups') {
+    } else if (this.selectedSegment == 'groups' && this.visitedGroups) {
       this.groupInvite
         .getGroupInviteByIdUserAsync({
           userId: Number(this.userService.loggedUser.ID_USER),
@@ -192,10 +201,12 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
           next: (response) => {
             this.invite = response
             this.isReady = true
+            this.visitedGroups = false
           },
           error: () => {
             this.alert.alertNotOk()
             this.isReady = true
+            this.visitedGroups = false
           },
         })
     }
@@ -207,18 +218,21 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
     )
     this.selectedSegment = select
     this.leave()
+    this.getDetails()
   }
 
   swiperSlideChange() {
     if (this.swiperContainer.nativeElement.swiper.activeIndex != null) {
       this.selectedSegment =
         this.segmentList[this.swiperContainer.nativeElement.swiper.activeIndex]
+      this.leave()
+      this.getDetails()
     }
-    this.leave()
   }
 
   handleRefresh($event: IonRefresherCustomEvent<RefresherEventDetail>) {
     setTimeout(() => {
+      this.leave()
       this.reload()
       $event.target.complete()
     }, 2000)

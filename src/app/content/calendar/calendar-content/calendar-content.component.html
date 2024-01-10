@@ -1,8 +1,5 @@
-@if(!isReady){
-<div style="text-align: center">
-  <ion-spinner color="primary" name="crescent"> </ion-spinner>
-</div>
-} @if(isReady){
+<app-spinner [isReady]="!isReady"></app-spinner>
+@if(isReady){
 <ion-content class="ion-padding">
   <ion-list [inset]="true">
     <ion-datetime

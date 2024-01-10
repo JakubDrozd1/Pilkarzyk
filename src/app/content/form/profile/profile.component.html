@@ -1,8 +1,5 @@
-@if(!isReady){
-<div style="text-align: center">
-  <ion-spinner color="primary" name="crescent"> </ion-spinner>
-</div>
-}
+<app-spinner [isReady]="!isReady"></app-spinner>
+
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">

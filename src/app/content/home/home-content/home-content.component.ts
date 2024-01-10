@@ -27,6 +27,7 @@ import { UserService } from 'src/app/service/user/user.service'
 import { SwiperContainer } from 'swiper/element'
 import { IonRefresherCustomEvent } from '@ionic/core'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
 
 @Component({
   selector: 'app-home-content',
@@ -41,6 +42,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
     FormsModule,
     MessageWaitingContentComponent,
     TranslateModule,
+    SpinnerComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

@@ -15,20 +15,22 @@ import { UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { UserService } from 'src/app/service/user/user.service'
+import { SpinnerComponent } from "../../../helper/spinner/spinner.component";
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    IonicModule,
-    MaskitoModule,
-    ReactiveFormsModule,
-    FormsModule,
-    TranslateModule,
-  ],
+    selector: 'app-profile',
+    templateUrl: './profile.component.html',
+    styleUrls: ['./profile.component.scss'],
+    standalone: true,
+    imports: [
+        CommonModule,
+        IonicModule,
+        MaskitoModule,
+        ReactiveFormsModule,
+        FormsModule,
+        TranslateModule,
+        SpinnerComponent
+    ]
 })
 export class ProfileComponent implements OnInit {
   @Input() inputEdit: string = ''

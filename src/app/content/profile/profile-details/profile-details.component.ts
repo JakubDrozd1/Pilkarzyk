@@ -13,13 +13,14 @@ import { convertFileToBase64 } from 'src/app/helper/convertFileToBase64'
 import { NotificationService } from 'src/app/service/notification/notification.service'
 import { UserService } from 'src/app/service/user/user.service'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { SpinnerComponent } from "../../../helper/spinner/spinner.component";
 
 @Component({
-  selector: 'app-profile-details',
-  templateUrl: './profile-details.component.html',
-  styleUrls: ['./profile-details.component.scss'],
-  standalone: true,
-  imports: [CommonModule, IonicModule, LogoutComponent, TranslateModule],
+    selector: 'app-profile-details',
+    templateUrl: './profile-details.component.html',
+    styleUrls: ['./profile-details.component.scss'],
+    standalone: true,
+    imports: [CommonModule, IonicModule, LogoutComponent, TranslateModule, SpinnerComponent]
 })
 export class ProfileDetailsComponent implements OnInit {
   user: USERS | undefined

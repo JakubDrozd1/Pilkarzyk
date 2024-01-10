@@ -29,6 +29,7 @@ import { UserService } from 'src/app/service/user/user.service'
 import { SwiperContainer } from 'swiper/element'
 import { IonRefresherCustomEvent, RefresherEventDetail } from '@ionic/core'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
 
 @Component({
   selector: 'app-groups-content',
@@ -43,6 +44,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
     FormsModule,
     GroupsUserListComponent,
     TranslateModule,
+    SpinnerComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -60,6 +62,9 @@ export class GroupsContentComponent implements OnInit {
   groupUser!: GetGroupsUsersResponse
   segmentList: Array<string> = ['meetings', 'members', 'ranking']
   selectedSegment: string = this.segmentList[0]
+  visitedMeetings: boolean = true
+  visitedMembers: boolean = true
+  visitedRanking: boolean = true
 
   constructor(
     private route: ActivatedRoute,
@@ -77,8 +82,7 @@ export class GroupsContentComponent implements OnInit {
     this.subscription.add(
       this.refreshDataService.refreshSubject.subscribe((index) => {
         if (index === 'groups-content') {
-          this.isReady = false
-          this.getDetails()
+          this.reload()
         }
       })
     )
@@ -91,7 +95,7 @@ export class GroupsContentComponent implements OnInit {
   }
 
   getDetails() {
-    if (this.selectedSegment == 'meetings') {
+    if (this.selectedSegment == 'meetings' && this.visitedMeetings) {
       this.isReady = false
       this.meetings = []
       forkJoin({
@@ -107,40 +111,17 @@ export class GroupsContentComponent implements OnInit {
         group: this.groupsApi.getGroupById({
           groupId: this.idGroup ?? 0,
         }),
-      }).subscribe({
-        next: (responses) => {
-          this.meetings = responses.meetings
-          this.nameGroup = responses.group.NAME
-          this.isReady = true
-        },
-        error: () => {
-          this.alert.alertNotOk()
-          this.groupsUsers = []
-          this.meetings = []
-          this.nameGroup = ''
-          this.isReady = true
-        },
-      })
-    } else if (this.selectedSegment == 'members') {
-      this.groupsUsers = []
-      this.isReady = false
-      forkJoin({
-        groupsUsers: this.groupsUsersApi.getAllGroupsFromUserAsync({
-          page: 0,
-          onPage: -1,
-          sortColumn: 'SURNAME',
-          sortMode: 'ASC',
-          idGroup: this.idGroup,
-        }),
         groupUser: this.groupsUsersApi.getUserWithGroup({
           userId: Number(this.userService.loggedUser.ID_USER),
           groupId: this.idGroup ?? 0,
         }),
       }).subscribe({
         next: (responses) => {
-          this.groupsUsers = responses.groupsUsers
+          this.meetings = responses.meetings
+          this.nameGroup = responses.group.NAME
           this.groupUser = responses.groupUser
           this.isReady = true
+          this.visitedMeetings = false
         },
         error: () => {
           this.alert.alertNotOk()
@@ -148,8 +129,35 @@ export class GroupsContentComponent implements OnInit {
           this.meetings = []
           this.nameGroup = ''
           this.isReady = true
+          this.visitedMeetings = false
         },
       })
+    } else if (this.selectedSegment == 'members' && this.visitedMembers) {
+      this.groupsUsers = []
+      this.isReady = false
+      this.groupsUsersApi
+        .getAllGroupsFromUserAsync({
+          page: 0,
+          onPage: -1,
+          sortColumn: 'SURNAME',
+          sortMode: 'ASC',
+          idGroup: this.idGroup,
+        })
+        .subscribe({
+          next: (response) => {
+            this.groupsUsers = response
+            this.isReady = true
+            this.visitedMembers = false
+          },
+          error: () => {
+            this.alert.alertNotOk()
+            this.groupsUsers = []
+            this.meetings = []
+            this.nameGroup = ''
+            this.isReady = true
+            this.visitedMembers = false
+          },
+        })
     }
   }
 
@@ -192,20 +200,29 @@ export class GroupsContentComponent implements OnInit {
       this.segmentList.indexOf(select)
     )
     this.selectedSegment = select
+    this.getDetails()
   }
 
   swiperSlideChange() {
     if (this.swiperContainer.nativeElement.swiper.activeIndex != null) {
       this.selectedSegment =
         this.segmentList[this.swiperContainer.nativeElement.swiper.activeIndex]
+      this.getDetails()
     }
   }
 
   handleRefresh($event: IonRefresherCustomEvent<RefresherEventDetail>) {
     setTimeout(() => {
-      this.isReady = false
-      this.getDetails()
+      this.reload()
       $event.target.complete()
     }, 2000)
+  }
+
+  reload() {
+    this.isReady = false
+    this.visitedMeetings = true
+    this.visitedMembers = true
+    this.visitedRanking = true
+    this.getDetails()
   }
 }

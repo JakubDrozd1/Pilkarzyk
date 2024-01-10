@@ -18,21 +18,23 @@ import { GroupInvitesApi, GroupsApi, USERS, UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { UserService } from 'src/app/service/user/user.service'
+import { SpinnerComponent } from "../../../helper/spinner/spinner.component";
 
 @Component({
-  selector: 'app-users',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    IonicModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MaskitoModule,
-    RouterLink,
-    TranslateModule,
-  ],
+    selector: 'app-users',
+    templateUrl: './users.component.html',
+    styleUrls: ['./users.component.scss'],
+    standalone: true,
+    imports: [
+        CommonModule,
+        IonicModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MaskitoModule,
+        RouterLink,
+        TranslateModule,
+        SpinnerComponent
+    ]
 })
 export class UsersComponent implements OnInit {
   @Input() idGroup: number = 0

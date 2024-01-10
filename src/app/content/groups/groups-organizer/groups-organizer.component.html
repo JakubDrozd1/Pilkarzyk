@@ -6,11 +6,8 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  @if(!isReady){
-  <div style="text-align: center">
-    <ion-spinner color="primary" name="crescent"> </ion-spinner>
-  </div>
-  } @if(isReady){
+  <app-spinner [isReady]="!isReady"></app-spinner>
+  @if(isReady){
   <ion-list>
     <ion-card>
       @for (item of groupsUsers; track $index) {

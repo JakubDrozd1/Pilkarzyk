@@ -79,8 +79,9 @@ export class GroupsInviteComponent implements OnInit {
               })
               .subscribe({
                 next: () => {
-                  this.alert.alertOk('Pomyslnie dołaczono')
-                  this.translate.instant('Invited successfully')
+                  this.alert.alertOk(
+                    this.translate.instant('Successfully joined')
+                  )
                   this.refreshDataService.refresh('notification')
                   this.getDetails()
                 },

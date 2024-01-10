@@ -11,47 +11,47 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-@if(userService.loggedUser && groupUser){ @if(userService.loggedUser.IS_ADMIN ||
-groupUser.AccountType){
-<ion-fab slot="fixed" vertical="bottom" horizontal="end">
-  <ion-fab-button>
-    <ion-icon name="add"></ion-icon>
-  </ion-fab-button>
-  <ion-fab-list side="top">
-    <ion-fab-button expand="block" (click)="openModalAddMeeting()">
-      <ion-icon size="large" name="chatbubbles-outline"> </ion-icon>
-    </ion-fab-button>
-    <ion-fab-button expand="block" (click)="openModalAddUser()">
-      <ion-icon size="large" name="person-add-outline"> </ion-icon>
-    </ion-fab-button>
-    @if(userService.loggedUser.IS_ADMIN){
-    <ion-fab-button expand="block" (click)="openModalAddOrganizer()">
-      <ion-icon
-        size="large"
-        name="settings-outline"
-      ></ion-icon> </ion-fab-button
-    >}
-  </ion-fab-list>
-</ion-fab>
-} }
-
-<ion-segment
-  [(ngModel)]="selectedSegment"
-  (ngModelChange)="onSegmentChange(selectedSegment)"
-  swipeGesture="true"
->
-  <ion-segment-button vertical="top" value="meetings">
-    <ion-label>{{ "Meetings" | translate }}</ion-label>
-  </ion-segment-button>
-  <ion-segment-button vertical="top" value="members">
-    <ion-label>{{ "Members" | translate }}</ion-label>
-  </ion-segment-button>
-  <ion-segment-button vertical="top" value="ranking">
-    <ion-label>{{ "Ranking" | translate }}</ion-label>
-  </ion-segment-button>
-</ion-segment>
-
 <ion-content>
+  @if(isReady){ @if(userService.loggedUser != null && groupUser!= null){
+  @if(userService.loggedUser.IS_ADMIN || groupUser.AccountType){
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button expand="block" (click)="openModalAddMeeting()">
+        <ion-icon size="large" name="chatbubbles-outline"> </ion-icon>
+      </ion-fab-button>
+      <ion-fab-button expand="block" (click)="openModalAddUser()">
+        <ion-icon size="large" name="person-add-outline"> </ion-icon>
+      </ion-fab-button>
+      @if(userService.loggedUser.IS_ADMIN){
+      <ion-fab-button expand="block" (click)="openModalAddOrganizer()">
+        <ion-icon
+          size="large"
+          name="settings-outline"
+        ></ion-icon> </ion-fab-button
+      >}
+    </ion-fab-list>
+  </ion-fab>
+  } } }
+
+  <ion-segment
+    [(ngModel)]="selectedSegment"
+    (ngModelChange)="onSegmentChange(selectedSegment)"
+    swipeGesture="true"
+  >
+    <ion-segment-button vertical="top" value="meetings">
+      <ion-label>{{ "Meetings" | translate }}</ion-label>
+    </ion-segment-button>
+    <ion-segment-button vertical="top" value="members">
+      <ion-label>{{ "Members" | translate }}</ion-label>
+    </ion-segment-button>
+    <ion-segment-button vertical="top" value="ranking">
+      <ion-label>{{ "Ranking" | translate }}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
   <ion-refresher
     slot="fixed"
     [pullFactor]="0.5"
@@ -59,13 +59,11 @@ groupUser.AccountType){
     [pullMax]="200"
     (ionRefresh)="handleRefresh($event)"
   >
-    <ion-refresher-content></ion-refresher-content>
+    <app-spinner [isReady]="true"></app-spinner>
   </ion-refresher>
-  @if(!isReady){
-  <div style="text-align: center">
-    <ion-spinner color="primary" name="crescent"> </ion-spinner>
-  </div>
-  }
+
+  <app-spinner [isReady]="!isReady"></app-spinner>
+
   <swiper-container
     #swiperContainer
     (swiperslidechange)="swiperSlideChange()"
@@ -91,11 +89,15 @@ groupUser.AccountType){
         }
       </ion-list>
       }@else{
-      <ion-item class="header" lines="none">{{ "No members" | translate }}</ion-item>
+      <ion-item class="header" lines="none">{{
+        "No members" | translate
+      }}</ion-item>
       }}
     </swiper-slide>
     <swiper-slide>
-      <ion-item class="header" lines="none">{{ "No ranking" | translate }}</ion-item>
+      <ion-item class="header" lines="none">{{
+        "No ranking" | translate
+      }}</ion-item>
     </swiper-slide>
   </swiper-container>
 </ion-content>

@@ -1,9 +1,6 @@
 <ion-content class="ion-padding">
-  @if(!isReady){
-  <div style="text-align: center">
-    <ion-spinner color="primary" name="crescent"> </ion-spinner>
-  </div>
-  } @if(isReady){
+  <app-spinner [isReady]="!isReady"></app-spinner>
+  @if(isReady){
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <ion-list [inset]="true">
       <ion-item lines="none">

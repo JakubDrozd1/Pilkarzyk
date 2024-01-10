@@ -65,7 +65,7 @@ export interface UpdateMeetingRequestParams {
 })
 export class MeetingsApi {
 
-    protected basePath = 'http://192.168.88.20:45455';
+    protected basePath = 'https://192.168.88.224:27885';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
     public encoder: HttpParameterCodec;

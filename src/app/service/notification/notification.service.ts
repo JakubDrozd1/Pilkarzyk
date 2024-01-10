@@ -8,6 +8,7 @@ import {
   ScheduleOptions,
 } from '@capacitor/local-notifications'
 import { UsersMeetingsApi } from 'libs/api-client'
+import { TranslateService } from '@ngx-translate/core'
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,10 @@ export class NotificationService {
     meetingid: number
   }>({ userid: 0, meetingid: 0 })
 
-  constructor(private usersMeetingsApi: UsersMeetingsApi) {
+  constructor(
+    private usersMeetingsApi: UsersMeetingsApi,
+    private translate: TranslateService
+  ) {
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(AppConfig.settings.apiEndpoint + 'notify', {
         skipNegotiation: true,
@@ -49,12 +53,14 @@ export class NotificationService {
                 let options: ScheduleOptions = {
                   notifications: [
                     {
-                      id: 111,
-                      title: 'Nowe zaproszenie do spotkania',
+                      id: response.IdMeeting ?? 0,
+                      title: this.translate.instant('New meeting invitation'),
                       body: formattedDate + ' ' + String(response.Description),
                       largeBody:
                         formattedDate + ' ' + String(response.Description),
-                      summaryText: 'Kliknij, aby odpowiedzieć',
+                      summaryText: this.translate.instant('Click to reply'),
+                      group: 'Notification',
+                      groupSummary: true,
                     },
                   ],
                 }
@@ -77,10 +83,10 @@ export class NotificationService {
       notifications: [
         {
           id: 111,
-          title: 'jd',
-          body: 'xpp',
-          largeBody: 'get ',
-          summaryText: 'masno ni',
+          title: '',
+          body: '',
+          largeBody: '',
+          summaryText: '',
         },
       ],
     }

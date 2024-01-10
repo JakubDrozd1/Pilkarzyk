@@ -19,21 +19,21 @@ import * as moment from 'moment'
 import { Observable } from 'rxjs'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
-import { SpinnerComponent } from "../../../helper/spinner/spinner.component";
+import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 
 @Component({
-    selector: 'app-meeting',
-    templateUrl: './meeting.component.html',
-    styleUrls: ['./meeting.component.scss'],
-    standalone: true,
-    imports: [
-        CommonModule,
-        IonicModule,
-        ReactiveFormsModule,
-        FormsModule,
-        TranslateModule,
-        SpinnerComponent
-    ]
+  selector: 'app-meeting',
+  templateUrl: './meeting.component.html',
+  styleUrls: ['./meeting.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    IonicModule,
+    ReactiveFormsModule,
+    FormsModule,
+    TranslateModule,
+    SpinnerComponent,
+  ],
 })
 export class MeetingComponent implements OnInit {
   @Input() idGroup: number = 0
@@ -75,6 +75,7 @@ export class MeetingComponent implements OnInit {
   }
 
   getGroupUsers() {
+    this.isReady = false
     this.groupsUsersApi
       .getAllGroupsFromUserAsync({
         page: 0,
@@ -128,27 +129,15 @@ export class MeetingComponent implements OnInit {
                   this.refreshDataService.refresh('groups-content')
                   this.cancel()
                 },
-                error: (userError) => {
-                  if (userError.error.includes('Event already exists')) {
-                    this.alert.alertNotOk(
-                      this.translate.instant('Event already exists')
-                    )
-                  } else {
-                    this.alert.alertNotOk()
-                  }
+                error: () => {
+                  this.alert.alertNotOk()
                   this.cancel()
                   this.isReady = true
                 },
               })
           },
-          error: (meetingError) => {
-            if (meetingError.error.includes('Event already exists')) {
-              this.alert.alertNotOk(
-                this.translate.instant('Event already exists')
-              )
-            } else {
-              this.alert.alertNotOk()
-            }
+          error: () => {
+            this.alert.alertNotOk()
             this.cancel()
             this.isReady = true
           },

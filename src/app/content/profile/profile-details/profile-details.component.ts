@@ -13,14 +13,20 @@ import { convertFileToBase64 } from 'src/app/helper/convertFileToBase64'
 import { NotificationService } from 'src/app/service/notification/notification.service'
 import { UserService } from 'src/app/service/user/user.service'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
-import { SpinnerComponent } from "../../../helper/spinner/spinner.component";
+import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 
 @Component({
-    selector: 'app-profile-details',
-    templateUrl: './profile-details.component.html',
-    styleUrls: ['./profile-details.component.scss'],
-    standalone: true,
-    imports: [CommonModule, IonicModule, LogoutComponent, TranslateModule, SpinnerComponent]
+  selector: 'app-profile-details',
+  templateUrl: './profile-details.component.html',
+  styleUrls: ['./profile-details.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    IonicModule,
+    LogoutComponent,
+    TranslateModule,
+    SpinnerComponent,
+  ],
 })
 export class ProfileDetailsComponent implements OnInit {
   user: USERS | undefined
@@ -29,6 +35,34 @@ export class ProfileDetailsComponent implements OnInit {
   isReady: boolean = false
   temp: string = ''
   private subscription: Subscription = new Subscription()
+  pickerColumns = [
+    {
+      name: 'languages',
+      options: [
+        {
+          text: this.translate.instant('Polish'),
+          value: 'pl',
+        },
+        {
+          text: this.translate.instant('English'),
+          value: 'en',
+        },
+      ],
+    },
+  ]
+  pickerButtons = [
+    {
+      text: this.translate.instant('Cancel'),
+      role: 'cancel',
+    },
+    {
+      text: 'Ok',
+      handler: (value: { languages: { value: any } }) => {
+        localStorage.setItem('lang', value.languages.value)
+        window.location.reload()
+      },
+    },
+  ]
 
   constructor(
     private usersApi: UsersApi,

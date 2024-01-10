@@ -94,5 +94,10 @@
   "Registration": "Rejestracja",
   "You have successfully changed your avatar.": "Udało się zmienić avatar.",
   "The file is too large (max 5MB)": "Plik jest za duży (maks 5MB)",
-  "Date of meeting": "Data spotkania"
+  "Date of meeting": "Data spotkania",
+  "Click to reply": "Kliknij, aby odpowiedzieć",
+  "New meeting invitation": "Nowe zaproszenie do spotkania",
+  "Language": "Język",
+  "Polish": "Polski",
+  "English": "Angielski"
 }

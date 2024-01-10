@@ -59,6 +59,8 @@ export class HomeContentComponent implements OnInit, OnDestroy {
   messages: GetMessagesUsersMeetingsResponse[] = []
   segmentList: Array<string> = ['waiting', 'meetings']
   selectedSegment: string = this.segmentList[0]
+  visitedWaiting: boolean = true
+  visitedMeetings: boolean = true
 
   constructor(
     private usersMeetingsApi: UsersMeetingsApi,
@@ -95,7 +97,7 @@ export class HomeContentComponent implements OnInit, OnDestroy {
   }
 
   getDetails() {
-    if (this.selectedSegment == 'waiting') {
+    if (this.selectedSegment == 'waiting' && this.visitedWaiting) {
       this.meetingsWaiting = []
       this.usersMeetingsApi
         .getListMeetingsUsersAsync({
@@ -111,13 +113,15 @@ export class HomeContentComponent implements OnInit, OnDestroy {
           next: (response) => {
             this.meetingsWaiting = response
             this.isReady = true
+            this.visitedWaiting = false
           },
           error: () => {
             this.alert.alertNotOk()
             this.isReady = true
+            this.visitedWaiting = false
           },
         })
-    } else if (this.selectedSegment == 'meetings') {
+    } else if (this.selectedSegment == 'meetings' && this.visitedMeetings) {
       this.meetings = []
       const startOfDay = moment().startOf('day').format()
       const endOfDay = moment().endOf('day').format()
@@ -136,10 +140,12 @@ export class HomeContentComponent implements OnInit, OnDestroy {
           next: (response) => {
             this.meetings = response
             this.isReady = true
+            this.visitedMeetings = false
           },
           error: () => {
             this.alert.alertNotOk()
             this.isReady = true
+            this.visitedMeetings = false
           },
         })
     }
@@ -147,6 +153,8 @@ export class HomeContentComponent implements OnInit, OnDestroy {
 
   reload() {
     this.isReady = false
+    this.visitedWaiting = true
+    this.visitedMeetings = true
     this.getDetails()
   }
 

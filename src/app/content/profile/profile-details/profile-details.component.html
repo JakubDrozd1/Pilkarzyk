@@ -54,6 +54,23 @@
         <ion-label>{{ "Notifications" | translate }}</ion-label>
       </ion-item>
     </ion-card-content>
+    <ion-card-content>
+      <ion-item
+        lines="full"
+        id="open-picker-language"
+        button
+        detail="true"
+        class="title"
+      >
+        <ion-picker
+          trigger="open-picker-language"
+          [columns]="pickerColumns"
+          [buttons]="pickerButtons"
+        ></ion-picker>
+
+        <ion-label>{{ "Language" | translate }}</ion-label>
+      </ion-item>
+    </ion-card-content>
   </ion-card>
   <ion-card>
     <ion-card-header>

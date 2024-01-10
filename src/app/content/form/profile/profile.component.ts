@@ -10,22 +10,27 @@ import {
 import { IonicModule, ModalController } from '@ionic/angular'
 import { MaskitoModule } from '@maskito/angular'
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
+import { UserService } from 'src/app/service/user/user.service'
+import { SpinnerComponent } from "../../../helper/spinner/spinner.component";
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    IonicModule,
-    MaskitoModule,
-    ReactiveFormsModule,
-    FormsModule,
-  ],
+    selector: 'app-profile',
+    templateUrl: './profile.component.html',
+    styleUrls: ['./profile.component.scss'],
+    standalone: true,
+    imports: [
+        CommonModule,
+        IonicModule,
+        MaskitoModule,
+        ReactiveFormsModule,
+        FormsModule,
+        TranslateModule,
+        SpinnerComponent
+    ]
 })
 export class ProfileComponent implements OnInit {
   @Input() inputEdit: string = ''
@@ -38,18 +43,18 @@ export class ProfileComponent implements OnInit {
     (el as HTMLIonInputElement).getInputElement()
   profileForm!: FormGroup
   isReady: boolean = true
-  idUser: number = 0
 
   constructor(
     private fb: FormBuilder,
     private modalCtrl: ModalController,
     private alert: Alert,
     private usersApi: UsersApi,
-    private refreshDataService: RefreshDataService
+    private refreshDataService: RefreshDataService,
+    private userService: UserService,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {
-    this.idUser = Number(localStorage.getItem('user_id'))
     this.inicializeForm()
   }
 
@@ -129,12 +134,12 @@ export class ProfileComponent implements OnInit {
   }
 
   onSubmit() {
-    this.isReady = false
     this.profileForm.markAllAsTouched()
-
     if (this.profileForm.valid) {
+      this.isReady = false
+
       let updateColumnUserRequest: any = {
-        userId: this.idUser,
+        userId: this.userService.loggedUser.ID_USER,
       }
       switch (this.inputEdit) {
         case 'mail':
@@ -178,10 +183,12 @@ export class ProfileComponent implements OnInit {
         next: () => {
           this.refreshDataService.refresh('profile-details')
           this.cancel()
-          this.alert.alertOk('Zaktualizowano pomyślnie')
+          this.alert.alertOk(this.translate.instant('Updated successfully'))
+        },
+        error: () => {
+          this.alert.alertNotOk()
           this.isReady = true
         },
-        error: () => this.alert.alertNotOk(),
       })
     }
   }

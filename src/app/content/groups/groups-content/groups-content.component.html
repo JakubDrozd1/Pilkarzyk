@@ -11,79 +11,93 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-@if(loggedUser){ @if(loggedUser.AccountType==1){
-<ion-fab slot="fixed" vertical="bottom" horizontal="end">
-  <ion-fab-button>
-    <ion-icon name="add"></ion-icon>
-  </ion-fab-button>
-  <ion-fab-list side="top">
-    <ion-fab-button expand="block" (click)="openModalAddMeeting()">
-      <ion-icon size="large" name="chatbubbles-outline"> </ion-icon>
-    </ion-fab-button>
-    <ion-fab-button expand="block" (click)="openModalAddUser()">
-      <ion-icon size="large" name="person-add-outline"> </ion-icon>
-    </ion-fab-button>
-  </ion-fab-list>
-</ion-fab>
-} } @if(!isReady){
-<div style="text-align: center">
-  <ion-spinner color="primary" name="crescent"> </ion-spinner>
-</div>
-}
-
-<ion-segment [(ngModel)]="selectedSegment" swipeGesture="true">
-  <ion-segment-button vertical="top" value="meetings">
-    <ion-label>Spotkania</ion-label>
-  </ion-segment-button>
-  <ion-segment-button vertical="top" value="members">
-    <ion-label>Członkowie</ion-label>
-  </ion-segment-button>
-  <ion-segment-button vertical="top" value="ranking">
-    <ion-label>Ranking</ion-label>
-  </ion-segment-button>
-</ion-segment>
 <ion-content>
-  @if(isReady){ @switch (selectedSegment) { @case ("meetings") {
-  <ion-list>
-    @if(meetings.length!=0){ @for (item of meetings; track $index) {
-    <app-meeting-content [meeting]="item"></app-meeting-content>
-    }} @else {
-    <ion-item lines="none">Brak nadchodzących spotkań</ion-item>
-    }
-  </ion-list>
-  } @case ("members") {
-  <ion-list>
-    <ion-card>
-      @for (item of groupsUsers; track $index) {
-      <ion-card-header>
-        <ion-card-title>
-          {{ item.Login }}
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-item lines="full" class="title">
-          @if(images[$index] === '0'){
-          <ion-avatar slot="start">
-            <img
-              alt="img"
-              src="https://ionicframework.com/docs/img/demos/avatar.svg"
-            />
-          </ion-avatar>
-          } @else {
-          <ion-avatar slot="start">
-            <img alt="img" [src]="images[$index]" />
-          </ion-avatar>
-          }
-          <ion-label> {{ item.Firstname }} {{ item.Surname }} </ion-label>
-          @if(item.PhoneNumber!=null){
-          {{ item.PhoneNumber.toString().slice(0, 3) }}-{{
-            item.PhoneNumber.toString().slice(3, 6)
-          }}-{{ item.PhoneNumber.toString().slice(6) }}
-          }
-        </ion-item>
-      </ion-card-content>
-      }
-    </ion-card>
-  </ion-list>
+  @if(isReady){ @if(userService.loggedUser != null && groupUser!= null){
+  @if(userService.loggedUser.IS_ADMIN || groupUser.AccountType){
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button expand="block" (click)="openModalAddMeeting()">
+        <ion-icon size="large" name="chatbubbles-outline"> </ion-icon>
+      </ion-fab-button>
+      <ion-fab-button expand="block" (click)="openModalAddUser()">
+        <ion-icon size="large" name="person-add-outline"> </ion-icon>
+      </ion-fab-button>
+      @if(userService.loggedUser.IS_ADMIN){
+      <ion-fab-button expand="block" (click)="openModalAddOrganizer()">
+        <ion-icon
+          size="large"
+          name="settings-outline"
+        ></ion-icon> </ion-fab-button
+      >}
+    </ion-fab-list>
+  </ion-fab>
   } } }
+
+  <ion-segment
+    [(ngModel)]="selectedSegment"
+    (ngModelChange)="onSegmentChange(selectedSegment)"
+    swipeGesture="true"
+  >
+    <ion-segment-button vertical="top" value="meetings">
+      <ion-label>{{ "Meetings" | translate }}</ion-label>
+    </ion-segment-button>
+    <ion-segment-button vertical="top" value="members">
+      <ion-label>{{ "Members" | translate }}</ion-label>
+    </ion-segment-button>
+    <ion-segment-button vertical="top" value="ranking">
+      <ion-label>{{ "Ranking" | translate }}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-refresher
+    slot="fixed"
+    [pullFactor]="0.5"
+    [pullMin]="100"
+    [pullMax]="200"
+    (ionRefresh)="handleRefresh($event)"
+  >
+    <app-spinner [isReady]="true"></app-spinner>
+  </ion-refresher>
+
+  <app-spinner [isReady]="!isReady"></app-spinner>
+
+  <swiper-container
+    #swiperContainer
+    (swiperslidechange)="swiperSlideChange()"
+    appSwiper
+  >
+    <swiper-slide>
+      @if(isReady){ @if(meetings.length>0){ @for (item of meetings; track
+      $index) {
+      <ion-list>
+        <app-meeting-content [meeting]="item"></app-meeting-content>
+      </ion-list>
+      } } @else {
+      <ion-item class="header" lines="none">
+        {{ "No upcoming meetings" | translate }}
+      </ion-item>
+      } }
+    </swiper-slide>
+    <swiper-slide>
+      @if(isReady){ @if(groupsUsers.length>0){
+      <ion-list>
+        @for (item of groupsUsers; track $index) {
+        <app-groups-user-list [user]="item"></app-groups-user-list>
+        }
+      </ion-list>
+      }@else{
+      <ion-item class="header" lines="none">{{
+        "No members" | translate
+      }}</ion-item>
+      }}
+    </swiper-slide>
+    <swiper-slide>
+      <ion-item class="header" lines="none">{{
+        "No ranking" | translate
+      }}</ion-item>
+    </swiper-slide>
+  </swiper-container>
 </ion-content>

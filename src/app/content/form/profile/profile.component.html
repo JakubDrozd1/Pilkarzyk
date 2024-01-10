@@ -1,12 +1,11 @@
-@if(!isReady){
-<div style="text-align: center">
-  <ion-spinner color="primary" name="crescent"> </ion-spinner>
-</div>
-}
+<app-spinner [isReady]="!isReady"></app-spinner>
+
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button color="medium" (click)="cancel()">Anuluj</ion-button>
+      <ion-button color="medium" (click)="cancel()">
+        {{ "Cancel" | translate }}
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -17,11 +16,11 @@
     <ion-list [inset]="true">
       <ion-item lines="none">
         <ion-input
-          errorText="Zły format maila"
+          [errorText]="'Incorrect email format' | translate"
           formControlName="email"
           inputmode="email"
           labelPlacement="floating"
-          label="Email"
+          [label]="'Email' | translate"
           type="email"
           placeholder="email@domain.com"
         >
@@ -32,10 +31,10 @@
     <ion-list [inset]="true">
       <ion-item lines="none">
         <ion-input
-          errorText="Numer jest za krótki"
+          [errorText]="'Number is too short' | translate"
           formControlName="phoneNumber"
           labelPlacement="floating"
-          label="Numer telefonu"
+          [label]="'Phone number ' | translate"
           placeholder="xxx-xxx-xxx"
           [maskito]="phoneMask"
           [maskitoElement]="maskPredicate"
@@ -49,10 +48,10 @@
       <ion-item lines="none">
         <ion-input
           maxlength="25"
-          errorText="Login jest za krótki"
+          [errorText]="'Login is too short' | translate"
           formControlName="login"
           labelPlacement="floating"
-          label="Login"
+          [label]="'Login' | translate"
         >
         </ion-input>
       </ion-item>
@@ -61,25 +60,27 @@
     <ion-list [inset]="true">
       <ion-item lines="none">
         <ion-input
-          errorText="Imię nie może mieć cyfr"
+          [errorText]="'First name cannot have digits' | translate"
           formControlName="firstname"
           labelPlacement="floating"
-          label="Imię"
+          [label]="'First name' | translate"
         >
         </ion-input>
       </ion-item>
       <ion-item lines="none">
         <ion-input
-          errorText="Nazwisko nie może mieć cyfr"
+          [errorText]="'Last name cannot have digits' | translate"
           formControlName="surname"
           labelPlacement="floating"
-          label="Nazwisko"
+          [label]="'Last name' | translate"
         >
         </ion-input>
       </ion-item>
     </ion-list>
     } }
-    <ion-button type="submit" expand="full"> Zapisz </ion-button>
+    <ion-button type="submit" expand="full">
+      {{ "Save" | translate }}
+    </ion-button>
   </form>
   }
 </ion-content>

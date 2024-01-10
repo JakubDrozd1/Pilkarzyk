@@ -333,7 +333,7 @@
         "operationId": "AddUserToGroupAsync",
         "parameters": [
           {
-            "name": "IDUSER",
+            "name": "IdUser",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -341,7 +341,7 @@
             }
           },
           {
-            "name": "IDGROUP",
+            "name": "IdGroup",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -349,7 +349,7 @@
             }
           },
           {
-            "name": "ACCOUNT_TYPE",
+            "name": "AccountType",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -711,6 +711,45 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/groups-users/permission": {
+      "put": {
+        "tags": [
+          "GroupsUsers"
+        ],
+        "operationId": "UpdatePermission",
+        "parameters": [
+          {
+            "name": "IdUser",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "IdGroup",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "AccountType",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success"
@@ -2401,6 +2440,11 @@
             "format": "int32",
             "nullable": true
           },
+          "IdGroupUser": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "Avatar": {
             "type": "string",
             "nullable": true
@@ -2429,6 +2473,11 @@
             "nullable": true
           },
           "Quantity": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IdMeeting": {
             "type": "integer",
             "format": "int32",
             "nullable": true
@@ -2627,6 +2676,10 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          },
+          "Avatar": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2762,32 +2815,32 @@
       "GetUpdateUserRequest": {
         "type": "object",
         "properties": {
-          "LOGIN": {
+          "Login": {
             "type": "string",
             "nullable": true
           },
-          "USER_PASSWORD": {
+          "UserPassword": {
             "type": "string",
             "nullable": true
           },
-          "EMAIL": {
+          "Email": {
             "type": "string",
             "nullable": true
           },
-          "FIRSTNAME": {
+          "Firstname": {
             "type": "string",
             "nullable": true
           },
-          "SURNAME": {
+          "Surname": {
             "type": "string",
             "nullable": true
           },
-          "PHONE_NUMBER": {
+          "PhoneNumber": {
             "type": "integer",
             "format": "int32",
             "nullable": true
           },
-          "AVATAR": {
+          "Avatar": {
             "type": "string",
             "format": "byte",
             "nullable": true

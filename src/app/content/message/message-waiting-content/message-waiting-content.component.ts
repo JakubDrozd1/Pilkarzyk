@@ -1,28 +1,46 @@
 import { CommonModule } from '@angular/common'
 import { Component, Input, OnInit } from '@angular/core'
-import { IonicModule } from '@ionic/angular'
-import { GetMeetingUsersResponse, MessagesApi } from 'libs/api-client'
+import { IonicModule, ModalController } from '@ionic/angular'
+import {
+  GetMeetingUsersResponse,
+  GetMessagesUsersMeetingsResponse,
+  MessagesApi,
+} from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { CountdownComponent } from '../../../helper/countdown/countdown.component'
 import * as moment from 'moment'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { MeetingUserListComponent } from '../../meeting/meeting-user-list/meeting-user-list.component'
 
 @Component({
   selector: 'app-message-waiting-content',
   templateUrl: './message-waiting-content.component.html',
   styleUrls: ['./message-waiting-content.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, CountdownComponent],
+  imports: [
+    CommonModule,
+    IonicModule,
+    CountdownComponent,
+    TranslateModule,
+    MeetingUserListComponent,
+  ],
 })
 export class MessageWaitingContentComponent implements OnInit {
   @Input() message!: GetMeetingUsersResponse
   currentDate!: Date
   futureDate!: Date
+  acceptMeeting: Number = 0
+  filteredMessages: GetMessagesUsersMeetingsResponse[] = []
+  messages: GetMessagesUsersMeetingsResponse[] = []
+  isReady: boolean = false
 
   constructor(
     private messagesApi: MessagesApi,
     private alert: Alert,
-    private refreshDataService: RefreshDataService
+    private refreshDataService: RefreshDataService,
+    public translate: TranslateService,
+    private modalCtrl: ModalController
   ) {}
 
   ngOnInit() {
@@ -31,6 +49,26 @@ export class MessageWaitingContentComponent implements OnInit {
     if (this.currentDate >= this.futureDate) {
       this.resetMeeting(true)
     }
+    this.isReady = false
+    this.messagesApi
+      .getAllMessages({
+        idMeeting: Number(this.message.IdMeeting),
+        page: 0,
+        onPage: -1,
+      })
+      .subscribe({
+        next: (response) => {
+          this.messages = response
+          this.filteredMessages = response.filter(
+            (message) => message.Answer === 'yes'
+          )
+          this.acceptMeeting = this.filteredMessages.length
+          this.isReady = true
+        },
+        error: () => {
+          this.alert.alertNotOk()
+        },
+      })
   }
 
   onSubmit(answer: string) {
@@ -44,7 +82,7 @@ export class MessageWaitingContentComponent implements OnInit {
       })
       .subscribe({
         next: () => {
-          this.alert.alertOk('Odpowiedziano pomyślnie')
+          this.alert.alertOk(this.translate.instant('Answered successfully'))
           this.refreshDataService.refresh('home')
         },
         error: () => {
@@ -73,5 +111,9 @@ export class MessageWaitingContentComponent implements OnInit {
           },
         })
     }
+  }
+
+  cancel() {
+    return this.modalCtrl.dismiss(null, 'cancel')
   }
 }

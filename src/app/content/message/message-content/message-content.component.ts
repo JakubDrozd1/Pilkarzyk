@@ -1,42 +1,75 @@
 import { CommonModule } from '@angular/common'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { IonicModule, ModalController } from '@ionic/angular'
-import { GetMeetingUsersResponse, MessagesApi } from 'libs/api-client'
-import * as moment from 'moment'
+import {
+  GetMeetingUsersResponse,
+  GetMessagesUsersMeetingsResponse,
+  MessagesApi,
+} from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { MessageAnswerModalComponent } from '../message-answer-modal/message-answer-modal.component'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { MeetingUserListComponent } from '../../meeting/meeting-user-list/meeting-user-list.component'
 
 @Component({
   selector: 'app-message-content',
   templateUrl: './message-content.component.html',
   styleUrls: ['./message-content.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, ReactiveFormsModule, FormsModule],
+  imports: [
+    CommonModule,
+    IonicModule,
+    ReactiveFormsModule,
+    FormsModule,
+    TranslateModule,
+    MeetingUserListComponent,
+  ],
 })
 export class MessageContentComponent implements OnInit {
   @Output() messageUpdate: EventEmitter<GetMeetingUsersResponse> =
     new EventEmitter()
 
   @Input() message!: GetMeetingUsersResponse
+  acceptMeeting: Number = 0
+  filteredMessages: GetMessagesUsersMeetingsResponse[] = []
+  messages: GetMessagesUsersMeetingsResponse[] = []
+  isReady: boolean = true
 
   constructor(
     private messagesApi: MessagesApi,
     private alert: Alert,
     private refreshDataService: RefreshDataService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    public translate: TranslateService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.isReady = false
+    this.messagesApi
+      .getAllMessages({
+        idMeeting: Number(this.message.IdMeeting),
+        page: 0,
+        onPage: -1,
+      })
+      .subscribe({
+        next: (response) => {
+          this.messages = response
+          this.filteredMessages = response.filter(
+            (message) => message.Answer === 'yes'
+          )
+          this.acceptMeeting = this.filteredMessages.length
+          this.isReady = true
+        },
+        error: () => {
+          this.alert.alertNotOk()
+        },
+      })
+  }
 
   onSubmit(answer: string) {
+    this.isReady = false
     this.messagesApi
       .updateAnswerMessageAsync({
         getMessageRequest: {
@@ -47,12 +80,14 @@ export class MessageContentComponent implements OnInit {
       })
       .subscribe({
         next: () => {
-          this.alert.alertOk('Odpowiedziano pomyślnie')
-          this.messageUpdate.emit(this.message)
+          this.alert.alertOk(this.translate.instant('Answered successfully'))
           this.refreshDataService.refresh('notification')
+          this.messageUpdate.emit(this.message)
+          this.isReady = true
         },
         error: () => {
           this.alert.alertNotOk()
+          this.isReady = true
         },
       })
   }
@@ -69,5 +104,9 @@ export class MessageContentComponent implements OnInit {
     modal.onDidDismiss().then((data) => {
       this.messageUpdate.emit(data.data)
     })
+  }
+
+  cancel() {
+    return this.modalCtrl.dismiss(null, 'cancel')
   }
 }

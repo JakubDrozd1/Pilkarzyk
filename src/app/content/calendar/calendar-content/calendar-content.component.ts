@@ -2,30 +2,34 @@ import { CommonModule, DatePipe } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { IonicModule } from '@ionic/angular'
-import { MeetingsApi, UsersMeetingsApi } from 'libs/api-client'
+import {
+  GetMeetingGroupsResponse,
+  MeetingsApi,
+  UsersMeetingsApi,
+} from 'libs/api-client'
 import { MeetingContentComponent } from '../../meeting/meeting-content/meeting-content.component'
 import * as moment from 'moment'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { Subscription } from 'rxjs'
-import { GetMeetingUsersGroupsResponse } from 'libs/api-client/model/get-meeting-users-groups-response'
 import { NotificationService } from 'src/app/service/notification/notification.service'
+import { UserService } from 'src/app/service/user/user.service'
+import { SpinnerComponent } from "../../../helper/spinner/spinner.component";
 
 @Component({
-  selector: 'app-calendar-content',
-  templateUrl: './calendar-content.component.html',
-  styleUrls: ['./calendar-content.component.scss'],
-  standalone: true,
-  imports: [CommonModule, IonicModule, FormsModule, MeetingContentComponent],
-  providers: [DatePipe],
+    selector: 'app-calendar-content',
+    templateUrl: './calendar-content.component.html',
+    styleUrls: ['./calendar-content.component.scss'],
+    standalone: true,
+    providers: [DatePipe],
+    imports: [CommonModule, IonicModule, FormsModule, MeetingContentComponent, SpinnerComponent]
 })
 export class CalendarContentComponent implements OnInit {
-  meetings: GetMeetingUsersGroupsResponse[] = []
-  meetingsSelected: GetMeetingUsersGroupsResponse[] = []
+  meetings: GetMeetingGroupsResponse[] = []
+  meetingsSelected: GetMeetingGroupsResponse[] = []
   isReady: boolean = false
   highlightedDates: any
   selectedDate: string[] | undefined
-  idUser: number = 0
   private subscription: Subscription = new Subscription()
 
   constructor(
@@ -34,7 +38,8 @@ export class CalendarContentComponent implements OnInit {
     private alert: Alert,
     private refreshDataService: RefreshDataService,
     private usersMeetingsApi: UsersMeetingsApi,
-    public notificationService: NotificationService
+    public notificationService: NotificationService,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
@@ -45,7 +50,6 @@ export class CalendarContentComponent implements OnInit {
         }
       })
     )
-    this.idUser = Number(localStorage.getItem('user_id'))
     this.getDetails()
   }
 
@@ -57,7 +61,7 @@ export class CalendarContentComponent implements OnInit {
         onPage: -1,
         sortColumn: 'DATE_MEETING',
         sortMode: 'ASC',
-        idUser: this.idUser,
+        idUser: this.userService.loggedUser.ID_USER,
         answer: 'yes',
       })
       .subscribe({
@@ -122,7 +126,7 @@ export class CalendarContentComponent implements OnInit {
             dateFrom: startOfDay,
             dateTo: endOfDay,
             answer: 'yes',
-            idUser: this.idUser,
+            idUser: this.userService.loggedUser.ID_USER,
           })
           .subscribe({
             next: (response) => {
@@ -142,7 +146,7 @@ export class CalendarContentComponent implements OnInit {
   }
 
   reload() {
-    this.idUser = Number(localStorage.getItem('user_id'))
+    this.isReady = false
     this.getDetails()
   }
 }

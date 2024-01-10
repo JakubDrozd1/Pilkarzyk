@@ -1,17 +1,20 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button color="medium" (click)="cancel()">Anuluj</ion-button>
+      <ion-button color="medium" (click)="cancel()">
+        {{ "Cancel" | translate }}
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-  <ion-button id="open-modal-add-existing-user" expand="block"
-    >Dodaj istniejącego użytkownika</ion-button
-  >
-  <ion-button id="open-modal-add-new-user" expand="block"
-    >Dodaj nowego użytkowanika</ion-button
-  >
+  <ion-button id="open-modal-add-existing-user" expand="block">
+    {{ "Add existing user" | translate }}
+  </ion-button>
+
+  <ion-button id="open-modal-add-new-user" expand="block">
+    {{ "Add new user" | translate }}
+  </ion-button>
 </ion-content>
 
 <ion-modal #modal trigger="open-modal-add-existing-user">
@@ -19,14 +22,16 @@
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-button (click)="cancel()">Anuluj</ion-button>
+          <ion-button (click)="cancel()">{{ "Cancel" | translate }}</ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
+      <app-spinner [isReady]="!isReady"></app-spinner>
+      @if(isReady){
       <form [formGroup]="addExistingUserForm" (ngSubmit)="onSubmitExisting()">
         <ion-list [inset]="true">
-          <ion-label>Zaproś istniejącego użytkownika</ion-label>
+          <ion-label>{{ "Invite an existing user" | translate }}</ion-label>
           <ion-item lines="none">
             <ion-input
               helperText=" "
@@ -43,9 +48,12 @@
             {{ user.FIRSTNAME }} {{ user.SURNAME }}
           </ion-item>
           }
-          <ion-button type="submit" expand="full">Dodaj </ion-button>
+          <ion-button type="submit" expand="full">
+            {{ "Add" | translate }}
+          </ion-button>
         </ion-list>
       </form>
+      }
     </ion-content>
   </ng-template>
 </ion-modal>
@@ -55,23 +63,24 @@
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-button (click)="cancel()">Anuluj</ion-button>
+          <ion-button (click)="cancel()">{{ "Cancel" | translate }}</ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
+      <app-spinner [isReady]="!isReady"></app-spinner>
+      @if(isReady){
       <form [formGroup]="addNewUserForm" (ngSubmit)="onSubmitNew()">
         <ion-list [inset]="true">
-          <ion-label
-            >Zaproś nowego użytkowanika za pomocą emaila lub numeru
-            telefonu</ion-label
-          >
+          <ion-label>
+            {{ "Invite a new user using email or phone number" | translate }}
+          </ion-label>
           <ion-item lines="none">
             <ion-input
-              errorText="Numer jest za krótki"
+              [errorText]="'Number is too short' | translate"
               formControlName="phoneNumber"
               labelPlacement="floating"
-              label="Numer telefonu"
+              [label]="'Phone number' | translate"
               placeholder="xxx-xxx-xxx"
               [maskito]="phoneMask"
               [maskitoElement]="maskPredicate"
@@ -81,19 +90,22 @@
           </ion-item>
           <ion-item lines="none">
             <ion-input
-              errorText="Zły format maila"
+              [errorText]="'Incorrect email format' | translate"
               formControlName="email"
               inputmode="email"
               labelPlacement="floating"
-              label="Email"
+              [label]="'Email' | translate"
               type="email"
               placeholder="email@domain.com"
             >
             </ion-input>
           </ion-item>
-          <ion-button type="submit" expand="full">Dodaj </ion-button>
+          <ion-button type="submit" expand="full">
+            {{ "Add" | translate }}
+          </ion-button>
         </ion-list>
       </form>
+      }
     </ion-content>
   </ng-template>
 </ion-modal>

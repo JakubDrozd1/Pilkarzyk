@@ -10,23 +10,33 @@ import {
 import { Router } from '@angular/router'
 import { JwtHelperService } from '@auth0/angular-jwt'
 import { IonicModule } from '@ionic/angular'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { TokenApi, UsersApi } from 'libs/api-client'
 import { forkJoin } from 'rxjs'
 import { Alert } from 'src/app/helper/alert'
 import { AppConfig } from 'src/app/service/app-config'
 import { AuthService } from 'src/app/service/auth/auth.service'
+import { SpinnerComponent } from "../../../helper/spinner/spinner.component";
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
-  standalone: true,
-  imports: [CommonModule, IonicModule, ReactiveFormsModule, FormsModule],
-  providers: [JwtHelperService],
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
+    standalone: true,
+    providers: [JwtHelperService],
+    imports: [
+        CommonModule,
+        IonicModule,
+        ReactiveFormsModule,
+        FormsModule,
+        TranslateModule,
+        SpinnerComponent
+    ]
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup
   errorMessage: string = ''
+  isReady: boolean = true
 
   constructor(
     private fb: FormBuilder,
@@ -34,7 +44,8 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private tokenApi: TokenApi,
-    private alert: Alert
+    private alert: Alert,
+    public translate: TranslateService
   ) {
     this.loginForm = this.fb.group({
       login: ['', Validators.required],
@@ -51,6 +62,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.loginForm.markAllAsTouched()
     if (this.loginForm.valid) {
+      this.isReady = false
       forkJoin({
         users: this.usersApi.getUserByLoginAndPassword({
           login: this.loginForm.value.login,
@@ -81,18 +93,24 @@ export class LoginComponent implements OnInit {
             this.navigate()
           } else {
             this.alert.alertNotOk()
+            this.isReady = true
           }
         },
         error: (error) => {
           if (String(error.error).includes('User is null')) {
-            this.errorMessage = 'Dany użytkownik nie istnieje.'
+            this.errorMessage = this.translate.instant(
+              'The given user does not exist.'
+            )
             this.alert.alertNotOk(this.errorMessage)
           } else if (String(error.error).includes('Password is not correct')) {
-            this.errorMessage = 'Podane hasło jest niepoprawne. '
+            this.errorMessage = this.translate.instant(
+              'Password is not correct.'
+            )
             this.alert.alertNotOk(this.errorMessage)
           } else {
             this.alert.alertNotOk()
           }
+          this.isReady = true
         },
       })
     }

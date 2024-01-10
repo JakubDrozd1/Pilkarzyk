@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()"> {{ "Back" | translate }} </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <app-spinner [isReady]="!isReady"></app-spinner>
+  @if(isReady){
+  <ion-list>
+    <ion-card>
+      @for (item of groupsUsers; track $index) {
+      <ion-card-header>
+        <ion-card-title>
+          {{ item.Login }}
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item lines="full" class="title">
+          @if(images[$index] === '0'){
+          <ion-avatar slot="start">
+            <img
+              alt="img"
+              src="https://ionicframework.com/docs/img/demos/avatar.svg"
+            />
+          </ion-avatar>
+          } @else {
+          <ion-avatar slot="start">
+            <img alt="img" [src]="images[$index]" />
+          </ion-avatar>
+          }
+          <ion-toggle
+            (ionChange)="checkedChange($event, item)"
+            [checked]="item.AccountType"
+            >{{ item.Firstname }} {{ item.Surname }}</ion-toggle
+          ><br /><br />
+        </ion-item>
+      </ion-card-content>
+      }
+    </ion-card>
+  </ion-list>
+  }
+</ion-content>

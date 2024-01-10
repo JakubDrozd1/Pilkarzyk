@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Component, Input, OnInit } from '@angular/core'
 import {
   ReactiveFormsModule,
   FormsModule,
@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms'
 import { IonicModule, ModalController } from '@ionic/angular'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { GetMeetingUsersResponse, MessagesApi } from 'libs/api-client'
 import * as moment from 'moment'
 import { Alert } from 'src/app/helper/alert'
@@ -18,7 +19,13 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
   templateUrl: './message-answer-modal.component.html',
   styleUrls: ['./message-answer-modal.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, ReactiveFormsModule, FormsModule],
+  imports: [
+    CommonModule,
+    IonicModule,
+    ReactiveFormsModule,
+    FormsModule,
+    TranslateModule,
+  ],
 })
 export class MessageAnswerModalComponent implements OnInit {
   @Input() message!: GetMeetingUsersResponse
@@ -32,7 +39,8 @@ export class MessageAnswerModalComponent implements OnInit {
     private messagesApi: MessagesApi,
     private alert: Alert,
     private refreshDataService: RefreshDataService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    public translate: TranslateService
   ) {
     this.displayDate = moment().format()
     this.messageForm = this.fb.group({
@@ -43,7 +51,7 @@ export class MessageAnswerModalComponent implements OnInit {
   ngOnInit() {
     this.messageForm
       .get('dateMeeting')
-      ?.setValue(moment().locale('pl').format())
+      ?.setValue(moment().format())
     this.maxDate = moment(this.message.DateMeeting)
       .clone()
       .subtract(2, 'hours')
@@ -64,7 +72,7 @@ export class MessageAnswerModalComponent implements OnInit {
         })
         .subscribe({
           next: () => {
-            this.alert.alertOk('Odpowiedziano pomyślnie')
+            this.alert.alertOk(this.translate.instant('Answered successfully'))
             this.selectMessage(this.message)
             this.refreshDataService.refresh('notification')
             this.cancel()

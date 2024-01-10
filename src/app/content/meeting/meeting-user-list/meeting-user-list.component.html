@@ -1,0 +1,27 @@
+<app-spinner [isReady]="!isReady"></app-spinner>
+@if(isReady){
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>
+      {{ user.Login }}
+    </ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-item [color]="color" lines="full" class="title">
+      @if(user.Avatar == null){
+      <ion-avatar slot="start">
+        <img
+          alt="img"
+          src="https://ionicframework.com/docs/img/demos/avatar.svg"
+        />
+      </ion-avatar>
+      } @else {
+      <ion-avatar slot="start">
+        <img alt="img" [src]="images" />
+      </ion-avatar>
+      }
+      <ion-label> {{ user.Firstname }} {{ user.Surname }} </ion-label>
+    </ion-item>
+  </ion-card-content>
+</ion-card>
+}

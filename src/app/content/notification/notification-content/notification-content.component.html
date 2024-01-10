@@ -1,31 +1,70 @@
-<ion-segment [(ngModel)]="selectedSegment" swipeGesture="true">
-  <ion-segment-button vertical="top" value="meetings">
-    <ion-label
-      >Spotkania @if(messagesNotification.length+messages.length>0){
-      <ion-badge>{{ messagesNotification.length + messages.length }} </ion-badge
-      >}
-    </ion-label>
-  </ion-segment-button>
-  <ion-segment-button vertical="top" value="groups">
-    <ion-label>Grupa</ion-label>
-  </ion-segment-button>
-</ion-segment>
-@switch (selectedSegment) { @case ("meetings") {
-@if(messagesNotification.length>0){ @for(message of messagesNotification; track
-$index){
-<ion-item class="title" lines="full">
-  <app-message-content
-    (messageUpdate)="updateNotification($event)"
-    [message]="message"
-  ></app-message-content>
-</ion-item>
-<ion-label color="danger">NOWE ZAPROSZENIE</ion-label>
-} } @if(messages.length>0){ @for(message of messages; track $index){
-<app-message-content [message]="message"></app-message-content>
-} } @if(messages.length==0&&messagesNotification.length==0){
-<ion-item class="header" lines="none">Nie masz żadnych zaproszeń</ion-item>
-} } @case ("groups") { @if(invite.length>0){ @for(item of invite; track $index){
-<app-groups-invite [invite]="item"></app-groups-invite>
-} }@else {
-<ion-item class="header" lines="none">Nie masz żadnych zaproszeń</ion-item>
-} } }
+<ion-content>
+  <ion-segment
+    [(ngModel)]="selectedSegment"
+    (ngModelChange)="onSegmentChange(selectedSegment)"
+    swipeGesture="true"
+  >
+    <ion-segment-button vertical="top" [value]="segmentList[0]">
+      <ion-label>
+        {{ "Meetings" | translate }}
+        @if(messages.length>0){
+        <ion-badge>
+          {{ messages.length }}
+        </ion-badge>
+        }
+      </ion-label>
+    </ion-segment-button>
+    <ion-segment-button vertical="top" [value]="segmentList[1]">
+      <ion-label>
+        {{ "Group" | translate }}
+        @if(invite.length>0){
+        <ion-badge>
+          {{ invite.length }}
+        </ion-badge>
+        }
+      </ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-refresher
+    slot="fixed"
+    [pullFactor]="0.5"
+    [pullMin]="100"
+    [pullMax]="200"
+    (ionRefresh)="handleRefresh($event)"
+  >
+    <app-spinner [isReady]="true"></app-spinner>
+  </ion-refresher>
+
+  <app-spinner [isReady]="!isReady"></app-spinner>
+
+  <swiper-container
+    #swiperContainer
+    (swiperslidechange)="swiperSlideChange()"
+    appSwiper
+  >
+    <swiper-slide>
+      @if(isReady){ @if(messages.length>0){ @for(message of messages; track
+      $index){ @if(message.Answer==null){
+      <ion-item class="title" lines="full">
+        <app-message-content [message]="message" (messageUpdate)="updateNotification()"></app-message-content>
+      </ion-item>
+      <ion-label color="danger"> {{ "NEW INVITATION" | translate }} </ion-label>
+      }@else { <app-message-content [message]="message"></app-message-content>
+      } } } @if(messages.length==0){
+      <ion-item class="header" lines="none">
+        {{ "You have no invitations" | translate }}
+      </ion-item>
+      } }
+    </swiper-slide>
+    <swiper-slide>
+      @if(isReady){ @if(invite.length>0){ @for(item of invite; track $index){
+      <app-groups-invite [invite]="item"></app-groups-invite>
+      } }@else {
+      <ion-item class="header" lines="none">
+        {{ "You have no invitations" | translate }}
+      </ion-item>
+      } }
+    </swiper-slide>
+  </swiper-container>
+</ion-content>

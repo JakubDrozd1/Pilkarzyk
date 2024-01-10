@@ -12,7 +12,7 @@ export class TimeService {
   constructor() {}
 
   updateCurrentTime() {
-    const currentTime = moment().locale('pl').format('DD MMMM YYYY HH:mm:ss')
+    const currentTime = moment().format('DD MMMM YYYY HH:mm:ss')
     this.currentTimeSubject.next(currentTime)
   }
 }

@@ -1,7 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button color="medium" (click)="cancel()">Anuluj</ion-button>
+      <ion-button color="medium" (click)="cancel()">
+        {{ "Cancel" | translate }}
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -10,8 +12,8 @@
     <ion-list [inset]="true">
       <ion-item lines="none">
         <ion-input
-          errorText="Nazwa grupy jest wymagana"
-          label="Nazwa grupy"
+          [errorText]="'Group name is required' | translate"
+          [label]="'Group name' | translate"
           labelPlacement="floating"
           formControlName="name"
           type="text"
@@ -20,7 +22,7 @@
       <ion-item lines="none">
         <ion-input
           helperText=" "
-          label="Organizator"
+          [label]="'Organizer' | translate"
           labelPlacement="floating"
           formControlName="organizer"
           (ngModelChange)="handleInput()"
@@ -35,6 +37,8 @@
       </ion-item>
       }
     </ion-list>
-    <ion-button type="submit" expand="full">Dodaj grupę </ion-button>
+    <ion-button type="submit" expand="full">
+      {{ "Add a group" | translate }}
+    </ion-button>
   </form>
 </ion-content>

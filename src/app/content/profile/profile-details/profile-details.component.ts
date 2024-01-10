@@ -11,29 +11,67 @@ import { ProfilePasswordComponent } from '../../form/profile-password/profile-pa
 import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
 import { convertFileToBase64 } from 'src/app/helper/convertFileToBase64'
 import { NotificationService } from 'src/app/service/notification/notification.service'
+import { UserService } from 'src/app/service/user/user.service'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 
 @Component({
   selector: 'app-profile-details',
   templateUrl: './profile-details.component.html',
   styleUrls: ['./profile-details.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, LogoutComponent],
+  imports: [
+    CommonModule,
+    IonicModule,
+    LogoutComponent,
+    TranslateModule,
+    SpinnerComponent,
+  ],
 })
 export class ProfileDetailsComponent implements OnInit {
-  idUser: number = 0
   user: USERS | undefined
   selectedFile: File | null = null
   image: File | null = null
   isReady: boolean = false
   temp: string = ''
   private subscription: Subscription = new Subscription()
+  pickerColumns = [
+    {
+      name: 'languages',
+      options: [
+        {
+          text: this.translate.instant('Polish'),
+          value: 'pl',
+        },
+        {
+          text: this.translate.instant('English'),
+          value: 'en',
+        },
+      ],
+    },
+  ]
+  pickerButtons = [
+    {
+      text: this.translate.instant('Cancel'),
+      role: 'cancel',
+    },
+    {
+      text: 'Ok',
+      handler: (value: { languages: { value: any } }) => {
+        localStorage.setItem('lang', value.languages.value)
+        window.location.reload()
+      },
+    },
+  ]
 
   constructor(
     private usersApi: UsersApi,
     private alert: Alert,
     private modalCtrl: ModalController,
     private refreshDataService: RefreshDataService,
-    public notificationService: NotificationService
+    public notificationService: NotificationService,
+    private userService: UserService,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {
@@ -44,14 +82,13 @@ export class ProfileDetailsComponent implements OnInit {
         }
       })
     )
-    this.idUser = Number(localStorage.getItem('user_id'))
     this.getDetails()
   }
 
   getDetails() {
     this.usersApi
       .getUserById({
-        userId: this.idUser,
+        userId: Number(this.userService.loggedUser.ID_USER),
       })
       .subscribe({
         next: (response) => {
@@ -93,15 +130,19 @@ export class ProfileDetailsComponent implements OnInit {
       convertFileToBase64(selectedFile).then((base64String) => {
         this.usersApi
           .updateColumnUser({
-            userId: this.idUser,
+            userId: Number(this.userService.loggedUser.ID_USER),
             getUpdateUserRequest: {
               Column: ['AVATAR'],
-              AVATAR: base64String,
+              Avatar: base64String,
             },
           })
           .subscribe({
             next: () => {
-              this.alert.alertOk('Udało się zmienić avatar')
+              this.alert.alertOk(
+                this.translate.instant(
+                  'You have successfully changed your avatar.'
+                )
+              )
               this.refreshDataService.refresh('profile-details')
             },
             error: () => {
@@ -110,7 +151,9 @@ export class ProfileDetailsComponent implements OnInit {
           })
       })
     } else {
-      this.alert.alertNotOk('Plik jest za duży (maks 5MB)')
+      this.alert.alertNotOk(
+        this.translate.instant('The file is too large (max 5MB)')
+      )
     }
   }
 
@@ -152,7 +195,7 @@ export class ProfileDetailsComponent implements OnInit {
 
   reload() {
     this.temp = ''
-    this.idUser = Number(localStorage.getItem('user_id'))
+    this.isReady = false
     this.getDetails()
   }
 }

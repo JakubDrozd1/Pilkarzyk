@@ -1,7 +1,3 @@
-ion-spinner {
-  width: 100px;
-  height: 100px;
-}
 ion-fab-button:active {
   --background: var(--ion-color-tertiary);
   transform: scale(0.9);
@@ -15,4 +11,8 @@ ion-back-button:active {
 }
 ion-segment-button {
   --color-checked: var(--ion-color-secondary);
+}
+.header {
+  padding: 5px;
+  height: 70vh;
 }

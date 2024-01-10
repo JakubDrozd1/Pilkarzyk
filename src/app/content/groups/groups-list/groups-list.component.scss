@@ -1,10 +1,13 @@
-ion-spinner {
-  width: 100px;
-  height: 100px;
-}
 ion-item:active {
   transform: scale(0.97);
 }
 ion-item {
   --border-color: var(--ion-color-secondary);
+}
+ion-segment-button {
+  --color-checked: var(--ion-color-secondary);
+}
+.header {
+  padding: 5px;
+  height: 70vh;
 }

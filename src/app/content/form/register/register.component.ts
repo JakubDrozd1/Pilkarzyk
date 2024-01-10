@@ -11,23 +11,27 @@ import { Router } from '@angular/router'
 import { IonicModule } from '@ionic/angular'
 import { MaskitoModule } from '@maskito/angular'
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { compareValidator } from 'src/app/helper/validateConfirmPasswd'
 import { AuthService } from 'src/app/service/auth/auth.service'
+import { SpinnerComponent } from "../../../helper/spinner/spinner.component";
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    IonicModule,
-    MaskitoModule,
-    ReactiveFormsModule,
-    FormsModule,
-  ],
+    selector: 'app-register',
+    templateUrl: './register.component.html',
+    styleUrls: ['./register.component.scss'],
+    standalone: true,
+    imports: [
+        CommonModule,
+        IonicModule,
+        MaskitoModule,
+        ReactiveFormsModule,
+        FormsModule,
+        TranslateModule,
+        SpinnerComponent
+    ]
 })
 export class RegisterComponent implements OnInit {
   @Output() userRegistered: EventEmitter<any> = new EventEmitter()
@@ -38,13 +42,15 @@ export class RegisterComponent implements OnInit {
   readonly maskPredicate: MaskitoElementPredicateAsync = async (el) =>
     (el as HTMLIonInputElement).getInputElement()
   registrationForm: FormGroup
+  isReady: boolean = true
 
   constructor(
     private fb: FormBuilder,
     private usersApi: UsersApi,
     private authService: AuthService,
     private router: Router,
-    private alert: Alert
+    private alert: Alert,
+    public translate: TranslateService
   ) {
     this.registrationForm = this.fb.group({
       login: [
@@ -59,7 +65,7 @@ export class RegisterComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.minLength(10),
+          Validators.minLength(6),
           Validators.maxLength(25),
         ],
       ],
@@ -99,6 +105,7 @@ export class RegisterComponent implements OnInit {
   onSubmit() {
     this.registrationForm.markAllAsTouched()
     if (this.registrationForm.valid) {
+      this.isReady = false
       let str: string = this.registrationForm.value.phoneNumber
       let intNumber: number = parseInt(str.replace(/-/g, ''), 10)
       this.usersApi
@@ -114,12 +121,16 @@ export class RegisterComponent implements OnInit {
         })
         .subscribe({
           next: (response) => {
-            this.alert.alertOk('Zarejestronano pomyślnie. Możesz się zalogować')
+            this.alert.alertOk(
+              this.translate.instant('Registered successfully. You can log in.')
+            )
+            this.isReady = true
             this.registrationForm.reset()
             this.router.navigate(['/login'])
             this.userRegistered.emit(response)
           },
           error: () => {
+            this.isReady = true
             this.alert.alertNotOk()
           },
         })

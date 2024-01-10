@@ -1,13 +1,19 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import {
+  CUSTOM_ELEMENTS_SCHEMA,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { IonicModule, ModalController } from '@ionic/angular'
 import {
   GetGroupsUsersResponse,
+  GetMeetingGroupsResponse,
+  GroupsApi,
   GroupsUsersApi,
   MeetingsApi,
-  USERS,
-  UsersApi,
 } from 'libs/api-client'
 import { Subscription, forkJoin } from 'rxjs'
 import { MeetingComponent } from '../../form/meeting/meeting.component'
@@ -16,9 +22,14 @@ import { MeetingContentComponent } from '../../meeting/meeting-content/meeting-c
 import { UsersComponent } from '../../form/users/users.component'
 import { Alert } from 'src/app/helper/alert'
 import { FormsModule } from '@angular/forms'
-import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
 import * as moment from 'moment'
-import { GetMeetingUsersGroupsResponse } from 'libs/api-client/model/get-meeting-users-groups-response'
+import { GroupsOrganizerComponent } from '../groups-organizer/groups-organizer.component'
+import { GroupsUserListComponent } from '../groups-user-list/groups-user-list.component'
+import { UserService } from 'src/app/service/user/user.service'
+import { SwiperContainer } from 'swiper/element'
+import { IonRefresherCustomEvent, RefresherEventDetail } from '@ionic/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
 
 @Component({
   selector: 'app-groups-content',
@@ -31,21 +42,29 @@ import { GetMeetingUsersGroupsResponse } from 'libs/api-client/model/get-meeting
     MeetingComponent,
     MeetingContentComponent,
     FormsModule,
+    GroupsUserListComponent,
+    TranslateModule,
+    SpinnerComponent,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class GroupsContentComponent implements OnInit {
+  @ViewChild('swiperContainer', { read: ElementRef, static: false })
+  swiperContainer!: ElementRef<SwiperContainer>
+
   idGroup: number | undefined
   groupsUsers: GetGroupsUsersResponse[] = []
   isReady: boolean = false
-  meetings: GetMeetingUsersGroupsResponse[] = []
+  meetings: GetMeetingGroupsResponse[] = []
   nameGroup: string | undefined | null
   add: boolean = false
   private subscription: Subscription = new Subscription()
-  selectedSegment: string = 'meetings'
-  temp: File | null = null
-  images: string[] = []
-  idUser: number = 0
-  loggedUser!: GetGroupsUsersResponse
+  groupUser!: GetGroupsUsersResponse
+  segmentList: Array<string> = ['meetings', 'members', 'ranking']
+  selectedSegment: string = this.segmentList[0]
+  visitedMeetings: boolean = true
+  visitedMembers: boolean = true
+  visitedRanking: boolean = true
 
   constructor(
     private route: ActivatedRoute,
@@ -54,16 +73,16 @@ export class GroupsContentComponent implements OnInit {
     private modalCtrl: ModalController,
     private refreshDataService: RefreshDataService,
     private alert: Alert,
-    private userApi: UsersApi
+    private groupsApi: GroupsApi,
+    public userService: UserService,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {
-    this.idUser = Number(localStorage.getItem('user_id'))
     this.subscription.add(
       this.refreshDataService.refreshSubject.subscribe((index) => {
         if (index === 'groups-content') {
-          this.idUser = Number(localStorage.getItem('user_id'))
-          this.getDetails()
+          this.reload()
         }
       })
     )
@@ -76,62 +95,70 @@ export class GroupsContentComponent implements OnInit {
   }
 
   getDetails() {
-    this.groupsUsers = []
-    this.meetings = []
-    this.images = []
-    forkJoin({
-      groupsUsers: this.groupsUsersApi.getAllGroupsFromUserAsync({
-        page: 0,
-        onPage: -1,
-        sortColumn: 'NAME',
-        sortMode: 'ASC',
-        idGroup: this.idGroup,
-      }),
-      meetings: this.meetingsApi.getAllMeetings({
-        page: 0,
-        onPage: -1,
-        sortColumn: 'DATE_MEETING',
-        sortMode: 'ASC',
-        idGroup: this.idGroup,
-        dateFrom: moment().format(),
-        idUser: this.idUser,
-      }),
-      user: this.groupsUsersApi.getUserWithGroup({
-        userId: this.idUser,
-        groupId: this.idGroup ?? 0,
-      }),
-    }).subscribe({
-      next: (responses) => {
-        this.loggedUser = responses.user
-        this.groupsUsers = responses.groupsUsers
-        this.meetings = responses.meetings
-        this.nameGroup = responses.groupsUsers[0].Name
-        for (let user of responses.groupsUsers) {
-          const base64String = user.Avatar
-          if (base64String != null) {
-            convertBase64ToFile(base64String).then((file) => {
-              this.temp = file
-              const reader = new FileReader()
-              reader.onload = () => {
-                this.images.unshift(reader.result as string)
-              }
-              reader.readAsDataURL(this.temp)
-              this.isReady = true
-            })
-          } else {
-            this.images.push('0')
+    if (this.selectedSegment == 'meetings' && this.visitedMeetings) {
+      this.isReady = false
+      this.meetings = []
+      forkJoin({
+        meetings: this.meetingsApi.getAllMeetings({
+          page: 0,
+          onPage: -1,
+          sortColumn: 'DATE_MEETING',
+          sortMode: 'ASC',
+          idGroup: this.idGroup,
+          dateFrom: moment().format(),
+          idUser: this.userService.loggedUser.ID_USER,
+        }),
+        group: this.groupsApi.getGroupById({
+          groupId: this.idGroup ?? 0,
+        }),
+        groupUser: this.groupsUsersApi.getUserWithGroup({
+          userId: Number(this.userService.loggedUser.ID_USER),
+          groupId: this.idGroup ?? 0,
+        }),
+      }).subscribe({
+        next: (responses) => {
+          this.meetings = responses.meetings
+          this.nameGroup = responses.group.NAME
+          this.groupUser = responses.groupUser
+          this.isReady = true
+          this.visitedMeetings = false
+        },
+        error: () => {
+          this.alert.alertNotOk()
+          this.groupsUsers = []
+          this.meetings = []
+          this.nameGroup = ''
+          this.isReady = true
+          this.visitedMeetings = false
+        },
+      })
+    } else if (this.selectedSegment == 'members' && this.visitedMembers) {
+      this.groupsUsers = []
+      this.isReady = false
+      this.groupsUsersApi
+        .getAllGroupsFromUserAsync({
+          page: 0,
+          onPage: -1,
+          sortColumn: 'SURNAME',
+          sortMode: 'ASC',
+          idGroup: this.idGroup,
+        })
+        .subscribe({
+          next: (response) => {
+            this.groupsUsers = response
             this.isReady = true
-          }
-        }
-      },
-      error: () => {
-        this.alert.alertNotOk()
-        this.groupsUsers = []
-        this.meetings = []
-        this.nameGroup = ''
-        this.isReady = true
-      },
-    })
+            this.visitedMembers = false
+          },
+          error: () => {
+            this.alert.alertNotOk()
+            this.groupsUsers = []
+            this.meetings = []
+            this.nameGroup = ''
+            this.isReady = true
+            this.visitedMembers = false
+          },
+        })
+    }
   }
 
   async openModalAddMeeting() {
@@ -155,5 +182,47 @@ export class GroupsContentComponent implements OnInit {
     })
     modal.present()
     await modal.onWillDismiss()
+  }
+
+  async openModalAddOrganizer() {
+    const modal = await this.modalCtrl.create({
+      component: GroupsOrganizerComponent,
+      componentProps: {
+        idGroup: this.idGroup,
+      },
+    })
+    modal.present()
+    await modal.onWillDismiss()
+  }
+
+  onSegmentChange(select: string) {
+    this.swiperContainer.nativeElement.swiper.slideTo(
+      this.segmentList.indexOf(select)
+    )
+    this.selectedSegment = select
+    this.getDetails()
+  }
+
+  swiperSlideChange() {
+    if (this.swiperContainer.nativeElement.swiper.activeIndex != null) {
+      this.selectedSegment =
+        this.segmentList[this.swiperContainer.nativeElement.swiper.activeIndex]
+      this.getDetails()
+    }
+  }
+
+  handleRefresh($event: IonRefresherCustomEvent<RefresherEventDetail>) {
+    setTimeout(() => {
+      this.reload()
+      $event.target.complete()
+    }, 2000)
+  }
+
+  reload() {
+    this.isReady = false
+    this.visitedMeetings = true
+    this.visitedMembers = true
+    this.visitedRanking = true
+    this.getDetails()
   }
 }

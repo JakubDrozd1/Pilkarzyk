@@ -4,32 +4,56 @@
       <ion-card-title>{{ currentTime }}</ion-card-title>
     </ion-card-header>
   </ion-card>
-  @if(!isReady){
-  <div style="text-align: center">
-    <ion-spinner color="primary" name="crescent"> </ion-spinner>
-  </div>
-  }
-  <ion-segment [(ngModel)]="selectedSegment" swipeGesture="true">
-    <ion-segment-button vertical="top" value="waiting">
-      <ion-label>Oczekujące</ion-label>
+  <ion-segment
+    [(ngModel)]="selectedSegment"
+    (ngModelChange)="onSegmentChange(selectedSegment)"
+    swipeGesture="true"
+  >
+    <ion-segment-button vertical="top" [value]="segmentList[0]">
+      <ion-label> {{ "Pending" | translate }}</ion-label>
     </ion-segment-button>
-    <ion-segment-button vertical="top" value="meetings">
-      <ion-label>spotkania</ion-label>
+    <ion-segment-button vertical="top" [value]="segmentList[1]">
+      <ion-label>{{ "Meetings" | translate }}</ion-label>
     </ion-segment-button>
   </ion-segment>
-  @switch (selectedSegment) { @case ("waiting") { @if(meetingsWaiting.length >
-  0){ @for(meeting of meetingsWaiting; track $index){
-  <app-message-waiting-content
-    [message]="meeting"
-  ></app-message-waiting-content>
-  } }@else {
-  <ion-item class="header" lines="none">Nie masz oczekujących spotkań</ion-item>
-  } } @case ("meetings") { @if(meetings.length > 0){ @for(meeting of meetings;
-  track $index){
-  <app-meeting-content [meeting]="meeting"></app-meeting-content>
-  } }@else {
-  <ion-item class="header" lines="none"
-    >Nie masz dzisiaj żadnych spotkań</ion-item
+  
+  <ion-refresher
+    slot="fixed"
+    [pullFactor]="0.5"
+    [pullMin]="100"
+    [pullMax]="200"
+    (ionRefresh)="handleRefresh($event)"
   >
-  } } }</ion-content
->
+    <app-spinner [isReady]="true"></app-spinner>
+  </ion-refresher>
+
+  <app-spinner [isReady]="!isReady"></app-spinner>
+  <swiper-container
+    #swiperContainer
+    (swiperslidechange)="swiperSlideChange()"
+    appSwiper
+  >
+    <swiper-slide>
+      @if(isReady){ @if(meetingsWaiting.length > 0){ @for(meeting of
+      meetingsWaiting; track $index){
+      <app-message-waiting-content
+        [message]="meeting"
+      ></app-message-waiting-content>
+      }}@else {
+      <ion-item class="header" lines="none">
+        {{ "You have no pending meetings" | translate }}
+      </ion-item>
+      }}
+    </swiper-slide>
+    <swiper-slide>
+      @if(isReady){ @if(meetings.length > 0){ @for(meeting of meetings; track
+      $index){
+      <app-meeting-content [meeting]="meeting"></app-meeting-content>
+      } }@else {
+      <ion-item class="header" lines="none">
+        {{ "You have no meetings today" | translate }}
+      </ion-item>
+      }}
+    </swiper-slide>
+  </swiper-container>
+</ion-content>

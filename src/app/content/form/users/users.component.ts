@@ -13,30 +13,28 @@ import { Keyboard } from '@capacitor/keyboard'
 import { IonicModule, ModalController } from '@ionic/angular'
 import { MaskitoModule } from '@maskito/angular'
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core'
-import {
-  GroupInvitesApi,
-  GroupsApi,
-  GroupsUsersApi,
-  USERS,
-  UsersApi,
-} from 'libs/api-client'
-import { forkJoin } from 'rxjs'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { GroupInvitesApi, GroupsApi, USERS, UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
+import { UserService } from 'src/app/service/user/user.service'
+import { SpinnerComponent } from "../../../helper/spinner/spinner.component";
 
 @Component({
-  selector: 'app-users',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    IonicModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MaskitoModule,
-    RouterLink,
-  ],
+    selector: 'app-users',
+    templateUrl: './users.component.html',
+    styleUrls: ['./users.component.scss'],
+    standalone: true,
+    imports: [
+        CommonModule,
+        IonicModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MaskitoModule,
+        RouterLink,
+        TranslateModule,
+        SpinnerComponent
+    ]
 })
 export class UsersComponent implements OnInit {
   @Input() idGroup: number = 0
@@ -45,13 +43,13 @@ export class UsersComponent implements OnInit {
   users: USERS[] = []
   user: USERS | undefined
   addExistingUserForm: FormGroup
-  idUser: number = 0
   readonly phoneMask: MaskitoOptions = {
     mask: [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/],
   }
   readonly maskPredicate: MaskitoElementPredicateAsync = async (el) =>
     (el as HTMLIonInputElement).getInputElement()
   addNewUserForm: FormGroup
+  isReady: boolean = true
 
   constructor(
     private modalCtrl: ModalController,
@@ -60,7 +58,9 @@ export class UsersComponent implements OnInit {
     private alert: Alert,
     private refreshDataService: RefreshDataService,
     private groupsApi: GroupsApi,
-    private groupInviteApi: GroupInvitesApi
+    private groupInviteApi: GroupInvitesApi,
+    private userService: UserService,
+    public translate: TranslateService
   ) {
     this.addExistingUserForm = this.fb.group({
       user: ['', Validators.required],
@@ -72,7 +72,6 @@ export class UsersComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.idUser = Number(localStorage.getItem('user_id'))
     this.getUsers()
   }
 
@@ -134,23 +133,25 @@ export class UsersComponent implements OnInit {
   onSubmitExisting() {
     this.addExistingUserForm.markAllAsTouched()
     if (this.addExistingUserForm.valid) {
+      this.isReady = false
       this.groupInviteApi
         .addGroupInviteAsync({
           getGroupInviteRequest: {
             IdGroup: this.idGroup,
             IdUser: this.user?.ID_USER,
-            IdAuthor: this.idUser,
+            IdAuthor: this.userService.loggedUser.ID_USER,
           },
         })
         .subscribe({
           next: () => {
-            this.alert.alertOk('Zaproszono pomyślnie')
+            this.alert.alertOk(this.translate.instant('Successfully joined'))
             this.refreshDataService.refresh('groups-content')
             this.cancel()
           },
           error: () => {
             this.alert.alertNotOk()
             this.cancel()
+            this.isReady = true
           },
         })
     }
@@ -159,39 +160,46 @@ export class UsersComponent implements OnInit {
   onSubmitNew() {
     this.addExistingUserForm.markAllAsTouched()
     if (this.addNewUserForm.valid) {
+      this.isReady = false
       if (this.addNewUserForm.value.email) {
-        forkJoin({
-          user: this.usersApi.getUserById({
-            userId: this.idUser,
-          }),
-          group: this.groupsApi.getGroupById({
+        this.groupsApi
+          .getGroupById({
             groupId: this.idGroup,
-          }),
-        }).subscribe({
-          next: (responses) => {
-            this.usersApi
-              .sendInvitationEmail({
-                getEmailSenderRequest: {
-                  To: this.addNewUserForm.value.email,
-                  Name: responses.user.FIRSTNAME,
-                  Surname: responses.user.SURNAME,
-                  GroupName: responses.group.NAME,
-                  IdGroup: this.idGroup,
-                },
-              })
-              .subscribe({
-                next: () => {
-                  this.alert.alertOk('Wysłano emaila z zaproszeniem')
-                },
-                error: () => {
-                  this.alert.alertNotOk()
-                },
-              })
-          },
-          error: () => {
-            this.alert.alertNotOk()
-          },
-        })
+          })
+          .subscribe({
+            next: (response) => {
+              this.usersApi
+                .sendInvitationEmail({
+                  getEmailSenderRequest: {
+                    To: this.addNewUserForm.value.email,
+                    Name: this.userService.loggedUser.FIRSTNAME,
+                    Surname: this.userService.loggedUser.SURNAME,
+                    GroupName: response.NAME,
+                    IdGroup: this.idGroup,
+                  },
+                })
+                .subscribe({
+                  next: () => {
+                    this.alert.alertOk(
+                      this.translate.instant(
+                        'An invitation email has been sent'
+                      )
+                    )
+                    this.cancel()
+                  },
+                  error: () => {
+                    this.cancel()
+                    this.alert.alertNotOk()
+                    this.isReady = true
+                  },
+                })
+            },
+            error: () => {
+              this.cancel()
+              this.alert.alertNotOk()
+              this.isReady = true
+            },
+          })
       }
     }
   }

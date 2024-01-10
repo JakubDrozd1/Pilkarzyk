@@ -1,10 +1,8 @@
 import {
   ActivatedRouteSnapshot,
   CanActivateFn,
-  Router,
   RouterStateSnapshot,
   Routes,
-  UrlTree,
 } from '@angular/router'
 import { TabComponent } from './controller/tab/tab.component'
 import { AuthComponent } from './controller/auth/auth.component'
@@ -13,7 +11,11 @@ import { RegisterComponent } from './content/form/register/register.component'
 import { inject } from '@angular/core'
 import { IsLogged } from './helper/isLogged'
 import { RegisterLinkComponent } from './content/form/register-link/register-link.component'
+import { UserService } from './service/user/user.service'
 
+const MainCanActivateFn: CanActivateFn = () => {
+  return inject(UserService).getDetails()
+}
 const IsLoggedFn: CanActivateFn = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot
@@ -25,7 +27,7 @@ export const routes: Routes = [
   {
     path: 'logged',
     component: TabComponent,
-    canActivate: [IsLoggedFn],
+    canActivate: [IsLoggedFn, MainCanActivateFn],
     children: [
       {
         path: 'groups',

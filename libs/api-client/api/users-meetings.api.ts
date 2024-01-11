@@ -53,7 +53,7 @@ export interface GetUserWithMeetingRequestParams {
   providedIn: 'root',
 })
 export class UsersMeetingsApi {
-  protected basePath = 'https://192.168.88.224:27885';
+  protected basePath = 'https://jaball.manowski.pl:8001';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
   public encoder: HttpParameterCodec;

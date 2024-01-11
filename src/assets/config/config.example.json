@@ -1,0 +1,9 @@
+{
+  "apiEndpoint": "",
+  "clientId": "",
+  "clientSecretPublic": "",
+  "Jwt": {
+    "Audience": "",
+    "Issuer": ""
+  }
+}

@@ -16,22 +16,22 @@ import { UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { compareValidator } from 'src/app/helper/validateConfirmPasswd'
 import { AuthService } from 'src/app/service/auth/auth.service'
-import { SpinnerComponent } from "../../../helper/spinner/spinner.component";
+import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 
 @Component({
-    selector: 'app-register',
-    templateUrl: './register.component.html',
-    styleUrls: ['./register.component.scss'],
-    standalone: true,
-    imports: [
-        CommonModule,
-        IonicModule,
-        MaskitoModule,
-        ReactiveFormsModule,
-        FormsModule,
-        TranslateModule,
-        SpinnerComponent
-    ]
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    IonicModule,
+    MaskitoModule,
+    ReactiveFormsModule,
+    FormsModule,
+    TranslateModule,
+    SpinnerComponent,
+  ],
 })
 export class RegisterComponent implements OnInit {
   @Output() userRegistered: EventEmitter<any> = new EventEmitter()
@@ -77,7 +77,7 @@ export class RegisterComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.pattern('^[a-zA-Z]+$'),
+          Validators.pattern('^[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]+$'),
           Validators.minLength(3),
           Validators.maxLength(25),
         ],
@@ -86,7 +86,7 @@ export class RegisterComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.pattern('^[a-zA-Z]+$'),
+          Validators.pattern('^[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]+$'),
           Validators.minLength(3),
           Validators.maxLength(25),
         ],

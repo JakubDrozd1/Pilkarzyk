@@ -63,7 +63,7 @@ export interface UpdateRankingRequestParams {
   providedIn: 'root',
 })
 export class RankingsApi {
-  protected basePath = 'https://jaball.manowski.pl:8001';
+  protected basePath = 'https://jaball.manowski.pl:2001';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
   public encoder: HttpParameterCodec;

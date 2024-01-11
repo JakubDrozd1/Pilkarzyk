@@ -12,6 +12,7 @@ import { inject } from '@angular/core'
 import { IsLogged } from './helper/isLogged'
 import { RegisterLinkComponent } from './content/form/register-link/register-link.component'
 import { UserService } from './service/user/user.service'
+import { DownloadComponent } from './helper/download/download.component'
 
 const MainCanActivateFn: CanActivateFn = () => {
   return inject(UserService).getDetails()
@@ -70,6 +71,10 @@ export const routes: Routes = [
           import('./layout/notification-page/notification-page.component').then(
             (m) => m.NotificationPageComponent
           ),
+      },
+      {
+        path: 'download',
+        component: DownloadComponent,
       },
       {
         path: '',

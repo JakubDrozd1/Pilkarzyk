@@ -65,6 +65,7 @@ export class GroupsContentComponent implements OnInit {
   visitedMeetings: boolean = true
   visitedMembers: boolean = true
   visitedRanking: boolean = true
+  permission: boolean = false
 
   constructor(
     private route: ActivatedRoute,
@@ -120,6 +121,10 @@ export class GroupsContentComponent implements OnInit {
           this.meetings = responses.meetings
           this.nameGroup = responses.group.NAME
           this.groupUser = responses.groupUser
+          if (this.groupUser) {
+            this.permission = Boolean(this.groupUser.AccountType)
+          }
+          this.permission = Boolean(this.userService.loggedUser.IS_ADMIN)
           this.isReady = true
           this.visitedMeetings = false
         },

@@ -79,7 +79,6 @@
   "Password changed successfully": "Pomyślnie zmieniono hasło",
   "Save": "Zapisz",
   "Updated successfully": "Zaktualizowano pomyślnie",
-  "Event already exists": "Wydarzenie już istnieje",
   "Number of people": "Ilość osób",
   "Place": "Miejsce",
   "The given user does not exist.": "Dany użytkownik nie istnieje.",
@@ -99,5 +98,23 @@
   "New meeting invitation": "Nowe zaproszenie do spotkania",
   "Language": "Język",
   "Polish": "Polski",
-  "English": "Angielski"
+  "English": "Angielski",
+  "RESET": "RESET",
+  "First name and last name": "Imię i nazwisko",
+  "Work in progress": "Funkcjonalność jeszcze nie zaimplementowana.",
+  "You should complete one field":"Powinieneś wypełnić jedno pole.",
+
+  "Group is null": "Grupa nie istnieje.",
+  "User is null": "Użytkownik nie istnieje.",
+  "User is already in this group": "Użytkownik jest już w tej grupie.",
+  "Group with this name already exists": "Grupa z taką nazwą już istnieje.",
+  "Refresh token expired": "Sesja wygasła.",
+  "Meeting is null": "Spotkanie nie istnieje.",
+  "Event already exists": "Wydarzenie już istnieje.",
+  "User is already in this meeting": "Użytkownik jest już w tym spotkaniu.",
+  "Acount with login already exists": "Konto z tym loginem już istnieje.",
+  "Acount with email already exists": "Konto z tym emailem już istnieje.",
+  "Acount with phone number already exists": "Konto z tym numerem telefonu już istnieje.",
+  "An unexpected error occured": "Wystąpił nieoczekiwany błąd",
+  "Password is not correct": "Podane hasło jest nieprawidłowe"
 }

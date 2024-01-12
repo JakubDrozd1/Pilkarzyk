@@ -14,6 +14,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { GroupsApi, GroupsUsersApi, USERS, UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
+import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
+import { UserValidator } from 'src/app/helper/customValidators'
 
 @Component({
   selector: 'app-groups',
@@ -26,10 +28,11 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
     ReactiveFormsModule,
     FormsModule,
     TranslateModule,
+    SpinnerComponent,
   ],
 })
 export class GroupsComponent implements OnInit {
-  groupForm: FormGroup
+  groupForm!: FormGroup
   users: USERS[] = []
   isReady: boolean = false
   results: USERS[] = []
@@ -44,12 +47,7 @@ export class GroupsComponent implements OnInit {
     private refreshDataService: RefreshDataService,
     private alert: Alert,
     public translate: TranslateService
-  ) {
-    this.groupForm = this.fb.group({
-      name: ['', Validators.required],
-      organizer: [''],
-    })
-  }
+  ) {}
 
   ngOnInit() {
     this.getDetails()
@@ -58,6 +56,7 @@ export class GroupsComponent implements OnInit {
   onSubmit() {
     this.groupForm.markAllAsTouched()
     if (this.groupForm.valid) {
+      this.isReady = true
       this.groupsApi
         .addGroup({
           getGroupRequest: {
@@ -77,30 +76,24 @@ export class GroupsComponent implements OnInit {
                   next: () => {
                     this.alert.alertOk()
                     this.cancel()
-                    this.groupForm.reset()
+                    this.isReady = false
                     this.refreshDataService.refresh('groups-list')
                   },
-                  error: () => {
-                    this.alert.alertNotOk()
+                  error: (error) => {
+                    this.isReady = false
+                    this.alert.handleError(error)
                     this.cancel()
                   },
                 })
+            } else {
+              this.alert.alertOk()
+              this.refreshDataService.refresh('groups-list')
             }
-            this.refreshDataService.refresh('groups-list')
           },
           error: (error) => {
-            let errorMessage = ''
-            if (
-              String(error.error.message).includes(
-                'Group with this name already exists'
-              )
-            ) {
-              errorMessage = this.translate.instant(
-                'Group with this name already exists.'
-              )
-            }
-            this.alert.alertNotOk(errorMessage)
+            this.alert.handleError(error)
             this.cancel()
+            this.isReady = false
           },
         })
     }
@@ -117,6 +110,10 @@ export class GroupsComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.users = response
+          this.groupForm = this.fb.group({
+            name: ['', Validators.required],
+            organizer: ['', UserValidator(this.users)],
+          })
           this.isReady = true
         },
         error: () => {

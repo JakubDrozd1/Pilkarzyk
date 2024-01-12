@@ -8,6 +8,8 @@
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
+  <app-spinner [isReady]="!isReady"></app-spinner>
+  @if(isReady){
   <form [formGroup]="groupForm" (ngSubmit)="onSubmit()">
     <ion-list [inset]="true">
       <ion-item lines="none">
@@ -22,6 +24,7 @@
       <ion-item lines="none">
         <ion-input
           helperText=" "
+          [errorText]="'User is null' | translate"
           [label]="'Organizer' | translate"
           labelPlacement="floating"
           formControlName="organizer"
@@ -41,4 +44,5 @@
       {{ "Add a group" | translate }}
     </ion-button>
   </form>
+  }
 </ion-content>

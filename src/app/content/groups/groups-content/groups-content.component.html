@@ -12,8 +12,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  @if(isReady){ @if(userService.loggedUser != null && groupUser!= null){
-  @if(userService.loggedUser.IS_ADMIN || groupUser.AccountType){
+  @if(isReady){ @if(permission){
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button>
       <ion-icon name="add"></ion-icon>
@@ -34,7 +33,7 @@
       >}
     </ion-fab-list>
   </ion-fab>
-  } } }
+  }}
 
   <ion-segment
     [(ngModel)]="selectedSegment"

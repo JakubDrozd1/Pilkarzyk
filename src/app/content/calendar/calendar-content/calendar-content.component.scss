@@ -1,0 +1,11 @@
+ion-button {
+  --border-color: var(--ion-color-secondary);
+  color: var(--ion-color-secondary);
+}
+ion-icon {
+  color: var(--ion-color-secondary);
+}
+ion-button:active {
+  transform: scale(0.97);
+  filter: brightness(120%);
+}

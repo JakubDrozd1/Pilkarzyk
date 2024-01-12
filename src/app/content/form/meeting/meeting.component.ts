@@ -129,15 +129,15 @@ export class MeetingComponent implements OnInit {
                   this.refreshDataService.refresh('groups-content')
                   this.cancel()
                 },
-                error: () => {
-                  this.alert.alertNotOk()
+                error: (error) => {
+                  this.alert.handleError(error)
                   this.cancel()
                   this.isReady = true
                 },
               })
           },
-          error: () => {
-            this.alert.alertNotOk()
+          error: (error) => {
+            this.alert.handleError(error)
             this.cancel()
             this.isReady = true
           },

@@ -14,23 +14,32 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
 import { Subscription } from 'rxjs'
 import { NotificationService } from 'src/app/service/notification/notification.service'
 import { UserService } from 'src/app/service/user/user.service'
-import { SpinnerComponent } from "../../../helper/spinner/spinner.component";
+import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 @Component({
-    selector: 'app-calendar-content',
-    templateUrl: './calendar-content.component.html',
-    styleUrls: ['./calendar-content.component.scss'],
-    standalone: true,
-    providers: [DatePipe],
-    imports: [CommonModule, IonicModule, FormsModule, MeetingContentComponent, SpinnerComponent]
+  selector: 'app-calendar-content',
+  templateUrl: './calendar-content.component.html',
+  styleUrls: ['./calendar-content.component.scss'],
+  standalone: true,
+  providers: [DatePipe],
+  imports: [
+    CommonModule,
+    IonicModule,
+    FormsModule,
+    MeetingContentComponent,
+    SpinnerComponent,
+    TranslateModule,
+  ],
 })
 export class CalendarContentComponent implements OnInit {
   meetings: GetMeetingGroupsResponse[] = []
   meetingsSelected: GetMeetingGroupsResponse[] = []
   isReady: boolean = false
   highlightedDates: any
-  selectedDate: string[] | undefined
+  selectedDate: string[] = []
   private subscription: Subscription = new Subscription()
+  isReadyRefresh: boolean = false
 
   constructor(
     private meetingsApi: MeetingsApi,
@@ -39,7 +48,8 @@ export class CalendarContentComponent implements OnInit {
     private refreshDataService: RefreshDataService,
     private usersMeetingsApi: UsersMeetingsApi,
     public notificationService: NotificationService,
-    private userService: UserService
+    private userService: UserService,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {
@@ -55,6 +65,7 @@ export class CalendarContentComponent implements OnInit {
 
   getDetails() {
     this.meetings = []
+    this.isReady = false
     this.usersMeetingsApi
       .getListMeetingsUsersAsync({
         page: 0,
@@ -97,11 +108,13 @@ export class CalendarContentComponent implements OnInit {
               return self.findIndex((d) => d.date === dateStr) === index
             })
           this.isReady = true
+          this.isReadyRefresh = true
         },
         error: () => {
           this.alert.alertNotOk()
           this.meetings = []
           this.isReady = true
+          this.isReadyRefresh = true
         },
       })
   }
@@ -111,8 +124,9 @@ export class CalendarContentComponent implements OnInit {
     return formattedDate || ''
   }
 
-  onDateChange(newDate: string[]) {
+  onDateChange(newDate: string) {
     this.meetingsSelected = []
+    this.isReadyRefresh = false
     if (newDate != null) {
       for (let date of newDate) {
         const startOfDay = moment(date).startOf('day').add(1, 'hours').format()
@@ -133,20 +147,28 @@ export class CalendarContentComponent implements OnInit {
               for (let meeting of response) {
                 this.meetingsSelected.push(meeting)
               }
-              this.isReady = true
+              this.isReadyRefresh = true
             },
             error: () => {
               this.alert.alertNotOk()
               this.meetingsSelected = []
-              this.isReady = true
+              this.isReadyRefresh = true
             },
           })
       }
+    } else {
+      this.isReadyRefresh = true
     }
   }
 
   reload() {
     this.isReady = false
+    this.isReadyRefresh = false
     this.getDetails()
+  }
+
+  reset() {
+    this.selectedDate = []
+    // this.selectedDate = null
   }
 }

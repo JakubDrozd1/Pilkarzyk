@@ -16,7 +16,6 @@
     {{ "Add new user" | translate }}
   </ion-button>
 </ion-content>
-
 <ion-modal #modal trigger="open-modal-add-existing-user">
   <ng-template>
     <ion-header>
@@ -27,15 +26,16 @@
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-      <app-spinner [isReady]="!isReady"></app-spinner>
-      @if(isReady){
+      <app-spinner [isReady]="!isReadyExistingUser"></app-spinner>
+      @if(isReadyExistingUser){
       <form [formGroup]="addExistingUserForm" (ngSubmit)="onSubmitExisting()">
         <ion-list [inset]="true">
           <ion-label>{{ "Invite an existing user" | translate }}</ion-label>
           <ion-item lines="none">
             <ion-input
               helperText=" "
-              label="Imię i nazwisko"
+              [errorText]="'User is null' | translate"
+              [label]="'First name and last name' | translate"
               labelPlacement="floating"
               formControlName="user"
               (ngModelChange)="handleInput()"
@@ -68,8 +68,8 @@
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-      <app-spinner [isReady]="!isReady"></app-spinner>
-      @if(isReady){
+      <app-spinner [isReady]="!isReadyNewUser"></app-spinner>
+      @if(isReadyNewUser){
       <form [formGroup]="addNewUserForm" (ngSubmit)="onSubmitNew()">
         <ion-list [inset]="true">
           <ion-label>

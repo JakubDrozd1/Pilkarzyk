@@ -5,8 +5,8 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.proman.pilkarzyk"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+      minSdkVersion minSdkVersion
+      targetSdkVersion targetSdkVersion
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -15,6 +15,7 @@ android {
              // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
+      minSdk 30
     }
     buildTypes {
         release {

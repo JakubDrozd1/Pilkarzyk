@@ -1,4 +1,5 @@
 export * from './groups';
+export * from './get-create-group-request';
 export * from './get-email-sender-request';
 export * from './get-group-invite-request';
 export * from './get-group-invite-response';

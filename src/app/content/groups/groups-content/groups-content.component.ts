@@ -123,8 +123,11 @@ export class GroupsContentComponent implements OnInit {
           this.groupUser = responses.groupUser
           if (this.groupUser) {
             this.permission = Boolean(this.groupUser.AccountType)
+            console.log(this.permission)
           }
-          this.permission = Boolean(this.userService.loggedUser.IS_ADMIN)
+          if (!this.permission) {
+            this.permission = Boolean(this.userService.loggedUser.IS_ADMIN)
+          }
           this.isReady = true
           this.visitedMeetings = false
         },

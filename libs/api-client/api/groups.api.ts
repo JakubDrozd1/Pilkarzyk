@@ -21,6 +21,8 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { GROUPS } from '../model/groups';
 // @ts-ignore
+import { GetCreateGroupRequest } from '../model/get-create-group-request';
+// @ts-ignore
 import { GetGroupRequest } from '../model/get-group-request';
 
 // @ts-ignore
@@ -29,7 +31,7 @@ import { Configuration }                                     from '../configurat
 
 
 export interface AddGroupRequestParams {
-    getGroupRequest?: GetGroupRequest;
+    getCreateGroupRequest?: GetCreateGroupRequest;
 }
 
 export interface DeleteGroupRequestParams {
@@ -126,7 +128,7 @@ export class GroupsApi {
     public addGroup(requestParameters: AddGroupRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
     public addGroup(requestParameters: AddGroupRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
     public addGroup(requestParameters: AddGroupRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
-        const getGroupRequest = requestParameters.getGroupRequest;
+        const getCreateGroupRequest = requestParameters.getCreateGroupRequest;
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -180,7 +182,7 @@ export class GroupsApi {
         return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: getGroupRequest,
+                body: getCreateGroupRequest,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

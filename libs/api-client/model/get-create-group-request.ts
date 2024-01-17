@@ -9,17 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { GetGroupRequest } from './get-group-request';
+import { USERS } from './users';
 
 
-export interface GetUpdateUserRequest { 
-    Login?: string | null;
-    UserPassword?: string | null;
-    Email?: string | null;
-    Firstname?: string | null;
-    Surname?: string | null;
-    PhoneNumber?: number | null;
-    GroupCounter?: number | null;
-    Avatar?: string | null;
-    Column?: Array<string> | null;
+export interface GetCreateGroupRequest { 
+    GroupRequest?: GetGroupRequest;
+    User?: USERS;
 }
 

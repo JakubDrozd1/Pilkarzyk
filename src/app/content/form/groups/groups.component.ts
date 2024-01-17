@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, Input, OnInit } from '@angular/core'
 import {
   FormBuilder,
   FormGroup,
@@ -16,6 +16,7 @@ import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { UserValidator } from 'src/app/helper/customValidators'
+import { UserService } from 'src/app/service/user/user.service'
 
 @Component({
   selector: 'app-groups',
@@ -32,6 +33,7 @@ import { UserValidator } from 'src/app/helper/customValidators'
   ],
 })
 export class GroupsComponent implements OnInit {
+  @Input() isAdmin: boolean = false
   groupForm!: FormGroup
   users: USERS[] = []
   isReady: boolean = false
@@ -46,7 +48,8 @@ export class GroupsComponent implements OnInit {
     private groupsUsersApi: GroupsUsersApi,
     private refreshDataService: RefreshDataService,
     private alert: Alert,
-    public translate: TranslateService
+    public translate: TranslateService,
+    public userService: UserService
   ) {}
 
   ngOnInit() {
@@ -59,8 +62,11 @@ export class GroupsComponent implements OnInit {
       this.isReady = true
       this.groupsApi
         .addGroup({
-          getGroupRequest: {
-            Name: this.groupForm.value.name,
+          getCreateGroupRequest: {
+            GroupRequest: {
+              Name: this.groupForm.value.name,
+            },
+            User: this.userService.loggedUser,
           },
         })
         .subscribe({
@@ -86,7 +92,9 @@ export class GroupsComponent implements OnInit {
                   },
                 })
             } else {
+              this.isReady = false
               this.alert.alertOk()
+              this.cancel()
               this.refreshDataService.refresh('groups-list')
             }
           },

@@ -22,5 +22,6 @@ export interface USERS {
     IS_ADMIN?: boolean;
     SALT?: string | null;
     AVATAR?: string | null;
+    GROUP_COUNTER?: number;
 }
 

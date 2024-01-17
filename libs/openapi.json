@@ -199,17 +199,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/GetGroupRequest"
+                "$ref": "#/components/schemas/GetCreateGroupRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/GetGroupRequest"
+                "$ref": "#/components/schemas/GetCreateGroupRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/GetGroupRequest"
+                "$ref": "#/components/schemas/GetCreateGroupRequest"
               }
             }
           }
@@ -2295,6 +2295,18 @@
         },
         "additionalProperties": false
       },
+      "GetCreateGroupRequest": {
+        "type": "object",
+        "properties": {
+          "GroupRequest": {
+            "$ref": "#/components/schemas/GetGroupRequest"
+          },
+          "User": {
+            "$ref": "#/components/schemas/USERS"
+          }
+        },
+        "additionalProperties": false
+      },
       "GetEmailSenderRequest": {
         "type": "object",
         "properties": {
@@ -2447,6 +2459,11 @@
           },
           "Avatar": {
             "type": "string",
+            "nullable": true
+          },
+          "GroupCounter": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           }
         },
@@ -2840,6 +2857,11 @@
             "format": "int32",
             "nullable": true
           },
+          "GroupCounter": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "Avatar": {
             "type": "string",
             "format": "byte",
@@ -3060,6 +3082,10 @@
           "AVATAR": {
             "type": "string",
             "nullable": true
+          },
+          "GROUP_COUNTER": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

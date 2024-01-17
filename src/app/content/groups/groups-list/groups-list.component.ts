@@ -176,9 +176,12 @@ export class GroupsListComponent implements OnInit {
     }
   }
 
-  async openModal() {
+  async openModal(isAdmin: boolean) {
     const modal = await this.modalCtrl.create({
       component: GroupsComponent,
+      componentProps: {
+        isAdmin: isAdmin,
+      },
     })
     modal.present()
     await modal.onWillDismiss()

@@ -15,6 +15,7 @@ configuration.ts
 encoder.ts
 git_push.sh
 index.ts
+model/get-create-group-request.ts
 model/get-email-sender-request.ts
 model/get-group-invite-request.ts
 model/get-group-invite-response.ts

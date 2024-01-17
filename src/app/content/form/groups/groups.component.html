@@ -21,6 +21,7 @@
           type="text"
         ></ion-input>
       </ion-item>
+      @if(isAdmin){
       <ion-item lines="none">
         <ion-input
           helperText=" "
@@ -34,7 +35,7 @@
         >
         </ion-input>
       </ion-item>
-      @for(user of results; track $index){
+      } @for(user of results; track $index){
       <ion-item label-placement="fixed" lines="full" (click)="add(user)">
         {{ user.FIRSTNAME }} {{ user.SURNAME }}
       </ion-item>

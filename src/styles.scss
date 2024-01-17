@@ -15,7 +15,13 @@
   justify-content: center;
   height: 100%;
 }
-
+.tab {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: x-large;
+}
 $background-color-normal: var(--ion-color-primary);
 $background-color-hover: var(--ion-color-secondary);
 

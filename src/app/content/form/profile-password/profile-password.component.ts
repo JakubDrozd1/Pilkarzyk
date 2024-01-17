@@ -12,9 +12,9 @@ import { MaskitoModule } from '@maskito/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
-import { compareValidator } from 'src/app/helper/validateConfirmPasswd'
 import { UserService } from 'src/app/service/user/user.service'
 import { SpinnerComponent } from "../../../helper/spinner/spinner.component";
+import { ComparePasswordValidator } from 'src/app/helper/customValidators'
 
 @Component({
     selector: 'app-profile-password',
@@ -54,7 +54,7 @@ export class ProfilePasswordComponent implements OnInit {
       ],
       confirmPassword: [
         '',
-        [Validators.required, compareValidator('password')],
+        [Validators.required, ComparePasswordValidator('password')],
       ],
     })
   }

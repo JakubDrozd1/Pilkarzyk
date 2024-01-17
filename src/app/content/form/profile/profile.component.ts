@@ -106,7 +106,7 @@ export class ProfileComponent implements OnInit {
               '',
               [
                 Validators.required,
-                Validators.pattern('^[a-zA-Z]+$'),
+                Validators.pattern('^[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]+$'),
                 Validators.minLength(3),
                 Validators.maxLength(25),
               ],
@@ -115,7 +115,7 @@ export class ProfileComponent implements OnInit {
               '',
               [
                 Validators.required,
-                Validators.pattern('^[a-zA-Z]+$'),
+                Validators.pattern('^[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]+$'),
                 Validators.minLength(3),
                 Validators.maxLength(25),
               ],

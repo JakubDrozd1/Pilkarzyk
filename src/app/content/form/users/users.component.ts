@@ -18,23 +18,24 @@ import { GroupInvitesApi, GroupsApi, USERS, UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { UserService } from 'src/app/service/user/user.service'
-import { SpinnerComponent } from "../../../helper/spinner/spinner.component";
+import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
+import { UserValidator } from 'src/app/helper/customValidators'
 
 @Component({
-    selector: 'app-users',
-    templateUrl: './users.component.html',
-    styleUrls: ['./users.component.scss'],
-    standalone: true,
-    imports: [
-        CommonModule,
-        IonicModule,
-        ReactiveFormsModule,
-        FormsModule,
-        MaskitoModule,
-        RouterLink,
-        TranslateModule,
-        SpinnerComponent
-    ]
+  selector: 'app-users',
+  templateUrl: './users.component.html',
+  styleUrls: ['./users.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    IonicModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MaskitoModule,
+    RouterLink,
+    TranslateModule,
+    SpinnerComponent,
+  ],
 })
 export class UsersComponent implements OnInit {
   @Input() idGroup: number = 0
@@ -42,14 +43,15 @@ export class UsersComponent implements OnInit {
   results: USERS[] = []
   users: USERS[] = []
   user: USERS | undefined
-  addExistingUserForm: FormGroup
+  addExistingUserForm!: FormGroup
   readonly phoneMask: MaskitoOptions = {
     mask: [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/],
   }
   readonly maskPredicate: MaskitoElementPredicateAsync = async (el) =>
     (el as HTMLIonInputElement).getInputElement()
   addNewUserForm: FormGroup
-  isReady: boolean = true
+  isReadyNewUser: boolean = true
+  isReadyExistingUser: boolean = false
 
   constructor(
     private modalCtrl: ModalController,
@@ -62,12 +64,9 @@ export class UsersComponent implements OnInit {
     private userService: UserService,
     public translate: TranslateService
   ) {
-    this.addExistingUserForm = this.fb.group({
-      user: ['', Validators.required],
-    })
     this.addNewUserForm = this.fb.group({
-      email: [''],
-      phoneNumber: [''],
+      email: ['', [Validators.email]],
+      phoneNumber: ['', [Validators.minLength(11)]],
     })
   }
 
@@ -123,9 +122,14 @@ export class UsersComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.users = response
+          this.addExistingUserForm = this.fb.group({
+            user: ['', [Validators.required, UserValidator(this.users)]],
+          })
+          this.isReadyExistingUser = true
         },
         error: () => {
           this.alert.alertNotOk()
+          this.isReadyExistingUser = true
         },
       })
   }
@@ -133,7 +137,7 @@ export class UsersComponent implements OnInit {
   onSubmitExisting() {
     this.addExistingUserForm.markAllAsTouched()
     if (this.addExistingUserForm.valid) {
-      this.isReady = false
+      this.isReadyExistingUser = false
       this.groupInviteApi
         .addGroupInviteAsync({
           getGroupInviteRequest: {
@@ -144,24 +148,24 @@ export class UsersComponent implements OnInit {
         })
         .subscribe({
           next: () => {
-            this.alert.alertOk(this.translate.instant('Successfully joined'))
+            this.alert.alertOk(this.translate.instant('Invited successfully'))
             this.refreshDataService.refresh('groups-content')
             this.cancel()
           },
-          error: () => {
-            this.alert.alertNotOk()
+          error: (error) => {
+            this.alert.handleError(error)
             this.cancel()
-            this.isReady = true
+            this.isReadyExistingUser = true
           },
         })
     }
   }
 
   onSubmitNew() {
-    this.addExistingUserForm.markAllAsTouched()
+    this.addNewUserForm.markAllAsTouched()
     if (this.addNewUserForm.valid) {
-      this.isReady = false
       if (this.addNewUserForm.value.email) {
+        this.isReadyNewUser = false
         this.groupsApi
           .getGroupById({
             groupId: this.idGroup,
@@ -190,16 +194,24 @@ export class UsersComponent implements OnInit {
                   error: () => {
                     this.cancel()
                     this.alert.alertNotOk()
-                    this.isReady = true
+                    this.isReadyNewUser = true
                   },
                 })
             },
-            error: () => {
+            error: (error) => {
               this.cancel()
-              this.alert.alertNotOk()
-              this.isReady = true
+              this.alert.handleError(error)
+              this.isReadyNewUser = true
             },
           })
+      } else if (this.addNewUserForm.value.phoneNumber) {
+        this.alert.alertNotOk(this.translate.instant('Work in progress'))
+        this.cancel()
+      } else {
+        this.alert.alertNotOk(
+          this.translate.instant('You should complete one field')
+        )
+        this.isReadyNewUser = true
       }
     }
   }

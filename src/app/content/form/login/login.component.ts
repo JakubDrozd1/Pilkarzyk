@@ -61,6 +61,7 @@ export class LoginComponent implements OnInit {
     this.loginForm.markAllAsTouched()
     if (this.loginForm.valid) {
       this.isReady = false
+
       this.tokenApi
         .generateToken({
           grantType: 'password',
@@ -91,21 +92,7 @@ export class LoginComponent implements OnInit {
             }
           },
           error: (error) => {
-            if (String(error.error).includes('User is null')) {
-              this.errorMessage = this.translate.instant(
-                'The given user does not exist.'
-              )
-              this.alert.alertNotOk(this.errorMessage)
-            } else if (
-              String(error.error).includes('Password is not correct')
-            ) {
-              this.errorMessage = this.translate.instant(
-                'Password is not correct.'
-              )
-              this.alert.alertNotOk(this.errorMessage)
-            } else {
-              this.alert.alertNotOk()
-            }
+            this.alert.handleError(error)
             this.isReady = true
           },
         })

@@ -4,3 +4,7 @@ ion-item {
 ion-input {
   --border-color: var(--ion-color-tertiary);
 }
+ion-button:active {
+  transform: scale(0.97);
+  filter: brightness(120%);
+}

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">pilkarzyk</string>
+    <string name="app_name">JaBall</string>
     <string name="title_activity_main">pilkarzyk</string>
     <string name="package_name">com.proman.pilkarzyk</string>
     <string name="custom_url_scheme">com.proman.pilkarzyk</string>

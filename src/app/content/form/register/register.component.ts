@@ -14,9 +14,9 @@ import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
-import { compareValidator } from 'src/app/helper/validateConfirmPasswd'
 import { AuthService } from 'src/app/service/auth/auth.service'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
+import { ComparePasswordValidator } from 'src/app/helper/customValidators'
 
 @Component({
   selector: 'app-register',
@@ -71,7 +71,7 @@ export class RegisterComponent implements OnInit {
       ],
       confirmPassword: [
         '',
-        [Validators.required, compareValidator('password')],
+        [Validators.required, ComparePasswordValidator('password')],
       ],
       firstname: [
         '',
@@ -129,9 +129,9 @@ export class RegisterComponent implements OnInit {
             this.router.navigate(['/login'])
             this.userRegistered.emit(response)
           },
-          error: () => {
+          error: (error) => {
             this.isReady = true
-            this.alert.alertNotOk()
+            this.alert.handleError(error)
           },
         })
     }

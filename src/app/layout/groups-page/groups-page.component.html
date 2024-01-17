@@ -1,6 +1,15 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{ "Your groups" | translate }}</ion-title>
+    <ion-grid>
+      <ion-row>
+        <ion-col class="tab">
+          {{ "Your groups" | translate }}
+        </ion-col>
+        <ion-col style="text-align: right">
+          <app-gadu-gadu></app-gadu-gadu>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ion-toolbar>
 </ion-header>
 <ion-content>

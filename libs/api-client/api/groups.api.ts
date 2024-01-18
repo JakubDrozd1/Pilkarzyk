@@ -59,7 +59,7 @@ export interface UpdateGroupRequestParams {
   providedIn: 'root',
 })
 export class GroupsApi {
-  protected basePath = 'https://jaball.manowski.pl:2001';
+  protected basePath = 'https://jaball.manowski.pl:2100';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
   public encoder: HttpParameterCodec;

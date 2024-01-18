@@ -8,7 +8,7 @@ const config: CapacitorConfig = {
     url: 'https://jaball.manowski.pl', //http://192.168.1.114:4200  http://192.168.88.20:4200
     cleartext: true,
     androidScheme: 'https',
-    allowNavigation: ['https://jaball.manowski.pl:2001'],
+    allowNavigation: ['https://jaball.manowski.pl:2100'],
   },
   plugins: {
     Keyboard: {

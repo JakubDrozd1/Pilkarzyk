@@ -82,7 +82,6 @@
   "Number of people": "Ilość osób",
   "Place": "Miejsce",
   "The given user does not exist.": "Dany użytkownik nie istnieje.",
-  "Password is not correct.": "Podane hasło jest niepoprawne.",
   "Log in": "Zaloguj",
   "Group with this name already exists.": "Grupa z taką nazwą już istnieje.",
   "Group name is required": "Nazwa grupy jest wymagana",
@@ -115,6 +114,7 @@
   "Acount with login already exists": "Konto z tym loginem już istnieje.",
   "Acount with email already exists": "Konto z tym emailem już istnieje.",
   "Acount with phone number already exists": "Konto z tym numerem telefonu już istnieje.",
-  "An unexpected error occured": "Wystąpił nieoczekiwany błąd",
-  "Password is not correct": "Podane hasło jest nieprawidłowe"
+  "An unexpected error occured": "Wystąpił nieoczekiwany błąd.",
+  "Password is not correct": "Podane hasło jest nieprawidłowe.",
+  "Username is null": "Konto o podanym loginie nie istnieje."
 }

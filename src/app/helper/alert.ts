@@ -20,6 +20,7 @@ export class Alert {
     'Acount with email already exists',
     'Acount with phone number already exists',
     'Password is not correct',
+    'Username is null',
   ]
 
   constructor(
@@ -46,10 +47,22 @@ export class Alert {
   }
 
   async handleError(error: any) {
-    if (this.errorMessages.includes(String(error.error.message))) {
-      this.errorMessage = this.translate.instant(String(error.error.message))
-    } else {
-      this.errorMessage = this.translate.instant('An unexpected error occured')
+    if (typeof error.error === 'string') {
+      if (this.errorMessages.includes(String(error.error))) {
+        this.errorMessage = this.translate.instant(String(error.error))
+      } else {
+        this.errorMessage = this.translate.instant(
+          'An unexpected error occured'
+        )
+      }
+    } else if (typeof error.error === 'object') {
+      if (this.errorMessages.includes(String(error.error.message))) {
+        this.errorMessage = this.translate.instant(String(error.error.message))
+      } else {
+        this.errorMessage = this.translate.instant(
+          'An unexpected error occured'
+        )
+      }
     }
     const alert = await this.alertController.create({
       header: this.translate.instant('Error'),

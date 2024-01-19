@@ -2910,6 +2910,10 @@
           "Salt": {
             "type": "string",
             "nullable": true
+          },
+          "GroupCounter": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false

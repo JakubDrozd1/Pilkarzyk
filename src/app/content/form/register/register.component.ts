@@ -117,6 +117,7 @@ export class RegisterComponent implements OnInit {
             Firstname: this.registrationForm.value.firstname,
             Surname: this.registrationForm.value.surname,
             PhoneNumber: intNumber,
+            GroupCounter: 1,
           },
         })
         .subscribe({

@@ -19,7 +19,7 @@
   "Password is required": "Password is required",
   "NUMBER OF PEOPLE": "NUMBER OF PEOPLE",
   "First name": "First name",
-  "First name cannot have digits": "First name cannot have digits",
+  "First name cannot have digits": "Wrong first name format",
   "LOGIN": "LOGIN",
   "Login": "Login",
   "Login is too short": "Login is too short",
@@ -27,7 +27,7 @@
   "PLACE": "PLACE",
   "Group name": "Group name",
   "Last name": "Last name",
-  "Last name cannot have digits": "Last name cannot have digits",
+  "Last name cannot have digits": "Wrong last name format",
   "I WON'T COME": "I WON'T COME",
   "You have no meetings today": "You have no meetings today",
   "You have no pending meetings": "You have no pending meetings",
@@ -82,7 +82,6 @@
   "Number of people": "Number of people",
   "Place": "Place",
   "The given user does not exist.": "The given user does not exist.",
-  "Password is not correct.": "Password is not correct.",
   "Log in": "Log in",
   "Group with this name already exists.": "Group with this name already exists.",
   "Group name is required": "Group name is required",
@@ -115,6 +114,7 @@
   "Acount with login already exists": "Acount with this login already exist.",
   "Acount with email already exists": "Acount with this email already exists.",
   "Acount with phone number already exists": "Acount with this phone number already exists.",
-  "An unexpected error occured": "An unexpected error occured",
-  "Password is not correct": "Password is not correct"
+  "An unexpected error occured": "An unexpected error occured.",
+  "Password is not correct": "Password is not correct.",
+  "Username is null": "The account with the given login does not exist."
 }

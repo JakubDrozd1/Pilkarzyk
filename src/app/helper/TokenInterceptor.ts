@@ -50,12 +50,6 @@ export class TokenInterceptor implements HttpInterceptor {
       request = this.addAuthenticationToken(request)
     }
 
-    if (lang) {
-      request = request.clone({
-        headers: request.headers.set('X-localization', lang),
-      })
-    }
-
     request = request.clone({
       headers: request.headers.set('Accept', 'application/json'),
     })

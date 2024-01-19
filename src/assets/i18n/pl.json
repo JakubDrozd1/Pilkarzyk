@@ -19,7 +19,7 @@
   "Password is required": "Hasło jest wymagane",
   "NUMBER OF PEOPLE": "ILOŚĆ OSÓB",
   "First name": "Imię",
-  "First name cannot have digits": "Imię nie może mieć cyfr",
+  "First name cannot have digits": "Zły format imienia",
   "LOGIN": "LOGIN",
   "Login": "Login",
   "Login is too short": "Login jest za krótki",
@@ -27,7 +27,7 @@
   "PLACE": "MIEJSCE",
   "Group name": "Nazwa grupy",
   "Last name": "Nazwisko",
-  "Last name cannot have digits": "Nazwisko nie może mieć cyfr",
+  "Last name cannot have digits": "Zły format nazwiska",
   "I WON'T COME": "NIE BĘDĘ",
   "You have no meetings today": "Nie masz dzisiaj żadnych spotkań",
   "You have no pending meetings": "Nie masz oczekujących spotkań",
@@ -82,7 +82,6 @@
   "Number of people": "Ilość osób",
   "Place": "Miejsce",
   "The given user does not exist.": "Dany użytkownik nie istnieje.",
-  "Password is not correct.": "Podane hasło jest niepoprawne.",
   "Log in": "Zaloguj",
   "Group with this name already exists.": "Grupa z taką nazwą już istnieje.",
   "Group name is required": "Nazwa grupy jest wymagana",
@@ -115,6 +114,7 @@
   "Acount with login already exists": "Konto z tym loginem już istnieje.",
   "Acount with email already exists": "Konto z tym emailem już istnieje.",
   "Acount with phone number already exists": "Konto z tym numerem telefonu już istnieje.",
-  "An unexpected error occured": "Wystąpił nieoczekiwany błąd",
-  "Password is not correct": "Podane hasło jest nieprawidłowe"
+  "An unexpected error occured": "Wystąpił nieoczekiwany błąd.",
+  "Password is not correct": "Podane hasło jest nieprawidłowe.",
+  "Username is null": "Konto o podanym loginie nie istnieje."
 }

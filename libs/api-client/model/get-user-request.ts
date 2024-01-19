@@ -20,5 +20,6 @@ export interface GetUserRequest {
     PhoneNumber?: number;
     IsAdmin?: boolean;
     Salt?: string | null;
+    GroupCounter?: number;
 }
 

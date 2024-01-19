@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.proman.pilkarzyk',
+  appId: 'com.proman.JaBall',
   appName: 'JABALL',
   webDir: 'dist/pilkarzyk',
   server: {
@@ -20,7 +20,7 @@ const config: CapacitorConfig = {
       sound: 'beep.wav',
     },
     BackgroundRunner: {
-      label: 'com.proman.pilkarzyk.notification',
+      label: 'com.proman.JaBall.notification',
       src: 'runners/runner.js',
       event: 'push-notification',
       repeat: true,

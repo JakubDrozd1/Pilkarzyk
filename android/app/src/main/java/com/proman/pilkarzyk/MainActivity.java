@@ -1,4 +1,4 @@
-package com.proman.pilkarzyk;
+package com.proman.JaBall;
 
 import com.getcapacitor.BridgeActivity;
 

@@ -26,6 +26,6 @@ export class DownloadComponent implements OnInit {
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
-    this.router.navigate(['logged/home'])
+    this.router.navigate(['home'])
   }
 }

@@ -14,23 +14,23 @@ export class IsLogged {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(
-    _route: ActivatedRouteSnapshot,
-    _state: RouterStateSnapshot
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
   ): Observable<boolean> {
-    if (this.authService.isLoggedIn) {
+    if (this.authService.login()) {
       return of(true)
     }
-
     return this.authService.refreshAccesToken(false).pipe(
       catchError(() => {
         return of(false)
       }),
       map((token) => {
         if (!token) {
-          this.router.navigate(['login'])
+          this.router.navigate(['/form/login'])
           return false
         }
         this.authService.setLoggedIn(token.access_token, token.refresh_token)
+        window.location.reload()
         return true
       })
     )

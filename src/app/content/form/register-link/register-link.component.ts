@@ -2,10 +2,12 @@ import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { IonicModule } from '@ionic/angular'
 import { RegisterComponent } from '../register/register.component'
-import { GroupsUsersApi, UsersApi } from 'libs/api-client'
+import { GroupsUsersApi, TokenApi, UsersApi } from 'libs/api-client'
 import { ActivatedRoute } from '@angular/router'
 import { Alert } from 'src/app/helper/alert'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { AppConfig } from 'src/app/service/app-config'
+import { JwtHelperService } from '@auth0/angular-jwt'
 
 @Component({
   selector: 'app-register-link',
@@ -22,7 +24,9 @@ export class RegisterLinkComponent implements OnInit {
     private groupsUsersApi: GroupsUsersApi,
     private route: ActivatedRoute,
     private alert: Alert,
-    public translate: TranslateService
+    public translate: TranslateService,
+    private tokenApi: TokenApi,
+    private jwt: JwtHelperService
   ) {}
 
   ngOnInit() {
@@ -39,21 +43,36 @@ export class RegisterLinkComponent implements OnInit {
   }
 
   onUserRegistered(user: any) {
-    this.usersApi
-      .getUserByLoginAndPassword({
-        login: user.Login ?? '',
-        password: user.Password ?? '',
+    console.log(user)
+    this.tokenApi
+      .generateToken({
+        grantType: 'password',
+        clientId: AppConfig.settings.clientId,
+        clientSecret: AppConfig.settings.clientSecretPublic,
+        username: user.Login,
+        password: user.Password,
       })
       .subscribe({
         next: (response) => {
+          let decodedToken = this.jwt.decodeToken(response.access_token ?? '')
+          if (decodedToken.idUser > 0) {
+            localStorage.setItem('access_token', response.access_token ?? '')
+            localStorage.setItem('refresh_token', response.refresh_token ?? '')
+          }
           this.groupsUsersApi
             .addUserToGroupAsync({
               idGroup: this.idGroup,
-              idUser: response.ID_USER,
+              idUser: decodedToken.idUser,
+              accountType: 0,
             })
             .subscribe({
-              next: () => {},
+              next: () => {
+                localStorage.removeItem('access_token')
+                localStorage.removeItem('refresh_token')
+              },
               error: () => {
+                localStorage.removeItem('access_token')
+                localStorage.removeItem('refresh_token')
                 this.alert.alertNotOk(
                   this.translate.instant(
                     'Not added to group. Please try again later.'

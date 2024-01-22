@@ -8,22 +8,7 @@ import { AppConfig } from '../app-config'
   providedIn: 'root',
 })
 export class AuthService {
-  private loggedIn = new BehaviorSubject<boolean>(false)
-
   constructor(private jwt: JwtHelperService, private tokenApi: TokenApi) {}
-
-  get isLoggedIn() {
-    if (
-      this.jwt.isTokenExpired() ||
-      localStorage.getItem('refresh_token') == null ||
-      localStorage.getItem('access_token') == null
-    ) {
-      this.loggedIn.next(false)
-    } else {
-      this.loggedIn.next(true)
-    }
-    return this.loggedIn.getValue()
-  }
 
   setLoggedIn(token: string, refreshToken: string): boolean {
     try {
@@ -41,16 +26,16 @@ export class AuthService {
 
   login() {
     if (this.jwt.isTokenExpired()) {
-      this.loggedIn.next(false)
+      return false
     }
-    this.loggedIn.next(true)
+    return true
   }
 
   logout() {
     localStorage.removeItem('access_token')
     localStorage.removeItem('refresh_token')
-    this.loggedIn.next(false)
     window.location.reload()
+    return false
   }
 
   refreshAccesToken(errorThrow: boolean = true): Observable<any> {

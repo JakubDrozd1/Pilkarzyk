@@ -26,8 +26,9 @@ const IsLoggedFn: CanActivateFn = (
 
 export const routes: Routes = [
   {
-    path: 'logged',
-    component: TabComponent,
+    path: '',
+    loadComponent: () =>
+      import('./controller/tab/tab.component').then((m) => m.TabComponent),
     canActivate: [IsLoggedFn, MainCanActivateFn],
     children: [
       {
@@ -78,22 +79,29 @@ export const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'logged/home',
+        redirectTo: 'home',
         pathMatch: 'full',
       },
     ],
   },
   {
-    path: '',
-    component: AuthComponent,
+    path: 'form',
+    loadComponent: () =>
+      import('./controller/auth/auth.component').then((m) => m.AuthComponent),
     children: [
       {
         path: 'login',
-        component: LoginComponent,
+        loadComponent: () =>
+          import('./content/form/login/login.component').then(
+            (m) => m.LoginComponent
+          ),
       },
       {
         path: 'register',
-        component: RegisterComponent,
+        loadComponent: () =>
+          import('./content/form/register/register.component').then(
+            (m) => m.RegisterComponent
+          ),
       },
       {
         path: '',
@@ -108,7 +116,7 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'login',
+    redirectTo: 'form/login',
     pathMatch: 'full',
   },
 ]

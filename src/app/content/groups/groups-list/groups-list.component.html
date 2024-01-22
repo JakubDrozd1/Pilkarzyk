@@ -38,7 +38,7 @@
         <ion-card-content>
           <ion-item
             lines="full"
-            [routerLink]="['/logged/groups', item.IdGroup]"
+            [routerLink]="['/groups', item.IdGroup]"
             button
             detail="true"
           >
@@ -65,7 +65,8 @@
     </ion-fab-list>
   </ion-fab>
   } } @if(userService.loggedUser && userService.loggedUser.GROUP_COUNTER){
-  @if(!userService.loggedUser.IS_ADMIN && userService.loggedUser.GROUP_COUNTER >0){
+  @if(!userService.loggedUser.IS_ADMIN && userService.loggedUser.GROUP_COUNTER
+  >0){
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button>
       <ion-icon name="add"></ion-icon>

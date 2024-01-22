@@ -97,7 +97,7 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.authService.isLoggedIn) {
+    if (this.authService.login()) {
       this.navigate()
     }
   }
@@ -126,9 +126,12 @@ export class RegisterComponent implements OnInit {
               this.translate.instant('Registered successfully. You can log in.')
             )
             this.isReady = true
+            this.router.navigate(['/form/login'])
+            this.userRegistered.emit({
+              Login: this.registrationForm.value.login,
+              Password: this.registrationForm.value.password,
+            })
             this.registrationForm.reset()
-            this.router.navigate(['/login'])
-            this.userRegistered.emit(response)
           },
           error: (error) => {
             this.isReady = true
@@ -138,6 +141,6 @@ export class RegisterComponent implements OnInit {
     }
   }
   private navigate() {
-    this.router.navigate(['/logged/home'])
+    this.router.navigate(['/home'])
   }
 }

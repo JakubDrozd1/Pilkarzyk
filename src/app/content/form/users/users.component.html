@@ -1,111 +1,81 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button color="medium" (click)="cancel()">
-        {{ "Cancel" | translate }}
-      </ion-button>
+      <ion-button (click)="cancel()">{{ "Cancel" | translate }}</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
+
+@if(mode=="old"){
 <ion-content class="ion-padding">
-  <ion-button id="open-modal-add-existing-user" expand="block">
-    {{ "Add existing user" | translate }}
-  </ion-button>
-
-  <ion-button id="open-modal-add-new-user" expand="block">
-    {{ "Add new user" | translate }}
-  </ion-button>
+  <app-spinner [isReady]="!isReadyExistingUser"></app-spinner>
+  @if(isReadyExistingUser){
+  <form [formGroup]="addExistingUserForm" (ngSubmit)="onSubmitExisting()">
+    <ion-list [inset]="true">
+      <ion-label>{{ "Invite an existing user" | translate }}</ion-label>
+      <ion-item lines="none">
+        <ion-input
+          helperText=" "
+          [errorText]="'User is null' | translate"
+          [label]="'First name and last name' | translate"
+          labelPlacement="floating"
+          formControlName="user"
+          (ngModelChange)="handleInput()"
+          (ionBlur)="removeFocus()"
+        >
+        </ion-input>
+      </ion-item>
+      @for(user of results; track $index){
+      <ion-item lines="full" (click)="add(user)">
+        {{ user.FIRSTNAME }} {{ user.SURNAME }}
+      </ion-item>
+      }
+      <ion-button type="submit" expand="full">
+        {{ "Add" | translate }}
+      </ion-button>
+    </ion-list>
+  </form>
+  }
 </ion-content>
-<ion-modal #modal trigger="open-modal-add-existing-user">
-  <ng-template>
-    <ion-header>
-      <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-button (click)="cancel()">{{ "Cancel" | translate }}</ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content class="ion-padding">
-      <app-spinner [isReady]="!isReadyExistingUser"></app-spinner>
-      @if(isReadyExistingUser){
-      <form [formGroup]="addExistingUserForm" (ngSubmit)="onSubmitExisting()">
-        <ion-list [inset]="true">
-          <ion-label>{{ "Invite an existing user" | translate }}</ion-label>
-          <ion-item lines="none">
-            <ion-input
-              helperText=" "
-              [errorText]="'User is null' | translate"
-              [label]="'First name and last name' | translate"
-              labelPlacement="floating"
-              formControlName="user"
-              (ngModelChange)="handleInput()"
-              (ionBlur)="removeFocus()"
-            >
-            </ion-input>
-          </ion-item>
-          @for(user of results; track $index){
-          <ion-item lines="full" (click)="add(user)">
-            {{ user.FIRSTNAME }} {{ user.SURNAME }}
-          </ion-item>
-          }
-          <ion-button type="submit" expand="full">
-            {{ "Add" | translate }}
-          </ion-button>
-        </ion-list>
-      </form>
-      }
-    </ion-content>
-  </ng-template>
-</ion-modal>
-
-<ion-modal #modal trigger="open-modal-add-new-user">
-  <ng-template>
-    <ion-header>
-      <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-button (click)="cancel()">{{ "Cancel" | translate }}</ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content class="ion-padding">
-      <app-spinner [isReady]="!isReadyNewUser"></app-spinner>
-      @if(isReadyNewUser){
-      <form [formGroup]="addNewUserForm" (ngSubmit)="onSubmitNew()">
-        <ion-list [inset]="true">
-          <ion-label>
-            {{ "Invite a new user using email or phone number" | translate }}
-          </ion-label>
-          <ion-item lines="none">
-            <ion-input
-              [errorText]="'Number is too short' | translate"
-              formControlName="phoneNumber"
-              labelPlacement="floating"
-              [label]="'Phone number' | translate"
-              placeholder="xxx-xxx-xxx"
-              [maskito]="phoneMask"
-              [maskitoElement]="maskPredicate"
-              type="tel"
-            >
-            </ion-input>
-          </ion-item>
-          <ion-item lines="none">
-            <ion-input
-              [errorText]="'Incorrect email format' | translate"
-              formControlName="email"
-              inputmode="email"
-              labelPlacement="floating"
-              [label]="'Email' | translate"
-              type="email"
-              placeholder="email@domain.com"
-            >
-            </ion-input>
-          </ion-item>
-          <ion-button type="submit" expand="full">
-            {{ "Add" | translate }}
-          </ion-button>
-        </ion-list>
-      </form>
-      }
-    </ion-content>
-  </ng-template>
-</ion-modal>
+} @if(mode=='new'){
+<ion-content class="ion-padding">
+  <app-spinner [isReady]="!isReadyNewUser"></app-spinner>
+  @if(isReadyNewUser){
+  <form [formGroup]="addNewUserForm" (ngSubmit)="onSubmitNew()">
+    <ion-list [inset]="true">
+      <ion-label>
+        {{ "Invite a new user using email or phone number" | translate }}
+      </ion-label>
+      <ion-item lines="none">
+        <ion-input
+          [errorText]="'Number is too short' | translate"
+          formControlName="phoneNumber"
+          labelPlacement="floating"
+          [label]="'Phone number' | translate"
+          placeholder="xxx-xxx-xxx"
+          [maskito]="phoneMask"
+          [maskitoElement]="maskPredicate"
+          type="tel"
+        >
+        </ion-input>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-input
+          [errorText]="'Incorrect email format' | translate"
+          formControlName="email"
+          inputmode="email"
+          labelPlacement="floating"
+          [label]="'Email' | translate"
+          type="email"
+          placeholder="email@domain.com"
+        >
+        </ion-input>
+      </ion-item>
+      <ion-button type="submit" expand="full">
+        {{ "Add" | translate }}
+      </ion-button>
+    </ion-list>
+  </form>
+  }
+</ion-content>
+}

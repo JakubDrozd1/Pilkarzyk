@@ -12,6 +12,7 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
 import { MessageAnswerModalComponent } from '../message-answer-modal/message-answer-modal.component'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { MeetingUserListComponent } from '../../meeting/meeting-user-list/meeting-user-list.component'
+import { RouterLink } from '@angular/router'
 
 @Component({
   selector: 'app-message-content',
@@ -25,6 +26,7 @@ import { MeetingUserListComponent } from '../../meeting/meeting-user-list/meetin
     FormsModule,
     TranslateModule,
     MeetingUserListComponent,
+    RouterLink,
   ],
 })
 export class MessageContentComponent implements OnInit {
@@ -34,7 +36,6 @@ export class MessageContentComponent implements OnInit {
   @Input() message!: GetMeetingUsersResponse
   acceptMeeting: Number = 0
   filteredMessages: GetMessagesUsersMeetingsResponse[] = []
-  messages: GetMessagesUsersMeetingsResponse[] = []
   isReady: boolean = true
 
   constructor(
@@ -55,7 +56,6 @@ export class MessageContentComponent implements OnInit {
       })
       .subscribe({
         next: (response) => {
-          this.messages = response
           this.filteredMessages = response.filter(
             (message) => message.Answer === 'yes'
           )
@@ -104,9 +104,5 @@ export class MessageContentComponent implements OnInit {
     modal.onDidDismiss().then((data) => {
       this.messageUpdate.emit(data.data)
     })
-  }
-
-  cancel() {
-    return this.modalCtrl.dismiss(null, 'cancel')
   }
 }

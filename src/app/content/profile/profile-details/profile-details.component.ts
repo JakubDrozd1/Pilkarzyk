@@ -1,34 +1,34 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
-import { IonicModule, ModalController } from '@ionic/angular'
+import { IonicModule } from '@ionic/angular'
 import { USERS, UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { LogoutComponent } from '../logout/logout.component'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { Subscription } from 'rxjs'
-import { ProfileComponent } from '../../form/profile/profile.component'
-import { ProfilePasswordComponent } from '../../form/profile-password/profile-password.component'
 import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
 import { convertFileToBase64 } from 'src/app/helper/convertFileToBase64'
 import { NotificationService } from 'src/app/service/notification/notification.service'
 import { UserService } from 'src/app/service/user/user.service'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
-import { GaduGaduComponent } from "../../../helper/gadu-gadu/gadu-gadu.component";
+import { GaduGaduComponent } from '../../../helper/gadu-gadu/gadu-gadu.component'
+import { RouterLink } from '@angular/router'
 
 @Component({
-    selector: 'app-profile-details',
-    templateUrl: './profile-details.component.html',
-    styleUrls: ['./profile-details.component.scss'],
-    standalone: true,
-    imports: [
-        CommonModule,
-        IonicModule,
-        LogoutComponent,
-        TranslateModule,
-        SpinnerComponent,
-        GaduGaduComponent
-    ]
+  selector: 'app-profile-details',
+  templateUrl: './profile-details.component.html',
+  styleUrls: ['./profile-details.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    IonicModule,
+    LogoutComponent,
+    TranslateModule,
+    SpinnerComponent,
+    GaduGaduComponent,
+    RouterLink,
+  ],
 })
 export class ProfileDetailsComponent implements OnInit {
   user: USERS | undefined
@@ -65,11 +65,11 @@ export class ProfileDetailsComponent implements OnInit {
       },
     },
   ]
+  isPickerOpen: boolean = false
 
   constructor(
     private usersApi: UsersApi,
     private alert: Alert,
-    private modalCtrl: ModalController,
     private refreshDataService: RefreshDataService,
     public notificationService: NotificationService,
     private userService: UserService,
@@ -85,6 +85,9 @@ export class ProfileDetailsComponent implements OnInit {
       })
     )
     this.getDetails()
+    window.addEventListener('popstate', (event) => {
+      this.setOpen(false)
+    })
   }
 
   getDetails() {
@@ -117,10 +120,6 @@ export class ProfileDetailsComponent implements OnInit {
       })
   }
 
-  cancel() {
-    return this.modalCtrl.dismiss(null, 'cancel')
-  }
-
   openFileInput() {
     document.getElementById('fileInput')?.click()
   }
@@ -129,6 +128,7 @@ export class ProfileDetailsComponent implements OnInit {
     const selectedFile = event.target.files[0]
     const maxSizeInBytes = 5 * 1024 * 1024
     if (selectedFile && selectedFile.size <= maxSizeInBytes) {
+      this.isReady = false
       convertFileToBase64(selectedFile).then((base64String) => {
         this.usersApi
           .updateColumnUser({
@@ -145,6 +145,7 @@ export class ProfileDetailsComponent implements OnInit {
                   'You have successfully changed your avatar.'
                 )
               )
+              this.isReady = true
               this.refreshDataService.refresh('profile-details')
             },
             error: () => {
@@ -159,45 +160,13 @@ export class ProfileDetailsComponent implements OnInit {
     }
   }
 
-  openModalEditMail() {
-    this.openModalEdit('mail', this.user?.EMAIL)
-  }
-
-  openModalEditPhoneNumber() {
-    this.openModalEdit('phone', String(this.user?.PHONE_NUMBER))
-  }
-
-  openModalAddLogin() {
-    this.openModalEdit('login', this.user?.LOGIN)
-  }
-
-  openModalEditName() {
-    this.openModalEdit('name', this.user?.FIRSTNAME + ' ' + this.user?.SURNAME)
-  }
-
-  async openModalEdit(mode: string, data: string | null | undefined) {
-    const modal = await this.modalCtrl.create({
-      component: ProfileComponent,
-      componentProps: {
-        inputEdit: mode,
-        data: data,
-      },
-    })
-    modal.present()
-    await modal.onWillDismiss()
-  }
-
-  async openModalEditPassword() {
-    const modal = await this.modalCtrl.create({
-      component: ProfilePasswordComponent,
-    })
-    modal.present()
-    await modal.onWillDismiss()
-  }
-
   reload() {
     this.temp = ''
     this.isReady = false
     this.getDetails()
+  }
+
+  setOpen(isOpen: boolean) {
+    this.isPickerOpen = isOpen
   }
 }

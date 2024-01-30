@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import {
   FormBuilder,
   FormGroup,
@@ -9,7 +9,7 @@ import {
 } from '@angular/forms'
 import { Capacitor } from '@capacitor/core'
 import { Keyboard } from '@capacitor/keyboard'
-import { IonicModule, ModalController } from '@ionic/angular'
+import { IonicModule } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { GroupsApi, GroupsUsersApi, USERS, UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
@@ -17,6 +17,7 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { UserValidator } from 'src/app/helper/customValidators'
 import { UserService } from 'src/app/service/user/user.service'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-groups',
@@ -33,7 +34,6 @@ import { UserService } from 'src/app/service/user/user.service'
   ],
 })
 export class GroupsComponent implements OnInit {
-  @Input() isAdmin: boolean = false
   groupForm!: FormGroup
   users: USERS[] = []
   isReady: boolean = false
@@ -42,14 +42,14 @@ export class GroupsComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private modalCtrl: ModalController,
     private groupsApi: GroupsApi,
     private usersApi: UsersApi,
     private groupsUsersApi: GroupsUsersApi,
     private refreshDataService: RefreshDataService,
     private alert: Alert,
     public translate: TranslateService,
-    public userService: UserService
+    public userService: UserService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -131,7 +131,7 @@ export class GroupsComponent implements OnInit {
   }
 
   cancel() {
-    return this.modalCtrl.dismiss(null, 'cancel')
+    this.router.navigate(['/groups'])
   }
 
   handleInput() {

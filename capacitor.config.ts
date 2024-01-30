@@ -27,9 +27,9 @@ const config: CapacitorConfig = {
       label: 'com.proman.pilkarzyk.notification',
       src: 'runners/runner.js',
       event: 'push-notification',
-      repeat: true,
+      repeat: false,
       interval: 1,
-      autoStart: true,
+      autoStart: false,
     },
   },
 };

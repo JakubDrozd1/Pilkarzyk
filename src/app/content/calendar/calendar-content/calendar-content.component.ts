@@ -40,6 +40,7 @@ export class CalendarContentComponent implements OnInit {
   selectedDate: string[] = []
   private subscription: Subscription = new Subscription()
   isReadyRefresh: boolean = false
+  lang: string = ''
 
   constructor(
     private meetingsApi: MeetingsApi,
@@ -60,6 +61,7 @@ export class CalendarContentComponent implements OnInit {
         }
       })
     )
+    this.lang = localStorage.getItem('lang') ?? 'en'
     this.getDetails()
   }
 

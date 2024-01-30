@@ -6,8 +6,8 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
-import { IonicModule, ModalController } from '@ionic/angular'
+import { ActivatedRoute, RouterLink } from '@angular/router'
+import { IonicModule } from '@ionic/angular'
 import {
   GetGroupsUsersResponse,
   GetMeetingGroupsResponse,
@@ -19,11 +19,9 @@ import { Subscription, forkJoin } from 'rxjs'
 import { MeetingComponent } from '../../form/meeting/meeting.component'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { MeetingContentComponent } from '../../meeting/meeting-content/meeting-content.component'
-import { UsersComponent } from '../../form/users/users.component'
 import { Alert } from 'src/app/helper/alert'
 import { FormsModule } from '@angular/forms'
 import * as moment from 'moment'
-import { GroupsOrganizerComponent } from '../groups-organizer/groups-organizer.component'
 import { GroupsUserListComponent } from '../groups-user-list/groups-user-list.component'
 import { UserService } from 'src/app/service/user/user.service'
 import { SwiperContainer } from 'swiper/element'
@@ -45,6 +43,7 @@ import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
     GroupsUserListComponent,
     TranslateModule,
     SpinnerComponent,
+    RouterLink,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -71,7 +70,6 @@ export class GroupsContentComponent implements OnInit {
     private route: ActivatedRoute,
     private groupsUsersApi: GroupsUsersApi,
     private meetingsApi: MeetingsApi,
-    private modalCtrl: ModalController,
     private refreshDataService: RefreshDataService,
     private alert: Alert,
     private groupsApi: GroupsApi,
@@ -123,7 +121,6 @@ export class GroupsContentComponent implements OnInit {
           this.groupUser = responses.groupUser
           if (this.groupUser) {
             this.permission = Boolean(this.groupUser.AccountType)
-            console.log(this.permission)
           }
           if (!this.permission) {
             this.permission = Boolean(this.userService.loggedUser.IS_ADMIN)
@@ -167,40 +164,6 @@ export class GroupsContentComponent implements OnInit {
           },
         })
     }
-  }
-
-  async openModalAddMeeting() {
-    const modal = await this.modalCtrl.create({
-      component: MeetingComponent,
-      componentProps: {
-        idGroup: this.idGroup,
-        groupsUsers: this.groupsUsers,
-      },
-    })
-    modal.present()
-    await modal.onWillDismiss()
-  }
-
-  async openModalAddUser() {
-    const modal = await this.modalCtrl.create({
-      component: UsersComponent,
-      componentProps: {
-        idGroup: this.idGroup,
-      },
-    })
-    modal.present()
-    await modal.onWillDismiss()
-  }
-
-  async openModalAddOrganizer() {
-    const modal = await this.modalCtrl.create({
-      component: GroupsOrganizerComponent,
-      componentProps: {
-        idGroup: this.idGroup,
-      },
-    })
-    modal.present()
-    await modal.onWillDismiss()
   }
 
   onSegmentChange(select: string) {

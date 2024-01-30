@@ -116,5 +116,7 @@
   "Acount with phone number already exists": "Acount with this phone number already exists.",
   "An unexpected error occured": "An unexpected error occured.",
   "Password is not correct": "Password is not correct.",
-  "Username is null": "The account with the given login does not exist."
+  "Username is null": "The account with the given login does not exist.",
+  "Account exist with this email": "Account exist with this email",
+  "Report problem": "Report an error"
 }

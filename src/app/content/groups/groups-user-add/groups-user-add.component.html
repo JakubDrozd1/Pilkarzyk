@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()"> {{ "Cancel" | translate }} </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-button [routerLink]="['old']" expand="block">
+    {{ "Add existing user" | translate }}
+  </ion-button>
+
+  <ion-button [routerLink]="['new']" expand="block">
+    {{ "Add new user" | translate }}
+  </ion-button>
+</ion-content>

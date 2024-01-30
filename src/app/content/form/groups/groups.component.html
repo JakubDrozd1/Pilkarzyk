@@ -21,7 +21,7 @@
           type="text"
         ></ion-input>
       </ion-item>
-      @if(isAdmin){
+      @if(userService.loggedUser.IS_ADMIN){
       <ion-item lines="none">
         <ion-input
           helperText=" "

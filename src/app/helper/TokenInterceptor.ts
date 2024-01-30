@@ -33,7 +33,7 @@ export class TokenInterceptor implements HttpInterceptor {
     null
   )
 
-  constructor(private oauthService: AuthService, private router: Router) {}
+  constructor(private oauthService: AuthService) {}
 
   intercept(
     request: HttpRequest<any>,

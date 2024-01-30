@@ -12,7 +12,11 @@ export class TimeService {
   constructor() {}
 
   updateCurrentTime() {
-    const currentTime = moment().format('DD MMMM YYYY HH:mm:ss')
+    let lang = localStorage.getItem('lang')
+    console.log(lang)
+    const currentTime = moment()
+      .locale(lang ?? 'en')
+      .format('DD MMMM YYYY HH:mm:ss')
     this.currentTimeSubject.next(currentTime)
   }
 }

@@ -101,7 +101,7 @@
   "RESET": "RESET",
   "First name and last name": "Imię i nazwisko",
   "Work in progress": "Funkcjonalność jeszcze nie zaimplementowana.",
-  "You should complete one field":"Powinieneś wypełnić jedno pole.",
+  "You should complete one field": "Powinieneś wypełnić jedno pole.",
 
   "Group is null": "Grupa nie istnieje.",
   "User is null": "Użytkownik nie istnieje.",
@@ -116,5 +116,7 @@
   "Acount with phone number already exists": "Konto z tym numerem telefonu już istnieje.",
   "An unexpected error occured": "Wystąpił nieoczekiwany błąd.",
   "Password is not correct": "Podane hasło jest nieprawidłowe.",
-  "Username is null": "Konto o podanym loginie nie istnieje."
+  "Username is null": "Konto o podanym loginie nie istnieje.",
+  "Account exist with this email": "Istnieje już konto z tym emailem",
+  "Report problem": "Zgłoś błąd"
 }

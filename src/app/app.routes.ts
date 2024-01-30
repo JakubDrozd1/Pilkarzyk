@@ -4,10 +4,6 @@ import {
   RouterStateSnapshot,
   Routes,
 } from '@angular/router'
-import { TabComponent } from './controller/tab/tab.component'
-import { AuthComponent } from './controller/auth/auth.component'
-import { LoginComponent } from './content/form/login/login.component'
-import { RegisterComponent } from './content/form/register/register.component'
 import { inject } from '@angular/core'
 import { IsLogged } from './helper/isLogged'
 import { RegisterLinkComponent } from './content/form/register-link/register-link.component'
@@ -39,11 +35,46 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'groups/add',
+        loadComponent: () =>
+          import('./content/form/groups/groups.component').then(
+            (m) => m.GroupsComponent
+          ),
+      },
+      {
         path: 'groups/:idGroup',
         loadComponent: () =>
           import(
             './content/groups/groups-content/groups-content.component'
           ).then((m) => m.GroupsContentComponent),
+      },
+      {
+        path: 'groups/:idGroup/add-meeting',
+        loadComponent: () =>
+          import('./content/form/meeting/meeting.component').then(
+            (m) => m.MeetingComponent
+          ),
+      },
+      {
+        path: 'groups/:idGroup/add-user',
+        loadComponent: () =>
+          import(
+            './content/groups/groups-user-add/groups-user-add.component'
+          ).then((m) => m.GroupsUserAddComponent),
+      },
+      {
+        path: 'groups/:idGroup/add-user/:mode',
+        loadComponent: () =>
+          import('./content/form/users/users.component').then(
+            (m) => m.UsersComponent
+          ),
+      },
+      {
+        path: 'groups/:idGroup/add-organizer',
+        loadComponent: () =>
+          import(
+            './content/groups/groups-organizer/groups-organizer.component'
+          ).then((m) => m.GroupsOrganizerComponent),
       },
       {
         path: 'calendar',
@@ -67,11 +98,39 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'profile/edit-pass',
+        loadComponent: () =>
+          import(
+            './content/form/profile-password/profile-password.component'
+          ).then((m) => m.ProfilePasswordComponent),
+      },
+      {
+        path: 'profile/edit',
+        loadComponent: () =>
+          import('./content/profile/profile-edit/profile-edit.component').then(
+            (m) => m.ProfileEditComponent
+          ),
+      },
+      {
+        path: 'profile/edit/:mode',
+        loadComponent: () =>
+          import('./content/form/profile/profile.component').then(
+            (m) => m.ProfileComponent
+          ),
+      },
+      {
         path: 'notification',
         loadComponent: () =>
           import('./layout/notification-page/notification-page.component').then(
             (m) => m.NotificationPageComponent
           ),
+      },
+      {
+        path: 'message/:idMeeting',
+        loadComponent: () =>
+          import(
+            './content/message/message-user-list/message-user-list.component'
+          ).then((m) => m.MessageUserListComponent),
       },
       {
         path: 'download',

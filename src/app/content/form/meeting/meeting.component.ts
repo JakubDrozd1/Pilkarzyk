@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import {
   FormBuilder,
   FormGroup,
@@ -7,7 +7,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms'
-import { IonicModule, ModalController, NavParams } from '@ionic/angular'
+import { IonicModule } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import {
   GetGroupsUsersResponse,
@@ -20,6 +20,7 @@ import { Observable } from 'rxjs'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
+import { ActivatedRoute, Router } from '@angular/router'
 
 @Component({
   selector: 'app-meeting',
@@ -36,9 +37,8 @@ import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
   ],
 })
 export class MeetingComponent implements OnInit {
-  @Input() idGroup: number = 0
-  @Input() groupsUsers: GetGroupsUsersResponse[] = []
-
+  idGroup: number = 0
+  groupsUsers: GetGroupsUsersResponse[] = []
   meetingForm: FormGroup
   displayDate: any
   idUsers: number[] = []
@@ -48,13 +48,14 @@ export class MeetingComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private modalCtrl: ModalController,
+    private router: Router,
     private meetingsApi: MeetingsApi,
     private refreshDataService: RefreshDataService,
     private alert: Alert,
     private usersMeetingsApi: UsersMeetingsApi,
     private groupsUsersApi: GroupsUsersApi,
-    public translate: TranslateService
+    public translate: TranslateService,
+    private route: ActivatedRoute
   ) {
     this.meetingForm = this.fb.group({
       dateMeeting: ['', Validators.required],
@@ -65,13 +66,16 @@ export class MeetingComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.route.params.subscribe((params) => {
+      if (params?.['idGroup'] > 0) {
+        this.idGroup = parseInt(params?.['idGroup'])
+        this.getGroupUsers()
+      }
+    })
     this.displayDate = moment().add(this.delay, 'hours').format()
     this.meetingForm
       .get('dateMeeting')
       ?.setValue(moment().add(this.delay, 'hours').format())
-    if (this.groupsUsers.length <= 0) {
-      this.getGroupUsers()
-    }
   }
 
   getGroupUsers() {
@@ -145,7 +149,7 @@ export class MeetingComponent implements OnInit {
     }
   }
 
-  cancel() {
-    return this.modalCtrl.dismiss(null, 'cancel')
+  async cancel() {
+    this.router.navigate(['/groups', this.idGroup])
   }
 }

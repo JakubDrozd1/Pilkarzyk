@@ -1,0 +1,84 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">{{ "Cancel" | translate }}</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <app-spinner [isReady]="!isReady"></app-spinner>
+
+  @if(isReady && user){
+  <ion-list>
+    <ion-card>
+      <ion-card-content>
+        <ion-item lines="none" class="label">
+          <ion-label>{{ "FIRSTNAME & LASTNAME" | translate }}</ion-label>
+        </ion-item>
+        <ion-item
+          [routerLink]="['/profile/edit/name']"
+          value="masno"
+          lines="full"
+          class="title"
+          button
+          detail="true"
+        >
+          <ion-label>{{ user.FIRSTNAME }} {{ user.SURNAME }}</ion-label>
+          <ion-icon slot="end" size="large" name="create-outline"></ion-icon>
+        </ion-item>
+      </ion-card-content>
+      <ion-card-content>
+        <ion-item lines="none" class="label">
+          <ion-label>{{ "E-MAIL" | translate }}</ion-label>
+        </ion-item>
+        <ion-item
+          [routerLink]="['/profile/edit/mail']"
+          lines="full"
+          class="title"
+          button
+          detail="true"
+        >
+          <ion-label>{{ user.EMAIL }}</ion-label>
+          <ion-icon slot="end" size="large" name="create-outline"></ion-icon>
+        </ion-item>
+      </ion-card-content>
+      <ion-card-content>
+        <ion-item lines="none" class="label">
+          <ion-label>{{ "PHONE NUMBER" | translate }}</ion-label>
+        </ion-item>
+        <ion-item
+          [routerLink]="['/profile/edit/phone']"
+          lines="full"
+          class="title"
+          button
+          detail="true"
+        >
+          @if(user.PHONE_NUMBER){
+          <ion-label>
+            {{ user.PHONE_NUMBER.toString().slice(0, 3) }}-{{
+              user.PHONE_NUMBER.toString().slice(3, 6)
+            }}-{{ user.PHONE_NUMBER.toString().slice(6) }}
+          </ion-label>
+          }
+          <ion-icon slot="end" size="large" name="create-outline"></ion-icon>
+        </ion-item>
+      </ion-card-content>
+      <ion-card-content>
+        <ion-item lines="none" class="label">
+          <ion-label>{{ "LOGIN" | translate }}</ion-label>
+        </ion-item>
+        <ion-item
+          [routerLink]="['/profile/edit/login']"
+          lines="full"
+          class="title"
+          button
+          detail="true"
+        >
+          <ion-label>{{ user.LOGIN }}</ion-label>
+          <ion-icon slot="end" size="large" name="create-outline"></ion-icon>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+  }
+</ion-content>

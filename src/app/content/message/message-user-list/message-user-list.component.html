@@ -1,0 +1,13 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">{{ "Cancel" | translate }}</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <app-spinner [isReady]="!isReady"></app-spinner>
+  @if(isReady){ @for(item of messages; track $index){
+  <app-meeting-user-list [user]="item"></app-meeting-user-list>
+  }}
+</ion-content>

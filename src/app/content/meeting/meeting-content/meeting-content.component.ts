@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnInit, Input } from '@angular/core'
-import { IonicModule, ModalController } from '@ionic/angular'
+import { IonicModule } from '@ionic/angular'
 import {
   GetMeetingGroupsResponse,
   GetMessagesUsersMeetingsResponse,
@@ -9,6 +9,7 @@ import {
 import { Alert } from 'src/app/helper/alert'
 import { MeetingUserListComponent } from '../meeting-user-list/meeting-user-list.component'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { RouterLink } from '@angular/router'
 
 @Component({
   selector: 'app-meeting-content',
@@ -20,19 +21,18 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
     IonicModule,
     MeetingUserListComponent,
     TranslateModule,
+    RouterLink,
   ],
 })
 export class MeetingContentComponent implements OnInit {
   @Input() meeting!: GetMeetingGroupsResponse
   acceptMeeting: Number = 0
   filteredMessages: GetMessagesUsersMeetingsResponse[] = []
-  messages: GetMessagesUsersMeetingsResponse[] = []
   isReady: boolean = false
 
   constructor(
     private messagesApi: MessagesApi,
     private alert: Alert,
-    private modalCtrl: ModalController,
     public translate: TranslateService
   ) {}
 
@@ -45,7 +45,6 @@ export class MeetingContentComponent implements OnInit {
       })
       .subscribe({
         next: (response) => {
-          this.messages = response
           this.filteredMessages = response.filter(
             (message) => message.Answer === 'yes'
           )
@@ -56,9 +55,5 @@ export class MeetingContentComponent implements OnInit {
           this.alert.alertNotOk()
         },
       })
-  }
-
-  cancel() {
-    return this.modalCtrl.dismiss(null, 'cancel')
   }
 }

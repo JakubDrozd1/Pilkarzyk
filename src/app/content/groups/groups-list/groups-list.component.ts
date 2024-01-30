@@ -81,7 +81,6 @@ export class GroupsListComponent implements OnInit {
 
   constructor(
     private groupsUsersApi: GroupsUsersApi,
-    private modalCtrl: ModalController,
     private refreshDataService: RefreshDataService,
     private alert: Alert,
     public notificationService: NotificationService,
@@ -174,17 +173,6 @@ export class GroupsListComponent implements OnInit {
           },
         })
     }
-  }
-
-  async openModal(isAdmin: boolean) {
-    const modal = await this.modalCtrl.create({
-      component: GroupsComponent,
-      componentProps: {
-        isAdmin: isAdmin,
-      },
-    })
-    modal.present()
-    await modal.onWillDismiss()
   }
 
   reload() {

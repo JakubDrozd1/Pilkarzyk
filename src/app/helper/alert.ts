@@ -21,6 +21,7 @@ export class Alert {
     'Acount with phone number already exists',
     'Password is not correct',
     'Username is null',
+    'Account exist with this email',
   ]
 
   constructor(

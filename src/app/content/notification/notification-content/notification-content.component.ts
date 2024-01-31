@@ -10,17 +10,15 @@ import {
 import { IonicModule, RefresherEventDetail } from '@ionic/angular'
 import {
   GetGroupInviteResponse,
-  GetMeetingUsersResponse,
   GetMessagesUsersMeetingsResponse,
   GroupInvitesApi,
   MessagesApi,
   UsersMeetingsApi,
 } from 'libs/api-client'
 import { MessageContentComponent } from '../../message/message-content/message-content.component'
-import { Observable, Subscription, forkJoin } from 'rxjs'
+import { Observable, Subscription } from 'rxjs'
 import { Alert } from 'src/app/helper/alert'
 import { DataService } from 'src/app/service/data/data.service'
-import { NotificationService } from 'src/app/service/notification/notification.service'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import * as moment from 'moment'
 import { FormsModule } from '@angular/forms'
@@ -68,7 +66,6 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
     private alert: Alert,
     private refreshDataService: RefreshDataService,
     private messagesApi: MessagesApi,
-    public notificationService: NotificationService,
     private dataService: DataService,
     private groupInvite: GroupInvitesApi,
     private userService: UserService,
@@ -94,12 +91,6 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
         }
       })
     )
-    this.meetingNotificationSubscription = this.notificationService
-      .getMeetingNotifications()
-      .subscribe((notification) => {
-        this.getNotification(notification.userid, notification.meetingid)
-      })
-
     this.getDetails()
   }
 

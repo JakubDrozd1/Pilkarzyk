@@ -19,7 +19,6 @@ import { MeetingContentComponent } from '../../meeting/meeting-content/meeting-c
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { TimeService } from 'src/app/service/time/time.service'
-import { NotificationService } from 'src/app/service/notification/notification.service'
 import { MessageContentComponent } from '../../message/message-content/message-content.component'
 import { FormsModule } from '@angular/forms'
 import { MessageWaitingContentComponent } from '../../message/message-waiting-content/message-waiting-content.component'
@@ -67,7 +66,6 @@ export class HomeContentComponent implements OnInit, OnDestroy {
     private alert: Alert,
     private refreshDataService: RefreshDataService,
     private timeService: TimeService,
-    public notificationService: NotificationService,
     private userService: UserService,
     public translate: TranslateService
   ) {}

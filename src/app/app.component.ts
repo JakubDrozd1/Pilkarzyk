@@ -1,14 +1,12 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { RouterModule } from '@angular/router'
-import { BackgroundRunner } from '@capacitor/background-runner'
 import { Capacitor } from '@capacitor/core'
 import { IonicModule } from '@ionic/angular'
 import { HttpClientModule } from '@angular/common/http'
 import { register } from 'swiper/element/bundle'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { Subscription } from 'rxjs'
-import { NotificationService } from './service/notification/notification.service'
 import { UserService } from './service/user/user.service'
 import { GetMeetingUsersResponse, UsersMeetingsApi } from 'libs/api-client'
 import { DataService } from './service/data/data.service'
@@ -35,7 +33,6 @@ export class AppComponent implements OnInit {
 
   constructor(
     public translate: TranslateService,
-    public notificationService: NotificationService,
     private userService: UserService,
     private usersMeetingsApi: UsersMeetingsApi,
     private dataService: DataService
@@ -44,32 +41,14 @@ export class AppComponent implements OnInit {
     this.init()
     this.testSave()
   }
-  ngOnInit(): void {
-    this.meetingNotificationSubscription = this.notificationService
-      .getMeetingNotifications()
-      .subscribe((notification) => {
-        this.getNotification(notification.userid, notification.meetingid)
-      })
-  }
+  ngOnInit(): void {}
 
   async init() {
     if (Capacitor.isNativePlatform()) {
-      try {
-        const permissions = await BackgroundRunner.requestPermissions({
-          apis: ['notifications'],
-        })
-      } catch (error) {
-        console.error(error)
-      }
     }
   }
   async testSave() {
     if (Capacitor.isNativePlatform()) {
-      const result = await BackgroundRunner.dispatchEvent({
-        label: 'com.proman.pilkarzyk.notification',
-        event: 'push-notification',
-        details: {},
-      })
     }
   }
 

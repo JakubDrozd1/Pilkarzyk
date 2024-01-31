@@ -4,7 +4,6 @@ import { IonicModule } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { USERS, UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
-import { NotificationService } from 'src/app/service/notification/notification.service'
 import { UserService } from 'src/app/service/user/user.service'
 import { Router, RouterLink } from '@angular/router'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
@@ -32,7 +31,6 @@ export class ProfileEditComponent implements OnInit {
   constructor(
     private usersApi: UsersApi,
     private alert: Alert,
-    public notificationService: NotificationService,
     private userService: UserService,
     public translate: TranslateService,
     private router: Router,

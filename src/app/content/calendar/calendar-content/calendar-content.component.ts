@@ -12,7 +12,6 @@ import * as moment from 'moment'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { Subscription } from 'rxjs'
-import { NotificationService } from 'src/app/service/notification/notification.service'
 import { UserService } from 'src/app/service/user/user.service'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
@@ -48,7 +47,6 @@ export class CalendarContentComponent implements OnInit {
     private alert: Alert,
     private refreshDataService: RefreshDataService,
     private usersMeetingsApi: UsersMeetingsApi,
-    public notificationService: NotificationService,
     private userService: UserService,
     public translate: TranslateService
   ) {}
@@ -171,6 +169,5 @@ export class CalendarContentComponent implements OnInit {
 
   reset() {
     this.selectedDate = []
-    // this.selectedDate = null
   }
 }

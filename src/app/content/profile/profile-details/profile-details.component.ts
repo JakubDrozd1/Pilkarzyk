@@ -8,7 +8,6 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
 import { Subscription } from 'rxjs'
 import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
 import { convertFileToBase64 } from 'src/app/helper/convertFileToBase64'
-import { NotificationService } from 'src/app/service/notification/notification.service'
 import { UserService } from 'src/app/service/user/user.service'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
@@ -71,7 +70,6 @@ export class ProfileDetailsComponent implements OnInit {
     private usersApi: UsersApi,
     private alert: Alert,
     private refreshDataService: RefreshDataService,
-    public notificationService: NotificationService,
     private userService: UserService,
     public translate: TranslateService
   ) {}

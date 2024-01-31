@@ -9,7 +9,6 @@ import {
 import { RouterLink } from '@angular/router'
 import {
   IonicModule,
-  ModalController,
   RefresherEventDetail,
 } from '@ionic/angular'
 import {
@@ -19,11 +18,9 @@ import {
   USERS,
   UsersApi,
 } from 'libs/api-client'
-import { GroupsComponent } from '../../form/groups/groups.component'
 import { Observable, Subscription } from 'rxjs'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { Alert } from 'src/app/helper/alert'
-import { NotificationService } from 'src/app/service/notification/notification.service'
 import { UserService } from 'src/app/service/user/user.service'
 import { FormsModule } from '@angular/forms'
 import { GroupsUserListComponent } from '../groups-user-list/groups-user-list.component'
@@ -83,7 +80,6 @@ export class GroupsListComponent implements OnInit {
     private groupsUsersApi: GroupsUsersApi,
     private refreshDataService: RefreshDataService,
     private alert: Alert,
-    public notificationService: NotificationService,
     private groupApi: GroupsApi,
     public userService: UserService,
     private usersApi: UsersApi,

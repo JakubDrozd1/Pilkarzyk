@@ -18,18 +18,8 @@ const config: CapacitorConfig = {
     Keyboard: {
       resizeOnFullScreen: true,
     },
-    LocalNotifications: {
-      smallIcon: 'ic_stat_icon_config_sample',
-      iconColor: '#488AFF',
-      sound: 'beep.wav',
-    },
-    BackgroundRunner: {
-      label: 'com.proman.pilkarzyk.notification',
-      src: 'runners/runner.js',
-      event: 'push-notification',
-      repeat: false,
-      interval: 1,
-      autoStart: false,
+    PushNotifications: {
+      presentationOptions: ['badge', 'sound', 'alert'],
     },
   },
 };

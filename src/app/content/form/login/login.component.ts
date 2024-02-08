@@ -11,11 +11,14 @@ import { Router } from '@angular/router'
 import { JwtHelperService } from '@auth0/angular-jwt'
 import { IonicModule } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
-import { TokenApi } from 'libs/api-client'
+import { NotificationTokensApi, TokenApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { AppConfig } from 'src/app/service/app-config'
 import { AuthService } from 'src/app/service/auth/auth.service'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
+import { PushNotifications } from '@capacitor/push-notifications'
+import { UserService } from 'src/app/service/user/user.service'
+import { Capacitor } from '@capacitor/core'
 
 @Component({
   selector: 'app-login',
@@ -43,7 +46,9 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private tokenApi: TokenApi,
     private alert: Alert,
-    public translate: TranslateService
+    public translate: TranslateService,
+    private notificationTokensApi: NotificationTokensApi,
+    private jwt: JwtHelperService
   ) {
     this.loginForm = this.fb.group({
       login: ['', Validators.required],
@@ -61,7 +66,6 @@ export class LoginComponent implements OnInit {
     this.loginForm.markAllAsTouched()
     if (this.loginForm.valid) {
       this.isReady = false
-
       this.tokenApi
         .generateToken({
           grantType: 'password',
@@ -71,7 +75,7 @@ export class LoginComponent implements OnInit {
           password: this.loginForm.value.password,
         })
         .subscribe({
-          next: (response) => {
+          next: async (response) => {
             let success = false
             if (
               response.access_token != null &&
@@ -86,6 +90,10 @@ export class LoginComponent implements OnInit {
               this.loginForm.reset()
               this.authService.login()
               this.navigate()
+              if (response.access_token && Capacitor.isNativePlatform()) {
+                this.addListeners(response.access_token)
+                await PushNotifications.register()
+              }
             } else {
               this.alert.alertNotOk()
               this.isReady = true
@@ -101,5 +109,29 @@ export class LoginComponent implements OnInit {
 
   private navigate() {
     this.router.navigate(['/home'])
+  }
+
+  addListeners = async (accessToken: string) => {
+    await PushNotifications.addListener('registration', (token) => {
+      let decodedToken = this.jwt.decodeToken(accessToken)
+      this.notificationTokensApi
+        .addNotificationToken({
+          getNotificationTokenRequest: {
+            Token: token.value,
+            IdUser: decodedToken.idUser,
+          },
+        })
+        .subscribe({
+          next: () => {
+            console.log('OK')
+          },
+          error: (error) => {
+            console.error(error.error)
+          },
+        })
+    })
+    await PushNotifications.addListener('registrationError', (err) => {
+      console.error('Registration error: ', err.error)
+    })
   }
 }

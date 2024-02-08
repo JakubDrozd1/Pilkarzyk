@@ -10,6 +10,8 @@ import { Subscription } from 'rxjs'
 import { UserService } from './service/user/user.service'
 import { GetMeetingUsersResponse, UsersMeetingsApi } from 'libs/api-client'
 import { DataService } from './service/data/data.service'
+import { PushNotifications } from '@capacitor/push-notifications'
+import { LocalNotifications } from '@capacitor/local-notifications'
 
 register()
 
@@ -36,19 +38,12 @@ export class AppComponent implements OnInit {
     private userService: UserService,
     private usersMeetingsApi: UsersMeetingsApi,
     private dataService: DataService
-  ) {
-    this.setLanguage()
-    this.init()
-    this.testSave()
-  }
-  ngOnInit(): void {}
+  ) {}
 
-  async init() {
+  ngOnInit(): void {
+    this.setLanguage()
     if (Capacitor.isNativePlatform()) {
-    }
-  }
-  async testSave() {
-    if (Capacitor.isNativePlatform()) {
+      this.registerNotifications()
     }
   }
 
@@ -96,6 +91,17 @@ export class AppComponent implements OnInit {
             },
           })
       }
+    }
+  }
+
+  registerNotifications = async () => {
+    let permStatus = await PushNotifications.checkPermissions()
+    if (permStatus.receive === 'prompt') {
+      permStatus = await PushNotifications.requestPermissions()
+      await LocalNotifications.requestPermissions()
+    }
+    if (permStatus.receive !== 'granted') {
+      throw new Error('User denied permissions!')
     }
   }
 }

@@ -57,6 +57,14 @@
         >
         </ion-textarea>
       </ion-item>
+      <ion-item lines="none">
+        <ion-checkbox
+          labelPlacement="end"
+          justify="start"
+          formControlName="presence"
+          >{{ "Check if you will also come" | translate }}</ion-checkbox
+        >
+      </ion-item>
     </ion-list>
     <ion-button type="submit" expand="full">
       {{ "Add" | translate }}

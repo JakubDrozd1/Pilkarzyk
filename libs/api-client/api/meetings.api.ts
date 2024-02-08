@@ -23,6 +23,8 @@ import { GetMeetingGroupsResponse } from '../model/get-meeting-groups-response';
 // @ts-ignore
 import { GetMeetingRequest } from '../model/get-meeting-request';
 // @ts-ignore
+import { GetUsersMeetingsRequest } from '../model/get-users-meetings-request';
+// @ts-ignore
 import { MEETINGS } from '../model/meetings';
 
 // @ts-ignore
@@ -31,7 +33,7 @@ import { Configuration }                                     from '../configurat
 
 
 export interface AddMeetingRequestParams {
-    getMeetingRequest?: GetMeetingRequest;
+    getUsersMeetingsRequest?: GetUsersMeetingsRequest;
 }
 
 export interface DeleteMeetingRequestParams {
@@ -133,7 +135,7 @@ export class MeetingsApi {
     public addMeeting(requestParameters: AddMeetingRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
     public addMeeting(requestParameters: AddMeetingRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
     public addMeeting(requestParameters: AddMeetingRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
-        const getMeetingRequest = requestParameters.getMeetingRequest;
+        const getUsersMeetingsRequest = requestParameters.getUsersMeetingsRequest;
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -187,7 +189,7 @@ export class MeetingsApi {
         return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: getMeetingRequest,
+                body: getUsersMeetingsRequest,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

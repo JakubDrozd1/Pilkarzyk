@@ -879,17 +879,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/GetMeetingRequest"
+                "$ref": "#/components/schemas/GetUsersMeetingsRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/GetMeetingRequest"
+                "$ref": "#/components/schemas/GetUsersMeetingsRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/GetMeetingRequest"
+                "$ref": "#/components/schemas/GetUsersMeetingsRequest"
               }
             }
           }
@@ -1279,6 +1279,117 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/notification-token": {
+      "post": {
+        "tags": [
+          "NotificationTokens"
+        ],
+        "operationId": "AddNotificationToken",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetNotificationTokenRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetNotificationTokenRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetNotificationTokenRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/notification-token/{userId}": {
+      "get": {
+        "tags": [
+          "NotificationTokens"
+        ],
+        "operationId": "GetNotificationTokensFromUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetMeetingGroupsResponse"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetMeetingGroupsResponse"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetMeetingGroupsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "NotificationTokens"
+        ],
+        "operationId": "DeleteNotificationToken",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success"
@@ -2079,40 +2190,6 @@
         }
       }
     },
-    "/api/users-meetings/add": {
-      "post": {
-        "tags": [
-          "UsersMeetings"
-        ],
-        "operationId": "AddUsersToMeetingAsync",
-        "parameters": [
-          {
-            "name": "IdUsers",
-            "in": "query",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "integer",
-                "format": "int32"
-              }
-            }
-          },
-          {
-            "name": "IdMeeting",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
     "/api/users-meetings/all": {
       "get": {
         "tags": [
@@ -2701,6 +2778,20 @@
         },
         "additionalProperties": false
       },
+      "GetNotificationTokenRequest": {
+        "type": "object",
+        "properties": {
+          "Token": {
+            "type": "string",
+            "nullable": true
+          },
+          "IdUser": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "GetRankingRequest": {
         "type": "object",
         "properties": {
@@ -2914,6 +3005,26 @@
           "GroupCounter": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetUsersMeetingsRequest": {
+        "type": "object",
+        "properties": {
+          "Meeting": {
+            "$ref": "#/components/schemas/GetMeetingRequest"
+          },
+          "IdUsers": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "nullable": true
+          },
+          "Message": {
+            "$ref": "#/components/schemas/GetMessageRequest"
           }
         },
         "additionalProperties": false

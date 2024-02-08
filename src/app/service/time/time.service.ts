@@ -13,7 +13,6 @@ export class TimeService {
 
   updateCurrentTime() {
     let lang = localStorage.getItem('lang')
-    console.log(lang)
     const currentTime = moment()
       .locale(lang ?? 'en')
       .format('DD MMMM YYYY HH:mm:ss')

@@ -20,7 +20,6 @@ export class RegisterLinkComponent implements OnInit {
   idGroup: number | undefined
 
   constructor(
-    private usersApi: UsersApi,
     private groupsUsersApi: GroupsUsersApi,
     private route: ActivatedRoute,
     private alert: Alert,
@@ -43,7 +42,6 @@ export class RegisterLinkComponent implements OnInit {
   }
 
   onUserRegistered(user: any) {
-    console.log(user)
     this.tokenApi
       .generateToken({
         grantType: 'password',

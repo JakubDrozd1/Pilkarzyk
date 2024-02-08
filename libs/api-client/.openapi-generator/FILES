@@ -7,6 +7,7 @@ api/groups-users.api.ts
 api/groups.api.ts
 api/meetings.api.ts
 api/messages.api.ts
+api/notification-tokens.api.ts
 api/rankings.api.ts
 api/token.api.ts
 api/users-meetings.api.ts
@@ -26,12 +27,14 @@ model/get-meeting-request.ts
 model/get-meeting-users-response.ts
 model/get-message-request.ts
 model/get-messages-users-meetings-response.ts
+model/get-notification-token-request.ts
 model/get-ranking-request.ts
 model/get-rankings-users-groups-response.ts
 model/get-token-request.ts
 model/get-token-response.ts
 model/get-update-user-request.ts
 model/get-user-request.ts
+model/get-users-meetings-request.ts
 model/groups.ts
 model/meetings.ts
 model/messages.ts

@@ -21,6 +21,7 @@ import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { ActivatedRoute, Router } from '@angular/router'
+import { UserService } from 'src/app/service/user/user.service'
 
 @Component({
   selector: 'app-meeting',
@@ -52,16 +53,17 @@ export class MeetingComponent implements OnInit {
     private meetingsApi: MeetingsApi,
     private refreshDataService: RefreshDataService,
     private alert: Alert,
-    private usersMeetingsApi: UsersMeetingsApi,
     private groupsUsersApi: GroupsUsersApi,
     public translate: TranslateService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private userService: UserService
   ) {
     this.meetingForm = this.fb.group({
       dateMeeting: ['', Validators.required],
       place: ['', Validators.required],
       quantity: ['', Validators.required],
       description: [''],
+      presence: [true],
     })
   }
 
@@ -91,6 +93,9 @@ export class MeetingComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.groupsUsers = response
+          for (let user of this.groupsUsers) {
+            this.idUsers.push(Number(user.IdUser))
+          }
           this.isReady = true
         },
         error: () => {
@@ -107,38 +112,27 @@ export class MeetingComponent implements OnInit {
       this.isReady = false
       this.meetingsApi
         .addMeeting({
-          getMeetingRequest: {
-            DateMeeting: this.meetingForm.value.dateMeeting,
-            Place: this.meetingForm.value.place,
-            Quantity: this.meetingForm.value.quantity,
-            Description: this.meetingForm.value.description,
-            IdGroup: this.idGroup,
+          getUsersMeetingsRequest: {
+            Meeting: {
+              DateMeeting: this.meetingForm.value.dateMeeting,
+              Place: this.meetingForm.value.place,
+              Quantity: this.meetingForm.value.quantity,
+              Description: this.meetingForm.value.description,
+              IdGroup: this.idGroup,
+            },
+            Message: {
+              IdUser: this.userService.loggedUser.ID_USER,
+              Answer: this.meetingForm.value.presence ? 'yes' : 'no',
+            },
+            IdUsers: this.idUsers,
           },
         })
         .subscribe({
-          next: (meetingResponse) => {
-            const meetingId = meetingResponse.ID_MEETING
-            for (let user of this.groupsUsers) {
-              this.idUsers.push(Number(user.IdUser))
-            }
-            this.usersMeetingsApi
-              .addUsersToMeetingAsync({
-                idUsers: this.idUsers,
-                idMeeting: meetingId,
-              })
-              .subscribe({
-                next: () => {
-                  this.alert.alertOk()
-                  this.meetingForm.reset()
-                  this.refreshDataService.refresh('groups-content')
-                  this.cancel()
-                },
-                error: (error) => {
-                  this.alert.handleError(error)
-                  this.cancel()
-                  this.isReady = true
-                },
-              })
+          next: () => {
+            this.alert.alertOk()
+            this.meetingForm.reset()
+            this.refreshDataService.refresh('groups-content')
+            this.cancel()
           },
           error: (error) => {
             this.alert.handleError(error)

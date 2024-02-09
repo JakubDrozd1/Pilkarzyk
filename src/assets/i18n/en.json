@@ -103,6 +103,10 @@
   "Work in progress": "Work in progress",
   "You should complete one field": "You should complete one field.",
   "Check if you will also come": "Check if you will also come",
+  "Add meeting": "Add meeting",
+  "Add person": "Add person",
+  "Settings": "Settings",
+  "Add group": "Add group",
 
   "Group is null": "Group doesn't exist.",
   "User is null": "User doesn't exist",

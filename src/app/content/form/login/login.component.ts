@@ -17,7 +17,6 @@ import { AppConfig } from 'src/app/service/app-config'
 import { AuthService } from 'src/app/service/auth/auth.service'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { PushNotifications } from '@capacitor/push-notifications'
-import { UserService } from 'src/app/service/user/user.service'
 import { Capacitor } from '@capacitor/core'
 
 @Component({

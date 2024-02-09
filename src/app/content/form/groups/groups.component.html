@@ -14,6 +14,7 @@
     <ion-list [inset]="true">
       <ion-item lines="none">
         <ion-input
+          class="border"
           [errorText]="'Group name is required' | translate"
           [label]="'Group name' | translate"
           labelPlacement="floating"
@@ -24,6 +25,7 @@
       @if(userService.loggedUser.IS_ADMIN){
       <ion-item lines="none">
         <ion-input
+          class="border"
           helperText=" "
           [errorText]="'User is null' | translate"
           [label]="'Organizer' | translate"

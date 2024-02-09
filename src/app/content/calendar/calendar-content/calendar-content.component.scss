@@ -5,7 +5,13 @@ ion-button {
 ion-icon {
   color: var(--ion-color-secondary);
 }
-ion-button:active {
-  transform: scale(0.97);
-  filter: brightness(120%);
+.calendar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+  align-content: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: auto;
 }

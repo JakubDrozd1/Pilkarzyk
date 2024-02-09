@@ -129,9 +129,14 @@
         </ion-item>
       </ion-col>
       <ion-col>
-        <ion-item class="button" lines="full">
+        <ion-item
+          class="button"
+          lines="full"
+          (click)="openModalAddWaitingTime()"
+          button
+        >
           <ion-card-header>
-            <ion-label color="warning" (click)="openModalAddWaitingTime()">
+            <ion-label color="warning">
               {{ "GIVE ME TIME" | translate }}
             </ion-label>
           </ion-card-header>

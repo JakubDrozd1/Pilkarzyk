@@ -65,6 +65,7 @@ export class GroupsContentComponent implements OnInit {
   visitedMembers: boolean = true
   visitedRanking: boolean = true
   permission: boolean = false
+  showMenuItem: boolean = true
 
   constructor(
     private route: ActivatedRoute,
@@ -195,5 +196,9 @@ export class GroupsContentComponent implements OnInit {
     this.visitedMembers = true
     this.visitedRanking = true
     this.getDetails()
+  }
+
+  showMenuItems() {
+    this.showMenuItem = !this.showMenuItem
   }
 }

@@ -15,6 +15,7 @@
       <ion-label>{{ "Invite an existing user" | translate }}</ion-label>
       <ion-item lines="none">
         <ion-input
+          class="border"
           helperText=" "
           [errorText]="'User is null' | translate"
           [label]="'First name and last name' | translate"
@@ -48,6 +49,7 @@
       </ion-label>
       <ion-item lines="none">
         <ion-input
+          class="border"
           [errorText]="'Number is too short' | translate"
           formControlName="phoneNumber"
           labelPlacement="floating"
@@ -61,6 +63,7 @@
       </ion-item>
       <ion-item lines="none">
         <ion-input
+          class="border"
           [errorText]="'Incorrect email format' | translate"
           formControlName="email"
           inputmode="email"

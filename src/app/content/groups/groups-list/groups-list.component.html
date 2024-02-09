@@ -26,6 +26,7 @@
 
   <app-spinner [isReady]="!isReadyGroups || !isReadyMembers"></app-spinner>
 
+  @if(userService.loggedUser.IS_ADMIN){
   <swiper-container
     #swiperContainer
     (swiperslidechange)="swiperSlideChange()"
@@ -37,6 +38,7 @@
         @for (item of groupsUsers; track $index) {
         <ion-card-content>
           <ion-item
+            class="button"
             lines="full"
             [routerLink]="['/groups', item.IdGroup]"
             button
@@ -53,17 +55,36 @@
       <app-groups-user-list [user]="item"></app-groups-user-list>}}
     </swiper-slide>
   </swiper-container>
-
-  @if(userService.loggedUser.IS_ADMIN ||
+  }@else { @if(isReadyGroups){
+  <ion-card>
+    @for (item of groupsUsers; track $index) {
+    <ion-card-content>
+      <ion-item
+        class="button"
+        lines="full"
+        [routerLink]="['/groups', item.IdGroup]"
+        button
+        detail="true"
+      >
+        {{ item.Name }}
+      </ion-item></ion-card-content
+    >}
+  </ion-card>
+  } } @if(userService.loggedUser.IS_ADMIN ||
   (userService.loggedUser.GROUP_COUNTER??0)>0){
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button>
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
-      <ion-fab-button expand="block" [routerLink]="['add']">
-        <ion-icon size="large" name="people-outline"> </ion-icon>
-      </ion-fab-button>
+      <div class="custom-fab">
+        <ion-button size="small" [routerLink]="['add']">
+          {{ "Add group" | translate }}
+        </ion-button>
+        <ion-fab-button size="small" expand="block" [routerLink]="['add']">
+          <ion-icon size="large" name="people-outline"></ion-icon>
+        </ion-fab-button>
+      </div>
     </ion-fab-list>
   </ion-fab>
   }

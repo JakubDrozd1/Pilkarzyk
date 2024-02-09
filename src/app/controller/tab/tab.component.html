@@ -1,27 +1,27 @@
 <ion-tabs>
   <ion-tab-bar slot="bottom">
-    <ion-tab-button class="hoverText" tab="home">
+    <ion-tab-button tab="home" class="ion-activatable ripple-parent">
       <ion-icon name="home-outline"></ion-icon>
-      <div class="hoverText">{{ "Start" | translate }}</div>
+      {{ "Start" | translate }}
     </ion-tab-button>
-    <ion-tab-button class="hoverText" tab="notification">
+    <ion-tab-button tab="notification" class="ion-activatable ripple-parent">
       <ion-icon name="notifications-outline"></ion-icon>
-      <div class="hoverText">{{ "Invitations" | translate }}</div>
+      {{ "Invitations" | translate }}
       @if(receivedData>0){
       <ion-badge>{{ receivedData }} </ion-badge>
       }
     </ion-tab-button>
-    <ion-tab-button class="hoverText" tab="groups">
+    <ion-tab-button tab="groups" class="ion-activatable ripple-parent">
       <ion-icon name="people-outline"></ion-icon>
-      <div class="hoverText">{{ "Groups" | translate }}</div>
+      {{ "Groups" | translate }}
     </ion-tab-button>
-    <ion-tab-button class="hoverText" tab="calendar">
+    <ion-tab-button tab="calendar" class="ion-activatable ripple-parent">
       <ion-icon name="calendar-outline"></ion-icon>
-      <div class="hoverText">{{ "Calendar" | translate }}</div>
+      {{ "Calendar" | translate }}
     </ion-tab-button>
-    <ion-tab-button class="hoverText" tab="profile">
+    <ion-tab-button tab="profile" class="ion-activatable ripple-parent">
       <ion-icon name="person-outline"></ion-icon>
-      <div class="hoverText">{{ "Profile" | translate }}</div>
+      {{ "Profile" | translate }}
     </ion-tab-button>
   </ion-tab-bar>
 </ion-tabs>

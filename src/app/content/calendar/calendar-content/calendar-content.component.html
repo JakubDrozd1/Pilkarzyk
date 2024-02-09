@@ -1,7 +1,7 @@
 <app-spinner [isReady]="!isReady"></app-spinner>
 @if(isReady){
-<ion-content class="ion-padding">
-  <ion-list [inset]="true">
+<ion-content>
+  <ion-list [inset]="true" class="calendar">
     <ion-datetime
       [(ngModel)]="selectedDate"
       (ngModelChange)="onDateChange($event)"
@@ -11,14 +11,12 @@
       [locale]="lang"
     >
     </ion-datetime>
-    <div style="text-align: right">
-      @if(selectedDate){ @if(selectedDate.length>0){
-      <ion-button fill="outline" shape="round" (click)="reset()">
-        <ion-icon name="close-outline"></ion-icon>
-        {{ "RESET" | translate }}
-      </ion-button>
-      }}
-    </div>
+    @if(selectedDate){ @if(selectedDate.length>0){
+    <ion-button fill="outline" shape="round" (click)="reset()">
+      <ion-icon name="close-outline"></ion-icon>
+      {{ "RESET" | translate }}
+    </ion-button>
+    }}
   </ion-list>
   <app-spinner [isReady]="!isReadyRefresh"></app-spinner>
   @if(isReadyRefresh){@if(selectedDate){ @if(selectedDate.length>0){ @for (item

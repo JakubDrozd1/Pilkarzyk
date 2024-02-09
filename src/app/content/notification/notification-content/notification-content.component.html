@@ -46,7 +46,7 @@
     <swiper-slide>
       @if(isReady){ @if(messages.length>0){ @for(message of messages; track
       $index){ @if(message.Answer==null){
-      <ion-item class="title" lines="full">
+      <ion-item class="warning" lines="full">
         <app-message-content [message]="message" (messageUpdate)="updateNotification()"></app-message-content>
       </ion-item>
       <ion-label color="danger"> {{ "NEW INVITATION" | translate }} </ion-label>

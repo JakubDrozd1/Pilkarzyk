@@ -166,6 +166,7 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
           sortColumn: 'DATE_MEETING',
           sortMode: 'ASC',
           dateFrom: moment().add(this.delay, 'hours').format(),
+          isAvatar: false,
         })
         .subscribe({
           next: (response) => {

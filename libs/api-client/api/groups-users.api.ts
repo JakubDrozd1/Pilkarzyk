@@ -52,6 +52,7 @@ export interface GetAllGroupsFromUserAsyncRequestParams {
     sortMode?: string;
     idUser?: number;
     idGroup?: number;
+    isAvatar?: boolean;
 }
 
 export interface GetUserWithGroupRequestParams {
@@ -444,6 +445,7 @@ export class GroupsUsersApi {
         const sortMode = requestParameters.sortMode;
         const idUser = requestParameters.idUser;
         const idGroup = requestParameters.idGroup;
+        const isAvatar = requestParameters.isAvatar;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (page !== undefined && page !== null) {
@@ -469,6 +471,10 @@ export class GroupsUsersApi {
         if (idGroup !== undefined && idGroup !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>idGroup, 'IdGroup');
+        }
+        if (isAvatar !== undefined && isAvatar !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>isAvatar, 'IsAvatar');
         }
 
         let localVarHeaders = this.defaultHeaders;

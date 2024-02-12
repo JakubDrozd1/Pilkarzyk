@@ -40,7 +40,7 @@ export class MessageWaitingContentComponent implements OnInit {
     private messagesApi: MessagesApi,
     private alert: Alert,
     private refreshDataService: RefreshDataService,
-    public translate: TranslateService,
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {
@@ -55,6 +55,7 @@ export class MessageWaitingContentComponent implements OnInit {
         idMeeting: Number(this.message.IdMeeting),
         page: 0,
         onPage: -1,
+        isAvatar: false,
       })
       .subscribe({
         next: (response) => {

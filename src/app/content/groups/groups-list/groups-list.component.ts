@@ -7,10 +7,7 @@ import {
   ViewChild,
 } from '@angular/core'
 import { RouterLink } from '@angular/router'
-import {
-  IonicModule,
-  RefresherEventDetail,
-} from '@ionic/angular'
+import { IonicModule, RefresherEventDetail } from '@ionic/angular'
 import {
   GetGroupsUsersResponse,
   GroupsApi,
@@ -94,6 +91,7 @@ export class GroupsListComponent implements OnInit {
         }
       })
     )
+    console.log(this.userService.loggedUser.GROUP_COUNTER)
     this.getGroups()
   }
 
@@ -132,6 +130,7 @@ export class GroupsListComponent implements OnInit {
               sortColumn: 'NAME',
               sortMode: 'ASC',
               idUser: this.userService.loggedUser.ID_USER,
+              isAvatar: false,
             })
             .subscribe({
               next: (groupResponse) => {

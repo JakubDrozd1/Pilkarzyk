@@ -18,5 +18,7 @@ export interface GetGroupInviteResponse {
     IdUser?: number;
     IdAuthor?: number;
     DateAdd?: string;
+    Firstname?: string | null;
+    Surname?: string | null;
 }
 

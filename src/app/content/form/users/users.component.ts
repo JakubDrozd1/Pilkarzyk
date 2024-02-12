@@ -124,7 +124,7 @@ export class UsersComponent implements OnInit {
       .getAllUsersWithoutGroupAsync({
         page: 0,
         onPage: -1,
-        sortColumn: 'SURNAME',
+        sortColumn: 'ID_USER',
         sortMode: 'ASC',
         idGroup: this.idGroup,
       })

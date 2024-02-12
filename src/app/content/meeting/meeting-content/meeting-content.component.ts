@@ -42,6 +42,7 @@ export class MeetingContentComponent implements OnInit {
         idMeeting: Number(this.meeting.IdMeeting),
         page: 0,
         onPage: -1,
+        isAvatar: false
       })
       .subscribe({
         next: (response) => {

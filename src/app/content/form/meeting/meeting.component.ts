@@ -89,6 +89,7 @@ export class MeetingComponent implements OnInit {
         sortColumn: 'SURNAME',
         sortMode: 'ASC',
         idGroup: this.idGroup,
+        isAvatar: false,
       })
       .subscribe({
         next: (response) => {

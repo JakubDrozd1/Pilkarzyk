@@ -48,6 +48,7 @@ export class GroupsOrganizerComponent implements OnInit {
           page: 0,
           onPage: -1,
           idGroup: this.idGroup,
+          isAvatar: true,
         })
         .subscribe({
           next: (response) => {

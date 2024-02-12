@@ -95,6 +95,7 @@ export class HomeContentComponent implements OnInit, OnDestroy {
   }
 
   getDetails() {
+    console.log('xpp')
     if (this.selectedSegment == 'waiting' && this.visitedWaiting) {
       this.meetingsWaiting = []
       this.usersMeetingsApi

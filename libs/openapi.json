@@ -523,6 +523,13 @@
               "type": "integer",
               "format": "int32"
             }
+          },
+          {
+            "name": "IsAvatar",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
@@ -1084,6 +1091,13 @@
             "schema": {
               "type": "string",
               "format": "date-time"
+            }
+          },
+          {
+            "name": "IsAvatar",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
             }
           }
         ],
@@ -2468,6 +2482,14 @@
           "DateAdd": {
             "type": "string",
             "format": "date-time"
+          },
+          "Firstname": {
+            "type": "string",
+            "nullable": true
+          },
+          "Surname": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2525,11 +2547,6 @@
             "nullable": true
           },
           "IdUser": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "IdGroupUser": {
             "type": "integer",
             "format": "int32",
             "nullable": true

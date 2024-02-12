@@ -148,6 +148,7 @@ export class GroupsContentComponent implements OnInit {
           sortColumn: 'SURNAME',
           sortMode: 'ASC',
           idGroup: this.idGroup,
+          isAvatar: true,
         })
         .subscribe({
           next: (response) => {

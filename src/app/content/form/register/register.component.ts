@@ -121,7 +121,7 @@ export class RegisterComponent implements OnInit {
           },
         })
         .subscribe({
-          next: (response) => {
+          next: () => {
             this.alert.alertOk(
               this.translate.instant('Registered successfully. You can log in.')
             )

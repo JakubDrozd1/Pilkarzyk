@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute } from '@angular/router'
 import { IonicModule } from '@ionic/angular'
 import { TranslateModule } from '@ngx-translate/core'
 import { MeetingUserListComponent } from '../../meeting/meeting-user-list/meeting-user-list.component'
@@ -27,7 +27,6 @@ export class MessageUserListComponent implements OnInit {
   isReady: boolean = false
 
   constructor(
-    private router: Router,
     private route: ActivatedRoute,
     private messagesApi: MessagesApi,
     private alert: Alert
@@ -50,6 +49,7 @@ export class MessageUserListComponent implements OnInit {
           idMeeting: this.idMeeting,
           page: 0,
           onPage: -1,
+          isAvatar: true,
         })
         .subscribe({
           next: (response) => {

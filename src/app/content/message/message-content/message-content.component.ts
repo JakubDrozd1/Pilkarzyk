@@ -53,6 +53,7 @@ export class MessageContentComponent implements OnInit {
         idMeeting: Number(this.message.IdMeeting),
         page: 0,
         onPage: -1,
+        isAvatar: false,
       })
       .subscribe({
         next: (response) => {

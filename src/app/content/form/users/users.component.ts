@@ -136,8 +136,8 @@ export class UsersComponent implements OnInit {
           })
           this.isReadyExistingUser = true
         },
-        error: () => {
-          this.alert.alertNotOk()
+        error: (error) => {
+          this.alert.handleError(error)
           this.isReadyExistingUser = true
         },
       })

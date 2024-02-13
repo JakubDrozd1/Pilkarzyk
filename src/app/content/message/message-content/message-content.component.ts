@@ -63,8 +63,8 @@ export class MessageContentComponent implements OnInit {
           this.acceptMeeting = this.filteredMessages.length
           this.isReady = true
         },
-        error: () => {
-          this.alert.alertNotOk()
+        error: (error) => {
+          this.alert.handleError(error)
         },
       })
   }
@@ -86,8 +86,8 @@ export class MessageContentComponent implements OnInit {
           this.messageUpdate.emit(this.message)
           this.isReady = true
         },
-        error: () => {
-          this.alert.alertNotOk()
+        error: (error) => {
+          this.alert.handleError(error)
           this.isReady = true
         },
       })

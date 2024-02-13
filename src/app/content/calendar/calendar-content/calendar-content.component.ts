@@ -110,8 +110,8 @@ export class CalendarContentComponent implements OnInit {
           this.isReady = true
           this.isReadyRefresh = true
         },
-        error: () => {
-          this.alert.alertNotOk()
+        error: (error) => {
+          this.alert.handleError(error)
           this.meetings = []
           this.isReady = true
           this.isReadyRefresh = true
@@ -141,6 +141,7 @@ export class CalendarContentComponent implements OnInit {
             dateTo: endOfDay,
             answer: 'yes',
             idUser: this.userService.loggedUser.ID_USER,
+            withMessages: true,
           })
           .subscribe({
             next: (response) => {
@@ -149,8 +150,8 @@ export class CalendarContentComponent implements OnInit {
               }
               this.isReadyRefresh = true
             },
-            error: () => {
-              this.alert.alertNotOk()
+            error: (error) => {
+              this.alert.handleError(error)
               this.meetingsSelected = []
               this.isReadyRefresh = true
             },

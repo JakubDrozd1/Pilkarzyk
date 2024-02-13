@@ -114,6 +114,7 @@ export class GroupsComponent implements OnInit {
         onPage: -1,
         sortColumn: 'SURNAME',
         sortMode: 'ASC',
+        isAvatar: false,
       })
       .subscribe({
         next: (response) => {
@@ -124,8 +125,8 @@ export class GroupsComponent implements OnInit {
           })
           this.isReady = true
         },
-        error: () => {
-          this.alert.alertNotOk()
+        error: (error) => {
+          this.alert.handleError(error)
         },
       })
   }

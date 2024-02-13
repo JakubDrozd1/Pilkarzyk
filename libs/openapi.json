@@ -843,6 +843,13 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "WithMessages",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
@@ -1828,6 +1835,13 @@
             "in": "query",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "IsAvatar",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
             }
           }
         ],

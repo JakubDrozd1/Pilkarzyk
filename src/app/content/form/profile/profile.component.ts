@@ -74,8 +74,8 @@ export class ProfileComponent implements OnInit {
           this.inicializeForm()
           this.isReady = true
         },
-        error: () => {
-          this.alert.alertNotOk()
+        error: (error) => {
+          this.alert.handleError(error)
           this.isReady = true
         },
       })
@@ -204,8 +204,8 @@ export class ProfileComponent implements OnInit {
           this.cancel()
           this.alert.alertOk(this.translate.instant('Updated successfully'))
         },
-        error: () => {
-          this.alert.alertNotOk()
+        error: (error) => {
+          this.alert.handleError(error)
           this.isReady = true
         },
       })

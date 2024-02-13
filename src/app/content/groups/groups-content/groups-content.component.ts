@@ -107,6 +107,7 @@ export class GroupsContentComponent implements OnInit {
           idGroup: this.idGroup,
           dateFrom: moment().format(),
           idUser: this.userService.loggedUser.ID_USER,
+          withMessages: true,
         }),
         group: this.groupsApi.getGroupById({
           groupId: this.idGroup ?? 0,
@@ -129,8 +130,8 @@ export class GroupsContentComponent implements OnInit {
           this.isReady = true
           this.visitedMeetings = false
         },
-        error: () => {
-          this.alert.alertNotOk()
+        error: (error) => {
+          this.alert.handleError(error)
           this.groupsUsers = []
           this.meetings = []
           this.nameGroup = ''
@@ -156,8 +157,8 @@ export class GroupsContentComponent implements OnInit {
             this.isReady = true
             this.visitedMembers = false
           },
-          error: () => {
-            this.alert.alertNotOk()
+          error: (error) => {
+            this.alert.handleError(error)
             this.groupsUsers = []
             this.meetings = []
             this.nameGroup = ''

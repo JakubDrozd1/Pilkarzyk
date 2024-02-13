@@ -65,8 +65,8 @@ export class MessageWaitingContentComponent implements OnInit {
           this.acceptMeeting = this.filteredMessages.length
           this.isReady = true
         },
-        error: () => {
-          this.alert.alertNotOk()
+        error: (error) => {
+          this.alert.handleError(error)
         },
       })
   }
@@ -85,8 +85,8 @@ export class MessageWaitingContentComponent implements OnInit {
           this.alert.alertOk(this.translate.instant('Answered successfully'))
           this.refreshDataService.refresh('home')
         },
-        error: () => {
-          this.alert.alertNotOk()
+        error: (error) => {
+          this.alert.handleError(error)
         },
       })
   }
@@ -106,8 +106,8 @@ export class MessageWaitingContentComponent implements OnInit {
             this.refreshDataService.refresh('home')
             this.refreshDataService.refresh('notification')
           },
-          error: () => {
-            this.alert.alertNotOk()
+          error: (error) => {
+            this.alert.handleError(error)
           },
         })
     }

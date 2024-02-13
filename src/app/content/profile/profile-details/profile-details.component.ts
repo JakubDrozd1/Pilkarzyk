@@ -111,8 +111,8 @@ export class ProfileDetailsComponent implements OnInit {
             this.isReady = true
           }
         },
-        error: () => {
-          this.alert.alertNotOk()
+        error: (error) => {
+          this.alert.handleError(error)
           this.isReady = true
         },
       })
@@ -146,8 +146,8 @@ export class ProfileDetailsComponent implements OnInit {
               this.isReady = true
               this.refreshDataService.refresh('profile-details')
             },
-            error: () => {
-              this.alert.alertNotOk()
+            error: (error) => {
+              this.alert.handleError(error)
             },
           })
       })

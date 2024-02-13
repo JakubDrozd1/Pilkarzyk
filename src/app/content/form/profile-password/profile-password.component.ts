@@ -85,8 +85,8 @@ export class ProfilePasswordComponent implements OnInit {
             )
             this.cancel()
           },
-          error: () => {
-            this.alert.alertNotOk()
+          error: (error) => {
+            this.alert.handleError(error)
             this.cancel()
             this.isReady = true
           },

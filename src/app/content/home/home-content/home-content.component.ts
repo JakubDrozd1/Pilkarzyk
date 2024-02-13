@@ -27,6 +27,7 @@ import { SwiperContainer } from 'swiper/element'
 import { IonRefresherCustomEvent } from '@ionic/core'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
+import { NotificationService } from 'src/app/service/notification/notification.service'
 
 @Component({
   selector: 'app-home-content',
@@ -67,7 +68,8 @@ export class HomeContentComponent implements OnInit, OnDestroy {
     private refreshDataService: RefreshDataService,
     private timeService: TimeService,
     private userService: UserService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    public notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -114,8 +116,8 @@ export class HomeContentComponent implements OnInit, OnDestroy {
             this.isReady = true
             this.visitedWaiting = false
           },
-          error: () => {
-            this.alert.alertNotOk()
+          error: (error) => {
+            this.alert.handleError(error)
             this.isReady = true
             this.visitedWaiting = false
           },
@@ -141,8 +143,8 @@ export class HomeContentComponent implements OnInit, OnDestroy {
             this.isReady = true
             this.visitedMeetings = false
           },
-          error: () => {
-            this.alert.alertNotOk()
+          error: (error) => {
+            this.alert.handleError(error)
             this.isReady = true
             this.visitedMeetings = false
           },

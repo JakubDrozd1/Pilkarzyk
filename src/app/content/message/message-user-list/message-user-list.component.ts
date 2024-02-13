@@ -56,9 +56,9 @@ export class MessageUserListComponent implements OnInit {
             this.messages = response
             this.isReady = true
           },
-          error: () => {
+          error: (error) => {
             this.isReady = true
-            this.alert.alertNotOk()
+            this.alert.handleError(error)
           },
         })
     }

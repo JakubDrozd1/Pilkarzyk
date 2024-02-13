@@ -82,8 +82,8 @@ export class GroupsOrganizerComponent implements OnInit {
               this.isReady = true
             })
           },
-          error: () => {
-            this.alert.alertNotOk()
+          error: (error) => {
+            this.alert.handleError(error)
             this.isReady = true
           },
         })
@@ -106,8 +106,8 @@ export class GroupsOrganizerComponent implements OnInit {
       })
       .subscribe({
         next: () => {},
-        error: () => {
-          this.alert.alertNotOk()
+        error: (error) => {
+          this.alert.handleError(error)
         },
       })
   }

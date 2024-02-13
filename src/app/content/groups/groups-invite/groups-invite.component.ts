@@ -13,22 +13,22 @@ import {
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
-import { SpinnerComponent } from "../../../helper/spinner/spinner.component";
+import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 
 @Component({
-    selector: 'app-groups-invite',
-    templateUrl: './groups-invite.component.html',
-    styleUrls: ['./groups-invite.component.scss'],
-    standalone: true,
-    imports: [
-        CommonModule,
-        IonicModule,
-        MeetingComponent,
-        MeetingContentComponent,
-        FormsModule,
-        TranslateModule,
-        SpinnerComponent
-    ]
+  selector: 'app-groups-invite',
+  templateUrl: './groups-invite.component.html',
+  styleUrls: ['./groups-invite.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    IonicModule,
+    MeetingComponent,
+    MeetingContentComponent,
+    FormsModule,
+    TranslateModule,
+    SpinnerComponent,
+  ],
 })
 export class GroupsInviteComponent implements OnInit {
   @Input() invite!: GetGroupInviteResponse
@@ -67,14 +67,14 @@ export class GroupsInviteComponent implements OnInit {
                   this.refreshDataService.refresh('notification')
                   this.isReady = true
                 },
-                error: () => {
-                  this.alert.alertNotOk()
+                error: (error) => {
+                  this.alert.handleError(error)
                   this.isReady = true
                 },
               })
           },
-          error: () => {
-            this.alert.alertNotOk()
+          error: (error) => {
+            this.alert.handleError(error)
             this.isReady = true
           },
         })
@@ -89,8 +89,8 @@ export class GroupsInviteComponent implements OnInit {
             this.refreshDataService.refresh('notification')
             this.isReady = true
           },
-          error: () => {
-            this.alert.alertNotOk()
+          error: (error) => {
+            this.alert.handleError(error)
             this.isReady = true
           },
         })

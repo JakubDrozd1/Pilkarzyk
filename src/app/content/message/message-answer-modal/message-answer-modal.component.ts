@@ -49,9 +49,7 @@ export class MessageAnswerModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.messageForm
-      .get('dateMeeting')
-      ?.setValue(moment().format())
+    this.messageForm.get('dateMeeting')?.setValue(moment().format())
     this.maxDate = moment(this.message.DateMeeting)
       .clone()
       .subtract(2, 'hours')
@@ -77,8 +75,8 @@ export class MessageAnswerModalComponent implements OnInit {
             this.refreshDataService.refresh('notification')
             this.cancel()
           },
-          error: () => {
-            this.alert.alertNotOk()
+          error: (error) => {
+            this.alert.handleError(error)
             this.cancel()
           },
         })

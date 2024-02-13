@@ -117,8 +117,8 @@ export class GroupsListComponent implements OnInit {
                 this.isReadyGroups = true
                 this.visitedGroups = false
               },
-              error: () => {
-                this.alert.alertNotOk()
+              error: (error) => {
+                this.alert.handleError(error)
                 this.isReadyGroups = true
                 this.visitedGroups = false
               },
@@ -138,8 +138,8 @@ export class GroupsListComponent implements OnInit {
                 this.isReadyGroups = true
                 this.visitedGroups = false
               },
-              error: () => {
-                this.alert.alertNotOk()
+              error: (error) => {
+                this.alert.handleError(error)
                 this.isReadyGroups = true
                 this.visitedGroups = false
               },
@@ -154,6 +154,7 @@ export class GroupsListComponent implements OnInit {
           onPage: -1,
           sortColumn: 'SURNAME',
           sortMode: 'ASC',
+          isAvatar: true,
         })
         .subscribe({
           next: (response) => {
@@ -161,8 +162,8 @@ export class GroupsListComponent implements OnInit {
             this.isReadyMembers = true
             this.visitedMembers = false
           },
-          error: () => {
-            this.alert.alertNotOk()
+          error: (error) => {
+            this.alert.handleError(error)
             this.isReadyMembers = true
             this.visitedMembers = false
           },
@@ -175,6 +176,7 @@ export class GroupsListComponent implements OnInit {
     this.isReadyGroups = false
     this.visitedGroups = true
     this.visitedMembers = true
+    this.userService.getDetails()
     this.getGroups()
   }
 

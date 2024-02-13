@@ -29,19 +29,19 @@ export class Alert {
     public translate: TranslateService
   ) {}
 
-  public async alertNotOk(message?: string) {
+  public async alertOk(message?: string) {
     const alert = await this.alertController.create({
-      header: this.translate.instant('Error'),
-      message: message ?? this.translate.instant('An error occured'),
+      header: 'OK',
+      message: message ?? this.translate.instant('Successfully added'),
       buttons: ['Ok'],
     })
     await alert.present()
   }
 
-  public async alertOk(message?: string) {
+  public async alertNotOk(message?: string) {
     const alert = await this.alertController.create({
-      header: 'OK',
-      message: message ?? this.translate.instant('Successfully added'),
+      header: this.translate.instant('Error'),
+      message: message ?? this.translate.instant('An error occured'),
       buttons: ['Ok'],
     })
     await alert.present()
@@ -52,17 +52,23 @@ export class Alert {
       if (this.errorMessages.includes(String(error.error))) {
         this.errorMessage = this.translate.instant(String(error.error))
       } else {
-        this.errorMessage = this.translate.instant(
-          'An unexpected error occured'
-        )
+        this.errorMessage =
+          this.translate.instant('An unexpected error occured') +
+          ': ' +
+          String(error.error)
       }
     } else if (typeof error.error === 'object') {
       if (this.errorMessages.includes(String(error.error.message))) {
         this.errorMessage = this.translate.instant(String(error.error.message))
       } else {
-        this.errorMessage = this.translate.instant(
-          'An unexpected error occured'
-        )
+        if (error.error.message) {
+          this.errorMessage =
+            this.translate.instant('An unexpected error occured') +
+            ': ' +
+            String(error.error.message)
+        } else {
+          this.errorMessage = this.translate.instant('Connections error')
+        }
       }
     }
     const alert = await this.alertController.create({

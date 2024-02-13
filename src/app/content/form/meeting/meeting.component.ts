@@ -99,8 +99,8 @@ export class MeetingComponent implements OnInit {
           }
           this.isReady = true
         },
-        error: () => {
-          this.alert.alertNotOk()
+        error: (error) => {
+          this.alert.handleError(error)
           this.groupsUsers = []
           this.isReady = true
         },

@@ -108,6 +108,7 @@
   "Settings": "Settings",
   "Add group": "Add group",
   "Organizer permission": "Grant permissions to create meetings",
+  "Connections error": "Connections error",
 
   "Group is null": "Group doesn't exist.",
   "User is null": "User doesn't exist",

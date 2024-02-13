@@ -45,6 +45,7 @@ export interface GetAllUsersRequestParams {
     onPage: number;
     sortColumn?: string;
     sortMode?: string;
+    isAvatar?: boolean;
 }
 
 export interface GetAllUsersWithoutGroupAsyncRequestParams {
@@ -299,6 +300,7 @@ export class UsersApi {
         }
         const sortColumn = requestParameters.sortColumn;
         const sortMode = requestParameters.sortMode;
+        const isAvatar = requestParameters.isAvatar;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (page !== undefined && page !== null) {
@@ -316,6 +318,10 @@ export class UsersApi {
         if (sortMode !== undefined && sortMode !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>sortMode, 'SortMode');
+        }
+        if (isAvatar !== undefined && isAvatar !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>isAvatar, 'IsAvatar');
         }
 
         let localVarHeaders = this.defaultHeaders;

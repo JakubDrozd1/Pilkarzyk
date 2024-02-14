@@ -938,17 +938,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/MEETINGS"
+                  "$ref": "#/components/schemas/GetMeetingGroupsResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MEETINGS"
+                  "$ref": "#/components/schemas/GetMeetingGroupsResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MEETINGS"
+                  "$ref": "#/components/schemas/GetMeetingGroupsResponse"
                 }
               }
             }
@@ -2805,6 +2805,11 @@
           "Avatar": {
             "type": "string",
             "nullable": true
+          },
+          "IdMessage": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3056,40 +3061,6 @@
           },
           "Message": {
             "$ref": "#/components/schemas/GetMessageRequest"
-          }
-        },
-        "additionalProperties": false
-      },
-      "MEETINGS": {
-        "type": "object",
-        "properties": {
-          "ID_MEETING": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "DATE_MEETING": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "PLACE": {
-            "type": "string",
-            "nullable": true
-          },
-          "QUANTITY": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "DESCRIPTION": {
-            "type": "string",
-            "nullable": true
-          },
-          "IDGROUP": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
           }
         },
         "additionalProperties": false

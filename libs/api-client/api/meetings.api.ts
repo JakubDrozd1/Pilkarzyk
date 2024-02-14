@@ -24,8 +24,6 @@ import { GetMeetingGroupsResponse } from '../model/get-meeting-groups-response';
 import { GetMeetingRequest } from '../model/get-meeting-request';
 // @ts-ignore
 import { GetUsersMeetingsRequest } from '../model/get-users-meetings-request';
-// @ts-ignore
-import { MEETINGS } from '../model/meetings';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -391,9 +389,9 @@ export class MeetingsApi {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getMeetingById(requestParameters: GetMeetingByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<MEETINGS>;
-    public getMeetingById(requestParameters: GetMeetingByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<MEETINGS>>;
-    public getMeetingById(requestParameters: GetMeetingByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<MEETINGS>>;
+    public getMeetingById(requestParameters: GetMeetingByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<GetMeetingGroupsResponse>;
+    public getMeetingById(requestParameters: GetMeetingByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<GetMeetingGroupsResponse>>;
+    public getMeetingById(requestParameters: GetMeetingByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<GetMeetingGroupsResponse>>;
     public getMeetingById(requestParameters: GetMeetingByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
         const meetingId = requestParameters.meetingId;
         if (meetingId === null || meetingId === undefined) {
@@ -441,7 +439,7 @@ export class MeetingsApi {
         }
 
         let localVarPath = `/api/meetings/${this.configuration.encodeParam({name: "meetingId", value: meetingId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
-        return this.httpClient.request<MEETINGS>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<GetMeetingGroupsResponse>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

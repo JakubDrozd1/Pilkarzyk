@@ -28,7 +28,7 @@
   "Group name": "Nazwa grupy",
   "Last name": "Nazwisko",
   "Last name cannot have digits": "Zły format nazwiska",
-  "I WON'T COME": "NIE BĘDĘ",
+  "I WONT COME": "NIE BĘDĘ",
   "You have no meetings today": "Nie masz dzisiaj żadnych spotkań",
   "You have no pending meetings": "Nie masz oczekujących spotkań",
   "You have no invitations": "Nie masz żadnych zaproszeń",
@@ -109,6 +109,7 @@
   "Add group": "Dodaj grupę",
   "Organizer permission": "Nadaj uprawnienia do tworzenia spotkań",
   "Connections error": "Wystąpił problem z połączeniem",
+  "Change decision": "Zmień decyzje dotyczącą uczestnictwa w spotkaniu.",
 
   "Group is null": "Grupa nie istnieje.",
   "User is null": "Użytkownik nie istnieje.",

@@ -61,9 +61,15 @@
 <ion-card>
   <ion-grid>
     <ion-card-header>
-      <ion-card-title>{{
-        meeting.DateMeeting | date : "dd.MM.yyyy HH:mm"
-      }}</ion-card-title>
+      <ion-card-title>
+        {{ meeting.DateMeeting | date : "dd.MM.yyyy HH:mm" }}
+        <ion-label
+          class="click"
+          [id]="'change-decision' + meeting.IdMeeting + component"
+        >
+          <ion-icon size="small" name="settings-outline"></ion-icon>
+        </ion-label>
+      </ion-card-title>
     </ion-card-header>
     <ion-row>
       <ion-col>
@@ -109,4 +115,11 @@
     }
   </ion-grid>
 </ion-card>
+
+<ion-alert
+  [trigger]="'change-decision' + meeting.IdMeeting + component"
+  [header]="'Change decision' | translate"
+  [inputs]="changeInputs"
+  [buttons]="changeButtons"
+></ion-alert>
 }

@@ -91,7 +91,6 @@ export class GroupsListComponent implements OnInit {
         }
       })
     )
-    console.log(this.userService.loggedUser.GROUP_COUNTER)
     this.getGroups()
   }
 

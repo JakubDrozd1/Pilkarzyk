@@ -1,7 +1,7 @@
 import { CommonModule, DatePipe } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { IonicModule } from '@ionic/angular'
+import { IonicModule, RefresherEventDetail } from '@ionic/angular'
 import {
   GetMeetingGroupsResponse,
   MeetingsApi,
@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs'
 import { UserService } from 'src/app/service/user/user.service'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { IonRefresherCustomEvent } from '@ionic/core'
 
 @Component({
   selector: 'app-calendar-content',
@@ -170,5 +171,12 @@ export class CalendarContentComponent implements OnInit {
 
   reset() {
     this.selectedDate = []
+  }
+
+  handleRefresh($event: IonRefresherCustomEvent<RefresherEventDetail>) {
+    setTimeout(() => {
+      this.reload()
+      $event.target.complete()
+    }, 2000)
   }
 }

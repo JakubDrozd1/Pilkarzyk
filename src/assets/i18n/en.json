@@ -28,7 +28,7 @@
   "Group name": "Group name",
   "Last name": "Last name",
   "Last name cannot have digits": "Wrong last name format",
-  "I WON'T COME": "I WON'T COME",
+  "I WONT COME": "I WON'T COME",
   "You have no meetings today": "You have no meetings today",
   "You have no pending meetings": "You have no pending meetings",
   "You have no invitations": "You have no invitations",
@@ -109,6 +109,7 @@
   "Add group": "Add group",
   "Organizer permission": "Grant permissions to create meetings",
   "Connections error": "Connections error",
+  "Change decision": "Change your decision about attending the meeting.",
 
   "Group is null": "Group doesn't exist.",
   "User is null": "User doesn't exist",

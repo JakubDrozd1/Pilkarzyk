@@ -123,7 +123,7 @@
         <ion-item class="button" lines="full" (click)="onSubmit('no')" button>
           <ion-card-header>
             <ion-label color="danger">
-              {{ "I WON'T COME" | translate }}
+              {{ "I WONT COME" | translate }}
             </ion-label>
           </ion-card-header>
         </ion-item>
@@ -132,8 +132,8 @@
         <ion-item
           class="button"
           lines="full"
-          (click)="openModalAddWaitingTime()"
           button
+          [routerLink]="['/message-add', message.IdMessage]"
         >
           <ion-card-header>
             <ion-label color="warning">

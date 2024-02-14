@@ -2,7 +2,11 @@
   <ion-toolbar>
     <ion-title>{{ nameGroup }} </ion-title>
     <ion-buttons slot="end">
-      <ion-back-button text="" icon="arrow-back-outline" [routerLink]="['/groups']">
+      <ion-back-button
+        text=""
+        icon="arrow-back-outline"
+        [routerLink]="['/groups']"
+      >
       </ion-back-button>
     </ion-buttons>
   </ion-toolbar>
@@ -89,7 +93,10 @@
       @if(isReady){ @if(meetings.length>0){ @for (item of meetings; track
       $index) {
       <ion-list>
-        <app-meeting-content [meeting]="item"></app-meeting-content>
+        <app-meeting-content
+          [meeting]="item"
+          component="group-content"
+        ></app-meeting-content>
       </ion-list>
       } } @else {
       <ion-item class="header" lines="none">

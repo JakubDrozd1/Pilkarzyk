@@ -36,7 +36,6 @@ model/get-update-user-request.ts
 model/get-user-request.ts
 model/get-users-meetings-request.ts
 model/groups.ts
-model/meetings.ts
 model/messages.ts
 model/models.ts
 model/problem-details.ts

@@ -16,7 +16,7 @@
       <ion-label>{{ "Meetings" | translate }}</ion-label>
     </ion-segment-button>
   </ion-segment>
-  
+
   <ion-refresher
     slot="fixed"
     [pullFactor]="0.5"
@@ -48,7 +48,10 @@
     <swiper-slide>
       @if(isReady){ @if(meetings.length > 0){ @for(meeting of meetings; track
       $index){
-      <app-meeting-content [meeting]="meeting"></app-meeting-content>
+      <app-meeting-content
+        [meeting]="meeting"
+        component="home"
+      ></app-meeting-content>
       } }@else {
       <ion-item class="header" lines="none">
         {{ "You have no meetings today" | translate }}

@@ -133,6 +133,13 @@ export const routes: Routes = [
           ).then((m) => m.MessageUserListComponent),
       },
       {
+        path: 'message-add/:idMessage',
+        loadComponent: () =>
+          import(
+            './content/message/message-answer-modal/message-answer-modal.component'
+          ).then((m) => m.MessageAnswerModalComponent),
+      },
+      {
         path: 'download',
         component: DownloadComponent,
       },

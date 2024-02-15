@@ -10,7 +10,7 @@
     }
   ],
   "paths": {
-    "/api/group-invites/{userId}": {
+    "/api/group-invites": {
       "get": {
         "tags": [
           "GroupInvites"
@@ -18,9 +18,50 @@
         "operationId": "GetGroupInviteByIdUserAsync",
         "parameters": [
           {
-            "name": "userId",
-            "in": "path",
+            "name": "Page",
+            "in": "query",
             "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "OnPage",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "SortColumn",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SortMode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "IdUser",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "IdGroup",
+            "in": "query",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -58,9 +99,7 @@
             }
           }
         }
-      }
-    },
-    "/api/group-invites": {
+      },
       "post": {
         "tags": [
           "GroupInvites"
@@ -2496,6 +2535,14 @@
           "DateAdd": {
             "type": "string",
             "format": "date-time"
+          },
+          "FirstnameAuthor": {
+            "type": "string",
+            "nullable": true
+          },
+          "SurnameAuthor": {
+            "type": "string",
+            "nullable": true
           },
           "Firstname": {
             "type": "string",

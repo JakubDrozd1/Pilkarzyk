@@ -22,6 +22,7 @@ export class Alert {
     'Password is not correct',
     'Username is null',
     'Account exist with this email',
+    'Invitation alredy send',
   ]
 
   constructor(
@@ -54,7 +55,7 @@ export class Alert {
       } else {
         this.errorMessage =
           this.translate.instant('An unexpected error occured') +
-          ': ' +
+          ' : ' +
           String(error.error)
       }
     } else if (typeof error.error === 'object') {

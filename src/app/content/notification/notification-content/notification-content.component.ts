@@ -145,7 +145,7 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
         })
         .subscribe({
           next: () => {
-            this.dataService.sendData(0)
+            this.updateNotification()
           },
           error: (error) => {
             this.alert.handleError(error)
@@ -166,7 +166,11 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
         isAvatar: false,
       }),
       invites: this.groupInvite.getGroupInviteByIdUserAsync({
-        userId: Number(this.userService.loggedUser.ID_USER),
+        idUser: Number(this.userService.loggedUser.ID_USER),
+        page: 0,
+        onPage: -1,
+        sortColumn: 'NAME',
+        sortMode: 'ASC',
       }),
     }).subscribe({
       next: (responses) => {

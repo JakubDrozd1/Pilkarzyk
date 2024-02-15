@@ -110,6 +110,9 @@
   "Organizer permission": "Nadaj uprawnienia do tworzenia spotkań",
   "Connections error": "Wystąpił problem z połączeniem",
   "Change decision": "Zmień decyzje dotyczącą uczestnictwa w spotkaniu.",
+  "Invitations sent": "Wysłane zaproszenia",
+  "Date sent": "Data wysłania",
+  "No groups": "Nie jesteś jeszcze w żadnej grupie",
 
   "Group is null": "Grupa nie istnieje.",
   "User is null": "Użytkownik nie istnieje.",
@@ -122,9 +125,10 @@
   "Acount with login already exists": "Konto z tym loginem już istnieje.",
   "Acount with email already exists": "Konto z tym emailem już istnieje.",
   "Acount with phone number already exists": "Konto z tym numerem telefonu już istnieje.",
-  "An unexpected error occured": "Wystąpił nieoczekiwany błąd.",
+  "An unexpected error occured": "Wystąpił nieoczekiwany błąd",
   "Password is not correct": "Podane hasło jest nieprawidłowe.",
   "Username is null": "Konto o podanym loginie nie istnieje.",
   "Account exist with this email": "Istnieje już konto z tym emailem",
-  "Report problem": "Zgłoś błąd"
+  "Report problem": "Zgłoś błąd",
+  "Invitation alredy send": "Wysłano już zaproszenie do tego użytkownika"
 }

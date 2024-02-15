@@ -11,16 +11,12 @@
  */
 
 
-export interface GetGroupInviteResponse { 
-    Name?: string | null;
-    IdGroupInvite?: number;
-    IdGroup?: number;
-    IdUser?: number;
-    IdAuthor?: number;
-    DateAdd?: string;
-    FirstnameAuthor?: string | null;
-    SurnameAuthor?: string | null;
-    Firstname?: string | null;
-    Surname?: string | null;
+export interface GetGroupInvitePaginationRequest { 
+    Page: number;
+    OnPage: number;
+    SortColumn?: string | null;
+    SortMode?: string | null;
+    IdUser?: number | null;
+    IdGroup?: number | null;
 }
 

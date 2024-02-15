@@ -5,7 +5,7 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content class="ion-padding">
+<ion-content>
   <ion-button [routerLink]="['old']" expand="block">
     {{ "Add existing user" | translate }}
   </ion-button>
@@ -13,4 +13,55 @@
   <ion-button [routerLink]="['new']" expand="block">
     {{ "Add new user" | translate }}
   </ion-button>
+  <app-spinner [isReady]="!isReady"></app-spinner>
+  @if(isReady && invites.length>0){
+  <ion-card>
+    <ion-row>
+      <ion-col>
+        <ion-card-header>
+          {{ "Invitations sent" | translate }}
+        </ion-card-header>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-card-header>
+          {{ "First name and last name" | translate }}
+        </ion-card-header>
+      </ion-col>
+      <ion-col>
+        <ion-card-header>{{ "Date sent" | translate }}</ion-card-header>
+      </ion-col>
+    </ion-row>
+    @for(invite of invites; track $index){
+    <ion-row>
+      <ion-col>
+        <ion-item lines="full">
+          <ion-card-header>
+            <div>
+              {{ invite.Firstname }}
+            </div>
+            <div>
+              {{ invite.Surname }}
+            </div>
+          </ion-card-header>
+        </ion-item>
+      </ion-col>
+      <ion-col>
+        <ion-item lines="full">
+          <ion-card-header>
+            <div>
+              {{ invite.DateAdd | date : "dd.MM.yyyy" }}
+            </div>
+            <div>
+              {{ invite.DateAdd | date : "HH:mm:ss" }}
+            </div>
+          </ion-card-header>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    }
+  </ion-card>
+
+  }
 </ion-content>

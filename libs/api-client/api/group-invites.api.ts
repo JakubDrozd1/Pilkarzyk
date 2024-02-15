@@ -37,7 +37,12 @@ export interface DeleteGroupInviteAsyncRequestParams {
 }
 
 export interface GetGroupInviteByIdUserAsyncRequestParams {
-    userId: number;
+    page: number;
+    onPage: number;
+    sortColumn?: string;
+    sortMode?: string;
+    idUser?: number;
+    idGroup?: number;
 }
 
 
@@ -251,9 +256,43 @@ export class GroupInvitesApi {
     public getGroupInviteByIdUserAsync(requestParameters: GetGroupInviteByIdUserAsyncRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<GetGroupInviteResponse>>>;
     public getGroupInviteByIdUserAsync(requestParameters: GetGroupInviteByIdUserAsyncRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<GetGroupInviteResponse>>>;
     public getGroupInviteByIdUserAsync(requestParameters: GetGroupInviteByIdUserAsyncRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
-        const userId = requestParameters.userId;
-        if (userId === null || userId === undefined) {
-            throw new Error('Required parameter userId was null or undefined when calling getGroupInviteByIdUserAsync.');
+        const page = requestParameters.page;
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling getGroupInviteByIdUserAsync.');
+        }
+        const onPage = requestParameters.onPage;
+        if (onPage === null || onPage === undefined) {
+            throw new Error('Required parameter onPage was null or undefined when calling getGroupInviteByIdUserAsync.');
+        }
+        const sortColumn = requestParameters.sortColumn;
+        const sortMode = requestParameters.sortMode;
+        const idUser = requestParameters.idUser;
+        const idGroup = requestParameters.idGroup;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (page !== undefined && page !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>page, 'Page');
+        }
+        if (onPage !== undefined && onPage !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>onPage, 'OnPage');
+        }
+        if (sortColumn !== undefined && sortColumn !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sortColumn, 'SortColumn');
+        }
+        if (sortMode !== undefined && sortMode !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sortMode, 'SortMode');
+        }
+        if (idUser !== undefined && idUser !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>idUser, 'IdUser');
+        }
+        if (idGroup !== undefined && idGroup !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>idGroup, 'IdGroup');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -296,10 +335,11 @@ export class GroupInvitesApi {
             }
         }
 
-        let localVarPath = `/api/group-invites/${this.configuration.encodeParam({name: "userId", value: userId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
+        let localVarPath = `/api/group-invites`;
         return this.httpClient.request<Array<GetGroupInviteResponse>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

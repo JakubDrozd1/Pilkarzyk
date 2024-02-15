@@ -16,6 +16,7 @@ import { UserService } from 'src/app/service/user/user.service'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { IonRefresherCustomEvent } from '@ionic/core'
+import { NotificationService } from 'src/app/service/notification/notification.service'
 
 @Component({
   selector: 'app-calendar-content',
@@ -49,7 +50,8 @@ export class CalendarContentComponent implements OnInit {
     private refreshDataService: RefreshDataService,
     private usersMeetingsApi: UsersMeetingsApi,
     private userService: UserService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    public notificationService: NotificationService
   ) {}
 
   ngOnInit() {

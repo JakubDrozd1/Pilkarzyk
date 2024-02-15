@@ -13,6 +13,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { GaduGaduComponent } from '../../../helper/gadu-gadu/gadu-gadu.component'
 import { RouterLink } from '@angular/router'
+import { NotificationService } from 'src/app/service/notification/notification.service'
 
 @Component({
   selector: 'app-profile-details',
@@ -71,7 +72,8 @@ export class ProfileDetailsComponent implements OnInit {
     private alert: Alert,
     private refreshDataService: RefreshDataService,
     private userService: UserService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    public notificationService: NotificationService
   ) {}
 
   ngOnInit() {

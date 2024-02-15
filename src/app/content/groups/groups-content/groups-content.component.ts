@@ -28,6 +28,7 @@ import { SwiperContainer } from 'swiper/element'
 import { IonRefresherCustomEvent, RefresherEventDetail } from '@ionic/core'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
+import { NotificationService } from 'src/app/service/notification/notification.service'
 
 @Component({
   selector: 'app-groups-content',
@@ -75,7 +76,8 @@ export class GroupsContentComponent implements OnInit {
     private alert: Alert,
     private groupsApi: GroupsApi,
     public userService: UserService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    public notificationService: NotificationService
   ) {}
 
   ngOnInit() {

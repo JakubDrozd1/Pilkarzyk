@@ -55,7 +55,7 @@
       <app-groups-user-list [user]="item"></app-groups-user-list>}}
     </swiper-slide>
   </swiper-container>
-  }@else { @if(isReadyGroups){
+  }@else { @if(isReadyGroups){ @if(groupsUsers.length>0){
   <ion-card>
     @for (item of groupsUsers; track $index) {
     <ion-card-content>
@@ -67,10 +67,15 @@
         detail="true"
       >
         {{ item.Name }}
-      </ion-item></ion-card-content
-    >}
+      </ion-item>
+    </ion-card-content>
+    }
   </ion-card>
-  } } @if(userService.loggedUser.IS_ADMIN ||
+  }@else{
+  <ion-item class="header" lines="none">
+    {{ "No groups" | translate }}
+  </ion-item>
+  } } } @if(userService.loggedUser.IS_ADMIN ||
   (userService.loggedUser.GROUP_COUNTER??0)>0){
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button>

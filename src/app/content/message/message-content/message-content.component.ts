@@ -91,18 +91,4 @@ export class MessageContentComponent implements OnInit {
         },
       })
   }
-
-  // async openModalAddWaitingTime() {
-  //   const modal = await this.modalCtrl.create({
-  //     component: MessageAnswerModalComponent,
-  //     componentProps: {
-  //       message: this.message,
-  //     },
-  //   })
-  //   modal.present()
-  //   await modal.onWillDismiss()
-  //   modal.onDidDismiss().then((data) => {
-  //     this.messageUpdate.emit(data.data)
-  //   })
-  // }
 }

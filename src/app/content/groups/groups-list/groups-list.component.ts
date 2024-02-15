@@ -25,6 +25,7 @@ import { SwiperContainer } from 'swiper/element'
 import { IonRefresherCustomEvent } from '@ionic/core'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
+import { NotificationService } from 'src/app/service/notification/notification.service'
 
 function convertUsersToGetGroupsUsersResponse(
   users: USERS[]
@@ -80,7 +81,8 @@ export class GroupsListComponent implements OnInit {
     private groupApi: GroupsApi,
     public userService: UserService,
     private usersApi: UsersApi,
-    public translate: TranslateService
+    public translate: TranslateService,
+    public notificationService: NotificationService
   ) {}
 
   ngOnInit() {

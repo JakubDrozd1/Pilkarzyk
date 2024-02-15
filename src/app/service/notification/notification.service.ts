@@ -39,7 +39,9 @@ export class NotificationService implements OnDestroy {
         isAvatar: false,
       }),
       invites: this.groupInvite.getGroupInviteByIdUserAsync({
-        userId: Number(this.userService.loggedUser.ID_USER),
+        page: 0,
+        onPage: -1,
+        idUser: Number(this.userService.loggedUser.ID_USER),
       }),
     }).subscribe({
       next: (responses) => {

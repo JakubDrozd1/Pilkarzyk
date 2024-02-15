@@ -1,7 +1,7 @@
 import { CommonModule, DatePipe } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { IonicModule } from '@ionic/angular'
+import { IonicModule, RefresherEventDetail } from '@ionic/angular'
 import {
   GetMeetingGroupsResponse,
   MeetingsApi,
@@ -12,10 +12,11 @@ import * as moment from 'moment'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { Subscription } from 'rxjs'
-import { NotificationService } from 'src/app/service/notification/notification.service'
 import { UserService } from 'src/app/service/user/user.service'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { IonRefresherCustomEvent } from '@ionic/core'
+import { NotificationService } from 'src/app/service/notification/notification.service'
 
 @Component({
   selector: 'app-calendar-content',
@@ -40,6 +41,7 @@ export class CalendarContentComponent implements OnInit {
   selectedDate: string[] = []
   private subscription: Subscription = new Subscription()
   isReadyRefresh: boolean = false
+  lang: string = ''
 
   constructor(
     private meetingsApi: MeetingsApi,
@@ -47,9 +49,9 @@ export class CalendarContentComponent implements OnInit {
     private alert: Alert,
     private refreshDataService: RefreshDataService,
     private usersMeetingsApi: UsersMeetingsApi,
-    public notificationService: NotificationService,
     private userService: UserService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    public notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -60,6 +62,7 @@ export class CalendarContentComponent implements OnInit {
         }
       })
     )
+    this.lang = localStorage.getItem('lang') ?? 'en'
     this.getDetails()
   }
 
@@ -110,8 +113,8 @@ export class CalendarContentComponent implements OnInit {
           this.isReady = true
           this.isReadyRefresh = true
         },
-        error: () => {
-          this.alert.alertNotOk()
+        error: (error) => {
+          this.alert.handleError(error)
           this.meetings = []
           this.isReady = true
           this.isReadyRefresh = true
@@ -141,6 +144,7 @@ export class CalendarContentComponent implements OnInit {
             dateTo: endOfDay,
             answer: 'yes',
             idUser: this.userService.loggedUser.ID_USER,
+            withMessages: true,
           })
           .subscribe({
             next: (response) => {
@@ -149,8 +153,8 @@ export class CalendarContentComponent implements OnInit {
               }
               this.isReadyRefresh = true
             },
-            error: () => {
-              this.alert.alertNotOk()
+            error: (error) => {
+              this.alert.handleError(error)
               this.meetingsSelected = []
               this.isReadyRefresh = true
             },
@@ -169,6 +173,12 @@ export class CalendarContentComponent implements OnInit {
 
   reset() {
     this.selectedDate = []
-    // this.selectedDate = null
+  }
+
+  handleRefresh($event: IonRefresherCustomEvent<RefresherEventDetail>) {
+    setTimeout(() => {
+      this.reload()
+      $event.target.complete()
+    }, 2000)
   }
 }

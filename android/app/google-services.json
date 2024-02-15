@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "335082630188",
+    "project_id": "go-bool",
+    "storage_bucket": "go-bool.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:335082630188:android:3a218eabb6c9543241b589",
+        "android_client_info": {
+          "package_name": "com.proman.pilkarzyk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRgFAibwgs9xaDEpK8AnqRKcM05VhU_ss"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

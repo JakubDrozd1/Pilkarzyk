@@ -10,7 +10,7 @@
     }
   ],
   "paths": {
-    "/api/group-invites/{userId}": {
+    "/api/group-invites": {
       "get": {
         "tags": [
           "GroupInvites"
@@ -18,9 +18,50 @@
         "operationId": "GetGroupInviteByIdUserAsync",
         "parameters": [
           {
-            "name": "userId",
-            "in": "path",
+            "name": "Page",
+            "in": "query",
             "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "OnPage",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "SortColumn",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SortMode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "IdUser",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "IdGroup",
+            "in": "query",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -58,9 +99,7 @@
             }
           }
         }
-      }
-    },
-    "/api/group-invites": {
+      },
       "post": {
         "tags": [
           "GroupInvites"
@@ -523,6 +562,13 @@
               "type": "integer",
               "format": "int32"
             }
+          },
+          {
+            "name": "IsAvatar",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
@@ -836,6 +882,13 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "WithMessages",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
@@ -879,17 +932,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/GetMeetingRequest"
+                "$ref": "#/components/schemas/GetUsersMeetingsRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/GetMeetingRequest"
+                "$ref": "#/components/schemas/GetUsersMeetingsRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/GetMeetingRequest"
+                "$ref": "#/components/schemas/GetUsersMeetingsRequest"
               }
             }
           }
@@ -924,17 +977,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/MEETINGS"
+                  "$ref": "#/components/schemas/GetMeetingGroupsResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MEETINGS"
+                  "$ref": "#/components/schemas/GetMeetingGroupsResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MEETINGS"
+                  "$ref": "#/components/schemas/GetMeetingGroupsResponse"
                 }
               }
             }
@@ -1084,6 +1137,13 @@
             "schema": {
               "type": "string",
               "format": "date-time"
+            }
+          },
+          {
+            "name": "IsAvatar",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
             }
           }
         ],
@@ -1279,6 +1339,117 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/notification-token": {
+      "post": {
+        "tags": [
+          "NotificationTokens"
+        ],
+        "operationId": "AddNotificationToken",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetNotificationTokenRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetNotificationTokenRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetNotificationTokenRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/notification-token/{userId}": {
+      "get": {
+        "tags": [
+          "NotificationTokens"
+        ],
+        "operationId": "GetNotificationTokensFromUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetMeetingGroupsResponse"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetMeetingGroupsResponse"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetMeetingGroupsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "NotificationTokens"
+        ],
+        "operationId": "DeleteNotificationToken",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success"
@@ -1704,6 +1875,13 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "IsAvatar",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
@@ -2079,40 +2257,6 @@
         }
       }
     },
-    "/api/users-meetings/add": {
-      "post": {
-        "tags": [
-          "UsersMeetings"
-        ],
-        "operationId": "AddUsersToMeetingAsync",
-        "parameters": [
-          {
-            "name": "IdUsers",
-            "in": "query",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "integer",
-                "format": "int32"
-              }
-            }
-          },
-          {
-            "name": "IdMeeting",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
     "/api/users-meetings/all": {
       "get": {
         "tags": [
@@ -2391,6 +2535,22 @@
           "DateAdd": {
             "type": "string",
             "format": "date-time"
+          },
+          "FirstnameAuthor": {
+            "type": "string",
+            "nullable": true
+          },
+          "SurnameAuthor": {
+            "type": "string",
+            "nullable": true
+          },
+          "Firstname": {
+            "type": "string",
+            "nullable": true
+          },
+          "Surname": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2448,11 +2608,6 @@
             "nullable": true
           },
           "IdUser": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "IdGroupUser": {
             "type": "integer",
             "format": "int32",
             "nullable": true
@@ -2697,6 +2852,25 @@
           "Avatar": {
             "type": "string",
             "nullable": true
+          },
+          "IdMessage": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetNotificationTokenRequest": {
+        "type": "object",
+        "properties": {
+          "Token": {
+            "type": "string",
+            "nullable": true
+          },
+          "IdUser": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -2918,36 +3092,22 @@
         },
         "additionalProperties": false
       },
-      "MEETINGS": {
+      "GetUsersMeetingsRequest": {
         "type": "object",
         "properties": {
-          "ID_MEETING": {
-            "type": "integer",
-            "format": "int32",
+          "Meeting": {
+            "$ref": "#/components/schemas/GetMeetingRequest"
+          },
+          "IdUsers": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
             "nullable": true
           },
-          "DATE_MEETING": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "PLACE": {
-            "type": "string",
-            "nullable": true
-          },
-          "QUANTITY": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "DESCRIPTION": {
-            "type": "string",
-            "nullable": true
-          },
-          "IDGROUP": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+          "Message": {
+            "$ref": "#/components/schemas/GetMessageRequest"
           }
         },
         "additionalProperties": false

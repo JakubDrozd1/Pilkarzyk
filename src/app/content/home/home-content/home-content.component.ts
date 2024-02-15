@@ -19,7 +19,6 @@ import { MeetingContentComponent } from '../../meeting/meeting-content/meeting-c
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { TimeService } from 'src/app/service/time/time.service'
-import { NotificationService } from 'src/app/service/notification/notification.service'
 import { MessageContentComponent } from '../../message/message-content/message-content.component'
 import { FormsModule } from '@angular/forms'
 import { MessageWaitingContentComponent } from '../../message/message-waiting-content/message-waiting-content.component'
@@ -28,6 +27,7 @@ import { SwiperContainer } from 'swiper/element'
 import { IonRefresherCustomEvent } from '@ionic/core'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
+import { NotificationService } from 'src/app/service/notification/notification.service'
 
 @Component({
   selector: 'app-home-content',
@@ -67,9 +67,9 @@ export class HomeContentComponent implements OnInit, OnDestroy {
     private alert: Alert,
     private refreshDataService: RefreshDataService,
     private timeService: TimeService,
-    public notificationService: NotificationService,
     private userService: UserService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    public notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -115,8 +115,8 @@ export class HomeContentComponent implements OnInit, OnDestroy {
             this.isReady = true
             this.visitedWaiting = false
           },
-          error: () => {
-            this.alert.alertNotOk()
+          error: (error) => {
+            this.alert.handleError(error)
             this.isReady = true
             this.visitedWaiting = false
           },
@@ -142,8 +142,8 @@ export class HomeContentComponent implements OnInit, OnDestroy {
             this.isReady = true
             this.visitedMeetings = false
           },
-          error: () => {
-            this.alert.alertNotOk()
+          error: (error) => {
+            this.alert.handleError(error)
             this.isReady = true
             this.visitedMeetings = false
           },

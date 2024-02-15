@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import {
   FormBuilder,
   FormGroup,
@@ -7,10 +7,10 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms'
-import { RouterLink } from '@angular/router'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { Capacitor } from '@capacitor/core'
 import { Keyboard } from '@capacitor/keyboard'
-import { IonicModule, ModalController } from '@ionic/angular'
+import { IonicModule } from '@ionic/angular'
 import { MaskitoModule } from '@maskito/angular'
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
@@ -38,8 +38,7 @@ import { UserValidator } from 'src/app/helper/customValidators'
   ],
 })
 export class UsersComponent implements OnInit {
-  @Input() idGroup: number = 0
-
+  idGroup: number = 0
   results: USERS[] = []
   users: USERS[] = []
   user: USERS | undefined
@@ -52,9 +51,9 @@ export class UsersComponent implements OnInit {
   addNewUserForm: FormGroup
   isReadyNewUser: boolean = true
   isReadyExistingUser: boolean = false
+  mode: string = ''
 
   constructor(
-    private modalCtrl: ModalController,
     private fb: FormBuilder,
     private usersApi: UsersApi,
     private alert: Alert,
@@ -62,7 +61,9 @@ export class UsersComponent implements OnInit {
     private groupsApi: GroupsApi,
     private groupInviteApi: GroupInvitesApi,
     private userService: UserService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.addNewUserForm = this.fb.group({
       email: ['', [Validators.email]],
@@ -71,11 +72,19 @@ export class UsersComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getUsers()
+    this.route.params.subscribe((params) => {
+      if (params?.['idGroup'] > 0) {
+        this.idGroup = parseInt(params?.['idGroup'])
+        this.route.params.subscribe((params) => {
+          this.mode = params?.['mode']
+          this.getUsers()
+        })
+      }
+    })
   }
 
   cancel() {
-    return this.modalCtrl.dismiss(null, 'cancel')
+    this.router.navigate(['/groups', this.idGroup, 'add-user'])
   }
 
   handleInput() {
@@ -115,7 +124,7 @@ export class UsersComponent implements OnInit {
       .getAllUsersWithoutGroupAsync({
         page: 0,
         onPage: -1,
-        sortColumn: 'SURNAME',
+        sortColumn: 'ID_USER',
         sortMode: 'ASC',
         idGroup: this.idGroup,
       })
@@ -127,8 +136,8 @@ export class UsersComponent implements OnInit {
           })
           this.isReadyExistingUser = true
         },
-        error: () => {
-          this.alert.alertNotOk()
+        error: (error) => {
+          this.alert.handleError(error)
           this.isReadyExistingUser = true
         },
       })
@@ -191,9 +200,9 @@ export class UsersComponent implements OnInit {
                     )
                     this.cancel()
                   },
-                  error: () => {
+                  error: (error) => {
                     this.cancel()
-                    this.alert.alertNotOk()
+                    this.alert.handleError(error)
                     this.isReadyNewUser = true
                   },
                 })

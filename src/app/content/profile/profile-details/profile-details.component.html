@@ -35,7 +35,7 @@
     <ion-card-content>
       <ion-item
         lines="full"
-        id="open-modal-edit-user"
+        [routerLink]="['/profile/edit']"
         button
         detail="true"
         class="title"
@@ -44,28 +44,23 @@
       </ion-item>
     </ion-card-content>
     <ion-card-content>
-      <ion-item
-        lines="full"
-        id="open-modal-edit-user"
-        button
-        detail="true"
-        class="title"
-      >
+      <ion-item lines="full" button detail="true" class="title">
         <ion-label>{{ "Notifications" | translate }}</ion-label>
       </ion-item>
     </ion-card-content>
     <ion-card-content>
       <ion-item
         lines="full"
-        id="open-picker-language"
+        (click)="setOpen(true)"
         button
         detail="true"
         class="title"
       >
         <ion-picker
-          trigger="open-picker-language"
           [columns]="pickerColumns"
           [buttons]="pickerButtons"
+          [isOpen]="isPickerOpen"
+          (didDismiss)="setOpen(false)"
         ></ion-picker>
 
         <ion-label>{{ "Language" | translate }}</ion-label>
@@ -80,9 +75,8 @@
     </ion-card-header>
     <ion-card-content>
       <ion-item
-        (click)="openModalEditPassword()"
+        [routerLink]="['/profile/edit-pass']"
         lines="full"
-        id="open-modal-edit-user"
         button
         detail="true"
         class="title"
@@ -95,107 +89,4 @@
     <app-logout></app-logout>
   </div>
 </ion-content>
-
-<ion-modal #modal trigger="open-modal-edit-user">
-  <ng-template>
-    <ion-header>
-      <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-button (click)="cancel()">{{ "Cancel" | translate }}</ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content>
-      @if(user){
-      <ion-list>
-        <ion-card>
-          <ion-card-content>
-            <ion-item lines="none" class="label">
-              <ion-label>{{ "FIRSTNAME & LASTNAME" | translate }}</ion-label>
-            </ion-item>
-            <ion-item
-              (click)="openModalEditName()"
-              value="masno"
-              lines="full"
-              class="title"
-              button
-              detail="true"
-            >
-              <ion-label>{{ user.FIRSTNAME }} {{ user.SURNAME }}</ion-label>
-              <ion-icon
-                slot="end"
-                size="large"
-                name="create-outline"
-              ></ion-icon>
-            </ion-item>
-          </ion-card-content>
-          <ion-card-content>
-            <ion-item lines="none" class="label">
-              <ion-label>{{ "E-MAIL" | translate }}</ion-label>
-            </ion-item>
-            <ion-item
-              (click)="openModalEditMail()"
-              lines="full"
-              class="title"
-              button
-              detail="true"
-            >
-              <ion-label>{{ user.EMAIL }}</ion-label>
-              <ion-icon
-                slot="end"
-                size="large"
-                name="create-outline"
-              ></ion-icon>
-            </ion-item>
-          </ion-card-content>
-          <ion-card-content>
-            <ion-item lines="none" class="label">
-              <ion-label>{{ "PHONE NUMBER" | translate }}</ion-label>
-            </ion-item>
-            <ion-item
-              (click)="openModalEditPhoneNumber()"
-              lines="full"
-              class="title"
-              button
-              detail="true"
-            >
-              @if(user.PHONE_NUMBER){
-              <ion-label>
-                {{ user.PHONE_NUMBER.toString().slice(0, 3) }}-{{
-                  user.PHONE_NUMBER.toString().slice(3, 6)
-                }}-{{ user.PHONE_NUMBER.toString().slice(6) }}
-              </ion-label>
-              }
-              <ion-icon
-                slot="end"
-                size="large"
-                name="create-outline"
-              ></ion-icon>
-            </ion-item>
-          </ion-card-content>
-          <ion-card-content>
-            <ion-item lines="none" class="label">
-              <ion-label>{{ "LOGIN" | translate }}</ion-label>
-            </ion-item>
-            <ion-item
-              (click)="openModalAddLogin()"
-              lines="full"
-              class="title"
-              button
-              detail="true"
-            >
-              <ion-label>{{ user.LOGIN }}</ion-label>
-              <ion-icon
-                slot="end"
-                size="large"
-                name="create-outline"
-              ></ion-icon>
-            </ion-item>
-          </ion-card-content>
-        </ion-card>
-      </ion-list>
-      }
-    </ion-content>
-  </ng-template>
-</ion-modal>
 }

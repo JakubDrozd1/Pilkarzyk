@@ -28,6 +28,7 @@
       </ion-modal>
       <ion-item lines="none">
         <ion-input
+          class="border"
           helperText=" "
           [label]="'Place' | translate"
           labelPlacement="floating"
@@ -38,6 +39,7 @@
       </ion-item>
       <ion-item lines="none">
         <ion-input
+          class="border"
           min="1"
           helperText=" "
           [label]="'Number of people' | translate"
@@ -49,6 +51,7 @@
       </ion-item>
       <ion-item lines="none">
         <ion-textarea
+          class="border"
           helperText=" "
           [label]="'Description' | translate"
           labelPlacement="floating"
@@ -56,6 +59,14 @@
           type="text"
         >
         </ion-textarea>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-checkbox
+          labelPlacement="end"
+          justify="start"
+          formControlName="presence"
+          >{{ "Check if you will also come" | translate }}</ion-checkbox
+        >
       </ion-item>
     </ion-list>
     <ion-button type="submit" expand="full">

@@ -21,21 +21,14 @@ export class Alert {
     'Acount with phone number already exists',
     'Password is not correct',
     'Username is null',
+    'Account exist with this email',
+    'Invitation alredy send',
   ]
 
   constructor(
     private alertController: AlertController,
     public translate: TranslateService
   ) {}
-
-  public async alertNotOk(message?: string) {
-    const alert = await this.alertController.create({
-      header: this.translate.instant('Error'),
-      message: message ?? this.translate.instant('An error occured'),
-      buttons: ['Ok'],
-    })
-    await alert.present()
-  }
 
   public async alertOk(message?: string) {
     const alert = await this.alertController.create({
@@ -46,22 +39,37 @@ export class Alert {
     await alert.present()
   }
 
+  public async alertNotOk(message?: string) {
+    const alert = await this.alertController.create({
+      header: this.translate.instant('Error'),
+      message: message ?? this.translate.instant('An error occured'),
+      buttons: ['Ok'],
+    })
+    await alert.present()
+  }
+
   async handleError(error: any) {
     if (typeof error.error === 'string') {
       if (this.errorMessages.includes(String(error.error))) {
         this.errorMessage = this.translate.instant(String(error.error))
       } else {
-        this.errorMessage = this.translate.instant(
-          'An unexpected error occured'
-        )
+        this.errorMessage =
+          this.translate.instant('An unexpected error occured') +
+          ' : ' +
+          String(error.error)
       }
     } else if (typeof error.error === 'object') {
       if (this.errorMessages.includes(String(error.error.message))) {
         this.errorMessage = this.translate.instant(String(error.error.message))
       } else {
-        this.errorMessage = this.translate.instant(
-          'An unexpected error occured'
-        )
+        if (error.error.message) {
+          this.errorMessage =
+            this.translate.instant('An unexpected error occured') +
+            ': ' +
+            String(error.error.message)
+        } else {
+          this.errorMessage = this.translate.instant('Connections error')
+        }
       }
     }
     const alert = await this.alertController.create({

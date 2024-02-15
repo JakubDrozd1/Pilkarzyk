@@ -1,14 +1,3 @@
 form {
   width: auto;
 }
-ion-button:active {
-  --background: var(--ion-color-tertiary);
-  transition: 0.2s ease-in-out;
-  transform: scale(0.90);
-}
-ion-input {
-  --border-color: var(--ion-color-tertiary);
-}
-ion-textarea {
-  --border-color: var(--ion-color-tertiary);
-}

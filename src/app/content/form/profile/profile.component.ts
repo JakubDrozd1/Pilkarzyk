@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import {
   ReactiveFormsModule,
   FormsModule,
@@ -7,35 +7,33 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms'
-import { IonicModule, ModalController } from '@ionic/angular'
+import { IonicModule } from '@ionic/angular'
 import { MaskitoModule } from '@maskito/angular'
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
-import { UsersApi } from 'libs/api-client'
+import { USERS, UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { UserService } from 'src/app/service/user/user.service'
-import { SpinnerComponent } from "../../../helper/spinner/spinner.component";
+import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
+import { ActivatedRoute, Router } from '@angular/router'
 
 @Component({
-    selector: 'app-profile',
-    templateUrl: './profile.component.html',
-    styleUrls: ['./profile.component.scss'],
-    standalone: true,
-    imports: [
-        CommonModule,
-        IonicModule,
-        MaskitoModule,
-        ReactiveFormsModule,
-        FormsModule,
-        TranslateModule,
-        SpinnerComponent
-    ]
+  selector: 'app-profile',
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    IonicModule,
+    MaskitoModule,
+    ReactiveFormsModule,
+    FormsModule,
+    TranslateModule,
+    SpinnerComponent,
+  ],
 })
 export class ProfileComponent implements OnInit {
-  @Input() inputEdit: string = ''
-  @Input() data: string = ''
-
   readonly phoneMask: MaskitoOptions = {
     mask: [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/],
   }
@@ -43,19 +41,44 @@ export class ProfileComponent implements OnInit {
     (el as HTMLIonInputElement).getInputElement()
   profileForm!: FormGroup
   isReady: boolean = true
+  inputEdit: string = ''
+  user: USERS | undefined
 
   constructor(
     private fb: FormBuilder,
-    private modalCtrl: ModalController,
     private alert: Alert,
     private usersApi: UsersApi,
     private refreshDataService: RefreshDataService,
     private userService: UserService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit() {
-    this.inicializeForm()
+    this.route.params.subscribe((params) => {
+      this.inputEdit = params?.['mode']
+      this.getDetails()
+    })
+  }
+
+  getDetails() {
+    this.isReady = false
+    this.usersApi
+      .getUserById({
+        userId: Number(this.userService.loggedUser.ID_USER),
+      })
+      .subscribe({
+        next: (response) => {
+          this.user = response
+          this.inicializeForm()
+          this.isReady = true
+        },
+        error: (error) => {
+          this.alert.handleError(error)
+          this.isReady = true
+        },
+      })
   }
 
   inicializeForm() {
@@ -65,7 +88,7 @@ export class ProfileComponent implements OnInit {
           this.profileForm = this.fb.group({
             email: ['', [Validators.required, Validators.email]],
           })
-          this.profileForm.get('email')?.setValue(this.data)
+          this.profileForm.get('email')?.setValue(this.user?.EMAIL)
         }
         break
       case 'phone':
@@ -73,14 +96,11 @@ export class ProfileComponent implements OnInit {
           this.profileForm = this.fb.group({
             phoneNumber: ['', [Validators.required, Validators.minLength(11)]],
           })
+          let phone = String(this.user?.PHONE_NUMBER)
           this.profileForm
             .get('phoneNumber')
             ?.setValue(
-              this.data.slice(0, 3) +
-                '-' +
-                this.data.slice(3, 6) +
-                '-' +
-                this.data.slice(6)
+              phone.slice(0, 3) + '-' + phone.slice(3, 6) + '-' + phone.slice(6)
             )
         }
         break
@@ -96,7 +116,7 @@ export class ProfileComponent implements OnInit {
               ],
             ],
           })
-          this.profileForm.get('login')?.setValue(this.data)
+          this.profileForm.get('login')?.setValue(this.user?.LOGIN)
         }
         break
       case 'name':
@@ -121,9 +141,8 @@ export class ProfileComponent implements OnInit {
               ],
             ],
           })
-          const [firstName, lastName] = this.data.split(' ')
-          this.profileForm.get('firstname')?.setValue(firstName)
-          this.profileForm.get('surname')?.setValue(lastName)
+          this.profileForm.get('firstname')?.setValue(this.user?.FIRSTNAME)
+          this.profileForm.get('surname')?.setValue(this.user?.SURNAME)
         }
         break
       default: {
@@ -181,12 +200,12 @@ export class ProfileComponent implements OnInit {
 
       this.usersApi.updateColumnUser(updateColumnUserRequest).subscribe({
         next: () => {
-          this.refreshDataService.refresh('profile-details')
+          this.refreshDataService.refresh('profile-edit')
           this.cancel()
           this.alert.alertOk(this.translate.instant('Updated successfully'))
         },
-        error: () => {
-          this.alert.alertNotOk()
+        error: (error) => {
+          this.alert.handleError(error)
           this.isReady = true
         },
       })
@@ -194,6 +213,6 @@ export class ProfileComponent implements OnInit {
   }
 
   cancel() {
-    return this.modalCtrl.dismiss(null, 'cancel')
+    this.router.navigate(['/profile/edit'])
   }
 }

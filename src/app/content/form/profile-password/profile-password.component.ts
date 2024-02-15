@@ -7,29 +7,30 @@ import {
   Validators,
   FormBuilder,
 } from '@angular/forms'
-import { IonicModule, ModalController } from '@ionic/angular'
+import { IonicModule } from '@ionic/angular'
 import { MaskitoModule } from '@maskito/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { UserService } from 'src/app/service/user/user.service'
-import { SpinnerComponent } from "../../../helper/spinner/spinner.component";
+import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { ComparePasswordValidator } from 'src/app/helper/customValidators'
+import { Router } from '@angular/router'
 
 @Component({
-    selector: 'app-profile-password',
-    templateUrl: './profile-password.component.html',
-    styleUrls: ['./profile-password.component.scss'],
-    standalone: true,
-    imports: [
-        CommonModule,
-        IonicModule,
-        MaskitoModule,
-        ReactiveFormsModule,
-        FormsModule,
-        TranslateModule,
-        SpinnerComponent
-    ]
+  selector: 'app-profile-password',
+  templateUrl: './profile-password.component.html',
+  styleUrls: ['./profile-password.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    IonicModule,
+    MaskitoModule,
+    ReactiveFormsModule,
+    FormsModule,
+    TranslateModule,
+    SpinnerComponent,
+  ],
 })
 export class ProfilePasswordComponent implements OnInit {
   profilePasswordForm: FormGroup
@@ -37,11 +38,11 @@ export class ProfilePasswordComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private modalCtrl: ModalController,
     private usersApi: UsersApi,
     private alert: Alert,
     private userService: UserService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    private router: Router
   ) {
     this.profilePasswordForm = this.fb.group({
       password: [
@@ -62,7 +63,7 @@ export class ProfilePasswordComponent implements OnInit {
   ngOnInit() {}
 
   cancel() {
-    return this.modalCtrl.dismiss(null, 'cancel')
+    this.router.navigate(['/profile'])
   }
 
   onSubmit() {
@@ -84,8 +85,8 @@ export class ProfilePasswordComponent implements OnInit {
             )
             this.cancel()
           },
-          error: () => {
-            this.alert.alertNotOk()
+          error: (error) => {
+            this.alert.handleError(error)
             this.cancel()
             this.isReady = true
           },

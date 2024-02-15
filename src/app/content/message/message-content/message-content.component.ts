@@ -12,6 +12,7 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
 import { MessageAnswerModalComponent } from '../message-answer-modal/message-answer-modal.component'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { MeetingUserListComponent } from '../../meeting/meeting-user-list/meeting-user-list.component'
+import { RouterLink } from '@angular/router'
 
 @Component({
   selector: 'app-message-content',
@@ -25,23 +26,22 @@ import { MeetingUserListComponent } from '../../meeting/meeting-user-list/meetin
     FormsModule,
     TranslateModule,
     MeetingUserListComponent,
+    RouterLink,
   ],
 })
 export class MessageContentComponent implements OnInit {
   @Output() messageUpdate: EventEmitter<GetMeetingUsersResponse> =
     new EventEmitter()
 
-  @Input() message!: GetMeetingUsersResponse
+  @Input() message!: GetMessagesUsersMeetingsResponse
   acceptMeeting: Number = 0
   filteredMessages: GetMessagesUsersMeetingsResponse[] = []
-  messages: GetMessagesUsersMeetingsResponse[] = []
   isReady: boolean = true
 
   constructor(
     private messagesApi: MessagesApi,
     private alert: Alert,
     private refreshDataService: RefreshDataService,
-    private modalCtrl: ModalController,
     public translate: TranslateService
   ) {}
 
@@ -52,18 +52,18 @@ export class MessageContentComponent implements OnInit {
         idMeeting: Number(this.message.IdMeeting),
         page: 0,
         onPage: -1,
+        isAvatar: false,
       })
       .subscribe({
         next: (response) => {
-          this.messages = response
           this.filteredMessages = response.filter(
             (message) => message.Answer === 'yes'
           )
           this.acceptMeeting = this.filteredMessages.length
           this.isReady = true
         },
-        error: () => {
-          this.alert.alertNotOk()
+        error: (error) => {
+          this.alert.handleError(error)
         },
       })
   }
@@ -85,28 +85,10 @@ export class MessageContentComponent implements OnInit {
           this.messageUpdate.emit(this.message)
           this.isReady = true
         },
-        error: () => {
-          this.alert.alertNotOk()
+        error: (error) => {
+          this.alert.handleError(error)
           this.isReady = true
         },
       })
-  }
-
-  async openModalAddWaitingTime() {
-    const modal = await this.modalCtrl.create({
-      component: MessageAnswerModalComponent,
-      componentProps: {
-        message: this.message,
-      },
-    })
-    modal.present()
-    await modal.onWillDismiss()
-    modal.onDidDismiss().then((data) => {
-      this.messageUpdate.emit(data.data)
-    })
-  }
-
-  cancel() {
-    return this.modalCtrl.dismiss(null, 'cancel')
   }
 }

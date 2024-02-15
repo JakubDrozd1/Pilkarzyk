@@ -14,18 +14,8 @@ const config: CapacitorConfig = {
     Keyboard: {
       resizeOnFullScreen: true,
     },
-    LocalNotifications: {
-      smallIcon: 'ic_stat_icon_config_sample',
-      iconColor: '#488AFF',
-      sound: 'beep.wav',
-    },
-    BackgroundRunner: {
-      label: 'com.proman.JaBall.notification',
-      src: 'runners/runner.js',
-      event: 'push-notification',
-      repeat: true,
-      interval: 1,
-      autoStart: true,
+    PushNotifications: {
+      presentationOptions: ['badge', 'sound', 'alert'],
     },
   },
 };

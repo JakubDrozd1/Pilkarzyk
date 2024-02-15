@@ -1,17 +1,19 @@
-@if(isReady){
+<app-spinner [isReady]="!isReady"></app-spinner>
+@if (isReady) {
 <ion-card>
   <ion-grid>
     <ion-row>
       <ion-col>
         <ion-card-header>
-          {{ "Invitation to the group" | translate }} {{ groupUser.Name }}
+          {{ "Invitation to the group" | translate }} {{ invite.Name }}
         </ion-card-header>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
         <ion-card-header>
-          {{ "Sent by" | translate }} {{ groupUser.Firstname }} {{ groupUser.Surname }}
+          {{ "Sent by" | translate }} {{ invite.FirstnameAuthor }}
+          {{ invite.SurnameAuthor }}
         </ion-card-header>
       </ion-col>
     </ion-row>

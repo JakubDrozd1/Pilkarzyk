@@ -5,6 +5,7 @@
     <ion-list [inset]="true">
       <ion-item lines="none">
         <ion-input
+          class="border"
           maxlength="25"
           [errorText]="'Login is too short' | translate"
           formControlName="login"
@@ -15,6 +16,7 @@
       </ion-item>
       <ion-item lines="none">
         <ion-input
+          class="border"
           [errorText]="'Incorrect email format' | translate"
           formControlName="email"
           inputmode="email"
@@ -27,6 +29,7 @@
       </ion-item>
       <ion-item lines="none">
         <ion-input
+          class="border"
           maxlength="25"
           [errorText]="'Password is too short' | translate"
           formControlName="password"
@@ -38,6 +41,7 @@
       </ion-item>
       <ion-item lines="none">
         <ion-input
+          class="border"
           [errorText]="'Passwords do not match' | translate"
           formControlName="confirmPassword"
           labelPlacement="floating"
@@ -48,6 +52,7 @@
       </ion-item>
       <ion-item lines="none">
         <ion-input
+          class="border"
           [errorText]="'First name cannot have digits' | translate"
           formControlName="firstname"
           labelPlacement="floating"
@@ -57,6 +62,7 @@
       </ion-item>
       <ion-item lines="none">
         <ion-input
+          class="border"
           [errorText]="'Last name cannot have digits' | translate"
           formControlName="surname"
           labelPlacement="floating"
@@ -66,6 +72,7 @@
       </ion-item>
       <ion-item lines="none">
         <ion-input
+          class="border"
           [errorText]="'Number is too short' | translate"
           formControlName="phoneNumber"
           labelPlacement="floating"

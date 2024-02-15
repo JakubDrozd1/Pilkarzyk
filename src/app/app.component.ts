@@ -1,17 +1,17 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { RouterModule } from '@angular/router'
-import { BackgroundRunner } from '@capacitor/background-runner'
 import { Capacitor } from '@capacitor/core'
 import { IonicModule } from '@ionic/angular'
 import { HttpClientModule } from '@angular/common/http'
 import { register } from 'swiper/element/bundle'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { Subscription } from 'rxjs'
-import { NotificationService } from './service/notification/notification.service'
 import { UserService } from './service/user/user.service'
 import { GetMeetingUsersResponse, UsersMeetingsApi } from 'libs/api-client'
 import { DataService } from './service/data/data.service'
+import { PushNotifications } from '@capacitor/push-notifications'
+import { LocalNotifications } from '@capacitor/local-notifications'
 
 register()
 
@@ -35,41 +35,15 @@ export class AppComponent implements OnInit {
 
   constructor(
     public translate: TranslateService,
-    public notificationService: NotificationService,
     private userService: UserService,
     private usersMeetingsApi: UsersMeetingsApi,
     private dataService: DataService
-  ) {
-    this.setLanguage()
-    this.init()
-    this.testSave()
-  }
-  ngOnInit(): void {
-    this.meetingNotificationSubscription = this.notificationService
-      .getMeetingNotifications()
-      .subscribe((notification) => {
-        this.getNotification(notification.userid, notification.meetingid)
-      })
-  }
+  ) {}
 
-  async init() {
+  ngOnInit(): void {
+    this.setLanguage()
     if (Capacitor.isNativePlatform()) {
-      try {
-        const permissions = await BackgroundRunner.requestPermissions({
-          apis: ['notifications'],
-        })
-      } catch (error) {
-        console.error(error)
-      }
-    }
-  }
-  async testSave() {
-    if (Capacitor.isNativePlatform()) {
-      const result = await BackgroundRunner.dispatchEvent({
-        label: 'com.proman.pilkarzyk.notification',
-        event: 'push-notification',
-        details: {},
-      })
+      this.registerNotifications()
     }
   }
 
@@ -117,6 +91,17 @@ export class AppComponent implements OnInit {
             },
           })
       }
+    }
+  }
+
+  registerNotifications = async () => {
+    let permStatus = await PushNotifications.checkPermissions()
+    if (permStatus.receive === 'prompt') {
+      permStatus = await PushNotifications.requestPermissions()
+      await LocalNotifications.requestPermissions()
+    }
+    if (permStatus.receive !== 'granted') {
+      throw new Error('User denied permissions!')
     }
   }
 }

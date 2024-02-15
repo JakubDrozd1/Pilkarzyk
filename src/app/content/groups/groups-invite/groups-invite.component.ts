@@ -13,6 +13,7 @@ import {
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 
 @Component({
   selector: 'app-groups-invite',
@@ -26,12 +27,12 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
     MeetingContentComponent,
     FormsModule,
     TranslateModule,
+    SpinnerComponent,
   ],
 })
 export class GroupsInviteComponent implements OnInit {
   @Input() invite!: GetGroupInviteResponse
-  groupUser!: GetGroupsUsersResponse
-  isReady: boolean = false
+  isReady: boolean = true
 
   constructor(
     private alert: Alert,
@@ -41,30 +42,11 @@ export class GroupsInviteComponent implements OnInit {
     public translate: TranslateService
   ) {}
 
-  ngOnInit() {
-    this.getDetails()
-  }
-
-  getDetails() {
-    this.groupUserApi
-      .getUserWithGroup({
-        userId: this.invite.IdAuthor ?? 0,
-        groupId: this.invite.IdGroup ?? 0,
-      })
-      .subscribe({
-        next: (response) => {
-          this.groupUser = response
-          this.isReady = true
-        },
-        error: () => {
-          this.alert.alertNotOk()
-          this.isReady = true
-        },
-      })
-  }
+  ngOnInit() {}
 
   onSubmit(answer: string) {
     if (answer == 'yes') {
+      this.isReady = false
       this.groupUserApi
         .addUserToGroupAsync({
           idGroup: this.invite.IdGroup ?? 0,
@@ -83,16 +65,16 @@ export class GroupsInviteComponent implements OnInit {
                     this.translate.instant('Successfully joined')
                   )
                   this.refreshDataService.refresh('notification')
-                  this.getDetails()
+                  this.isReady = true
                 },
-                error: () => {
-                  this.alert.alertNotOk()
+                error: (error) => {
+                  this.alert.handleError(error)
                   this.isReady = true
                 },
               })
           },
-          error: () => {
-            this.alert.alertNotOk()
+          error: (error) => {
+            this.alert.handleError(error)
             this.isReady = true
           },
         })
@@ -105,10 +87,10 @@ export class GroupsInviteComponent implements OnInit {
           next: () => {
             this.alert.alertOk(this.translate.instant('Successfully rejected'))
             this.refreshDataService.refresh('notification')
-            this.getDetails()
+            this.isReady = true
           },
-          error: () => {
-            this.alert.alertNotOk()
+          error: (error) => {
+            this.alert.handleError(error)
             this.isReady = true
           },
         })

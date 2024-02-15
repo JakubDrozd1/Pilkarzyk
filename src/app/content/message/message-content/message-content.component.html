@@ -61,9 +61,9 @@
 <ion-card>
   <ion-grid>
     <ion-card-header>
-      <ion-card-title>{{
-        message.DateMeeting | date : "dd.MM.yyyy HH:mm"
-      }}</ion-card-title>
+      <ion-card-title>
+        {{ message.DateMeeting | date : "dd.MM.yyyy HH:mm" }}
+      </ion-card-title>
     </ion-card-header>
     <ion-row>
       <ion-col>
@@ -90,7 +90,7 @@
           class="button"
           lines="full"
           button
-          [id]="'open-modal-check-participants' + message.IdMeeting"
+          [routerLink]="['/message', message.IdMeeting]"
         >
           <ion-card-header>
             {{ acceptMeeting }} / {{ message.Quantity }}
@@ -123,15 +123,20 @@
         <ion-item class="button" lines="full" (click)="onSubmit('no')" button>
           <ion-card-header>
             <ion-label color="danger">
-              {{ "I WON'T COME" | translate }}
+              {{ "I WONT COME" | translate }}
             </ion-label>
           </ion-card-header>
         </ion-item>
       </ion-col>
       <ion-col>
-        <ion-item class="button" lines="full">
+        <ion-item
+          class="button"
+          lines="full"
+          button
+          [routerLink]="['/message-add', message.IdMessage]"
+        >
           <ion-card-header>
-            <ion-label color="warning" (click)="openModalAddWaitingTime()">
+            <ion-label color="warning">
               {{ "GIVE ME TIME" | translate }}
             </ion-label>
           </ion-card-header>
@@ -140,25 +145,4 @@
     </ion-row>
   </ion-grid>
 </ion-card>
-
-<ion-modal
-  #modal
-  [trigger]="'open-modal-check-participants' + message.IdMeeting"
->
-  <ng-template>
-    <ion-header>
-      <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-button (click)="cancel()">{{ "Cancel" | translate }}</ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content>
-      @for(item of messages; track $index){
-      <app-meeting-user-list [user]="item"></app-meeting-user-list>
-      }
-    </ion-content>
-  </ng-template>
-</ion-modal>
-
 }

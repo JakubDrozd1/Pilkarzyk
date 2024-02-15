@@ -28,5 +28,6 @@ export interface GetMessagesUsersMeetingsResponse {
     IdMeeting?: number | null;
     WaitingTime?: string | null;
     Avatar?: string | null;
+    IdMessage?: number | null;
 }
 

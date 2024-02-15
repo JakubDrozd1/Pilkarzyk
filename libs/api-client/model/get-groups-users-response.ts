@@ -22,7 +22,6 @@ export interface GetGroupsUsersResponse {
     AccountType?: number | null;
     IdGroup?: number | null;
     IdUser?: number | null;
-    IdGroupUser?: number | null;
     Avatar?: string | null;
     GroupCounter?: number | null;
 }

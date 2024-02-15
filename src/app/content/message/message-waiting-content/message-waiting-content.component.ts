@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { Component, Input, OnInit } from '@angular/core'
-import { IonicModule, ModalController } from '@ionic/angular'
+import { IonicModule } from '@ionic/angular'
 import {
   GetMeetingUsersResponse,
   GetMessagesUsersMeetingsResponse,
@@ -12,6 +12,7 @@ import { CountdownComponent } from '../../../helper/countdown/countdown.componen
 import * as moment from 'moment'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { MeetingUserListComponent } from '../../meeting/meeting-user-list/meeting-user-list.component'
+import { RouterLink } from '@angular/router'
 
 @Component({
   selector: 'app-message-waiting-content',
@@ -24,6 +25,7 @@ import { MeetingUserListComponent } from '../../meeting/meeting-user-list/meetin
     CountdownComponent,
     TranslateModule,
     MeetingUserListComponent,
+    RouterLink,
   ],
 })
 export class MessageWaitingContentComponent implements OnInit {
@@ -32,15 +34,13 @@ export class MessageWaitingContentComponent implements OnInit {
   futureDate!: Date
   acceptMeeting: Number = 0
   filteredMessages: GetMessagesUsersMeetingsResponse[] = []
-  messages: GetMessagesUsersMeetingsResponse[] = []
   isReady: boolean = false
 
   constructor(
     private messagesApi: MessagesApi,
     private alert: Alert,
     private refreshDataService: RefreshDataService,
-    public translate: TranslateService,
-    private modalCtrl: ModalController
+    public translate: TranslateService
   ) {}
 
   ngOnInit() {
@@ -55,18 +55,18 @@ export class MessageWaitingContentComponent implements OnInit {
         idMeeting: Number(this.message.IdMeeting),
         page: 0,
         onPage: -1,
+        isAvatar: false,
       })
       .subscribe({
         next: (response) => {
-          this.messages = response
           this.filteredMessages = response.filter(
             (message) => message.Answer === 'yes'
           )
           this.acceptMeeting = this.filteredMessages.length
           this.isReady = true
         },
-        error: () => {
-          this.alert.alertNotOk()
+        error: (error) => {
+          this.alert.handleError(error)
         },
       })
   }
@@ -85,8 +85,8 @@ export class MessageWaitingContentComponent implements OnInit {
           this.alert.alertOk(this.translate.instant('Answered successfully'))
           this.refreshDataService.refresh('home')
         },
-        error: () => {
-          this.alert.alertNotOk()
+        error: (error) => {
+          this.alert.handleError(error)
         },
       })
   }
@@ -106,14 +106,10 @@ export class MessageWaitingContentComponent implements OnInit {
             this.refreshDataService.refresh('home')
             this.refreshDataService.refresh('notification')
           },
-          error: () => {
-            this.alert.alertNotOk()
+          error: (error) => {
+            this.alert.handleError(error)
           },
         })
     }
-  }
-
-  cancel() {
-    return this.modalCtrl.dismiss(null, 'cancel')
   }
 }

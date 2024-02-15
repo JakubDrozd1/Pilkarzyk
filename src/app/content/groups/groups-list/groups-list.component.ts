@@ -7,11 +7,7 @@ import {
   ViewChild,
 } from '@angular/core'
 import { RouterLink } from '@angular/router'
-import {
-  IonicModule,
-  ModalController,
-  RefresherEventDetail,
-} from '@ionic/angular'
+import { IonicModule, RefresherEventDetail } from '@ionic/angular'
 import {
   GetGroupsUsersResponse,
   GroupsApi,
@@ -19,11 +15,9 @@ import {
   USERS,
   UsersApi,
 } from 'libs/api-client'
-import { GroupsComponent } from '../../form/groups/groups.component'
 import { Observable, Subscription } from 'rxjs'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { Alert } from 'src/app/helper/alert'
-import { NotificationService } from 'src/app/service/notification/notification.service'
 import { UserService } from 'src/app/service/user/user.service'
 import { FormsModule } from '@angular/forms'
 import { GroupsUserListComponent } from '../groups-user-list/groups-user-list.component'
@@ -31,6 +25,7 @@ import { SwiperContainer } from 'swiper/element'
 import { IonRefresherCustomEvent } from '@ionic/core'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
+import { NotificationService } from 'src/app/service/notification/notification.service'
 
 function convertUsersToGetGroupsUsersResponse(
   users: USERS[]
@@ -81,14 +76,13 @@ export class GroupsListComponent implements OnInit {
 
   constructor(
     private groupsUsersApi: GroupsUsersApi,
-    private modalCtrl: ModalController,
     private refreshDataService: RefreshDataService,
     private alert: Alert,
-    public notificationService: NotificationService,
     private groupApi: GroupsApi,
     public userService: UserService,
     private usersApi: UsersApi,
-    public translate: TranslateService
+    public translate: TranslateService,
+    public notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -124,8 +118,8 @@ export class GroupsListComponent implements OnInit {
                 this.isReadyGroups = true
                 this.visitedGroups = false
               },
-              error: () => {
-                this.alert.alertNotOk()
+              error: (error) => {
+                this.alert.handleError(error)
                 this.isReadyGroups = true
                 this.visitedGroups = false
               },
@@ -137,6 +131,7 @@ export class GroupsListComponent implements OnInit {
               sortColumn: 'NAME',
               sortMode: 'ASC',
               idUser: this.userService.loggedUser.ID_USER,
+              isAvatar: false,
             })
             .subscribe({
               next: (groupResponse) => {
@@ -144,8 +139,8 @@ export class GroupsListComponent implements OnInit {
                 this.isReadyGroups = true
                 this.visitedGroups = false
               },
-              error: () => {
-                this.alert.alertNotOk()
+              error: (error) => {
+                this.alert.handleError(error)
                 this.isReadyGroups = true
                 this.visitedGroups = false
               },
@@ -160,6 +155,7 @@ export class GroupsListComponent implements OnInit {
           onPage: -1,
           sortColumn: 'SURNAME',
           sortMode: 'ASC',
+          isAvatar: true,
         })
         .subscribe({
           next: (response) => {
@@ -167,8 +163,8 @@ export class GroupsListComponent implements OnInit {
             this.isReadyMembers = true
             this.visitedMembers = false
           },
-          error: () => {
-            this.alert.alertNotOk()
+          error: (error) => {
+            this.alert.handleError(error)
             this.isReadyMembers = true
             this.visitedMembers = false
           },
@@ -176,22 +172,12 @@ export class GroupsListComponent implements OnInit {
     }
   }
 
-  async openModal(isAdmin: boolean) {
-    const modal = await this.modalCtrl.create({
-      component: GroupsComponent,
-      componentProps: {
-        isAdmin: isAdmin,
-      },
-    })
-    modal.present()
-    await modal.onWillDismiss()
-  }
-
   reload() {
     this.isReadyMembers = false
     this.isReadyGroups = false
     this.visitedGroups = true
     this.visitedMembers = true
+    this.userService.getDetails()
     this.getGroups()
   }
 

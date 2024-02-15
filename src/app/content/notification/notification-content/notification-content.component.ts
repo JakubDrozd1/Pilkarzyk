@@ -10,7 +10,6 @@ import {
 import { IonicModule, RefresherEventDetail } from '@ionic/angular'
 import {
   GetGroupInviteResponse,
-  GetMeetingUsersResponse,
   GetMessagesUsersMeetingsResponse,
   GroupInvitesApi,
   MessagesApi,
@@ -20,7 +19,6 @@ import { MessageContentComponent } from '../../message/message-content/message-c
 import { Observable, Subscription, forkJoin } from 'rxjs'
 import { Alert } from 'src/app/helper/alert'
 import { DataService } from 'src/app/service/data/data.service'
-import { NotificationService } from 'src/app/service/notification/notification.service'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import * as moment from 'moment'
 import { FormsModule } from '@angular/forms'
@@ -68,7 +66,6 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
     private alert: Alert,
     private refreshDataService: RefreshDataService,
     private messagesApi: MessagesApi,
-    public notificationService: NotificationService,
     private dataService: DataService,
     private groupInvite: GroupInvitesApi,
     private userService: UserService,
@@ -94,12 +91,6 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
         }
       })
     )
-    this.meetingNotificationSubscription = this.notificationService
-      .getMeetingNotifications()
-      .subscribe((notification) => {
-        this.getNotification(notification.userid, notification.meetingid)
-      })
-
     this.getDetails()
   }
 
@@ -133,83 +124,73 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
 
   updateNotification() {
     this.dataService.sendData(
-      this.messages.filter((message) => message.Answer == null).length
+      this.messages.filter(
+        (message) => message.Answer === 'readed' || message.Answer === null
+      ).length + this.invite.length
     )
   }
 
   leave() {
-    if (this.messages.filter((message) => message.Answer === null).length > 0) {
-      for (let message of this.messages.filter(
-        (message) => message.Answer === null
-      )) {
-        this.isReady = false
-        this.messagesApi
-          .updateAnswerMessageAsync({
-            getMessageRequest: {
-              IdMeeting: message.IdMeeting,
-              IdUser: message.IdUser,
-              Answer: 'readed',
-            },
-          })
-          .subscribe({
-            next: () => {
-              this.dataService.sendData(0)
-            },
-            error: () => {
-              this.alert.alertNotOk()
-            },
-          })
-      }
-    } else {
-      this.dataService.sendData(0)
+    for (let message of this.messages.filter(
+      (message) => message.Answer === null
+    )) {
+      this.isReady = false
+      this.messagesApi
+        .updateAnswerMessageAsync({
+          getMessageRequest: {
+            IdMeeting: message.IdMeeting,
+            IdUser: message.IdUser,
+            Answer: 'readed',
+          },
+        })
+        .subscribe({
+          next: () => {
+            this.updateNotification()
+          },
+          error: (error) => {
+            this.alert.handleError(error)
+          },
+        })
     }
   }
 
   getDetails() {
-    if (this.selectedSegment == 'meetings' && this.visitedMeetings) {
-      this.messagesApi
-        .getAllMessages({
-          idUser: this.userService.loggedUser.ID_USER,
-          page: 0,
-          onPage: -1,
-          sortColumn: 'DATE_MEETING',
-          sortMode: 'ASC',
-          dateFrom: moment().add(this.delay, 'hours').format(),
-        })
-        .subscribe({
-          next: (response) => {
-            this.messages = response.filter(
-              (message) =>
-                message.Answer === 'readed' || message.Answer === null
-            )
-            this.updateNotification()
-            this.visitedMeetings = false
-            this.isReady = true
-          },
-          error: () => {
-            this.alert.alertNotOk()
-            this.isReady = true
-            this.visitedMeetings = false
-          },
-        })
-    } else if (this.selectedSegment == 'groups' && this.visitedGroups) {
-      this.groupInvite
-        .getGroupInviteByIdUserAsync({
-          userId: Number(this.userService.loggedUser.ID_USER),
-        })
-        .subscribe({
-          next: (response) => {
-            this.invite = response
-            this.isReady = true
-            this.visitedGroups = false
-          },
-          error: () => {
-            this.alert.alertNotOk()
-            this.isReady = true
-            this.visitedGroups = false
-          },
-        })
-    }
+    forkJoin({
+      messages: this.messagesApi.getAllMessages({
+        idUser: this.userService.loggedUser.ID_USER,
+        page: 0,
+        onPage: -1,
+        sortColumn: 'DATE_MEETING',
+        sortMode: 'ASC',
+        dateFrom: moment().add(this.delay, 'hours').format(),
+        isAvatar: false,
+      }),
+      invites: this.groupInvite.getGroupInviteByIdUserAsync({
+        idUser: Number(this.userService.loggedUser.ID_USER),
+        page: 0,
+        onPage: -1,
+        sortColumn: 'NAME',
+        sortMode: 'ASC',
+      }),
+    }).subscribe({
+      next: (responses) => {
+        this.messages = responses.messages.filter(
+          (message) => message.Answer === 'readed' || message.Answer === null
+        )
+        this.updateNotification()
+        this.invite = responses.invites
+        this.isReady = true
+        this.visitedGroups = false
+        this.visitedMeetings = false
+        this.isReady = true
+      },
+      error: (error) => {
+        this.alert.handleError(error)
+        this.isReady = true
+        this.visitedMeetings = false
+        this.visitedGroups = false
+      },
+    })
   }
 
   onSegmentChange(select: string) {

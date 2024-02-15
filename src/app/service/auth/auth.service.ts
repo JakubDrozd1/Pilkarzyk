@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs'
+import { Observable, of, throwError } from 'rxjs'
 import { JwtHelperService } from '@auth0/angular-jwt'
 import { TokenApi } from 'libs/api-client'
 import { AppConfig } from '../app-config'

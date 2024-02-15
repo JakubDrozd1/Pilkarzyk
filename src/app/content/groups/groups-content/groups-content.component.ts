@@ -6,8 +6,8 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
-import { IonicModule, ModalController } from '@ionic/angular'
+import { ActivatedRoute, RouterLink } from '@angular/router'
+import { IonicModule } from '@ionic/angular'
 import {
   GetGroupsUsersResponse,
   GetMeetingGroupsResponse,
@@ -19,17 +19,16 @@ import { Subscription, forkJoin } from 'rxjs'
 import { MeetingComponent } from '../../form/meeting/meeting.component'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { MeetingContentComponent } from '../../meeting/meeting-content/meeting-content.component'
-import { UsersComponent } from '../../form/users/users.component'
 import { Alert } from 'src/app/helper/alert'
 import { FormsModule } from '@angular/forms'
 import * as moment from 'moment'
-import { GroupsOrganizerComponent } from '../groups-organizer/groups-organizer.component'
 import { GroupsUserListComponent } from '../groups-user-list/groups-user-list.component'
 import { UserService } from 'src/app/service/user/user.service'
 import { SwiperContainer } from 'swiper/element'
 import { IonRefresherCustomEvent, RefresherEventDetail } from '@ionic/core'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
+import { NotificationService } from 'src/app/service/notification/notification.service'
 
 @Component({
   selector: 'app-groups-content',
@@ -45,6 +44,7 @@ import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
     GroupsUserListComponent,
     TranslateModule,
     SpinnerComponent,
+    RouterLink,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -66,17 +66,18 @@ export class GroupsContentComponent implements OnInit {
   visitedMembers: boolean = true
   visitedRanking: boolean = true
   permission: boolean = false
+  showMenuItem: boolean = true
 
   constructor(
     private route: ActivatedRoute,
     private groupsUsersApi: GroupsUsersApi,
     private meetingsApi: MeetingsApi,
-    private modalCtrl: ModalController,
     private refreshDataService: RefreshDataService,
     private alert: Alert,
     private groupsApi: GroupsApi,
     public userService: UserService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    public notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -108,6 +109,7 @@ export class GroupsContentComponent implements OnInit {
           idGroup: this.idGroup,
           dateFrom: moment().format(),
           idUser: this.userService.loggedUser.ID_USER,
+          withMessages: true,
         }),
         group: this.groupsApi.getGroupById({
           groupId: this.idGroup ?? 0,
@@ -123,7 +125,6 @@ export class GroupsContentComponent implements OnInit {
           this.groupUser = responses.groupUser
           if (this.groupUser) {
             this.permission = Boolean(this.groupUser.AccountType)
-            console.log(this.permission)
           }
           if (!this.permission) {
             this.permission = Boolean(this.userService.loggedUser.IS_ADMIN)
@@ -131,8 +132,8 @@ export class GroupsContentComponent implements OnInit {
           this.isReady = true
           this.visitedMeetings = false
         },
-        error: () => {
-          this.alert.alertNotOk()
+        error: (error) => {
+          this.alert.handleError(error)
           this.groupsUsers = []
           this.meetings = []
           this.nameGroup = ''
@@ -150,6 +151,7 @@ export class GroupsContentComponent implements OnInit {
           sortColumn: 'SURNAME',
           sortMode: 'ASC',
           idGroup: this.idGroup,
+          isAvatar: true,
         })
         .subscribe({
           next: (response) => {
@@ -157,8 +159,8 @@ export class GroupsContentComponent implements OnInit {
             this.isReady = true
             this.visitedMembers = false
           },
-          error: () => {
-            this.alert.alertNotOk()
+          error: (error) => {
+            this.alert.handleError(error)
             this.groupsUsers = []
             this.meetings = []
             this.nameGroup = ''
@@ -167,40 +169,6 @@ export class GroupsContentComponent implements OnInit {
           },
         })
     }
-  }
-
-  async openModalAddMeeting() {
-    const modal = await this.modalCtrl.create({
-      component: MeetingComponent,
-      componentProps: {
-        idGroup: this.idGroup,
-        groupsUsers: this.groupsUsers,
-      },
-    })
-    modal.present()
-    await modal.onWillDismiss()
-  }
-
-  async openModalAddUser() {
-    const modal = await this.modalCtrl.create({
-      component: UsersComponent,
-      componentProps: {
-        idGroup: this.idGroup,
-      },
-    })
-    modal.present()
-    await modal.onWillDismiss()
-  }
-
-  async openModalAddOrganizer() {
-    const modal = await this.modalCtrl.create({
-      component: GroupsOrganizerComponent,
-      componentProps: {
-        idGroup: this.idGroup,
-      },
-    })
-    modal.present()
-    await modal.onWillDismiss()
   }
 
   onSegmentChange(select: string) {
@@ -232,5 +200,9 @@ export class GroupsContentComponent implements OnInit {
     this.visitedMembers = true
     this.visitedRanking = true
     this.getDetails()
+  }
+
+  showMenuItems() {
+    this.showMenuItem = !this.showMenuItem
   }
 }

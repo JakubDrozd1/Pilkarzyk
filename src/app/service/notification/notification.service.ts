@@ -1,107 +1,60 @@
-import { Injectable } from '@angular/core'
-import { HubConnection } from '@microsoft/signalr'
-import { BehaviorSubject, Observable } from 'rxjs'
-import { AppConfig } from '../app-config'
-import * as signalR from '@microsoft/signalr'
-import {
-  LocalNotifications,
-  ScheduleOptions,
-} from '@capacitor/local-notifications'
-import { UsersMeetingsApi } from 'libs/api-client'
-import { TranslateService } from '@ngx-translate/core'
+import { Injectable, OnDestroy, OnInit } from '@angular/core'
+import { Subscription, forkJoin, interval } from 'rxjs'
+import { GroupInvitesApi, MessagesApi } from 'libs/api-client'
+import { UserService } from '../user/user.service'
+import * as moment from 'moment'
+import { DataService } from '../data/data.service'
 
 @Injectable({
   providedIn: 'root',
 })
-export class NotificationService {
-  private hubConnection: HubConnection
-  private meetingNotificationSubject = new BehaviorSubject<{
-    userid: number
-    meetingid: number
-  }>({ userid: 0, meetingid: 0 })
+export class NotificationService implements OnDestroy {
+  delay: number = 2
+  notificationNumber: number = 0
+  refreshSubscription: Subscription = new Subscription()
 
   constructor(
-    private usersMeetingsApi: UsersMeetingsApi,
-    private translate: TranslateService
+    private messagesApi: MessagesApi,
+    private userService: UserService,
+    private groupInvite: GroupInvitesApi,
+    private dataService: DataService
   ) {
-    this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl(AppConfig.settings.apiEndpoint + 'notify', {
-        skipNegotiation: true,
-        transport: signalR.HttpTransportType.WebSockets,
-      })
-      .build()
-
-    this.hubConnection
-      .start()
-      .then(() => console.log('Connection started'))
-      .catch((err) => console.log('Error while starting connection: ' + err))
-
-    this.hubConnection.on(
-      'SendMessage',
-      (userid: number, meetingid: number) => {
-        const notification = { userid, meetingid }
-        this.usersMeetingsApi
-          .getUserWithMeeting({
-            userId: userid,
-            meetingId: meetingid,
-          })
-          .subscribe({
-            next: (response) => {
-              if (response.DateMeeting) {
-                const dateObject: Date = new Date(response.DateMeeting)
-                const formattedDate: string = this.formatDate(dateObject)
-                let options: ScheduleOptions = {
-                  notifications: [
-                    {
-                      id: response.IdMeeting ?? 0,
-                      title: this.translate.instant('New meeting invitation'),
-                      body: formattedDate + ' ' + String(response.Description),
-                      largeBody:
-                        formattedDate + ' ' + String(response.Description),
-                      summaryText: this.translate.instant('Click to reply'),
-                      group: 'Notification',
-                      groupSummary: true,
-                    },
-                  ],
-                }
-                LocalNotifications.schedule(options)
-                this.meetingNotificationSubject.next(notification)
-              }
-            },
-          })
-      }
-    )
+    this.refreshSubscription = interval(10000).subscribe(() => {
+      this.getDetails()
+    })
+    this.getDetails()
   }
 
-  getMeetingNotifications(): Observable<{ userid: number; meetingid: number }> {
-    return this.meetingNotificationSubject.asObservable()
+  ngOnDestroy(): void {
+    this.refreshSubscription.unsubscribe()
   }
 
-  handleRemoteNotification() {
-    const notification = { userid: 0, meetingid: 0 }
-    let options: ScheduleOptions = {
-      notifications: [
-        {
-          id: 111,
-          title: '',
-          body: '',
-          largeBody: '',
-          summaryText: '',
-        },
-      ],
-    }
-
-    LocalNotifications.schedule(options)
-
-    this.meetingNotificationSubject.next(notification)
-  }
-  private formatDate(date: Date): string {
-    const day: string = ('0' + date.getDate()).slice(-2)
-    const month: string = ('0' + (date.getMonth() + 1)).slice(-2)
-    const year: number = date.getFullYear()
-    const hours: string = ('0' + date.getHours()).slice(-2)
-    const minutes: string = ('0' + date.getMinutes()).slice(-2)
-
-    return `${day}-${month}-${year} ${hours}:${minutes}`
+  getDetails() {
+    forkJoin({
+      messages: this.messagesApi.getAllMessages({
+        idUser: this.userService.loggedUser.ID_USER,
+        page: 0,
+        onPage: -1,
+        dateFrom: moment().add(this.delay, 'hours').format(),
+        isAvatar: false,
+      }),
+      invites: this.groupInvite.getGroupInviteByIdUserAsync({
+        page: 0,
+        onPage: -1,
+        idUser: Number(this.userService.loggedUser.ID_USER),
+      }),
+    }).subscribe({
+      next: (responses) => {
+        this.notificationNumber =
+          responses.invites.length +
+          responses.messages.filter(
+            (message) => message.Answer === 'readed' || message.Answer === null
+          ).length
+        this.dataService.sendData(this.notificationNumber)
+      },
+      error: () => {
+        this.notificationNumber = 0
+      },
+    })
   }
 }

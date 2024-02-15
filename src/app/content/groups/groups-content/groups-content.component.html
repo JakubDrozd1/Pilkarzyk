@@ -2,7 +2,11 @@
   <ion-toolbar>
     <ion-title>{{ nameGroup }} </ion-title>
     <ion-buttons slot="end">
-      <ion-back-button text="" icon="arrow-back-outline" defaultHref="/groups">
+      <ion-back-button
+        text=""
+        icon="arrow-back-outline"
+        [routerLink]="['/groups']"
+      >
       </ion-back-button>
     </ion-buttons>
   </ion-toolbar>
@@ -14,19 +18,40 @@
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
-      <ion-fab-button expand="block" (click)="openModalAddMeeting()">
-        <ion-icon size="large" name="chatbubbles-outline"> </ion-icon>
-      </ion-fab-button>
-      <ion-fab-button expand="block" (click)="openModalAddUser()">
-        <ion-icon size="large" name="person-add-outline"> </ion-icon>
-      </ion-fab-button>
+      <div class="custom-fab">
+        <ion-button size="small" [routerLink]="['add-meeting']">
+          {{ "Add meeting" | translate }}
+        </ion-button>
+        <ion-fab-button
+          size="small"
+          expand="block"
+          [routerLink]="['add-meeting']"
+        >
+          <ion-icon size="large" name="chatbubbles-outline"></ion-icon>
+        </ion-fab-button>
+      </div>
+      <div class="custom-fab">
+        <ion-button size="small" [routerLink]="['add-user']">
+          {{ "Add person" | translate }}
+        </ion-button>
+        <ion-fab-button size="small" expand="block" [routerLink]="['add-user']">
+          <ion-icon size="large" name="person-add-outline"></ion-icon>
+        </ion-fab-button>
+      </div>
       @if(userService.loggedUser.IS_ADMIN){
-      <ion-fab-button expand="block" (click)="openModalAddOrganizer()">
-        <ion-icon
-          size="large"
-          name="settings-outline"
-        ></ion-icon> </ion-fab-button
-      >}
+      <div class="custom-fab">
+        <ion-button size="small" [routerLink]="['add-organizer']">
+          {{ "Settings" | translate }}
+        </ion-button>
+        <ion-fab-button
+          size="small"
+          expand="block"
+          [routerLink]="['add-organizer']"
+        >
+          <ion-icon size="large" name="settings-outline"></ion-icon>
+        </ion-fab-button>
+      </div>
+      }
     </ion-fab-list>
   </ion-fab>
   }}
@@ -68,7 +93,10 @@
       @if(isReady){ @if(meetings.length>0){ @for (item of meetings; track
       $index) {
       <ion-list>
-        <app-meeting-content [meeting]="item"></app-meeting-content>
+        <app-meeting-content
+          [meeting]="item"
+          component="group-content"
+        ></app-meeting-content>
       </ion-list>
       } } @else {
       <ion-item class="header" lines="none">
@@ -84,15 +112,15 @@
         }
       </ion-list>
       }@else{
-      <ion-item class="header" lines="none">{{
-        "No members" | translate
-      }}</ion-item>
+      <ion-item class="header" lines="none">
+        {{ "No members" | translate }}
+      </ion-item>
       }}
     </swiper-slide>
     <swiper-slide>
-      <ion-item class="header" lines="none">{{
-        "No ranking" | translate
-      }}</ion-item>
+      <ion-item class="header" lines="none">
+        {{ "No ranking" | translate }}
+      </ion-item>
     </swiper-slide>
   </swiper-container>
 </ion-content>

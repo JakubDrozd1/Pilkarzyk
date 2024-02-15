@@ -20,7 +20,6 @@ export class RegisterLinkComponent implements OnInit {
   idGroup: number | undefined
 
   constructor(
-    private usersApi: UsersApi,
     private groupsUsersApi: GroupsUsersApi,
     private route: ActivatedRoute,
     private alert: Alert,
@@ -43,7 +42,6 @@ export class RegisterLinkComponent implements OnInit {
   }
 
   onUserRegistered(user: any) {
-    console.log(user)
     this.tokenApi
       .generateToken({
         grantType: 'password',
@@ -70,23 +68,15 @@ export class RegisterLinkComponent implements OnInit {
                 localStorage.removeItem('access_token')
                 localStorage.removeItem('refresh_token')
               },
-              error: () => {
+              error: (error) => {
                 localStorage.removeItem('access_token')
                 localStorage.removeItem('refresh_token')
-                this.alert.alertNotOk(
-                  this.translate.instant(
-                    'Not added to group. Please try again later.'
-                  )
-                )
+                this.alert.handleError(error)
               },
             })
         },
-        error: () => {
-          this.alert.alertNotOk(
-            this.translate.instant(
-              'Not added to group. Please try again later.'
-            )
-          )
+        error: (error) => {
+          this.alert.handleError(error)
         },
       })
   }

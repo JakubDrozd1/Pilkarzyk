@@ -7,12 +7,19 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms'
-import { IonicModule, ModalController } from '@ionic/angular'
+import { ActivatedRoute } from '@angular/router'
+import { IonicModule } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
-import { GetMeetingUsersResponse, MessagesApi } from 'libs/api-client'
+import {
+  GetMeetingGroupsResponse,
+  MESSAGES,
+  MeetingsApi,
+  MessagesApi,
+} from 'libs/api-client'
 import * as moment from 'moment'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
+import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 
 @Component({
   selector: 'app-message-answer-modal',
@@ -25,22 +32,26 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
     ReactiveFormsModule,
     FormsModule,
     TranslateModule,
+    SpinnerComponent,
   ],
 })
 export class MessageAnswerModalComponent implements OnInit {
-  @Input() message!: GetMeetingUsersResponse
-
   displayDate: string = ''
   messageForm: FormGroup
   maxDate: string = ''
+  idMessage: number = 0
+  message!: MESSAGES
+  isReady: boolean = true
+  meeting!: GetMeetingGroupsResponse
 
   constructor(
     private fb: FormBuilder,
     private messagesApi: MessagesApi,
     private alert: Alert,
     private refreshDataService: RefreshDataService,
-    private modalCtrl: ModalController,
-    public translate: TranslateService
+    public translate: TranslateService,
+    private route: ActivatedRoute,
+    private meetingsApi: MeetingsApi
   ) {
     this.displayDate = moment().format()
     this.messageForm = this.fb.group({
@@ -49,23 +60,60 @@ export class MessageAnswerModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.messageForm
-      .get('dateMeeting')
-      ?.setValue(moment().format())
-    this.maxDate = moment(this.message.DateMeeting)
-      .clone()
-      .subtract(2, 'hours')
-      .format()
+    this.route.params.subscribe((params) => {
+      if (params?.['idMessage'] > 0) {
+        this.idMessage = parseInt(params?.['idMessage'])
+        this.getDetails()
+      }
+    })
+    this.messageForm.get('dateMeeting')?.setValue(moment().format())
+  }
+
+  getDetails() {
+    this.isReady = false
+    this.messagesApi
+      .getMessageById({
+        messageId: this.idMessage,
+      })
+      .subscribe({
+        next: (response) => {
+          this.message = response
+          this.meetingsApi
+            .getMeetingById({
+              meetingId: response.IDMEETING ?? 0,
+            })
+            .subscribe({
+              next: (response) => {
+                this.maxDate = moment(response.DateMeeting)
+                  .clone()
+                  .subtract(2, 'hours')
+                  .format()
+                this.isReady = true
+              },
+              error: (error) => {
+                this.cancel()
+                this.isReady = true
+                this.alert.handleError(error)
+              },
+            })
+        },
+        error: (error) => {
+          this.isReady = true
+          this.cancel()
+          this.alert.handleError(error)
+        },
+      })
   }
 
   onSubmitWait() {
     this.messageForm.markAllAsTouched()
     if (this.messageForm.valid) {
+      this.isReady = false
       this.messagesApi
         .updateAnswerMessageAsync({
           getMessageRequest: {
-            IdMeeting: this.message.IdMeeting,
-            IdUser: this.message.IdUser,
+            IdMeeting: this.message.IDMEETING,
+            IdUser: this.message.IDUSER,
             Answer: 'wait',
             WaitingTime: this.messageForm.value.dateMeeting,
           },
@@ -73,23 +121,21 @@ export class MessageAnswerModalComponent implements OnInit {
         .subscribe({
           next: () => {
             this.alert.alertOk(this.translate.instant('Answered successfully'))
-            this.selectMessage(this.message)
             this.refreshDataService.refresh('notification')
+            this.refreshDataService.refresh('calendar')
+            this.isReady = true
             this.cancel()
           },
-          error: () => {
-            this.alert.alertNotOk()
+          error: (error) => {
+            this.alert.handleError(error)
+            this.isReady = true
             this.cancel()
           },
         })
     }
   }
 
-  selectMessage(message: GetMeetingUsersResponse): void {
-    this.modalCtrl.dismiss(message)
-  }
-
   cancel() {
-    return this.modalCtrl.dismiss(null, 'cancel')
+    window.history.back()
   }
 }

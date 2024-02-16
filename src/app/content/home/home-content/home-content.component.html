@@ -1,19 +1,14 @@
 <ion-content>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>{{ currentTime }}</ion-card-title>
-    </ion-card-header>
-  </ion-card>
   <ion-segment
     [(ngModel)]="selectedSegment"
     (ngModelChange)="onSegmentChange(selectedSegment)"
     swipeGesture="true"
   >
     <ion-segment-button vertical="top" [value]="segmentList[0]">
-      <ion-label> {{ "Pending" | translate }}</ion-label>
+      <ion-label>{{ "Meetings" | translate }}</ion-label>
     </ion-segment-button>
     <ion-segment-button vertical="top" [value]="segmentList[1]">
-      <ion-label>{{ "Meetings" | translate }}</ion-label>
+      <ion-label> {{ "Pending" | translate }}</ion-label>
     </ion-segment-button>
   </ion-segment>
 
@@ -34,18 +29,6 @@
     appSwiper
   >
     <swiper-slide>
-      @if(isReady){ @if(meetingsWaiting.length > 0){ @for(meeting of
-      meetingsWaiting; track $index){
-      <app-message-waiting-content
-        [message]="meeting"
-      ></app-message-waiting-content>
-      }}@else {
-      <ion-item class="header" lines="none">
-        {{ "You have no pending meetings" | translate }}
-      </ion-item>
-      }}
-    </swiper-slide>
-    <swiper-slide>
       @if(isReady){ @if(meetings.length > 0){ @for(meeting of meetings; track
       $index){
       <app-meeting-content
@@ -55,6 +38,18 @@
       } }@else {
       <ion-item class="header" lines="none">
         {{ "You have no meetings today" | translate }}
+      </ion-item>
+      }}
+    </swiper-slide>
+    <swiper-slide>
+      @if(isReady){ @if(meetingsWaiting.length > 0){ @for(meeting of
+      meetingsWaiting; track $index){
+      <app-message-waiting-content
+        [message]="meeting"
+      ></app-message-waiting-content>
+      }}@else {
+      <ion-item class="header" lines="none">
+        {{ "You have no pending meetings" | translate }}
       </ion-item>
       }}
     </swiper-slide>

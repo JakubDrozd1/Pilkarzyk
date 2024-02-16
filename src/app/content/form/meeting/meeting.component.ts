@@ -44,7 +44,7 @@ export class MeetingComponent implements OnInit {
   displayDate: any
   idUsers: number[] = []
   meetingNotifications!: Observable<number>
-  delay: number = 3
+  delay: number = 0
   isReady: boolean = true
 
   constructor(

@@ -57,7 +57,7 @@ export class HomeContentComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription()
   private intervalSubscription: Subscription | undefined
   messages: GetMessagesUsersMeetingsResponse[] = []
-  segmentList: Array<string> = ['waiting', 'meetings']
+  segmentList: Array<string> = ['meetings', 'waiting']
   selectedSegment: string = this.segmentList[0]
   visitedWaiting: boolean = true
   visitedMeetings: boolean = true
@@ -106,7 +106,7 @@ export class HomeContentComponent implements OnInit, OnDestroy {
           sortColumn: 'DATE_MEETING',
           sortMode: 'ASC',
           idUser: this.userService.loggedUser.ID_USER,
-          dateFrom: moment().add(2, 'hours').format(),
+          dateFrom: moment().add(1, 'hours').format(),
           answer: 'wait',
         })
         .subscribe({
@@ -124,7 +124,6 @@ export class HomeContentComponent implements OnInit, OnDestroy {
     } else if (this.selectedSegment == 'meetings' && this.visitedMeetings) {
       this.meetings = []
       const startOfDay = moment().startOf('day').format()
-      const endOfDay = moment().endOf('day').format()
       this.usersMeetingsApi
         .getListMeetingsUsersAsync({
           page: 0,
@@ -132,7 +131,6 @@ export class HomeContentComponent implements OnInit, OnDestroy {
           sortColumn: 'DATE_MEETING',
           sortMode: 'ASC',
           dateFrom: startOfDay,
-          dateTo: endOfDay,
           idUser: this.userService.loggedUser.ID_USER,
           answer: 'yes',
         })

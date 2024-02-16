@@ -54,7 +54,7 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
   meetingNotifications!: Observable<number>
   private meetingNotificationSubscription: Subscription = new Subscription()
   isReady: boolean = false
-  delay: number = 2
+  delay: number = 1
   invite: GetGroupInviteResponse[] = []
   segmentList: Array<string> = ['meetings', 'groups']
   selectedSegment: string = this.segmentList[0]

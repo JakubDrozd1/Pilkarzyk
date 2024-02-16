@@ -17,7 +17,6 @@ import {
 } from 'rxjs'
 import { AuthService } from '../service/auth/auth.service'
 import { AppConfig } from '../service/app-config'
-import { Router } from '@angular/router'
 
 export interface Token {
   access_token: string

@@ -1,4 +1,9 @@
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms'
+import {
+  AbstractControl,
+  FormControl,
+  ValidationErrors,
+  ValidatorFn,
+} from '@angular/forms'
 import { USERS } from 'libs/api-client'
 
 export function ComparePasswordValidator(
@@ -28,4 +33,9 @@ export function UserValidator(users: USERS[]): ValidatorFn {
     )
     return userExists ? null : { userNotExist: true }
   }
+}
+export function removeWhitespace(control: FormControl) {
+  const value = control.value
+  const trimmedValue = value.replace(/\s+/g, '')
+  return trimmedValue === value ? null : { whitespace: true }
 }

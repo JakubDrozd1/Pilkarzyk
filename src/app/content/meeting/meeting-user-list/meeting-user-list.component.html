@@ -1,11 +1,6 @@
 <app-spinner [isReady]="!isReady"></app-spinner>
 @if(isReady){
 <ion-card>
-  <ion-card-header>
-    <ion-card-title>
-      {{ user.Login }}
-    </ion-card-title>
-  </ion-card-header>
   <ion-card-content>
     <ion-item [color]="color" lines="full" class="title">
       @if(user.Avatar == null){

@@ -127,7 +127,21 @@ export class ProfileDetailsComponent implements OnInit {
   onFileSelected(event: any) {
     const selectedFile = event.target.files[0]
     const maxSizeInBytes = 5 * 1024 * 1024
+    const allowedExtensions = ['.jpeg', '.jpg', '.png', '.gif']
+
     if (selectedFile && selectedFile.size <= maxSizeInBytes) {
+      const fileExtension = selectedFile.name
+        .toLowerCase()
+        .substring(selectedFile.name.lastIndexOf('.'))
+      if (!allowedExtensions.includes(fileExtension)) {
+        this.alert.alertNotOk(
+          this.translate.instant(
+            'Invalid file format. Only .jpeg, .jpg, .png, .gif are allowed.'
+          )
+        )
+        return
+      }
+
       this.isReady = false
       convertFileToBase64(selectedFile).then((base64String) => {
         this.usersApi

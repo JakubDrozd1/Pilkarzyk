@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import {
   FormBuilder,
+  FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
@@ -18,6 +19,7 @@ import { AuthService } from 'src/app/service/auth/auth.service'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { PushNotifications } from '@capacitor/push-notifications'
 import { Capacitor } from '@capacitor/core'
+import { removeWhitespace } from 'src/app/helper/customValidators'
 
 @Component({
   selector: 'app-login',

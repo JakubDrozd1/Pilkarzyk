@@ -77,7 +77,7 @@ export class RegisterComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.pattern('^[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]+$'),
+          Validators.pattern(/^[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ\s]*$/),
           Validators.minLength(3),
           Validators.maxLength(25),
         ],
@@ -86,7 +86,7 @@ export class RegisterComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.pattern('^[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]+$'),
+          Validators.pattern(/^[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ\s]*$/),
           Validators.minLength(3),
           Validators.maxLength(25),
         ],

@@ -9,7 +9,7 @@ import { DataService } from '../data/data.service'
   providedIn: 'root',
 })
 export class NotificationService implements OnDestroy {
-  delay: number = 2
+  delay: number = 1
   notificationNumber: number = 0
   refreshSubscription: Subscription = new Subscription()
 

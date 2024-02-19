@@ -16,7 +16,10 @@ import { UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { AuthService } from 'src/app/service/auth/auth.service'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
-import { ComparePasswordValidator } from 'src/app/helper/customValidators'
+import {
+  ComparePasswordValidator,
+  customValidator,
+} from 'src/app/helper/customValidators'
 
 @Component({
   selector: 'app-register',
@@ -55,11 +58,7 @@ export class RegisterComponent implements OnInit {
     this.registrationForm = this.fb.group({
       login: [
         '',
-        [
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(25),
-        ],
+        [Validators.required, customValidator(), Validators.maxLength(50)],
       ],
       password: [
         '',
@@ -78,8 +77,8 @@ export class RegisterComponent implements OnInit {
         [
           Validators.required,
           Validators.pattern(/^[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ\s]*$/),
-          Validators.minLength(3),
-          Validators.maxLength(25),
+          customValidator(),
+          Validators.maxLength(50),
         ],
       ],
       surname: [
@@ -87,8 +86,8 @@ export class RegisterComponent implements OnInit {
         [
           Validators.required,
           Validators.pattern(/^[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ\s]*$/),
-          Validators.minLength(3),
-          Validators.maxLength(25),
+          customValidator(),
+          Validators.maxLength(50),
         ],
       ],
       phoneNumber: ['', [Validators.required, Validators.minLength(11)]],
@@ -111,11 +110,11 @@ export class RegisterComponent implements OnInit {
       this.usersApi
         .addUser({
           getUserRequest: {
-            Login: this.registrationForm.value.login,
+            Login: this.registrationForm.value.login.trim(),
             Password: this.registrationForm.value.password,
-            Email: this.registrationForm.value.email,
-            Firstname: this.registrationForm.value.firstname,
-            Surname: this.registrationForm.value.surname,
+            Email: this.registrationForm.value.email.trim(),
+            Firstname: this.registrationForm.value.firstname.trim(),
+            Surname: this.registrationForm.value.surname.trim(),
             PhoneNumber: intNumber,
             GroupCounter: 1,
           },

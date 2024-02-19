@@ -114,6 +114,7 @@
   "Date sent": "Date sent",
   "No groups": "You are not in any group",
   "Invalid file format. Only .jpeg, .jpg, .png, .gif are allowed.": "Invalid file format. Only .jpeg, .jpg, .png, .gif are allowed.",
+  "Select a group": "Select a group",
 
   "Group is null": "Group doesn't exist.",
   "User is null": "User doesn't exist",

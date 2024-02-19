@@ -13,7 +13,6 @@ import {
   GetGroupsUsersResponse,
   GroupsUsersApi,
   MeetingsApi,
-  UsersMeetingsApi,
 } from 'libs/api-client'
 import * as moment from 'moment'
 import { Observable } from 'rxjs'
@@ -42,10 +41,11 @@ export class MeetingComponent implements OnInit {
   groupsUsers: GetGroupsUsersResponse[] = []
   meetingForm: FormGroup
   displayDate: any
-  idUsers: number[] = []
   meetingNotifications!: Observable<number>
   delay: number = 0
   isReady: boolean = true
+  groups: GetGroupsUsersResponse[] = []
+  isHome: boolean = false
 
   constructor(
     private fb: FormBuilder,
@@ -71,7 +71,14 @@ export class MeetingComponent implements OnInit {
     this.route.params.subscribe((params) => {
       if (params?.['idGroup'] > 0) {
         this.idGroup = parseInt(params?.['idGroup'])
-        this.getGroupUsers()
+        this.isHome = false
+      } else {
+        this.getPermission()
+        this.isHome = true
+        this.meetingForm.addControl(
+          'group',
+          this.fb.control('', Validators.required)
+        )
       }
     })
     this.displayDate = moment().add(this.delay, 'hours').format()
@@ -80,29 +87,24 @@ export class MeetingComponent implements OnInit {
       ?.setValue(moment().add(this.delay, 'hours').format())
   }
 
-  getGroupUsers() {
-    this.isReady = false
+  getPermission() {
     this.groupsUsersApi
       .getAllGroupsFromUserAsync({
         page: 0,
         onPage: -1,
-        sortColumn: 'SURNAME',
-        sortMode: 'ASC',
-        idGroup: this.idGroup,
+        idUser: this.userService.loggedUser.ID_USER,
         isAvatar: false,
       })
       .subscribe({
         next: (response) => {
-          this.groupsUsers = response
-          for (let user of this.groupsUsers) {
-            this.idUsers.push(Number(user.IdUser))
+          if (this.userService.loggedUser.IS_ADMIN) {
+            this.groups = response
+          } else {
+            this.groups = response.filter((obj) => obj.AccountType === 1)
           }
-          this.isReady = true
         },
         error: (error) => {
           this.alert.handleError(error)
-          this.groupsUsers = []
-          this.isReady = true
         },
       })
   }
@@ -119,13 +121,14 @@ export class MeetingComponent implements OnInit {
               Place: this.meetingForm.value.place,
               Quantity: this.meetingForm.value.quantity,
               Description: this.meetingForm.value.description,
-              IdGroup: this.idGroup,
+              IdGroup: this.isHome
+                ? this.meetingForm.value.group.IdGroup
+                : this.idGroup,
             },
             Message: {
               IdUser: this.userService.loggedUser.ID_USER,
               Answer: this.meetingForm.value.presence ? 'yes' : 'no',
             },
-            IdUsers: this.idUsers,
           },
         })
         .subscribe({
@@ -145,6 +148,10 @@ export class MeetingComponent implements OnInit {
   }
 
   async cancel() {
-    this.router.navigate(['/groups', this.idGroup])
+    if (this.isHome) {
+      this.router.navigate(['/home'])
+    } else {
+      this.router.navigate(['/groups', this.idGroup])
+    }
   }
 }

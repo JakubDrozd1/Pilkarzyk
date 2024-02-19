@@ -3098,14 +3098,6 @@
           "Meeting": {
             "$ref": "#/components/schemas/GetMeetingRequest"
           },
-          "IdUsers": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "nullable": true
-          },
           "Message": {
             "$ref": "#/components/schemas/GetMessageRequest"
           }

@@ -54,4 +54,24 @@
       }}
     </swiper-slide>
   </swiper-container>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <div class="custom-fab">
+        <ion-button size="small" [routerLink]="['add-meeting']">
+          {{ "Add meeting" | translate }}
+        </ion-button>
+        <ion-fab-button
+          size="small"
+          expand="block"
+          [routerLink]="['add-meeting']"
+        >
+          <ion-icon size="large" name="chatbubbles-outline"></ion-icon>
+        </ion-fab-button>
+      </div>
+    </ion-fab-list>
+  </ion-fab>
 </ion-content>

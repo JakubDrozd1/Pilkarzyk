@@ -11,14 +11,14 @@ import { IonicModule, RefresherEventDetail } from '@ionic/angular'
 import {
   GetMeetingGroupsResponse,
   GetMessagesUsersMeetingsResponse,
+  GroupsUsersApi,
   UsersMeetingsApi,
 } from 'libs/api-client'
 import * as moment from 'moment'
-import { Subscription, interval } from 'rxjs'
+import { Subscription } from 'rxjs'
 import { MeetingContentComponent } from '../../meeting/meeting-content/meeting-content.component'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
-import { TimeService } from 'src/app/service/time/time.service'
 import { MessageContentComponent } from '../../message/message-content/message-content.component'
 import { FormsModule } from '@angular/forms'
 import { MessageWaitingContentComponent } from '../../message/message-waiting-content/message-waiting-content.component'
@@ -28,6 +28,7 @@ import { IonRefresherCustomEvent } from '@ionic/core'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
 import { NotificationService } from 'src/app/service/notification/notification.service'
+import { RouterLink } from '@angular/router'
 
 @Component({
   selector: 'app-home-content',
@@ -43,6 +44,7 @@ import { NotificationService } from 'src/app/service/notification/notification.s
     MessageWaitingContentComponent,
     TranslateModule,
     SpinnerComponent,
+    RouterLink,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -61,15 +63,16 @@ export class HomeContentComponent implements OnInit, OnDestroy {
   selectedSegment: string = this.segmentList[0]
   visitedWaiting: boolean = true
   visitedMeetings: boolean = true
+  isOrganizer: boolean = false
 
   constructor(
     private usersMeetingsApi: UsersMeetingsApi,
     private alert: Alert,
     private refreshDataService: RefreshDataService,
-    private timeService: TimeService,
     private userService: UserService,
     public translate: TranslateService,
-    public notificationService: NotificationService
+    public notificationService: NotificationService,
+    private groupsUsersApi: GroupsUsersApi
   ) {}
 
   ngOnInit() {
@@ -80,13 +83,6 @@ export class HomeContentComponent implements OnInit, OnDestroy {
         }
       })
     )
-    this.timeService.updateCurrentTime()
-    this.intervalSubscription = interval(1000).subscribe(() => {
-      this.timeService.updateCurrentTime()
-    })
-    this.timeService.currentTime$.subscribe((currentTime) => {
-      this.currentTime = currentTime
-    })
     this.getDetails()
   }
 
@@ -147,6 +143,25 @@ export class HomeContentComponent implements OnInit, OnDestroy {
           },
         })
     }
+  }
+
+  getPermission() {
+    this.groupsUsersApi
+      .getAllGroupsFromUserAsync({
+        page: 0,
+        onPage: -1,
+        idUser: this.userService.loggedUser.ID_USER,
+        isAvatar: false,
+      })
+      .subscribe({
+        next: (response) => {
+          this.isOrganizer =
+            response.find((obj) => obj.AccountType === 1) !== undefined
+        },
+        error: (error) => {
+          this.alert.handleError(error)
+        },
+      })
   }
 
   reload() {

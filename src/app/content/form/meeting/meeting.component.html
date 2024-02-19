@@ -12,6 +12,24 @@
   @if(isReady){
   <form [formGroup]="meetingForm" (ngSubmit)="onSubmit()">
     <ion-list [inset]="true">
+      @if(isHome){
+      <ion-item lines="none">
+        <ion-select
+          justify="space-between"
+          aria-label="Groups"
+          interface="popover"
+          [placeholder]="'Select a group' | translate"
+          formControlName="group"
+          fill="outline"
+        >
+          @for(group of groups; track $index){
+          <ion-select-option [value]="group">
+            {{ group.Name }}
+          </ion-select-option>
+          }
+        </ion-select>
+      </ion-item>
+      }
       <ion-item lines="none">
         <ion-label> {{ "Date of meeting" | translate }} </ion-label>
         <ion-datetime-button datetime="datetime"> </ion-datetime-button>

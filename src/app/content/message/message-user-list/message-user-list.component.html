@@ -8,6 +8,9 @@
 <ion-content>
   <app-spinner [isReady]="!isReady"></app-spinner>
   @if(isReady){ @for(item of messages; track $index){
-  <app-meeting-user-list [user]="item"></app-meeting-user-list>
+  <app-meeting-user-list
+    [user]="item"
+    [counter]="$index"
+  ></app-meeting-user-list>
   }}
 </ion-content>

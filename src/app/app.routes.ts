@@ -91,18 +91,18 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'home/add-meeting',
+        loadComponent: () =>
+          import('./content/form/meeting/meeting.component').then(
+            (m) => m.MeetingComponent
+          ),
+      },
+      {
         path: 'profile',
         loadComponent: () =>
           import('./layout/profile-page/profile-page.component').then(
             (m) => m.ProfilePageComponent
           ),
-      },
-      {
-        path: 'profile/edit-pass',
-        loadComponent: () =>
-          import(
-            './content/form/profile-password/profile-password.component'
-          ).then((m) => m.ProfilePasswordComponent),
       },
       {
         path: 'profile/edit',
@@ -117,6 +117,13 @@ export const routes: Routes = [
           import('./content/form/profile/profile.component').then(
             (m) => m.ProfileComponent
           ),
+      },
+      {
+        path: 'profile/edit-pass',
+        loadComponent: () =>
+          import(
+            './content/form/profile-password/profile-password.component'
+          ).then((m) => m.ProfilePasswordComponent),
       },
       {
         path: 'notification',
@@ -138,6 +145,13 @@ export const routes: Routes = [
           import(
             './content/message/message-answer-modal/message-answer-modal.component'
           ).then((m) => m.MessageAnswerModalComponent),
+      },
+      {
+        path: 'meeting/:idMeeting',
+        loadComponent: () =>
+          import(
+            './content/meeting/meeting-details/meeting-details.component'
+          ).then((m) => m.MeetingDetailsComponent),
       },
       {
         path: 'download',

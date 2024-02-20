@@ -1,0 +1,16 @@
+ion-card-header {
+  font-size: x-large;
+}
+ion-item {
+  width: 100%;
+}
+ion-icon {
+  padding-right: 10px;
+}
+ion-avatar {
+  padding: 3px;
+}
+.click:active {
+  transform: scale(0.9);
+  filter: brightness(150%);
+}

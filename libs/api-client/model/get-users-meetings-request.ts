@@ -15,7 +15,6 @@ import { GetMessageRequest } from './get-message-request';
 
 export interface GetUsersMeetingsRequest { 
     Meeting?: GetMeetingRequest;
-    IdUsers?: Array<number> | null;
     Message?: GetMessageRequest;
 }
 

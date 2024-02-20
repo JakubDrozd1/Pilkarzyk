@@ -17,5 +17,6 @@ export interface GetMeetingRequest {
     Quantity?: number | null;
     Description?: string | null;
     IdGroup?: number | null;
+    IdAuthor?: number | null;
 }
 

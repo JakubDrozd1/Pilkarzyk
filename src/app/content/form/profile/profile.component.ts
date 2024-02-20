@@ -11,7 +11,7 @@ import { IonicModule } from '@ionic/angular'
 import { MaskitoModule } from '@maskito/angular'
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
-import { USERS, UsersApi } from 'libs/api-client'
+import { USERS, UpdateColumnUserRequestParams, UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { UserService } from 'src/app/service/user/user.service'
@@ -157,15 +157,15 @@ export class ProfileComponent implements OnInit {
     if (this.profileForm.valid) {
       this.isReady = false
 
-      let updateColumnUserRequest: any = {
-        userId: this.userService.loggedUser.ID_USER,
+      let updateColumnUserRequest: UpdateColumnUserRequestParams = {
+        userId: this.userService.loggedUser.ID_USER ?? 0,
       }
       switch (this.inputEdit) {
         case 'mail':
           {
             updateColumnUserRequest.getUpdateUserRequest = {
               Column: ['EMAIL'],
-              EMAIL: this.profileForm.value.email,
+              Email: this.profileForm.value.email,
             }
           }
           break
@@ -175,7 +175,7 @@ export class ProfileComponent implements OnInit {
             let intNumber: number = parseInt(str.replace(/-/g, ''), 10)
             updateColumnUserRequest.getUpdateUserRequest = {
               Column: ['PHONE_NUMBER'],
-              PHONE_NUMBER: intNumber,
+              PhoneNumber: intNumber,
             }
           }
           break
@@ -183,7 +183,7 @@ export class ProfileComponent implements OnInit {
           {
             updateColumnUserRequest.getUpdateUserRequest = {
               Column: ['LOGIN'],
-              LOGIN: this.profileForm.value.login,
+              Login: this.profileForm.value.login,
             }
           }
           break
@@ -191,8 +191,8 @@ export class ProfileComponent implements OnInit {
           {
             updateColumnUserRequest.getUpdateUserRequest = {
               Column: ['FIRSTNAME', 'SURNAME'],
-              FIRSTNAME: this.profileForm.value.firstname,
-              SURNAME: this.profileForm.value.surname,
+              Firstname: this.profileForm.value.firstname,
+              Surname: this.profileForm.value.surname,
             }
           }
           break

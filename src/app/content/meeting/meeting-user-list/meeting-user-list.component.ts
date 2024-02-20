@@ -3,17 +3,18 @@ import { Component, Input, OnInit } from '@angular/core'
 import { IonicModule } from '@ionic/angular'
 import { GetMessagesUsersMeetingsResponse } from 'libs/api-client'
 import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
-import { SpinnerComponent } from "../../../helper/spinner/spinner.component";
+import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 
 @Component({
-    selector: 'app-meeting-user-list',
-    templateUrl: './meeting-user-list.component.html',
-    styleUrls: ['./meeting-user-list.component.scss'],
-    standalone: true,
-    imports: [CommonModule, IonicModule, SpinnerComponent]
+  selector: 'app-meeting-user-list',
+  templateUrl: './meeting-user-list.component.html',
+  styleUrls: ['./meeting-user-list.component.scss'],
+  standalone: true,
+  imports: [CommonModule, IonicModule, SpinnerComponent],
 })
 export class MeetingUserListComponent implements OnInit {
   @Input() user!: GetMessagesUsersMeetingsResponse
+  @Input() counter: number = 0
   temp: File | null = null
   images: string = ''
   isReady: boolean = false

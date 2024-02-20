@@ -1,3 +1,11 @@
 form {
   width: auto;
 }
+ion-select {
+  &::part(container) {
+    width: 100%;
+  }
+}
+ion-item {
+  padding-top: 5px;
+}

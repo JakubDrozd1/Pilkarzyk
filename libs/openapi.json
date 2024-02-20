@@ -2653,6 +2653,11 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "IdAuthor": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2679,6 +2684,11 @@
             "nullable": true
           },
           "IdGroup": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IdAuthor": {
             "type": "integer",
             "format": "int32",
             "nullable": true
@@ -3097,14 +3107,6 @@
         "properties": {
           "Meeting": {
             "$ref": "#/components/schemas/GetMeetingRequest"
-          },
-          "IdUsers": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "nullable": true
           },
           "Message": {
             "$ref": "#/components/schemas/GetMessageRequest"

@@ -135,7 +135,7 @@ export class MeetingsApi {
     public addMeeting(requestParameters: AddMeetingRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
     public addMeeting(requestParameters: AddMeetingRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
         const getUsersMeetingsRequest = requestParameters.getUsersMeetingsRequest;
-
+        console.log(requestParameters);
         let localVarHeaders = this.defaultHeaders;
 
         let localVarCredential: string | undefined;

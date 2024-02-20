@@ -124,6 +124,7 @@ export class MeetingComponent implements OnInit {
               IdGroup: this.isHome
                 ? this.meetingForm.value.group.IdGroup
                 : this.idGroup,
+              IdAuthor: this.userService.loggedUser.ID_USER,
             },
             Message: {
               IdUser: this.userService.loggedUser.ID_USER,

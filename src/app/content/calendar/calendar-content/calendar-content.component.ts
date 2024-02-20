@@ -69,14 +69,15 @@ export class CalendarContentComponent implements OnInit {
   getDetails() {
     this.meetings = []
     this.isReady = false
-    this.usersMeetingsApi
-      .getListMeetingsUsersAsync({
+    this.meetingsApi
+      .getAllMeetings({
         page: 0,
         onPage: -1,
         sortColumn: 'DATE_MEETING',
         sortMode: 'ASC',
         idUser: this.userService.loggedUser.ID_USER,
         answer: 'yes',
+        withMessages: true,
       })
       .subscribe({
         next: (response) => {

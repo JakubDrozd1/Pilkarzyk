@@ -1,0 +1,99 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()"> {{ "Back" | translate }} </ion-button>
+    </ion-buttons>
+    @if(isReady){
+    <div style="display: flex; flex-direction: row-reverse">
+      @if(currentDate<(meeting.DateMeeting??0)){
+      <ion-label class="click" [id]="'change-decision' + meeting.IdMeeting">
+        <ion-icon slot="end" size="large" name="hand-right-outline"></ion-icon>
+      </ion-label>
+      }
+      <ion-label>
+        <ion-icon slot="end" size="large" name="create-outline"></ion-icon>
+      </ion-label>
+    </div>
+    }
+  </ion-toolbar>
+</ion-header>
+<app-spinner [isReady]="!isReady"></app-spinner>
+<ion-content>
+  @if(isReady){
+  <ion-card>
+    <ion-card-header>
+      {{ meeting.Name }}
+    </ion-card-header>
+    <ion-card-content>
+      <ion-chip>
+        @if(user.AVATAR == null){
+        <ion-avatar>
+          <img
+            alt="img"
+            src="https://ionicframework.com/docs/img/demos/avatar.svg"
+          />
+        </ion-avatar>
+        } @else {
+        <ion-avatar>
+          <img alt="img" [src]="image" />
+        </ion-avatar>
+        }
+        <ion-label> {{ user.FIRSTNAME }} {{ user.SURNAME }} </ion-label>
+      </ion-chip>
+    </ion-card-content>
+    <ion-card-content>
+      <ion-item lines="none">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <ion-label>
+          {{ meeting.DateMeeting | date : "dd.MM.yyyy HH:mm" }}
+        </ion-label>
+      </ion-item>
+      <ion-item lines="full" class="title">
+        <ion-icon name="location-outline"></ion-icon>
+        <ion-label>
+          {{ meeting.Place }}
+        </ion-label>
+      </ion-item>
+    </ion-card-content>
+    <ion-card-content>
+      <ion-item
+        class="button"
+        lines="full"
+        button
+        [routerLink]="['/message', meeting.IdMeeting]"
+      >
+        @for(image of images; track $index){ @if($index<counter){ @if(image ==
+        null){
+        <ion-avatar>
+          <img
+            alt="img"
+            src="https://ionicframework.com/docs/img/demos/avatar.svg"
+          />
+        </ion-avatar>
+        } @else {
+        <ion-avatar>
+          <img alt="img" [src]="image" />
+        </ion-avatar>
+        } }@else { @if($index==counter){
+        <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
+        } }}
+      </ion-item>
+      <ion-label> {{ acceptMeeting }} / {{ meeting.Quantity }}</ion-label>
+    </ion-card-content>
+  </ion-card>
+  @if( meeting.Description){
+  <ion-card>
+    <ion-card-header> Opis </ion-card-header>
+    <ion-list [inset]="true">
+      <ion-item>{{ meeting.Description }}</ion-item>
+    </ion-list>
+  </ion-card>
+  }
+  <ion-alert
+    [trigger]="'change-decision' + meeting.IdMeeting"
+    [header]="'Change decision' | translate"
+    [inputs]="changeInputs"
+    [buttons]="changeButtons"
+  ></ion-alert>
+  }
+</ion-content>

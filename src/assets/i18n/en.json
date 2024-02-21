@@ -118,6 +118,7 @@
   "Current": "Current",
   "Archival": "Archival",
   "Done": "Done",
+  "NEW": "NEW",
 
   "Group is null": "Group doesn't exist.",
   "User is null": "User doesn't exist",

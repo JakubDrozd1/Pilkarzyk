@@ -13,6 +13,8 @@ import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
 })
 export class GroupsUserListComponent implements OnInit {
   @Input() user!: GetGroupsUsersResponse
+  @Input() counter: number = 0
+  
   temp: File | null = null
   images: string = ''
   isReady: boolean = false

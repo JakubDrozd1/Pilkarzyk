@@ -156,7 +156,7 @@ export class MeetingDetailsComponent implements OnInit {
   }
 
   cancel() {
-    this.router.navigate(['/home'])
+    window.history.back()
   }
 
   setInputs() {

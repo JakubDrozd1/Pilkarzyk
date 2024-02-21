@@ -125,7 +125,10 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
   updateNotification() {
     this.dataService.sendData(
       this.messages.filter(
-        (message) => message.Answer === 'readed' || message.Answer === null
+        (message) =>
+          message.Answer === 'readed' ||
+          message.Answer === null ||
+          message.Answer === 'wait'
       ).length + this.invite.length
     )
   }
@@ -174,9 +177,23 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
       }),
     }).subscribe({
       next: (responses) => {
-        this.messages = responses.messages.filter(
-          (message) => message.Answer === 'readed' || message.Answer === null
-        )
+        this.messages = responses.messages
+          .filter(
+            (message) =>
+              message.Answer === 'readed' ||
+              message.Answer === null ||
+              message.Answer === 'wait'
+          )
+          .sort((a, b) => {
+            const priority: { [key: string]: number } = {
+              null: 1,
+              wait: 2,
+              readed: 3,
+            }
+            const answerA = a.Answer || 'null'
+            const answerB = b.Answer || 'null'
+            return priority[answerA] - priority[answerB]
+          })
         this.updateNotification()
         this.invite = responses.invites
         this.isReady = true

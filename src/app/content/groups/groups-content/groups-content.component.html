@@ -92,12 +92,10 @@
     <swiper-slide>
       @if(isReady){ @if(meetings.length>0){ @for (item of meetings; track
       $index) {
-      <ion-list>
-        <app-meeting-content
-          [meeting]="item"
-          component="group-content"
-        ></app-meeting-content>
-      </ion-list>
+      <app-meeting-content
+        [meeting]="item"
+        component="group-content"
+      ></app-meeting-content>
       } } @else {
       <ion-item class="header" lines="none">
         {{ "No upcoming meetings" | translate }}
@@ -108,7 +106,10 @@
       @if(isReady){ @if(groupsUsers.length>0){
       <ion-list>
         @for (item of groupsUsers; track $index) {
-        <app-groups-user-list [user]="item"></app-groups-user-list>
+        <app-groups-user-list
+          [user]="item"
+          [counter]="$index"
+        ></app-groups-user-list>
         }
       </ion-list>
       }@else{

@@ -3,7 +3,6 @@ import {
   CUSTOM_ELEMENTS_SCHEMA,
   Component,
   ElementRef,
-  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core'
@@ -13,7 +12,6 @@ import {
   GetMessagesUsersMeetingsResponse,
   GroupsUsersApi,
   MeetingsApi,
-  UsersMeetingsApi,
 } from 'libs/api-client'
 import * as moment from 'moment'
 import { Subscription, forkJoin } from 'rxjs'
@@ -22,7 +20,6 @@ import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { MessageContentComponent } from '../../message/message-content/message-content.component'
 import { FormsModule } from '@angular/forms'
-import { MessageWaitingContentComponent } from '../../message/message-waiting-content/message-waiting-content.component'
 import { UserService } from 'src/app/service/user/user.service'
 import { SwiperContainer } from 'swiper/element'
 import { InfiniteScrollCustomEvent, IonRefresherCustomEvent } from '@ionic/core'
@@ -42,7 +39,6 @@ import { RouterLink } from '@angular/router'
     MeetingContentComponent,
     MessageContentComponent,
     FormsModule,
-    MessageWaitingContentComponent,
     TranslateModule,
     SpinnerComponent,
     RouterLink,

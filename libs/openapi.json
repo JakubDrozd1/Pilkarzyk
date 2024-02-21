@@ -2910,6 +2910,16 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "IdAuthor": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IdGroup": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false

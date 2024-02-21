@@ -1,38 +1,50 @@
 <app-spinner [isReady]="!isReady"></app-spinner>
 @if (isReady) {
 <ion-card>
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <ion-card-header>
-          {{ "Invitation to the group" | translate }} {{ invite.Name }}
-        </ion-card-header>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-card-header>
-          {{ "Sent by" | translate }} {{ invite.FirstnameAuthor }}
-          {{ invite.SurnameAuthor }}
-        </ion-card-header>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-item class="button" lines="full" (click)="onSubmit('yes')" button>
-          <ion-card-header>
-            <ion-label color="success">{{ "ACCEPT" | translate }}</ion-label>
-          </ion-card-header>
-        </ion-item>
-      </ion-col>
-      <ion-col>
-        <ion-item class="button" lines="full" (click)="onSubmit('no')" button>
-          <ion-card-header>
-            <ion-label color="danger">{{ "REJECT" | translate }}</ion-label>
-          </ion-card-header>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <ion-card-header>
+    <ion-card-title>
+      {{ "Invitation to the group" | translate }} {{ invite.Name }}
+    </ion-card-title>
+  </ion-card-header>
+  <ion-card-header class="invite">
+    {{ "Sent by" | translate }}
+    <ion-chip>
+      @if(user.AVATAR == null){
+      <ion-avatar>
+        <img
+          alt="img"
+          src="https://ionicframework.com/docs/img/demos/avatar.svg"
+        />
+      </ion-avatar>
+      } @else {
+      <ion-avatar>
+        <img alt="img" [src]="image" />
+      </ion-avatar>
+      }
+      <ion-label> {{ user.FIRSTNAME }} {{ user.SURNAME }} </ion-label>
+    </ion-chip>
+  </ion-card-header>
+  <div class="buttons">
+    <ion-button
+      shape="round"
+      size="small"
+      class="button"
+      (click)="onSubmit('yes')"
+    >
+      <ion-label color="success">
+        <ion-icon size="large" name="checkmark-outline"></ion-icon>
+      </ion-label>
+    </ion-button>
+    <ion-button
+      shape="round"
+      size="small"
+      class="button"
+      (click)="onSubmit('no')"
+    >
+      <ion-label color="danger">
+        <ion-icon size="large" name="close-outline"></ion-icon>
+      </ion-label>
+    </ion-button>
+  </div>
 </ion-card>
 }

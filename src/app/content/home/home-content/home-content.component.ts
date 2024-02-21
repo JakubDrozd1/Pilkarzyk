@@ -3,7 +3,6 @@ import {
   CUSTOM_ELEMENTS_SCHEMA,
   Component,
   ElementRef,
-  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core'
@@ -13,7 +12,6 @@ import {
   GetMessagesUsersMeetingsResponse,
   GroupsUsersApi,
   MeetingsApi,
-  UsersMeetingsApi,
 } from 'libs/api-client'
 import * as moment from 'moment'
 import { Subscription, forkJoin } from 'rxjs'
@@ -22,10 +20,9 @@ import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { MessageContentComponent } from '../../message/message-content/message-content.component'
 import { FormsModule } from '@angular/forms'
-import { MessageWaitingContentComponent } from '../../message/message-waiting-content/message-waiting-content.component'
 import { UserService } from 'src/app/service/user/user.service'
 import { SwiperContainer } from 'swiper/element'
-import { IonRefresherCustomEvent } from '@ionic/core'
+import { InfiniteScrollCustomEvent, IonRefresherCustomEvent } from '@ionic/core'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
 import { NotificationService } from 'src/app/service/notification/notification.service'
@@ -42,14 +39,13 @@ import { RouterLink } from '@angular/router'
     MeetingContentComponent,
     MessageContentComponent,
     FormsModule,
-    MessageWaitingContentComponent,
     TranslateModule,
     SpinnerComponent,
     RouterLink,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class HomeContentComponent implements OnInit, OnDestroy {
+export class HomeContentComponent implements OnInit {
   @ViewChild('swiperContainer', { read: ElementRef, static: false })
   swiperContainer!: ElementRef<SwiperContainer>
 
@@ -57,13 +53,13 @@ export class HomeContentComponent implements OnInit, OnDestroy {
   meetingsExpired: GetMeetingGroupsResponse[] = []
   isReady: boolean = false
   private subscription: Subscription = new Subscription()
-  private intervalSubscription: Subscription | undefined
   messages: GetMessagesUsersMeetingsResponse[] = []
   segmentList: Array<string> = ['meetings', 'waiting']
   selectedSegment: string = this.segmentList[0]
   visitedWaiting: boolean = true
   visitedMeetings: boolean = true
   isOrganizer: boolean = false
+  counter: number = 1
 
   constructor(
     private alert: Alert,
@@ -86,12 +82,6 @@ export class HomeContentComponent implements OnInit, OnDestroy {
     this.getDetails()
   }
 
-  ngOnDestroy() {
-    if (this.intervalSubscription) {
-      this.intervalSubscription.unsubscribe()
-    }
-  }
-
   getDetails() {
     this.meetingsActive = []
     this.meetingsExpired = []
@@ -108,11 +98,10 @@ export class HomeContentComponent implements OnInit, OnDestroy {
       }),
       expiredMeetign: this.meetingsApi.getAllMeetings({
         page: 0,
-        onPage: -1,
+        onPage: 5,
         sortColumn: 'DATE_MEETING',
         sortMode: 'DESC',
         dateTo: moment().format(),
-        dateFrom: moment().subtract(1, 'month').startOf('day').format(),
         idUser: this.userService.loggedUser.ID_USER,
         answer: 'yes',
         withMessages: true,
@@ -120,7 +109,6 @@ export class HomeContentComponent implements OnInit, OnDestroy {
     }).subscribe({
       next: (responses) => {
         this.meetingsActive = responses.activeMeeting
-        console.log(this.meetingsActive)
         this.meetingsExpired = responses.expiredMeetign
         this.isReady = true
       },
@@ -162,5 +150,35 @@ export class HomeContentComponent implements OnInit, OnDestroy {
       this.reload()
       $event.target.complete()
     }, 2000)
+  }
+
+  onIonInfinite(ev: InfiniteScrollCustomEvent) {
+    this.generateItems()
+    setTimeout(() => {
+      ;(ev as InfiniteScrollCustomEvent).target.complete()
+    }, 500)
+  }
+
+  generateItems() {
+    this.meetingsApi
+      .getAllMeetings({
+        page: this.counter,
+        onPage: 5,
+        sortColumn: 'DATE_MEETING',
+        sortMode: 'DESC',
+        dateTo: moment().format(),
+        idUser: this.userService.loggedUser.ID_USER,
+        answer: 'yes',
+        withMessages: true,
+      })
+      .subscribe({
+        next: (response) => {
+          this.meetingsExpired = this.meetingsExpired.concat(response)
+          this.counter++
+        },
+        error: (error) => {
+          this.alert.handleError(error)
+        },
+      })
   }
 }

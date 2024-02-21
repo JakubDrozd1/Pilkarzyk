@@ -45,17 +45,16 @@
   >
     <swiper-slide>
       @if(isReady){ @if(messages.length>0){ @for(message of messages; track
-      $index){ @if(message.Answer==null){
-      <ion-item class="warning" lines="full">
-        <app-message-content [message]="message" (messageUpdate)="updateNotification()"></app-message-content>
-      </ion-item>
-      <ion-label color="danger"> {{ "NEW INVITATION" | translate }} </ion-label>
-      }@else { <app-message-content [message]="message"></app-message-content>
+      $index){
+      <app-message-content
+        [message]="message"
+        (messageUpdate)="updateNotification()"
+      ></app-message-content>
       } } } @if(messages.length==0){
       <ion-item class="header" lines="none">
         {{ "You have no invitations" | translate }}
       </ion-item>
-      } }
+      }
     </swiper-slide>
     <swiper-slide>
       @if(isReady){ @if(invite.length>0){ @for(item of invite; track $index){

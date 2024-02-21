@@ -11,15 +11,17 @@ import { IonicModule } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import {
   GetGroupsUsersResponse,
+  GetMessagesUsersMeetingsResponse,
   GroupsUsersApi,
   MeetingsApi,
+  MessagesApi,
 } from 'libs/api-client'
 import * as moment from 'moment'
 import { Observable } from 'rxjs'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute } from '@angular/router'
 import { UserService } from 'src/app/service/user/user.service'
 
 @Component({
@@ -46,17 +48,20 @@ export class MeetingComponent implements OnInit {
   isReady: boolean = true
   groups: GetGroupsUsersResponse[] = []
   isHome: boolean = false
+  idMeeting: number = 0
+  meeting!: GetMessagesUsersMeetingsResponse
+  isEdit: boolean = true
 
   constructor(
     private fb: FormBuilder,
-    private router: Router,
     private meetingsApi: MeetingsApi,
     private refreshDataService: RefreshDataService,
     private alert: Alert,
     private groupsUsersApi: GroupsUsersApi,
     public translate: TranslateService,
     private route: ActivatedRoute,
-    private userService: UserService
+    private userService: UserService,
+    private messagesApi: MessagesApi
   ) {
     this.meetingForm = this.fb.group({
       dateMeeting: ['', Validators.required],
@@ -70,11 +75,18 @@ export class MeetingComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params) => {
       if (params?.['idGroup'] > 0) {
-        this.idGroup = parseInt(params?.['idGroup'])
+        this.isEdit = false
         this.isHome = false
+        this.idGroup = parseInt(params?.['idGroup'])
+      } else if (params?.['idMeeting'] > 0) {
+        this.idMeeting = parseInt(params?.['idMeeting'])
+        this.isEdit = true
+        this.isHome = false
+        this.getMeeting()
       } else {
         this.getPermission()
         this.isHome = true
+        this.isEdit = false
         this.meetingForm.addControl(
           'group',
           this.fb.control('', Validators.required)
@@ -113,46 +125,108 @@ export class MeetingComponent implements OnInit {
     this.meetingForm.markAllAsTouched()
     if (this.meetingForm.valid) {
       this.isReady = false
-      this.meetingsApi
-        .addMeeting({
-          getUsersMeetingsRequest: {
-            Meeting: {
+      if (!this.isEdit) {
+        this.meetingsApi
+          .addMeeting({
+            getUsersMeetingsRequest: {
+              Meeting: {
+                DateMeeting: this.meetingForm.value.dateMeeting,
+                Place: this.meetingForm.value.place,
+                Quantity: this.meetingForm.value.quantity,
+                Description: this.meetingForm.value.description,
+                IdGroup: this.isHome
+                  ? this.meetingForm.value.group.IdGroup
+                  : this.idGroup,
+                IdAuthor: this.userService.loggedUser.ID_USER,
+              },
+              Message: {
+                IdUser: this.userService.loggedUser.ID_USER,
+                Answer: this.meetingForm.value.presence ? 'yes' : 'no',
+              },
+            },
+          })
+          .subscribe({
+            next: () => {
+              this.alert.alertOk()
+              this.meetingForm.reset()
+              this.refreshDataService.refresh('groups-content')
+              this.cancel()
+            },
+            error: (error) => {
+              this.alert.handleError(error)
+              this.cancel()
+              this.isReady = true
+            },
+          })
+      } else {
+        this.meetingsApi
+          .updateColumnMeeting({
+            meetingId: this.idMeeting,
+            getUpdateMeetingRequest: {
               DateMeeting: this.meetingForm.value.dateMeeting,
               Place: this.meetingForm.value.place,
               Quantity: this.meetingForm.value.quantity,
               Description: this.meetingForm.value.description,
-              IdGroup: this.isHome
-                ? this.meetingForm.value.group.IdGroup
-                : this.idGroup,
-              IdAuthor: this.userService.loggedUser.ID_USER,
+              Message: {
+                IdMeeting: this.idMeeting,
+                IdUser: this.userService.loggedUser.ID_USER,
+                Answer: this.meetingForm.value.presence ? 'yes' : 'no',
+              },
+              Column: ['DATE_MEETING', 'PLACE', 'QUANTITY', 'DESCRIPTION'],
             },
-            Message: {
-              IdUser: this.userService.loggedUser.ID_USER,
-              Answer: this.meetingForm.value.presence ? 'yes' : 'no',
+          })
+          .subscribe({
+            next: () => {
+              this.alert.alertOk()
+              this.meetingForm.reset()
+              this.refreshDataService.refresh('meeting-details')
+              this.cancel()
             },
-          },
+            error: (error) => {
+              this.alert.handleError(error)
+              this.cancel()
+              this.isReady = true
+            },
+          })
+      }
+    }
+  }
+
+  getMeeting() {
+    if (this.idMeeting > 0) {
+      this.isReady = false
+      this.messagesApi
+        .getAllMessages({
+          idMeeting: this.idMeeting,
+          idUser: this.userService.loggedUser.ID_USER,
+          page: 0,
+          onPage: -1,
         })
         .subscribe({
-          next: () => {
-            this.alert.alertOk()
-            this.meetingForm.reset()
-            this.refreshDataService.refresh('groups-content')
-            this.cancel()
+          next: (response) => {
+            this.meeting = response[0]
+            this.meetingForm
+              .get('dateMeeting')
+              ?.setValue(this.meeting.DateMeeting)
+            this.meetingForm.get('place')?.setValue(this.meeting.Place)
+            this.meetingForm.get('quantity')?.setValue(this.meeting.Quantity)
+            this.meetingForm
+              .get('description')
+              ?.setValue(this.meeting.Description)
+            this.meetingForm
+              .get('presence')
+              ?.setValue(this.meeting.Answer == 'yes')
+            this.isReady = true
           },
           error: (error) => {
             this.alert.handleError(error)
-            this.cancel()
             this.isReady = true
           },
         })
     }
   }
 
-  async cancel() {
-    if (this.isHome) {
-      this.router.navigate(['/home'])
-    } else {
-      this.router.navigate(['/groups', this.idGroup])
-    }
+  cancel() {
+    window.history.back()
   }
 }

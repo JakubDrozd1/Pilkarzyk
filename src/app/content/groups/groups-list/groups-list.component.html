@@ -52,7 +52,11 @@
     </swiper-slide>
     <swiper-slide>
       @if(isReadyMembers){ @for (item of users; track $index) {
-      <app-groups-user-list [user]="item"></app-groups-user-list>}}
+      <app-groups-user-list
+        [user]="item"
+        [counter]="$index"
+      ></app-groups-user-list
+      >}}
     </swiper-slide>
   </swiper-container>
   }@else { @if(isReadyGroups){ @if(groupsUsers.length>0){

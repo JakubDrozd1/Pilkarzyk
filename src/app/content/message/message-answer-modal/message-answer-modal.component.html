@@ -18,6 +18,9 @@
           [max]="maxDate"
           id="datetime"
           formControlName="dateMeeting"
+          [showDefaultButtons]="true"
+          [doneText]="'Done' | translate"
+          [cancelText]="'Cancel' | translate"
         ></ion-datetime>
       </ng-template>
     </ion-modal>

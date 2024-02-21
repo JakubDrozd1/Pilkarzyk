@@ -9,10 +9,14 @@
       <ion-label class="click" [id]="'change-decision' + meeting.IdMeeting">
         <ion-icon slot="end" size="large" name="hand-right-outline"></ion-icon>
       </ion-label>
-      }
-      <ion-label>
+      } @if(meeting.IdAuthor===userService.loggedUser.ID_USER){
+      <ion-label
+        class="click"
+        [routerLink]="['/meeting', meeting.IdMeeting, 'edit']"
+      >
         <ion-icon slot="end" size="large" name="create-outline"></ion-icon>
       </ion-label>
+      }
     </div>
     }
   </ion-toolbar>

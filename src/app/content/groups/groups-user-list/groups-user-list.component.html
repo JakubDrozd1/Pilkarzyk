@@ -33,6 +33,7 @@
         <img alt="img" [src]="images" />
       </ion-avatar>
       }
+      {{ counter + 1 }}.&nbsp;
       <ion-label> {{ user.Firstname }} {{ user.Surname }} </ion-label>
       @if(user.PhoneNumber!=null){
       {{ user.PhoneNumber.toString().slice(0, 3) }}-{{

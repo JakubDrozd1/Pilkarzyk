@@ -1058,6 +1058,49 @@
         }
       }
     },
+    "/api/meetings/column-{meetingId}": {
+      "put": {
+        "tags": [
+          "Meetings"
+        ],
+        "operationId": "UpdateColumnMeeting",
+        "parameters": [
+          {
+            "name": "meetingId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUpdateMeetingRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUpdateMeetingRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUpdateMeetingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/messages": {
       "get": {
         "tags": [
@@ -3009,6 +3052,40 @@
             "type": "string",
             "nullable": true,
             "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetUpdateMeetingRequest": {
+        "type": "object",
+        "properties": {
+          "DateMeeting": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "Place": {
+            "type": "string",
+            "nullable": true
+          },
+          "Quantity": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Description": {
+            "type": "string",
+            "nullable": true
+          },
+          "Column": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "Message": {
+            "$ref": "#/components/schemas/GetMessageRequest"
           }
         },
         "additionalProperties": false

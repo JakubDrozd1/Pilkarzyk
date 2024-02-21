@@ -56,7 +56,11 @@
   </ion-card-content>
 </ion-card>
 } @if(isReady){
-<ion-card [routerLink]="['/meeting', meeting.IdMeeting]" class="click">
+<ion-card
+  [routerLink]="['/meeting', meeting.IdMeeting]"
+  class="click"
+  [ngStyle]="{ opacity: !isCurrent ? '0.5' : '1' }"
+>
   <ion-card-header>
     <ion-card-title>
       <div style="display: flex">
@@ -75,7 +79,6 @@
     <ion-label>
       {{ meeting.DateMeeting | date : "dd.MM.yyyy HH:mm" }}
     </ion-label>
-
     <div style="display: flex">
       <div style="text-align: left; width: 100%">
         <ion-chip>
@@ -102,5 +105,4 @@
     </div>
   </ion-card-content>
 </ion-card>
-
 }

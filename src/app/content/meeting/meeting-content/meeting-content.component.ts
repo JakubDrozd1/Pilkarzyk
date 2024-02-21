@@ -33,7 +33,8 @@ import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
 })
 export class MeetingContentComponent implements OnInit {
   @Input() meeting!: GetMeetingGroupsResponse
-
+  @Input() isCurrent: boolean = true
+  
   acceptMeeting: number = 0
   filteredMessages: GetMessagesUsersMeetingsResponse[] = []
   isReady: boolean = false

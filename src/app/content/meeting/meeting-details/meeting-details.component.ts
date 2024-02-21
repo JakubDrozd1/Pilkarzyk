@@ -12,7 +12,7 @@ import {
   UsersApi,
 } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
-import { forkJoin } from 'rxjs'
+import { Subscription, forkJoin } from 'rxjs'
 import {
   convertBase64ToFile,
   convertStringsToImages,
@@ -50,6 +50,7 @@ export class MeetingDetailsComponent implements OnInit {
   public changeInputs: any
   selectedValue: string = ''
   currentDate: any
+  private subscription: Subscription = new Subscription()
   public changeButtons = [
     {
       text: this.translate.instant('Save'),
@@ -59,7 +60,7 @@ export class MeetingDetailsComponent implements OnInit {
       },
     },
   ]
-  
+
   constructor(
     private route: ActivatedRoute,
     private meetingsApi: MeetingsApi,
@@ -70,11 +71,22 @@ export class MeetingDetailsComponent implements OnInit {
     public translate: TranslateService,
     private elementRef: ElementRef,
     private refreshDataService: RefreshDataService,
-    private userService: UserService
+    public userService: UserService
   ) {}
 
   ngOnInit() {
     this.currentDate = moment().toISOString()
+    this.subscription.add(
+      this.refreshDataService.refreshSubject.subscribe((index) => {
+        if (index === 'meeting-details') {
+          this.reload()
+        }
+      })
+    )
+    this.reload()
+  }
+
+  reload() {
     this.route.params.subscribe((params) => {
       if (params?.['idMeeting'] > 0) {
         this.idMeeting = parseInt(params?.['idMeeting'])

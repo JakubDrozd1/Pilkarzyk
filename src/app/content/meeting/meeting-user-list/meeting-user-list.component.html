@@ -3,7 +3,6 @@
 <ion-card>
   <ion-card-content>
     <ion-item [color]="color" lines="full" class="title">
-      {{ counter + 1 }}.
       @if(user.Avatar == null){
       <ion-avatar slot="start">
         <img
@@ -16,6 +15,7 @@
         <img alt="img" [src]="images" />
       </ion-avatar>
       }
+      {{ counter + 1 }}.&nbsp;
       <ion-label> {{ user.Firstname }} {{ user.Surname }} </ion-label>
     </ion-item>
   </ion-card-content>

@@ -10,26 +10,29 @@
     <app-spinner [isReady]="true"></app-spinner>
   </ion-refresher>
 
-  @if(isReady){
-  <ion-item>Aktualne</ion-item>
-  @if(meetingsActive.length > 0){ @for(meeting of meetingsActive; track $index){
+  @if(isReady){ @if(meetingsActive.length > 0){
+  <ion-item lines="full">{{ "Current" | translate }}</ion-item>
+  @for(meeting of meetingsActive; track $index){
   <app-meeting-content
     [meeting]="meeting"
-    component="home"
+    [isCurrent]="true"
   ></app-meeting-content>
   } }@else {
   <ion-item class="header" lines="none">
     {{ "You have no meetings today" | translate }}
   </ion-item>
-  }} @if(isReady){
-  <ion-item>Archiwalne</ion-item>
-  @if(meetingsExpired.length > 0){ @for(meeting of meetingsExpired; track
-  $index){
+  }} @if(isReady){ @if(meetingsExpired.length > 0){
+  <ion-item lines="full">{{ "Archival" | translate }}</ion-item>
+  @for(meeting of meetingsExpired; track $index){
   <app-meeting-content
     [meeting]="meeting"
-    component="home"
+    [isCurrent]="false"
   ></app-meeting-content>
-  } }}
+  }
+  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  }}
 
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button>

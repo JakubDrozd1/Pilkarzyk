@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { IonicModule, ModalController } from '@ionic/angular'
+import { IonicModule } from '@ionic/angular'
 import {
   GetMeetingUsersResponse,
   GetMessagesUsersMeetingsResponse,
@@ -9,7 +9,6 @@ import {
 } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
-import { MessageAnswerModalComponent } from '../message-answer-modal/message-answer-modal.component'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { MeetingUserListComponent } from '../../meeting/meeting-user-list/meeting-user-list.component'
 import { RouterLink } from '@angular/router'

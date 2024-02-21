@@ -154,6 +154,13 @@ export const routes: Routes = [
           ).then((m) => m.MeetingDetailsComponent),
       },
       {
+        path: 'meeting/:idMeeting/edit',
+        loadComponent: () =>
+          import('./content/form/meeting/meeting.component').then(
+            (m) => m.MeetingComponent
+          ),
+      },
+      {
         path: 'download',
         component: DownloadComponent,
       },

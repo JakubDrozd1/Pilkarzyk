@@ -41,6 +41,9 @@
             max="2124-10-31"
             id="datetime"
             formControlName="dateMeeting"
+            [showDefaultButtons]="true"
+            [doneText]="'Done' | translate"
+            [cancelText]="'Cancel' | translate"
           ></ion-datetime>
         </ng-template>
       </ion-modal>
@@ -75,6 +78,7 @@
           labelPlacement="floating"
           formControlName="description"
           type="text"
+          maxlength="100"
         >
         </ion-textarea>
       </ion-item>
@@ -83,12 +87,17 @@
           labelPlacement="end"
           justify="start"
           formControlName="presence"
-          >{{ "Check if you will also come" | translate }}</ion-checkbox
         >
+          {{ "Check if you will also come" | translate }}
+        </ion-checkbox>
       </ion-item>
     </ion-list>
     <ion-button type="submit" expand="full">
+      @if(isEdit){
+      {{ "Save" | translate }}
+      }@else {
       {{ "Add" | translate }}
+      }
     </ion-button>
   </form>
   }

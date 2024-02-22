@@ -147,7 +147,9 @@ export class MeetingComponent implements OnInit {
           })
           .subscribe({
             next: () => {
-              this.alert.alertOk()
+              this.alert.presentToast(
+                this.translate.instant('Successully added meeting')
+              )
               this.meetingForm.reset()
               this.refreshDataService.refresh('groups-content')
               this.cancel()
@@ -177,7 +179,9 @@ export class MeetingComponent implements OnInit {
           })
           .subscribe({
             next: () => {
-              this.alert.alertOk()
+              this.alert.presentToast(
+                this.translate.instant('Successully update meeting')
+              )
               this.meetingForm.reset()
               this.refreshDataService.refresh('meeting-details')
               this.cancel()

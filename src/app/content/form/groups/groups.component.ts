@@ -80,7 +80,11 @@ export class GroupsComponent implements OnInit {
                 })
                 .subscribe({
                   next: () => {
-                    this.alert.alertOk()
+                    this.alert.presentToast(
+                      this.translate.instant(
+                        'Successully added user to group'
+                      ) + response.NAME
+                    )
                     this.cancel()
                     this.isReady = false
                     this.refreshDataService.refresh('groups-list')
@@ -93,7 +97,10 @@ export class GroupsComponent implements OnInit {
                 })
             } else {
               this.isReady = false
-              this.alert.alertOk()
+              this.alert.presentToast(
+                this.translate.instant('Successully added group') +
+                  response.NAME
+              )
               this.cancel()
               this.refreshDataService.refresh('groups-list')
             }

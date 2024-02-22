@@ -157,7 +157,7 @@ export class UsersComponent implements OnInit {
         })
         .subscribe({
           next: () => {
-            this.alert.alertOk(this.translate.instant('Invited successfully'))
+            this.alert.presentToast(this.translate.instant('Invited successfully'))
             this.refreshDataService.refresh('groups-content')
             this.cancel()
           },
@@ -193,7 +193,7 @@ export class UsersComponent implements OnInit {
                 })
                 .subscribe({
                   next: () => {
-                    this.alert.alertOk(
+                    this.alert.presentToast(
                       this.translate.instant(
                         'An invitation email has been sent'
                       )

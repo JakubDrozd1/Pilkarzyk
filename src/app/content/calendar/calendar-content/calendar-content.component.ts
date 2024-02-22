@@ -5,7 +5,6 @@ import { IonicModule, RefresherEventDetail } from '@ionic/angular'
 import {
   GetMeetingGroupsResponse,
   MeetingsApi,
-  UsersMeetingsApi,
 } from 'libs/api-client'
 import { MeetingContentComponent } from '../../meeting/meeting-content/meeting-content.component'
 import * as moment from 'moment'
@@ -48,7 +47,6 @@ export class CalendarContentComponent implements OnInit {
     private datePipe: DatePipe,
     private alert: Alert,
     private refreshDataService: RefreshDataService,
-    private usersMeetingsApi: UsersMeetingsApi,
     private userService: UserService,
     public translate: TranslateService,
     public notificationService: NotificationService

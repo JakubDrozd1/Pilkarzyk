@@ -154,7 +154,7 @@ export class ProfileDetailsComponent implements OnInit {
           })
           .subscribe({
             next: () => {
-              this.alert.alertOk(
+              this.alert.presentToast(
                 this.translate.instant(
                   'You have successfully changed your avatar.'
                 )

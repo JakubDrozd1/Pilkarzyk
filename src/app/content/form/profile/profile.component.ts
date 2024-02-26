@@ -43,6 +43,7 @@ export class ProfileComponent implements OnInit {
   isReady: boolean = true
   inputEdit: string = ''
   user: USERS | undefined
+  message: string = ''
 
   constructor(
     private fb: FormBuilder,
@@ -167,6 +168,7 @@ export class ProfileComponent implements OnInit {
               Column: ['EMAIL'],
               Email: this.profileForm.value.email,
             }
+            this.message = this.translate.instant('Mail successfully updated')
           }
           break
         case 'phone':
@@ -177,6 +179,7 @@ export class ProfileComponent implements OnInit {
               Column: ['PHONE_NUMBER'],
               PhoneNumber: intNumber,
             }
+            this.message = this.translate.instant('Phone successfully updated')
           }
           break
         case 'login':
@@ -185,6 +188,7 @@ export class ProfileComponent implements OnInit {
               Column: ['LOGIN'],
               Login: this.profileForm.value.login,
             }
+            this.message = this.translate.instant('Login successfully updated')
           }
           break
         case 'name':
@@ -194,6 +198,9 @@ export class ProfileComponent implements OnInit {
               Firstname: this.profileForm.value.firstname,
               Surname: this.profileForm.value.surname,
             }
+            this.message = this.translate.instant(
+              'Full name successfully updated'
+            )
           }
           break
       }
@@ -202,7 +209,7 @@ export class ProfileComponent implements OnInit {
         next: () => {
           this.refreshDataService.refresh('profile-edit')
           this.cancel()
-          this.alert.alertOk(this.translate.instant('Updated successfully'))
+          this.alert.presentToast(this.message)
         },
         error: (error) => {
           this.alert.handleError(error)

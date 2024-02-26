@@ -18,7 +18,7 @@
     [isCurrent]="true"
   ></app-meeting-content>
   } }@else {
-  <ion-item class="header" lines="none">
+  <ion-item style="padding: 5px" lines="none">
     {{ "You have no meetings today" | translate }}
   </ion-item>
   }} @if(isReady){ @if(meetingsExpired.length > 0){

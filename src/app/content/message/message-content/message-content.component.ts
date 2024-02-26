@@ -126,7 +126,7 @@ export class MessageContentComponent implements OnInit {
       })
       .subscribe({
         next: () => {
-          this.alert.alertOk(this.translate.instant('Answered successfully'))
+          this.alert.presentToast(this.translate.instant('Answered successfully'))
           this.refreshDataService.refresh('notification')
           this.messageUpdate.emit()
           this.isReady = true

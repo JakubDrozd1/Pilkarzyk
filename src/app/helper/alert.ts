@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { AlertController } from '@ionic/angular'
+import { AlertController, ToastButton, ToastController } from '@ionic/angular'
 import { TranslateService } from '@ngx-translate/core'
 
 @Injectable({
@@ -24,20 +24,18 @@ export class Alert {
     'Account exist with this email',
     'Invitation alredy send',
   ]
+  button: ToastButton = {
+    icon: 'close-circle-outline',
+    side: 'end',
+    role: 'cancel',
+    text: ' ',
+  }
 
   constructor(
     private alertController: AlertController,
-    public translate: TranslateService
+    public translate: TranslateService,
+    private toastController: ToastController
   ) {}
-
-  public async alertOk(message?: string) {
-    const alert = await this.alertController.create({
-      header: 'OK',
-      message: message ?? this.translate.instant('Successfully added'),
-      buttons: ['Ok'],
-    })
-    await alert.present()
-  }
 
   public async alertNotOk(message?: string) {
     const alert = await this.alertController.create({
@@ -78,5 +76,17 @@ export class Alert {
       buttons: ['Ok'],
     })
     await alert.present()
+  }
+
+  async presentToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      position: 'top',
+      cssClass: 'toast',
+      buttons: [this.button],
+      animated: true,
+    })
+    await toast.present()
   }
 }

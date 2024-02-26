@@ -80,7 +80,7 @@ export class ProfilePasswordComponent implements OnInit {
         })
         .subscribe({
           next: () => {
-            this.alert.alertOk(
+            this.alert.presentToast(
               this.translate.instant('Password changed successfully')
             )
             this.cancel()

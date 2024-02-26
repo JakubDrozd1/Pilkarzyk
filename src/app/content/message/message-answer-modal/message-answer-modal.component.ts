@@ -120,7 +120,7 @@ export class MessageAnswerModalComponent implements OnInit {
         })
         .subscribe({
           next: () => {
-            this.alert.alertOk(this.translate.instant('Answered successfully'))
+            this.alert.presentToast(this.translate.instant('Answered successfully'))
             this.refreshDataService.refresh('notification')
             this.refreshDataService.refresh('calendar')
             this.isReady = true

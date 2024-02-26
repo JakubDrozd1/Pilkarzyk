@@ -203,7 +203,9 @@ export class MeetingDetailsComponent implements OnInit {
         })
         .subscribe({
           next: () => {
-            this.alert.alertOk(this.translate.instant('Updated successfully'))
+            this.alert.presentToast(
+              this.translate.instant('Successfully updated answer')
+            )
             this.getDetails()
             this.refreshDataService.refresh('calendar')
             this.refreshDataService.refresh('groups-content')

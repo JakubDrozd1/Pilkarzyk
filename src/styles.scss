@@ -145,3 +145,22 @@ ion-card-header {
   width: 100%;
   font-size: large;
 }
+
+.toast {
+  --background: var(--ion-color-primary);
+  --border-radius: 50px;
+  --color: var(--ion-color-dark);
+  --button-color: var(--ion-color-tertiary) !important;
+  text-align: center;
+  font-size: large;
+}
+
+ion-toast::part(button) {
+  color: var(--ion-color-dark) !important;
+  font-size: 1.4em;
+}
+
+ion-toast::part(button):active {
+  filter: brightness(150%);
+  transform: scale(0.8);
+}

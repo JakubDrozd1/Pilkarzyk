@@ -60,6 +60,7 @@ export class HomeContentComponent implements OnInit {
   visitedMeetings: boolean = true
   isOrganizer: boolean = false
   counter: number = 1
+  formattedDateTime: string = ''
 
   constructor(
     private alert: Alert,
@@ -79,7 +80,9 @@ export class HomeContentComponent implements OnInit {
         }
       })
     )
-    this.getDetails()
+    this.updateFormattedDateTime()
+
+    console.log(this.formattedDateTime)
   }
 
   getDetails() {
@@ -91,7 +94,7 @@ export class HomeContentComponent implements OnInit {
         onPage: -1,
         sortColumn: 'DATE_MEETING',
         sortMode: 'ASC',
-        dateFrom: moment().format(),
+        dateFrom: this.formattedDateTime,
         idUser: this.userService.loggedUser.ID_USER,
         answer: 'yes',
         withMessages: true,
@@ -180,5 +183,20 @@ export class HomeContentComponent implements OnInit {
           this.alert.handleError(error)
         },
       })
+  }
+  
+  updateFormattedDateTime() {
+    const currentDate = new Date()
+    const year = currentDate.getFullYear()
+    const month = this.formatTwoDigits(currentDate.getMonth() + 1)
+    const day = this.formatTwoDigits(currentDate.getDate())
+    const hours = this.formatTwoDigits(currentDate.getHours())
+    const minutes = this.formatTwoDigits(currentDate.getMinutes())
+    const seconds = this.formatTwoDigits(currentDate.getSeconds())
+    this.formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
+  }
+
+  private formatTwoDigits(value: number): string {
+    return value < 10 ? `0${value}` : value.toString()
   }
 }

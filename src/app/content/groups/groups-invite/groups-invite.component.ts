@@ -101,8 +101,9 @@ export class GroupsInviteComponent implements OnInit {
               })
               .subscribe({
                 next: () => {
-                  this.alert.alertOk(
-                    this.translate.instant('Successfully joined')
+                  this.alert.presentToast(
+                    this.translate.instant('Successfully joined') +
+                      this.invite.Name
                   )
                   this.refreshDataService.refresh('notification')
                   this.isReady = true
@@ -125,7 +126,9 @@ export class GroupsInviteComponent implements OnInit {
         })
         .subscribe({
           next: () => {
-            this.alert.alertOk(this.translate.instant('Successfully rejected'))
+            this.alert.presentToast(
+              this.translate.instant('Successfully rejected') + this.invite.Name
+            )
             this.refreshDataService.refresh('notification')
             this.isReady = true
           },

@@ -71,7 +71,7 @@ export class MessageUserListComponent implements OnInit {
           page: 0,
           onPage: -1,
           isAvatar: true,
-          sortColumn: 'SURNAME',
+          sortColumn: 'ID_MESSAGE',
           sortMode: 'ASC',
         })
         .subscribe({

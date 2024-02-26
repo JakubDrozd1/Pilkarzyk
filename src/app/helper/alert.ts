@@ -89,4 +89,16 @@ export class Alert {
     })
     await toast.present()
   }
+
+  async presentInfinityToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      position: 'top',
+      duration: 10000,
+      cssClass: 'danger',
+      buttons: [this.button],
+      animated: true,
+    })
+    await toast.present()
+  }
 }

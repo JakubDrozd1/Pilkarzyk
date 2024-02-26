@@ -128,6 +128,7 @@
   "Login successfully updated": "Login successfully updated",
   "Full name successfully updated": "Full name successfully updated",
   "Successfully updated answer": "Successfully updated answer",
+  "Full meeting": "The meeting reached the maximum number of people. You are currently in the reserves.",
 
   "Group is null": "Group doesn't exist.",
   "User is null": "User doesn't exist",

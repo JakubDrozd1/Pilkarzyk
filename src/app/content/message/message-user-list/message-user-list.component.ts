@@ -8,27 +8,6 @@ import { GetMessagesUsersMeetingsResponse, MessagesApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 
-function customSort(
-  a: GetMessagesUsersMeetingsResponse,
-  b: GetMessagesUsersMeetingsResponse
-) {
-  // Utwórz mapowanie wartości Answer na ich priorytet sortowania
-  const priority: { [key: string]: number } = {
-    yes: 1,
-    wait: 2,
-    readed: 3,
-    no: 4,
-    null: 5,
-  }
-
-  // Pobieranie wartości Answer dla obiektów a i b
-  const answerA = a.Answer || 'null'
-  const answerB = b.Answer || 'null'
-
-  // Porównywanie priorytetów odpowiedzi
-  return priority[answerA] - priority[answerB]
-}
-
 @Component({
   selector: 'app-message-user-list',
   templateUrl: './message-user-list.component.html',
@@ -46,6 +25,7 @@ export class MessageUserListComponent implements OnInit {
   idMeeting: number = 0
   messages: GetMessagesUsersMeetingsResponse[] = []
   isReady: boolean = false
+  acceptCounter: number = 0
 
   constructor(
     private route: ActivatedRoute,
@@ -88,6 +68,9 @@ export class MessageUserListComponent implements OnInit {
               const answerB = b.Answer || 'null'
               return priority[answerA] - priority[answerB]
             })
+            this.acceptCounter = response.filter(
+              (message) => message.Answer === 'yes'
+            ).length
             this.isReady = true
           },
           error: (error) => {

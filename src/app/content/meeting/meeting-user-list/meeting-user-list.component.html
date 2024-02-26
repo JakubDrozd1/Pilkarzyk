@@ -17,6 +17,13 @@
       }
       {{ counter + 1 }}.&nbsp;
       <ion-label> {{ user.Firstname }} {{ user.Surname }} </ion-label>
+      @if(counter+1>(user.Quantity??0)&&user.Answer=='yes'){
+      <ion-icon
+        size="large"
+        color="danger"
+        name="alert-circle-outline"
+      ></ion-icon>
+      }
     </ion-item>
   </ion-card-content>
 </ion-card>

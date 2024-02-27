@@ -139,7 +139,7 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
     )) {
       this.isReady = false
       this.messagesApi
-        .updateAnswerMessageAsync({
+        .updateAnswerMessage({
           getMessageRequest: {
             IdMeeting: message.IdMeeting,
             IdUser: message.IdUser,
@@ -168,7 +168,7 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
         dateFrom: moment().add(this.delay, 'hours').format(),
         isAvatar: false,
       }),
-      invites: this.groupInvite.getGroupInviteByIdUserAsync({
+      invites: this.groupInvite.getGroupInviteByIdUser({
         idUser: Number(this.userService.loggedUser.ID_USER),
         page: 0,
         onPage: -1,

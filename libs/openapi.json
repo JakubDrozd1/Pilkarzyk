@@ -10,12 +10,141 @@
     }
   ],
   "paths": {
+    "/api/chat-messages": {
+      "get": {
+        "tags": [
+          "ChatMessages"
+        ],
+        "operationId": "GetAllChatMessagesFromMeeting",
+        "parameters": [
+          {
+            "name": "Page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "OnPage",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          },
+          {
+            "name": "SortColumn",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SortMode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "DateFrom",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "DateTo",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "IdMeeting",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetChatMessagesResponse"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetChatMessagesResponse"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetChatMessagesResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "ChatMessages"
+        ],
+        "operationId": "AddMessageToChat",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetChatMessageRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetChatMessageRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetChatMessageRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/group-invites": {
       "get": {
         "tags": [
           "GroupInvites"
         ],
-        "operationId": "GetGroupInviteByIdUserAsync",
+        "operationId": "GetGroupInviteByIdUser",
         "parameters": [
           {
             "name": "Page",
@@ -104,7 +233,7 @@
         "tags": [
           "GroupInvites"
         ],
-        "operationId": "AddGroupInviteAsync",
+        "operationId": "AddGroupInvite",
         "requestBody": {
           "content": {
             "application/json": {
@@ -136,7 +265,7 @@
         "tags": [
           "GroupInvites"
         ],
-        "operationId": "DeleteGroupInviteAsync",
+        "operationId": "DeleteGroupInvite",
         "parameters": [
           {
             "name": "groupInvitedId",
@@ -369,7 +498,7 @@
         "tags": [
           "GroupsUsers"
         ],
-        "operationId": "AddUserToGroupAsync",
+        "operationId": "AddUserToGroup",
         "parameters": [
           {
             "name": "IdUser",
@@ -456,7 +585,7 @@
         "tags": [
           "GroupsUsers"
         ],
-        "operationId": "DeleteUsersFromGroupAsync",
+        "operationId": "DeleteUsersFromGroup",
         "parameters": [
           {
             "name": "groupId",
@@ -511,7 +640,7 @@
         "tags": [
           "GroupsUsers"
         ],
-        "operationId": "GetAllGroupsFromUserAsync",
+        "operationId": "GetAllGroupsFromUser",
         "parameters": [
           {
             "name": "Page",
@@ -659,7 +788,7 @@
         "tags": [
           "GroupsUsers"
         ],
-        "operationId": "UpdateGroupWithUsersAsync",
+        "operationId": "UpdateGroupWithUsers",
         "parameters": [
           {
             "name": "groupId",
@@ -714,7 +843,7 @@
         "tags": [
           "GroupsUsers"
         ],
-        "operationId": "UpdateUserWithGroupsAsync",
+        "operationId": "UpdateUserWithGroups",
         "parameters": [
           {
             "name": "userId",
@@ -1362,7 +1491,7 @@
         "tags": [
           "Messages"
         ],
-        "operationId": "UpdateAnswerMessageAsync",
+        "operationId": "UpdateAnswerMessage",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1741,12 +1870,75 @@
         }
       }
     },
+    "/api/reset-password": {
+      "post": {
+        "tags": [
+          "ResetPasswords"
+        ],
+        "operationId": "SendRecoveryPasswordEmail",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/reset-password/{resetPasswordId}": {
+      "get": {
+        "tags": [
+          "ResetPasswords"
+        ],
+        "operationId": "GetResetPasswordById",
+        "parameters": [
+          {
+            "name": "resetPasswordId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetResetPasswordResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetResetPasswordResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetResetPasswordResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/token": {
       "post": {
         "tags": [
           "Token"
         ],
-        "operationId": "GenerateJwtTokenAsync",
+        "operationId": "GenerateJwtToken",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2190,7 +2382,7 @@
         "tags": [
           "Users"
         ],
-        "operationId": "GetAllUsersWithoutGroupAsync",
+        "operationId": "GetAllUsersWithoutGroup",
         "parameters": [
           {
             "name": "Page",
@@ -2305,7 +2497,7 @@
         "tags": [
           "UsersMeetings"
         ],
-        "operationId": "GetListMeetingsUsersAsync",
+        "operationId": "GetListMeetingsUsers",
         "parameters": [
           {
             "name": "Page",
@@ -2476,6 +2668,62 @@
             "nullable": true
           },
           "NAME": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetChatMessageRequest": {
+        "type": "object",
+        "properties": {
+          "IdUser": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IdMeeting": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ChatMessage": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetChatMessagesResponse": {
+        "type": "object",
+        "properties": {
+          "DateSend": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "ChatMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "IdUser": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Login": {
+            "type": "string",
+            "nullable": true
+          },
+          "Firstname": {
+            "type": "string",
+            "nullable": true
+          },
+          "Surname": {
+            "type": "string",
+            "nullable": true
+          },
+          "Avatar": {
             "type": "string",
             "nullable": true
           }
@@ -2828,6 +3076,11 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          },
+          "DateResponse": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3005,6 +3258,42 @@
           "IsAdmin": {
             "type": "boolean",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetResetPasswordResponse": {
+        "type": "object",
+        "properties": {
+          "Login": {
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "type": "string",
+            "nullable": true
+          },
+          "Firstname": {
+            "type": "string",
+            "nullable": true
+          },
+          "Surname": {
+            "type": "string",
+            "nullable": true
+          },
+          "IdResetPassword": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IdUser": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "DateAdd": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "additionalProperties": false
@@ -3229,6 +3518,11 @@
             "nullable": true
           },
           "WAITING_TIME": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "DATE_RESPONSE": {
             "type": "string",
             "format": "date-time",
             "nullable": true

@@ -124,7 +124,7 @@ export class MessageContentComponent implements OnInit {
   onSubmit(answer: string) {
     this.isReady = false
     this.messagesApi
-      .updateAnswerMessageAsync({
+      .updateAnswerMessage({
         getMessageRequest: {
           IdMeeting: this.message.IdMeeting,
           IdUser: this.message.IdUser,
@@ -158,7 +158,7 @@ export class MessageContentComponent implements OnInit {
   resetMeeting($event: boolean) {
     if ($event) {
       this.messagesApi
-        .updateAnswerMessageAsync({
+        .updateAnswerMessage({
           getMessageRequest: {
             IdMeeting: this.message.IdMeeting,
             IdUser: this.message.IdUser,

@@ -129,6 +129,13 @@
   "Full name successfully updated": "Imię i nazwisko zostało zaktualizowane pomyślnie",
   "Successfully updated answer": "Pomyślnie zmieniono decyzje",
   "Full meeting": "Spotkanie osiągnęło maksymalną ilość osób. Aktualnie znajdujesz się w rezerwie.",
+  "Have you forgotten your password?": "Zapomniałeś hasła?",
+  "Enter the email address to which the password reset link will be sent": "Podaj adres maila na który przyjdzie link do resetowania hasła",
+  "Reset your password": "Zresetuj hasło",
+  "Back to login": "Wróc do logowania",
+  "The password reset link has expired": "Link do resetu hasła wygasł",
+  "Send": "Wyślij",
+  "Password reset": "Wysłano wiadomość z linkiem do resetu hasła na podany email",
 
   "Group is null": "Grupa nie istnieje.",
   "User is null": "Użytkownik nie istnieje.",

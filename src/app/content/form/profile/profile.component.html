@@ -50,6 +50,7 @@
       <ion-item lines="none">
         <ion-input
           maxlength="25"
+          class="border"
           [errorText]="'Login is too short' | translate"
           formControlName="login"
           labelPlacement="floating"
@@ -62,6 +63,7 @@
     <ion-list [inset]="true">
       <ion-item lines="none">
         <ion-input
+          class="border"
           [errorText]="'First name cannot have digits' | translate"
           formControlName="firstname"
           labelPlacement="floating"
@@ -71,6 +73,7 @@
       </ion-item>
       <ion-item lines="none">
         <ion-input
+          class="border"
           [errorText]="'Last name cannot have digits' | translate"
           formControlName="surname"
           labelPlacement="floating"

@@ -19,36 +19,34 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { GetTokenRequest } from '../model/get-token-request';
+import { GetChatMessageRequest } from '../model/get-chat-message-request';
 // @ts-ignore
-import { GetTokenResponse } from '../model/get-token-response';
-// @ts-ignore
-import { ProblemDetails } from '../model/problem-details';
+import { GetChatMessagesResponse } from '../model/get-chat-messages-response';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
 
-export interface GenerateJwtTokenRequestParams {
-    getTokenRequest?: GetTokenRequest;
+export interface AddMessageToChatRequestParams {
+    getChatMessageRequest?: GetChatMessageRequest;
 }
 
-export interface GenerateTokenRequestParams {
-    grantType?: string;
-    username?: string;
-    password?: string;
-    clientId?: string;
-    clientSecret?: string;
-    refreshToken?: string;
-    scope?: string;
+export interface GetAllChatMessagesFromMeetingRequestParams {
+    page: number;
+    onPage: number;
+    sortColumn?: string;
+    sortMode?: string;
+    dateFrom?: string;
+    dateTo?: string;
+    idMeeting?: number;
 }
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class TokenApi {
+export class ChatMessagesApi {
 
     protected basePath = 'http://192.168.88.20:45455';
     public defaultHeaders = new HttpHeaders();
@@ -72,19 +70,6 @@ export class TokenApi {
         this.encoder = this.configuration.encoder || new CustomHttpParameterCodec();
     }
 
-    /**
-     * @param consumes string[] mime-types
-     * @return true: consumes contains 'multipart/form-data', false: otherwise
-     */
-    private canConsumeForm(consumes: string[]): boolean {
-        const form = 'multipart/form-data';
-        for (const consume of consumes) {
-            if (form === consume) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     // @ts-ignore
     private addToHttpParams(httpParams: HttpParams, value: any, key?: string): HttpParams {
@@ -127,11 +112,11 @@ export class TokenApi {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public generateJwtToken(requestParameters: GenerateJwtTokenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public generateJwtToken(requestParameters: GenerateJwtTokenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public generateJwtToken(requestParameters: GenerateJwtTokenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public generateJwtToken(requestParameters: GenerateJwtTokenRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
-        const getTokenRequest = requestParameters.getTokenRequest;
+    public addMessageToChat(requestParameters: AddMessageToChatRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public addMessageToChat(requestParameters: AddMessageToChatRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public addMessageToChat(requestParameters: AddMessageToChatRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public addMessageToChat(requestParameters: AddMessageToChatRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        const getChatMessageRequest = requestParameters.getChatMessageRequest;
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -181,11 +166,11 @@ export class TokenApi {
             }
         }
 
-        let localVarPath = `/api/token`;
+        let localVarPath = `/api/chat-messages`;
         return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: getTokenRequest,
+                body: getChatMessageRequest,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -200,17 +185,53 @@ export class TokenApi {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public generateToken(requestParameters: GenerateTokenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<GetTokenResponse>;
-    public generateToken(requestParameters: GenerateTokenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<GetTokenResponse>>;
-    public generateToken(requestParameters: GenerateTokenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<GetTokenResponse>>;
-    public generateToken(requestParameters: GenerateTokenRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
-        const grantType = requestParameters.grantType;
-        const username = requestParameters.username;
-        const password = requestParameters.password;
-        const clientId = requestParameters.clientId;
-        const clientSecret = requestParameters.clientSecret;
-        const refreshToken = requestParameters.refreshToken;
-        const scope = requestParameters.scope;
+    public getAllChatMessagesFromMeeting(requestParameters: GetAllChatMessagesFromMeetingRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<GetChatMessagesResponse>>;
+    public getAllChatMessagesFromMeeting(requestParameters: GetAllChatMessagesFromMeetingRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<GetChatMessagesResponse>>>;
+    public getAllChatMessagesFromMeeting(requestParameters: GetAllChatMessagesFromMeetingRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<GetChatMessagesResponse>>>;
+    public getAllChatMessagesFromMeeting(requestParameters: GetAllChatMessagesFromMeetingRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+        const page = requestParameters.page;
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling getAllChatMessagesFromMeeting.');
+        }
+        const onPage = requestParameters.onPage;
+        if (onPage === null || onPage === undefined) {
+            throw new Error('Required parameter onPage was null or undefined when calling getAllChatMessagesFromMeeting.');
+        }
+        const sortColumn = requestParameters.sortColumn;
+        const sortMode = requestParameters.sortMode;
+        const dateFrom = requestParameters.dateFrom;
+        const dateTo = requestParameters.dateTo;
+        const idMeeting = requestParameters.idMeeting;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (page !== undefined && page !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>page, 'Page');
+        }
+        if (onPage !== undefined && onPage !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>onPage, 'OnPage');
+        }
+        if (sortColumn !== undefined && sortColumn !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sortColumn, 'SortColumn');
+        }
+        if (sortMode !== undefined && sortMode !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sortMode, 'SortMode');
+        }
+        if (dateFrom !== undefined && dateFrom !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>dateFrom, 'DateFrom');
+        }
+        if (dateTo !== undefined && dateTo !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>dateTo, 'DateTo');
+        }
+        if (idMeeting !== undefined && idMeeting !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>idMeeting, 'IdMeeting');
+        }
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -240,43 +261,6 @@ export class TokenApi {
             localVarHttpContext = new HttpContext();
         }
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'multipart/form-data'
-        ];
-
-        const canConsumeForm = this.canConsumeForm(consumes);
-
-        let localVarFormParams: { append(param: string, value: any): any; };
-        let localVarUseForm = false;
-        let localVarConvertFormParamsToString = false;
-        if (localVarUseForm) {
-            localVarFormParams = new FormData();
-        } else {
-            localVarFormParams = new HttpParams({encoder: this.encoder});
-        }
-
-        if (grantType !== undefined) {
-            localVarFormParams = localVarFormParams.append('Grant_type', <any>grantType) as any || localVarFormParams;
-        }
-        if (username !== undefined) {
-            localVarFormParams = localVarFormParams.append('Username', <any>username) as any || localVarFormParams;
-        }
-        if (password !== undefined) {
-            localVarFormParams = localVarFormParams.append('Password', <any>password) as any || localVarFormParams;
-        }
-        if (clientId !== undefined) {
-            localVarFormParams = localVarFormParams.append('Client_id', <any>clientId) as any || localVarFormParams;
-        }
-        if (clientSecret !== undefined) {
-            localVarFormParams = localVarFormParams.append('Client_secret', <any>clientSecret) as any || localVarFormParams;
-        }
-        if (refreshToken !== undefined) {
-            localVarFormParams = localVarFormParams.append('Refresh_token', <any>refreshToken) as any || localVarFormParams;
-        }
-        if (scope !== undefined) {
-            localVarFormParams = localVarFormParams.append('Scope', <any>scope) as any || localVarFormParams;
-        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -289,11 +273,11 @@ export class TokenApi {
             }
         }
 
-        let localVarPath = `/api/token/generate`;
-        return this.httpClient.request<GetTokenResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        let localVarPath = `/api/chat-messages`;
+        return this.httpClient.request<Array<GetChatMessagesResponse>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: localVarConvertFormParamsToString ? localVarFormParams.toString() : localVarFormParams,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

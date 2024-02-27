@@ -11,11 +11,13 @@
  */
 
 
-export interface GetMessageRequest { 
-    IdMeeting?: number | null;
+export interface GetResetPasswordResponse { 
+    Login?: string | null;
+    Email?: string | null;
+    Firstname?: string | null;
+    Surname?: string | null;
+    IdResetPassword?: number | null;
     IdUser?: number | null;
-    Answer?: string | null;
-    WaitingTime?: string | null;
-    DateResponse?: string | null;
+    DateAdd?: string;
 }
 

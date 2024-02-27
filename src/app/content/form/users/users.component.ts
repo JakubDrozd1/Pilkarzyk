@@ -121,7 +121,7 @@ export class UsersComponent implements OnInit {
   getUsers() {
     this.users = []
     this.usersApi
-      .getAllUsersWithoutGroupAsync({
+      .getAllUsersWithoutGroup({
         page: 0,
         onPage: -1,
         sortColumn: 'ID_USER',
@@ -148,7 +148,7 @@ export class UsersComponent implements OnInit {
     if (this.addExistingUserForm.valid) {
       this.isReadyExistingUser = false
       this.groupInviteApi
-        .addGroupInviteAsync({
+        .addGroupInvite({
           getGroupInviteRequest: {
             IdGroup: this.idGroup,
             IdUser: this.user?.ID_USER,

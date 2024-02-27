@@ -19,36 +19,26 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { GetTokenRequest } from '../model/get-token-request';
-// @ts-ignore
-import { GetTokenResponse } from '../model/get-token-response';
-// @ts-ignore
-import { ProblemDetails } from '../model/problem-details';
+import { GetResetPasswordResponse } from '../model/get-reset-password-response';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
 
-export interface GenerateJwtTokenRequestParams {
-    getTokenRequest?: GetTokenRequest;
+export interface GetResetPasswordByIdRequestParams {
+    resetPasswordId: number;
 }
 
-export interface GenerateTokenRequestParams {
-    grantType?: string;
-    username?: string;
-    password?: string;
-    clientId?: string;
-    clientSecret?: string;
-    refreshToken?: string;
-    scope?: string;
+export interface SendRecoveryPasswordEmailRequestParams {
+    email?: string;
 }
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class TokenApi {
+export class ResetPasswordsApi {
 
     protected basePath = 'http://192.168.88.20:45455';
     public defaultHeaders = new HttpHeaders();
@@ -72,19 +62,6 @@ export class TokenApi {
         this.encoder = this.configuration.encoder || new CustomHttpParameterCodec();
     }
 
-    /**
-     * @param consumes string[] mime-types
-     * @return true: consumes contains 'multipart/form-data', false: otherwise
-     */
-    private canConsumeForm(consumes: string[]): boolean {
-        const form = 'multipart/form-data';
-        for (const consume of consumes) {
-            if (form === consume) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     // @ts-ignore
     private addToHttpParams(httpParams: HttpParams, value: any, key?: string): HttpParams {
@@ -127,90 +104,14 @@ export class TokenApi {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public generateJwtToken(requestParameters: GenerateJwtTokenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public generateJwtToken(requestParameters: GenerateJwtTokenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public generateJwtToken(requestParameters: GenerateJwtTokenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public generateJwtToken(requestParameters: GenerateJwtTokenRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
-        const getTokenRequest = requestParameters.getTokenRequest;
-
-        let localVarHeaders = this.defaultHeaders;
-
-        let localVarCredential: string | undefined;
-        // authentication (api-pilkarzyk-oauth2) required
-        localVarCredential = this.configuration.lookupCredential('api-pilkarzyk-oauth2');
-        if (localVarCredential) {
-            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    public getResetPasswordById(requestParameters: GetResetPasswordByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<GetResetPasswordResponse>;
+    public getResetPasswordById(requestParameters: GetResetPasswordByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<GetResetPasswordResponse>>;
+    public getResetPasswordById(requestParameters: GetResetPasswordByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<GetResetPasswordResponse>>;
+    public getResetPasswordById(requestParameters: GetResetPasswordByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+        const resetPasswordId = requestParameters.resetPasswordId;
+        if (resetPasswordId === null || resetPasswordId === undefined) {
+            throw new Error('Required parameter resetPasswordId was null or undefined when calling getResetPasswordById.');
         }
-
-        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-        if (localVarHttpHeaderAcceptSelected === undefined) {
-            // to determine the Accept header
-            const httpHeaderAccepts: string[] = [
-            ];
-            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        }
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        let localVarHttpContext: HttpContext | undefined = options && options.context;
-        if (localVarHttpContext === undefined) {
-            localVarHttpContext = new HttpContext();
-        }
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json',
-            'text/json',
-            'application/*+json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/api/token`;
-        return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: getTokenRequest,
-                responseType: <any>responseType_,
-                withCredentials: this.configuration.withCredentials,
-                headers: localVarHeaders,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public generateToken(requestParameters: GenerateTokenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<GetTokenResponse>;
-    public generateToken(requestParameters: GenerateTokenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<GetTokenResponse>>;
-    public generateToken(requestParameters: GenerateTokenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<GetTokenResponse>>;
-    public generateToken(requestParameters: GenerateTokenRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
-        const grantType = requestParameters.grantType;
-        const username = requestParameters.username;
-        const password = requestParameters.password;
-        const clientId = requestParameters.clientId;
-        const clientSecret = requestParameters.clientSecret;
-        const refreshToken = requestParameters.refreshToken;
-        const scope = requestParameters.scope;
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -240,43 +141,6 @@ export class TokenApi {
             localVarHttpContext = new HttpContext();
         }
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'multipart/form-data'
-        ];
-
-        const canConsumeForm = this.canConsumeForm(consumes);
-
-        let localVarFormParams: { append(param: string, value: any): any; };
-        let localVarUseForm = false;
-        let localVarConvertFormParamsToString = false;
-        if (localVarUseForm) {
-            localVarFormParams = new FormData();
-        } else {
-            localVarFormParams = new HttpParams({encoder: this.encoder});
-        }
-
-        if (grantType !== undefined) {
-            localVarFormParams = localVarFormParams.append('Grant_type', <any>grantType) as any || localVarFormParams;
-        }
-        if (username !== undefined) {
-            localVarFormParams = localVarFormParams.append('Username', <any>username) as any || localVarFormParams;
-        }
-        if (password !== undefined) {
-            localVarFormParams = localVarFormParams.append('Password', <any>password) as any || localVarFormParams;
-        }
-        if (clientId !== undefined) {
-            localVarFormParams = localVarFormParams.append('Client_id', <any>clientId) as any || localVarFormParams;
-        }
-        if (clientSecret !== undefined) {
-            localVarFormParams = localVarFormParams.append('Client_secret', <any>clientSecret) as any || localVarFormParams;
-        }
-        if (refreshToken !== undefined) {
-            localVarFormParams = localVarFormParams.append('Refresh_token', <any>refreshToken) as any || localVarFormParams;
-        }
-        if (scope !== undefined) {
-            localVarFormParams = localVarFormParams.append('Scope', <any>scope) as any || localVarFormParams;
-        }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -289,11 +153,78 @@ export class TokenApi {
             }
         }
 
-        let localVarPath = `/api/token/generate`;
-        return this.httpClient.request<GetTokenResponse>('post', `${this.configuration.basePath}${localVarPath}`,
+        let localVarPath = `/api/reset-password/${this.configuration.encodeParam({name: "resetPasswordId", value: resetPasswordId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
+        return this.httpClient.request<GetResetPasswordResponse>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: localVarConvertFormParamsToString ? localVarFormParams.toString() : localVarFormParams,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public sendRecoveryPasswordEmail(requestParameters: SendRecoveryPasswordEmailRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public sendRecoveryPasswordEmail(requestParameters: SendRecoveryPasswordEmailRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public sendRecoveryPasswordEmail(requestParameters: SendRecoveryPasswordEmailRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public sendRecoveryPasswordEmail(requestParameters: SendRecoveryPasswordEmailRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        const email = requestParameters.email;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (email !== undefined && email !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>email, 'email');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (api-pilkarzyk-oauth2) required
+        localVarCredential = this.configuration.lookupCredential('api-pilkarzyk-oauth2');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/reset-password`;
+        return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

@@ -13,7 +13,7 @@
         >
         </ion-input>
       </ion-item>
-      <ion-item lines="none">
+      <ion-item lines="none" style="margin-bottom: 10px">
         <ion-input
           class="border"
           [errorText]="'Password is required' | translate"
@@ -24,6 +24,9 @@
         >
         </ion-input>
       </ion-item>
+      <ion-label class="click" [routerLink]="['/form/recovery']">
+        <ion-note style="font-size: medium">Odzyskaj hasło</ion-note>
+      </ion-label>
     </ion-list>
     <ion-button type="submit" expand="full">
       {{ "Log in" | translate }}

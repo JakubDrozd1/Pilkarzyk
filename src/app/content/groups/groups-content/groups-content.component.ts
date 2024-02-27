@@ -145,7 +145,7 @@ export class GroupsContentComponent implements OnInit {
       this.groupsUsers = []
       this.isReady = false
       this.groupsUsersApi
-        .getAllGroupsFromUserAsync({
+        .getAllGroupsFromUser({
           page: 0,
           onPage: -1,
           sortColumn: 'SURNAME',

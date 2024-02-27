@@ -26,7 +26,7 @@ import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables'
 import { Configuration }                                     from '../configuration';
 
 
-export interface GetListMeetingsUsersAsyncRequestParams {
+export interface GetListMeetingsUsersRequestParams {
     page: number;
     onPage: number;
     sortColumn?: string;
@@ -113,17 +113,17 @@ export class UsersMeetingsApi {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getListMeetingsUsersAsync(requestParameters: GetListMeetingsUsersAsyncRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<GetMeetingUsersResponse>>;
-    public getListMeetingsUsersAsync(requestParameters: GetListMeetingsUsersAsyncRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<GetMeetingUsersResponse>>>;
-    public getListMeetingsUsersAsync(requestParameters: GetListMeetingsUsersAsyncRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<GetMeetingUsersResponse>>>;
-    public getListMeetingsUsersAsync(requestParameters: GetListMeetingsUsersAsyncRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+    public getListMeetingsUsers(requestParameters: GetListMeetingsUsersRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<GetMeetingUsersResponse>>;
+    public getListMeetingsUsers(requestParameters: GetListMeetingsUsersRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<GetMeetingUsersResponse>>>;
+    public getListMeetingsUsers(requestParameters: GetListMeetingsUsersRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<GetMeetingUsersResponse>>>;
+    public getListMeetingsUsers(requestParameters: GetListMeetingsUsersRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
         const page = requestParameters.page;
         if (page === null || page === undefined) {
-            throw new Error('Required parameter page was null or undefined when calling getListMeetingsUsersAsync.');
+            throw new Error('Required parameter page was null or undefined when calling getListMeetingsUsers.');
         }
         const onPage = requestParameters.onPage;
         if (onPage === null || onPage === undefined) {
-            throw new Error('Required parameter onPage was null or undefined when calling getListMeetingsUsersAsync.');
+            throw new Error('Required parameter onPage was null or undefined when calling getListMeetingsUsers.');
         }
         const sortColumn = requestParameters.sortColumn;
         const sortMode = requestParameters.sortMode;

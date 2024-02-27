@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { IonicModule } from '@ionic/angular'
 import { RegisterComponent } from '../register/register.component'
-import { GroupsUsersApi, TokenApi, UsersApi } from 'libs/api-client'
+import { GroupsUsersApi, TokenApi } from 'libs/api-client'
 import { ActivatedRoute } from '@angular/router'
 import { Alert } from 'src/app/helper/alert'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
@@ -58,7 +58,7 @@ export class RegisterLinkComponent implements OnInit {
             localStorage.setItem('refresh_token', response.refresh_token ?? '')
           }
           this.groupsUsersApi
-            .addUserToGroupAsync({
+            .addUserToGroup({
               idGroup: this.idGroup,
               idUser: decodedToken.idUser,
               accountType: 0,

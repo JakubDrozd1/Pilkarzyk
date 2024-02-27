@@ -110,7 +110,7 @@ export class MessageAnswerModalComponent implements OnInit {
     if (this.messageForm.valid) {
       this.isReady = false
       this.messagesApi
-        .updateAnswerMessageAsync({
+        .updateAnswerMessage({
           getMessageRequest: {
             IdMeeting: this.message.IDMEETING,
             IdUser: this.message.IDUSER,

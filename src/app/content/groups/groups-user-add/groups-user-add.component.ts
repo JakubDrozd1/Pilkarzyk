@@ -45,7 +45,7 @@ export class GroupsUserAddComponent implements OnInit {
     this.invites = []
     this.isReady = false
     this.groupInvites
-      .getGroupInviteByIdUserAsync({
+      .getGroupInviteByIdUser({
         page: 0,
         onPage: -1,
         sortColumn: 'DATE_ADD',

@@ -11,11 +11,9 @@
  */
 
 
-export interface GetMessageRequest { 
-    IdMeeting?: number | null;
+export interface GetChatMessageRequest { 
     IdUser?: number | null;
-    Answer?: string | null;
-    WaitingTime?: string | null;
-    DateResponse?: string | null;
+    IdMeeting?: number | null;
+    ChatMessage?: string | null;
 }
 

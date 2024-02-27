@@ -122,7 +122,7 @@ export class HomeContentComponent implements OnInit {
 
   getPermission() {
     this.groupsUsersApi
-      .getAllGroupsFromUserAsync({
+      .getAllGroupsFromUser({
         page: 0,
         onPage: -1,
         idUser: this.userService.loggedUser.ID_USER,

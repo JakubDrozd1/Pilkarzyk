@@ -28,15 +28,15 @@ import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables'
 import { Configuration }                                     from '../configuration';
 
 
-export interface AddGroupInviteAsyncRequestParams {
+export interface AddGroupInviteRequestParams {
     getGroupInviteRequest?: GetGroupInviteRequest;
 }
 
-export interface DeleteGroupInviteAsyncRequestParams {
+export interface DeleteGroupInviteRequestParams {
     groupInvitedId: number;
 }
 
-export interface GetGroupInviteByIdUserAsyncRequestParams {
+export interface GetGroupInviteByIdUserRequestParams {
     page: number;
     onPage: number;
     sortColumn?: string;
@@ -115,10 +115,10 @@ export class GroupInvitesApi {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public addGroupInviteAsync(requestParameters: AddGroupInviteAsyncRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public addGroupInviteAsync(requestParameters: AddGroupInviteAsyncRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public addGroupInviteAsync(requestParameters: AddGroupInviteAsyncRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public addGroupInviteAsync(requestParameters: AddGroupInviteAsyncRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public addGroupInvite(requestParameters: AddGroupInviteRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public addGroupInvite(requestParameters: AddGroupInviteRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public addGroupInvite(requestParameters: AddGroupInviteRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public addGroupInvite(requestParameters: AddGroupInviteRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
         const getGroupInviteRequest = requestParameters.getGroupInviteRequest;
 
         let localVarHeaders = this.defaultHeaders;
@@ -188,13 +188,13 @@ export class GroupInvitesApi {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteGroupInviteAsync(requestParameters: DeleteGroupInviteAsyncRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public deleteGroupInviteAsync(requestParameters: DeleteGroupInviteAsyncRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public deleteGroupInviteAsync(requestParameters: DeleteGroupInviteAsyncRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public deleteGroupInviteAsync(requestParameters: DeleteGroupInviteAsyncRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public deleteGroupInvite(requestParameters: DeleteGroupInviteRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public deleteGroupInvite(requestParameters: DeleteGroupInviteRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public deleteGroupInvite(requestParameters: DeleteGroupInviteRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public deleteGroupInvite(requestParameters: DeleteGroupInviteRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
         const groupInvitedId = requestParameters.groupInvitedId;
         if (groupInvitedId === null || groupInvitedId === undefined) {
-            throw new Error('Required parameter groupInvitedId was null or undefined when calling deleteGroupInviteAsync.');
+            throw new Error('Required parameter groupInvitedId was null or undefined when calling deleteGroupInvite.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -252,17 +252,17 @@ export class GroupInvitesApi {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getGroupInviteByIdUserAsync(requestParameters: GetGroupInviteByIdUserAsyncRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<GetGroupInviteResponse>>;
-    public getGroupInviteByIdUserAsync(requestParameters: GetGroupInviteByIdUserAsyncRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<GetGroupInviteResponse>>>;
-    public getGroupInviteByIdUserAsync(requestParameters: GetGroupInviteByIdUserAsyncRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<GetGroupInviteResponse>>>;
-    public getGroupInviteByIdUserAsync(requestParameters: GetGroupInviteByIdUserAsyncRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+    public getGroupInviteByIdUser(requestParameters: GetGroupInviteByIdUserRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<GetGroupInviteResponse>>;
+    public getGroupInviteByIdUser(requestParameters: GetGroupInviteByIdUserRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<GetGroupInviteResponse>>>;
+    public getGroupInviteByIdUser(requestParameters: GetGroupInviteByIdUserRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<GetGroupInviteResponse>>>;
+    public getGroupInviteByIdUser(requestParameters: GetGroupInviteByIdUserRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
         const page = requestParameters.page;
         if (page === null || page === undefined) {
-            throw new Error('Required parameter page was null or undefined when calling getGroupInviteByIdUserAsync.');
+            throw new Error('Required parameter page was null or undefined when calling getGroupInviteByIdUser.');
         }
         const onPage = requestParameters.onPage;
         if (onPage === null || onPage === undefined) {
-            throw new Error('Required parameter onPage was null or undefined when calling getGroupInviteByIdUserAsync.');
+            throw new Error('Required parameter onPage was null or undefined when calling getGroupInviteByIdUser.');
         }
         const sortColumn = requestParameters.sortColumn;
         const sortMode = requestParameters.sortMode;

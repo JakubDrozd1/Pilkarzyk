@@ -2,6 +2,7 @@
 README.md
 api.module.ts
 api/api.ts
+api/chat-messages.api.ts
 api/group-invites.api.ts
 api/groups-users.api.ts
 api/groups.api.ts
@@ -9,6 +10,7 @@ api/meetings.api.ts
 api/messages.api.ts
 api/notification-tokens.api.ts
 api/rankings.api.ts
+api/reset-passwords.api.ts
 api/token.api.ts
 api/users-meetings.api.ts
 api/users.api.ts
@@ -16,6 +18,8 @@ configuration.ts
 encoder.ts
 git_push.sh
 index.ts
+model/get-chat-message-request.ts
+model/get-chat-messages-response.ts
 model/get-create-group-request.ts
 model/get-email-sender-request.ts
 model/get-group-invite-request.ts
@@ -30,6 +34,7 @@ model/get-messages-users-meetings-response.ts
 model/get-notification-token-request.ts
 model/get-ranking-request.ts
 model/get-rankings-users-groups-response.ts
+model/get-reset-password-response.ts
 model/get-token-request.ts
 model/get-token-response.ts
 model/get-update-meeting-request.ts

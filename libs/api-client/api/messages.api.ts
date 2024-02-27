@@ -55,7 +55,7 @@ export interface GetMessageByIdRequestParams {
     messageId: number;
 }
 
-export interface UpdateAnswerMessageAsyncRequestParams {
+export interface UpdateAnswerMessageRequestParams {
     getMessageRequest?: GetMessageRequest;
 }
 
@@ -460,10 +460,10 @@ export class MessagesApi {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateAnswerMessageAsync(requestParameters: UpdateAnswerMessageAsyncRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public updateAnswerMessageAsync(requestParameters: UpdateAnswerMessageAsyncRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public updateAnswerMessageAsync(requestParameters: UpdateAnswerMessageAsyncRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public updateAnswerMessageAsync(requestParameters: UpdateAnswerMessageAsyncRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public updateAnswerMessage(requestParameters: UpdateAnswerMessageRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public updateAnswerMessage(requestParameters: UpdateAnswerMessageRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public updateAnswerMessage(requestParameters: UpdateAnswerMessageRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public updateAnswerMessage(requestParameters: UpdateAnswerMessageRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
         const getMessageRequest = requestParameters.getMessageRequest;
 
         let localVarHeaders = this.defaultHeaders;

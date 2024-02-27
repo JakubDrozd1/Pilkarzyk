@@ -26,7 +26,7 @@ import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables'
 import { Configuration }                                     from '../configuration';
 
 
-export interface AddUserToGroupAsyncRequestParams {
+export interface AddUserToGroupRequestParams {
     idUser?: number;
     idGroup?: number;
     accountType?: number;
@@ -40,12 +40,12 @@ export interface DeleteAllUsersFromGroupAsyncRequestParams {
     groupId: number;
 }
 
-export interface DeleteUsersFromGroupAsyncRequestParams {
+export interface DeleteUsersFromGroupRequestParams {
     groupId: number;
     requestBody?: Array<number>;
 }
 
-export interface GetAllGroupsFromUserAsyncRequestParams {
+export interface GetAllGroupsFromUserRequestParams {
     page: number;
     onPage: number;
     sortColumn?: string;
@@ -60,7 +60,7 @@ export interface GetUserWithGroupRequestParams {
     userId: number;
 }
 
-export interface UpdateGroupWithUsersAsyncRequestParams {
+export interface UpdateGroupWithUsersRequestParams {
     groupId: number;
     requestBody?: Array<number>;
 }
@@ -71,7 +71,7 @@ export interface UpdatePermissionRequestParams {
     accountType?: number;
 }
 
-export interface UpdateUserWithGroupsAsyncRequestParams {
+export interface UpdateUserWithGroupsRequestParams {
     userId: number;
     requestBody?: Array<number>;
 }
@@ -146,10 +146,10 @@ export class GroupsUsersApi {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public addUserToGroupAsync(requestParameters: AddUserToGroupAsyncRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public addUserToGroupAsync(requestParameters: AddUserToGroupAsyncRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public addUserToGroupAsync(requestParameters: AddUserToGroupAsyncRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public addUserToGroupAsync(requestParameters: AddUserToGroupAsyncRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public addUserToGroup(requestParameters: AddUserToGroupRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public addUserToGroup(requestParameters: AddUserToGroupRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public addUserToGroup(requestParameters: AddUserToGroupRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public addUserToGroup(requestParameters: AddUserToGroupRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
         const idUser = requestParameters.idUser;
         const idGroup = requestParameters.idGroup;
         const accountType = requestParameters.accountType;
@@ -352,13 +352,13 @@ export class GroupsUsersApi {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteUsersFromGroupAsync(requestParameters: DeleteUsersFromGroupAsyncRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public deleteUsersFromGroupAsync(requestParameters: DeleteUsersFromGroupAsyncRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public deleteUsersFromGroupAsync(requestParameters: DeleteUsersFromGroupAsyncRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public deleteUsersFromGroupAsync(requestParameters: DeleteUsersFromGroupAsyncRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public deleteUsersFromGroup(requestParameters: DeleteUsersFromGroupRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public deleteUsersFromGroup(requestParameters: DeleteUsersFromGroupRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public deleteUsersFromGroup(requestParameters: DeleteUsersFromGroupRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public deleteUsersFromGroup(requestParameters: DeleteUsersFromGroupRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
         const groupId = requestParameters.groupId;
         if (groupId === null || groupId === undefined) {
-            throw new Error('Required parameter groupId was null or undefined when calling deleteUsersFromGroupAsync.');
+            throw new Error('Required parameter groupId was null or undefined when calling deleteUsersFromGroup.');
         }
         const requestBody = requestParameters.requestBody;
 
@@ -429,17 +429,17 @@ export class GroupsUsersApi {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAllGroupsFromUserAsync(requestParameters: GetAllGroupsFromUserAsyncRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<GetGroupsUsersResponse>>;
-    public getAllGroupsFromUserAsync(requestParameters: GetAllGroupsFromUserAsyncRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<GetGroupsUsersResponse>>>;
-    public getAllGroupsFromUserAsync(requestParameters: GetAllGroupsFromUserAsyncRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<GetGroupsUsersResponse>>>;
-    public getAllGroupsFromUserAsync(requestParameters: GetAllGroupsFromUserAsyncRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+    public getAllGroupsFromUser(requestParameters: GetAllGroupsFromUserRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<GetGroupsUsersResponse>>;
+    public getAllGroupsFromUser(requestParameters: GetAllGroupsFromUserRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<GetGroupsUsersResponse>>>;
+    public getAllGroupsFromUser(requestParameters: GetAllGroupsFromUserRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<GetGroupsUsersResponse>>>;
+    public getAllGroupsFromUser(requestParameters: GetAllGroupsFromUserRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
         const page = requestParameters.page;
         if (page === null || page === undefined) {
-            throw new Error('Required parameter page was null or undefined when calling getAllGroupsFromUserAsync.');
+            throw new Error('Required parameter page was null or undefined when calling getAllGroupsFromUser.');
         }
         const onPage = requestParameters.onPage;
         if (onPage === null || onPage === undefined) {
-            throw new Error('Required parameter onPage was null or undefined when calling getAllGroupsFromUserAsync.');
+            throw new Error('Required parameter onPage was null or undefined when calling getAllGroupsFromUser.');
         }
         const sortColumn = requestParameters.sortColumn;
         const sortMode = requestParameters.sortMode;
@@ -618,13 +618,13 @@ export class GroupsUsersApi {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateGroupWithUsersAsync(requestParameters: UpdateGroupWithUsersAsyncRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public updateGroupWithUsersAsync(requestParameters: UpdateGroupWithUsersAsyncRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public updateGroupWithUsersAsync(requestParameters: UpdateGroupWithUsersAsyncRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public updateGroupWithUsersAsync(requestParameters: UpdateGroupWithUsersAsyncRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public updateGroupWithUsers(requestParameters: UpdateGroupWithUsersRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public updateGroupWithUsers(requestParameters: UpdateGroupWithUsersRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public updateGroupWithUsers(requestParameters: UpdateGroupWithUsersRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public updateGroupWithUsers(requestParameters: UpdateGroupWithUsersRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
         const groupId = requestParameters.groupId;
         if (groupId === null || groupId === undefined) {
-            throw new Error('Required parameter groupId was null or undefined when calling updateGroupWithUsersAsync.');
+            throw new Error('Required parameter groupId was null or undefined when calling updateGroupWithUsers.');
         }
         const requestBody = requestParameters.requestBody;
 
@@ -773,13 +773,13 @@ export class GroupsUsersApi {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateUserWithGroupsAsync(requestParameters: UpdateUserWithGroupsAsyncRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public updateUserWithGroupsAsync(requestParameters: UpdateUserWithGroupsAsyncRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public updateUserWithGroupsAsync(requestParameters: UpdateUserWithGroupsAsyncRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public updateUserWithGroupsAsync(requestParameters: UpdateUserWithGroupsAsyncRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public updateUserWithGroups(requestParameters: UpdateUserWithGroupsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public updateUserWithGroups(requestParameters: UpdateUserWithGroupsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public updateUserWithGroups(requestParameters: UpdateUserWithGroupsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public updateUserWithGroups(requestParameters: UpdateUserWithGroupsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
         const userId = requestParameters.userId;
         if (userId === null || userId === undefined) {
-            throw new Error('Required parameter userId was null or undefined when calling updateUserWithGroupsAsync.');
+            throw new Error('Required parameter userId was null or undefined when calling updateUserWithGroups.');
         }
         const requestBody = requestParameters.requestBody;
 

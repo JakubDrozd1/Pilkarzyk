@@ -194,7 +194,7 @@ export class MeetingDetailsComponent implements OnInit {
   updateAnswer() {
     if (this.selectedValue == 'yes' || this.selectedValue == 'no') {
       this.messagesApi
-        .updateAnswerMessageAsync({
+        .updateAnswerMessage({
           getMessageRequest: {
             IdMeeting: this.meeting.IdMeeting,
             IdUser: this.userService.loggedUser.ID_USER,

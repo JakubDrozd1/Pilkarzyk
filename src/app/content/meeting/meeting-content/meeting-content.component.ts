@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common'
-import { Component, OnInit, Input, ElementRef } from '@angular/core'
+import { Component, OnInit, Input } from '@angular/core'
 import { IonicModule } from '@ionic/angular'
 import {
   GetMeetingGroupsResponse,
@@ -11,9 +11,7 @@ import {
 import { Alert } from 'src/app/helper/alert'
 import { MeetingUserListComponent } from '../meeting-user-list/meeting-user-list.component'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
-import { Router, RouterLink } from '@angular/router'
-import { UserService } from 'src/app/service/user/user.service'
-import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
+import { RouterLink } from '@angular/router'
 import { forkJoin } from 'rxjs'
 import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
 

@@ -1,4 +1,6 @@
 export * from './groups';
+export * from './get-chat-message-request';
+export * from './get-chat-messages-response';
 export * from './get-create-group-request';
 export * from './get-email-sender-request';
 export * from './get-group-invite-request';
@@ -13,6 +15,7 @@ export * from './get-messages-users-meetings-response';
 export * from './get-notification-token-request';
 export * from './get-ranking-request';
 export * from './get-rankings-users-groups-response';
+export * from './get-reset-password-response';
 export * from './get-token-request';
 export * from './get-token-response';
 export * from './get-update-meeting-request';

@@ -41,7 +41,7 @@ export class MessageContentComponent implements OnInit {
   @Output() messageUpdate: EventEmitter<any> = new EventEmitter()
 
   @Input() message!: GetMessagesUsersMeetingsResponse
-  acceptMeeting: Number = 0
+  acceptMeeting: number = 0
   filteredMessages: GetMessagesUsersMeetingsResponse[] = []
   isReady: boolean = true
   group!: GROUPS
@@ -50,6 +50,13 @@ export class MessageContentComponent implements OnInit {
   image: string = ''
   currentDate!: Date
   futureDate!: Date
+  isToastOpen = false
+  public toastButtons = [
+    {
+      text: 'Dismiss',
+      role: 'cancel',
+    },
+  ]
 
   constructor(
     private messagesApi: MessagesApi,
@@ -117,7 +124,7 @@ export class MessageContentComponent implements OnInit {
   onSubmit(answer: string) {
     this.isReady = false
     this.messagesApi
-      .updateAnswerMessageAsync({
+      .updateAnswerMessage({
         getMessageRequest: {
           IdMeeting: this.message.IdMeeting,
           IdUser: this.message.IdUser,
@@ -126,8 +133,18 @@ export class MessageContentComponent implements OnInit {
       })
       .subscribe({
         next: () => {
-          this.alert.presentToast(this.translate.instant('Answered successfully'))
+          this.alert.presentToast(
+            this.translate.instant('Answered successfully')
+          )
           this.refreshDataService.refresh('notification')
+          if (
+            answer == 'yes' &&
+            this.acceptMeeting >= (this.message.Quantity ?? 0)
+          ) {
+            this.alert.presentInfinityToast(
+              this.translate.instant('Full meeting')
+            )
+          }
           this.messageUpdate.emit()
           this.isReady = true
         },
@@ -141,7 +158,7 @@ export class MessageContentComponent implements OnInit {
   resetMeeting($event: boolean) {
     if ($event) {
       this.messagesApi
-        .updateAnswerMessageAsync({
+        .updateAnswerMessage({
           getMessageRequest: {
             IdMeeting: this.message.IdMeeting,
             IdUser: this.message.IdUser,

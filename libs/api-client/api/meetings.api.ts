@@ -73,7 +73,6 @@ export interface UpdateMeetingRequestParams {
 })
 export class MeetingsApi {
   protected basePath = 'https://jaball.manowski.pl:2100';
-
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
   public encoder: HttpParameterCodec;

@@ -9,8 +9,13 @@
 <ion-content class="ion-padding">
   <app-spinner [isReady]="!isReady"></app-spinner>
   @if(isReady){
-  <form [formGroup]="messageForm" (ngSubmit)="onSubmitWait()">
-    <ion-datetime-button datetime="datetime"> </ion-datetime-button>
+  <form
+    [formGroup]="messageForm"
+    (ngSubmit)="onSubmitWait()"
+    style="padding: 10%"
+  >
+    <ion-datetime-button datetime="datetime" style="padding: 10%">
+    </ion-datetime-button>
     <ion-modal [keepContentsMounted]="true">
       <ng-template>
         <ion-datetime
@@ -24,8 +29,8 @@
         ></ion-datetime>
       </ng-template>
     </ion-modal>
-    <ion-button type="submit" expand="full"
-      >{{ "Wait" | translate }}
+    <ion-button type="submit" expand="full" style="padding: 10%">
+      {{ "Wait" | translate }}
     </ion-button>
   </form>
   }

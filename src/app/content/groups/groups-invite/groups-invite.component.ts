@@ -6,7 +6,6 @@ import { MeetingComponent } from '../../form/meeting/meeting.component'
 import { MeetingContentComponent } from '../../meeting/meeting-content/meeting-content.component'
 import {
   GetGroupInviteResponse,
-  GetGroupsUsersResponse,
   GroupInvitesApi,
   GroupsUsersApi,
   USERS,
@@ -88,7 +87,7 @@ export class GroupsInviteComponent implements OnInit {
     if (answer == 'yes') {
       this.isReady = false
       this.groupUserApi
-        .addUserToGroupAsync({
+        .addUserToGroup({
           idGroup: this.invite.IdGroup ?? 0,
           idUser: this.invite.IdUser ?? 0,
           accountType: 0,
@@ -96,7 +95,7 @@ export class GroupsInviteComponent implements OnInit {
         .subscribe({
           next: () => {
             this.groupInvite
-              .deleteGroupInviteAsync({
+              .deleteGroupInvite({
                 groupInvitedId: this.invite.IdGroupInvite ?? 0,
               })
               .subscribe({
@@ -121,7 +120,7 @@ export class GroupsInviteComponent implements OnInit {
         })
     } else {
       this.groupInvite
-        .deleteGroupInviteAsync({
+        .deleteGroupInvite({
           groupInvitedId: this.invite.IdGroupInvite ?? 0,
         })
         .subscribe({

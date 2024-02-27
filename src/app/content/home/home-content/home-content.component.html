@@ -32,8 +32,7 @@
   <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>
   </ion-infinite-scroll>
-  }}
-
+  }} @if(isOrganizer){
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button>
       <ion-icon name="add"></ion-icon>
@@ -53,4 +52,5 @@
       </div>
     </ion-fab-list>
   </ion-fab>
+  }
 </ion-content>

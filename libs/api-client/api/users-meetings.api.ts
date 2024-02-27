@@ -26,7 +26,7 @@ import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables'
 import { Configuration }                                     from '../configuration';
 
 
-export interface GetListMeetingsUsersAsyncRequestParams {
+export interface GetListMeetingsUsersRequestParams {
     page: number;
     onPage: number;
     sortColumn?: string;
@@ -49,7 +49,6 @@ export interface GetUserWithMeetingRequestParams {
 })
 export class UsersMeetingsApi {
   protected basePath = 'https://jaball.manowski.pl:2100';
-
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
   public encoder: HttpParameterCodec;
@@ -136,8 +135,8 @@ export class UsersMeetingsApi {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getListMeetingsUsersAsync(
-    requestParameters: GetListMeetingsUsersAsyncRequestParams,
+  public getListMeetingsUsers(
+    requestParameters: GetListMeetingsUsersRequestParams,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -145,8 +144,8 @@ export class UsersMeetingsApi {
       context?: HttpContext;
     }
   ): Observable<Array<GetMeetingUsersResponse>>;
-  public getListMeetingsUsersAsync(
-    requestParameters: GetListMeetingsUsersAsyncRequestParams,
+  public getListMeetingsUsers(
+    requestParameters: GetListMeetingsUsersRequestParams,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -154,8 +153,8 @@ export class UsersMeetingsApi {
       context?: HttpContext;
     }
   ): Observable<HttpResponse<Array<GetMeetingUsersResponse>>>;
-  public getListMeetingsUsersAsync(
-    requestParameters: GetListMeetingsUsersAsyncRequestParams,
+  public getListMeetingsUsers(
+    requestParameters: GetListMeetingsUsersRequestParams,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -163,8 +162,8 @@ export class UsersMeetingsApi {
       context?: HttpContext;
     }
   ): Observable<HttpEvent<Array<GetMeetingUsersResponse>>>;
-  public getListMeetingsUsersAsync(
-    requestParameters: GetListMeetingsUsersAsyncRequestParams,
+  public getListMeetingsUsers(
+    requestParameters: GetListMeetingsUsersRequestParams,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -175,13 +174,13 @@ export class UsersMeetingsApi {
     const page = requestParameters.page;
     if (page === null || page === undefined) {
       throw new Error(
-        'Required parameter page was null or undefined when calling getListMeetingsUsersAsync.'
+        'Required parameter page was null or undefined when calling getListMeetingsUsers.'
       );
     }
     const onPage = requestParameters.onPage;
     if (onPage === null || onPage === undefined) {
       throw new Error(
-        'Required parameter onPage was null or undefined when calling getListMeetingsUsersAsync.'
+        'Required parameter onPage was null or undefined when calling getListMeetingsUsers.'
       );
     }
     const sortColumn = requestParameters.sortColumn;

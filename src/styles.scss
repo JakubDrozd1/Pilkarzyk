@@ -155,6 +155,15 @@ ion-card-header {
   font-size: large;
 }
 
+.danger {
+  --background: var(--ion-color-danger);
+  --border-radius: 50px;
+  --color: var(--ion-color-dark);
+  --button-color: var(--ion-color-tertiary) !important;
+  text-align: center;
+  font-size: large;
+}
+
 ion-toast::part(button) {
   color: var(--ion-color-dark) !important;
   font-size: 1.4em;

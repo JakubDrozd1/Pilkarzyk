@@ -125,7 +125,7 @@ export class GroupsListComponent implements OnInit {
               },
             })
         : this.groupsUsersApi
-            .getAllGroupsFromUserAsync({
+            .getAllGroupsFromUser({
               page: 0,
               onPage: -1,
               sortColumn: 'NAME',

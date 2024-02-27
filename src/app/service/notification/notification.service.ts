@@ -38,7 +38,7 @@ export class NotificationService implements OnDestroy {
         dateFrom: moment().add(this.delay, 'hours').format(),
         isAvatar: false,
       }),
-      invites: this.groupInvite.getGroupInviteByIdUserAsync({
+      invites: this.groupInvite.getGroupInviteByIdUser({
         page: 0,
         onPage: -1,
         idUser: Number(this.userService.loggedUser.ID_USER),

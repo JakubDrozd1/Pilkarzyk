@@ -194,7 +194,7 @@ export class MeetingDetailsComponent implements OnInit {
   updateAnswer() {
     if (this.selectedValue == 'yes' || this.selectedValue == 'no') {
       this.messagesApi
-        .updateAnswerMessageAsync({
+        .updateAnswerMessage({
           getMessageRequest: {
             IdMeeting: this.meeting.IdMeeting,
             IdUser: this.userService.loggedUser.ID_USER,
@@ -206,6 +206,14 @@ export class MeetingDetailsComponent implements OnInit {
             this.alert.presentToast(
               this.translate.instant('Successfully updated answer')
             )
+            if (
+              this.selectedValue == 'yes' &&
+              this.acceptMeeting >= (this.meeting.Quantity ?? 0)
+            ) {
+              this.alert.presentInfinityToast(
+                this.translate.instant('Full meeting')
+              )
+            }
             this.getDetails()
             this.refreshDataService.refresh('calendar')
             this.refreshDataService.refresh('groups-content')

@@ -19,37 +19,34 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 // @ts-ignore
-import { GetGroupInviteRequest } from '../model/get-group-invite-request';
+import { GetChatMessageRequest } from '../model/get-chat-message-request';
 // @ts-ignore
-import { GetGroupInviteResponse } from '../model/get-group-invite-response';
+import { GetChatMessagesResponse } from '../model/get-chat-messages-response';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
 
-export interface AddGroupInviteRequestParams {
-    getGroupInviteRequest?: GetGroupInviteRequest;
+export interface AddMessageToChatRequestParams {
+    getChatMessageRequest?: GetChatMessageRequest;
 }
 
-export interface DeleteGroupInviteRequestParams {
-    groupInvitedId: number;
-}
-
-export interface GetGroupInviteByIdUserRequestParams {
+export interface GetAllChatMessagesFromMeetingRequestParams {
     page: number;
     onPage: number;
     sortColumn?: string;
     sortMode?: string;
-    idUser?: number;
-    idGroup?: number;
+    dateFrom?: string;
+    dateTo?: string;
+    idMeeting?: number;
 }
 
 
 @Injectable({
   providedIn: 'root',
 })
-export class GroupInvitesApi {
+export class ChatMessagesApi {
   protected basePath = 'https://jaball.manowski.pl:2100';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
@@ -137,31 +134,31 @@ export class GroupInvitesApi {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public addGroupInvite(
-    requestParameters: AddGroupInviteRequestParams,
+  public addMessageToChat(
+    requestParameters: AddMessageToChatRequestParams,
     observe?: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: undefined; context?: HttpContext }
   ): Observable<any>;
-  public addGroupInvite(
-    requestParameters: AddGroupInviteRequestParams,
+  public addMessageToChat(
+    requestParameters: AddMessageToChatRequestParams,
     observe?: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: undefined; context?: HttpContext }
   ): Observable<HttpResponse<any>>;
-  public addGroupInvite(
-    requestParameters: AddGroupInviteRequestParams,
+  public addMessageToChat(
+    requestParameters: AddMessageToChatRequestParams,
     observe?: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: undefined; context?: HttpContext }
   ): Observable<HttpEvent<any>>;
-  public addGroupInvite(
-    requestParameters: AddGroupInviteRequestParams,
+  public addMessageToChat(
+    requestParameters: AddMessageToChatRequestParams,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: { httpHeaderAccept?: undefined; context?: HttpContext }
   ): Observable<any> {
-    const getGroupInviteRequest = requestParameters.getGroupInviteRequest;
+    const getChatMessageRequest = requestParameters.getChatMessageRequest;
 
     let localVarHeaders = this.defaultHeaders;
 
@@ -226,13 +223,13 @@ export class GroupInvitesApi {
       }
     }
 
-    let localVarPath = `/api/group-invites`;
+    let localVarPath = `/api/chat-messages`;
     return this.httpClient.request<any>(
       'post',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
-        body: getGroupInviteRequest,
+        body: getChatMessageRequest,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,
@@ -247,142 +244,35 @@ export class GroupInvitesApi {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public deleteGroupInvite(
-    requestParameters: DeleteGroupInviteRequestParams,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<any>;
-  public deleteGroupInvite(
-    requestParameters: DeleteGroupInviteRequestParams,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<HttpResponse<any>>;
-  public deleteGroupInvite(
-    requestParameters: DeleteGroupInviteRequestParams,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<HttpEvent<any>>;
-  public deleteGroupInvite(
-    requestParameters: DeleteGroupInviteRequestParams,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<any> {
-    const groupInvitedId = requestParameters.groupInvitedId;
-    if (groupInvitedId === null || groupInvitedId === undefined) {
-      throw new Error(
-        'Required parameter groupInvitedId was null or undefined when calling deleteGroupInvite.'
-      );
-    }
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarCredential: string | undefined;
-    // authentication (api-pilkarzyk-oauth2) required
-    localVarCredential = this.configuration.lookupCredential(
-      'api-pilkarzyk-oauth2'
-    );
-    if (localVarCredential) {
-      localVarHeaders = localVarHeaders.set(
-        'Authorization',
-        'Bearer ' + localVarCredential
-      );
-    }
-
-    let localVarHttpHeaderAcceptSelected: string | undefined =
-      options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = [];
-      localVarHttpHeaderAcceptSelected =
-        this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set(
-        'Accept',
-        localVarHttpHeaderAcceptSelected
-      );
-    }
-
-    let localVarHttpContext: HttpContext | undefined =
-      options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (
-        this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)
-      ) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/api/group-invites/${this.configuration.encodeParam({
-      name: 'groupInvitedId',
-      value: groupInvitedId,
-      in: 'path',
-      style: 'simple',
-      explode: false,
-      dataType: 'number',
-      dataFormat: 'int32',
-    })}`;
-    return this.httpClient.request<any>(
-      'delete',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        reportProgress: reportProgress,
-      }
-    );
-  }
-
-  /**
-   * @param requestParameters
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public getGroupInviteByIdUser(
-    requestParameters: GetGroupInviteByIdUserRequestParams,
+  public getAllChatMessagesFromMeeting(
+    requestParameters: GetAllChatMessagesFromMeetingRequestParams,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
       httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json';
       context?: HttpContext;
     }
-  ): Observable<Array<GetGroupInviteResponse>>;
-  public getGroupInviteByIdUser(
-    requestParameters: GetGroupInviteByIdUserRequestParams,
+  ): Observable<Array<GetChatMessagesResponse>>;
+  public getAllChatMessagesFromMeeting(
+    requestParameters: GetAllChatMessagesFromMeetingRequestParams,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
       httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json';
       context?: HttpContext;
     }
-  ): Observable<HttpResponse<Array<GetGroupInviteResponse>>>;
-  public getGroupInviteByIdUser(
-    requestParameters: GetGroupInviteByIdUserRequestParams,
+  ): Observable<HttpResponse<Array<GetChatMessagesResponse>>>;
+  public getAllChatMessagesFromMeeting(
+    requestParameters: GetAllChatMessagesFromMeetingRequestParams,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
       httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json';
       context?: HttpContext;
     }
-  ): Observable<HttpEvent<Array<GetGroupInviteResponse>>>;
-  public getGroupInviteByIdUser(
-    requestParameters: GetGroupInviteByIdUserRequestParams,
+  ): Observable<HttpEvent<Array<GetChatMessagesResponse>>>;
+  public getAllChatMessagesFromMeeting(
+    requestParameters: GetAllChatMessagesFromMeetingRequestParams,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -393,19 +283,20 @@ export class GroupInvitesApi {
     const page = requestParameters.page;
     if (page === null || page === undefined) {
       throw new Error(
-        'Required parameter page was null or undefined when calling getGroupInviteByIdUser.'
+        'Required parameter page was null or undefined when calling getAllChatMessagesFromMeeting.'
       );
     }
     const onPage = requestParameters.onPage;
     if (onPage === null || onPage === undefined) {
       throw new Error(
-        'Required parameter onPage was null or undefined when calling getGroupInviteByIdUser.'
+        'Required parameter onPage was null or undefined when calling getAllChatMessagesFromMeeting.'
       );
     }
     const sortColumn = requestParameters.sortColumn;
     const sortMode = requestParameters.sortMode;
-    const idUser = requestParameters.idUser;
-    const idGroup = requestParameters.idGroup;
+    const dateFrom = requestParameters.dateFrom;
+    const dateTo = requestParameters.dateTo;
+    const idMeeting = requestParameters.idMeeting;
 
     let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
     if (page !== undefined && page !== null) {
@@ -436,18 +327,25 @@ export class GroupInvitesApi {
         'SortMode'
       );
     }
-    if (idUser !== undefined && idUser !== null) {
+    if (dateFrom !== undefined && dateFrom !== null) {
       localVarQueryParameters = this.addToHttpParams(
         localVarQueryParameters,
-        <any>idUser,
-        'IdUser'
+        <any>dateFrom,
+        'DateFrom'
       );
     }
-    if (idGroup !== undefined && idGroup !== null) {
+    if (dateTo !== undefined && dateTo !== null) {
       localVarQueryParameters = this.addToHttpParams(
         localVarQueryParameters,
-        <any>idGroup,
-        'IdGroup'
+        <any>dateTo,
+        'DateTo'
+      );
+    }
+    if (idMeeting !== undefined && idMeeting !== null) {
+      localVarQueryParameters = this.addToHttpParams(
+        localVarQueryParameters,
+        <any>idMeeting,
+        'IdMeeting'
       );
     }
 
@@ -503,8 +401,8 @@ export class GroupInvitesApi {
       }
     }
 
-    let localVarPath = `/api/group-invites`;
-    return this.httpClient.request<Array<GetGroupInviteResponse>>(
+    let localVarPath = `/api/chat-messages`;
+    return this.httpClient.request<Array<GetChatMessagesResponse>>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {

@@ -30,7 +30,7 @@ import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables'
 import { Configuration }                                     from '../configuration';
 
 
-export interface GenerateJwtTokenAsyncRequestParams {
+export interface GenerateJwtTokenRequestParams {
     getTokenRequest?: GetTokenRequest;
 }
 
@@ -50,7 +50,6 @@ export interface GenerateTokenRequestParams {
 })
 export class TokenApi {
   protected basePath = 'https://jaball.manowski.pl:2100';
-
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
   public encoder: HttpParameterCodec;
@@ -151,26 +150,26 @@ export class TokenApi {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public generateJwtTokenAsync(
-    requestParameters: GenerateJwtTokenAsyncRequestParams,
+  public generateJwtToken(
+    requestParameters: GenerateJwtTokenRequestParams,
     observe?: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: undefined; context?: HttpContext }
   ): Observable<any>;
-  public generateJwtTokenAsync(
-    requestParameters: GenerateJwtTokenAsyncRequestParams,
+  public generateJwtToken(
+    requestParameters: GenerateJwtTokenRequestParams,
     observe?: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: undefined; context?: HttpContext }
   ): Observable<HttpResponse<any>>;
-  public generateJwtTokenAsync(
-    requestParameters: GenerateJwtTokenAsyncRequestParams,
+  public generateJwtToken(
+    requestParameters: GenerateJwtTokenRequestParams,
     observe?: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: undefined; context?: HttpContext }
   ): Observable<HttpEvent<any>>;
-  public generateJwtTokenAsync(
-    requestParameters: GenerateJwtTokenAsyncRequestParams,
+  public generateJwtToken(
+    requestParameters: GenerateJwtTokenRequestParams,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: { httpHeaderAccept?: undefined; context?: HttpContext }

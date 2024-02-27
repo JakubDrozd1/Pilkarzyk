@@ -18,5 +18,6 @@ export interface MESSAGES {
     ANSWER?: string | null;
     DATE_ADD?: string | null;
     WAITING_TIME?: string | null;
+    DATE_RESPONSE?: string | null;
 }
 

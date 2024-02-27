@@ -44,7 +44,7 @@ export class GroupsOrganizerComponent implements OnInit {
     if (this.idGroup > 0) {
       this.isReady = false
       this.groupsUserApi
-        .getAllGroupsFromUserAsync({
+        .getAllGroupsFromUser({
           page: 0,
           onPage: -1,
           idGroup: this.idGroup,

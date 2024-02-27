@@ -191,6 +191,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'recovery',
+        loadComponent: () =>
+          import(
+            './content/form/password-recovery/password-recovery.component'
+          ).then((m) => m.PasswordRecoveryComponent),
+      },
+      {
         path: '',
         redirectTo: 'login',
         pathMatch: 'full',
@@ -200,6 +207,13 @@ export const routes: Routes = [
   {
     path: 'register/:idGroup',
     component: RegisterLinkComponent,
+  },
+  {
+    path: 'recovery/:idResetPassword',
+    loadComponent: () =>
+      import('./content/form/password-reset/password-reset.component').then(
+        (m) => m.PasswordResetComponent
+      ),
   },
   {
     path: '**',

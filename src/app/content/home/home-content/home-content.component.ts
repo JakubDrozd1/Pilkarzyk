@@ -81,8 +81,6 @@ export class HomeContentComponent implements OnInit {
       })
     )
     this.updateFormattedDateTime()
-
-    console.log(this.formattedDateTime)
   }
 
   getDetails() {
@@ -124,7 +122,7 @@ export class HomeContentComponent implements OnInit {
 
   getPermission() {
     this.groupsUsersApi
-      .getAllGroupsFromUserAsync({
+      .getAllGroupsFromUser({
         page: 0,
         onPage: -1,
         idUser: this.userService.loggedUser.ID_USER,
@@ -146,6 +144,7 @@ export class HomeContentComponent implements OnInit {
     this.visitedWaiting = true
     this.visitedMeetings = true
     this.getDetails()
+    this.getPermission()
   }
 
   handleRefresh($event: IonRefresherCustomEvent<RefresherEventDetail>) {
@@ -184,7 +183,7 @@ export class HomeContentComponent implements OnInit {
         },
       })
   }
-  
+
   updateFormattedDateTime() {
     const currentDate = new Date()
     const year = currentDate.getFullYear()

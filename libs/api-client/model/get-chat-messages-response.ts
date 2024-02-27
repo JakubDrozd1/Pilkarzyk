@@ -11,11 +11,13 @@
  */
 
 
-export interface GetMessageRequest { 
-    IdMeeting?: number | null;
+export interface GetChatMessagesResponse { 
+    DateSend?: string | null;
+    ChatMessage?: string | null;
     IdUser?: number | null;
-    Answer?: string | null;
-    WaitingTime?: string | null;
-    DateResponse?: string | null;
+    Login?: string | null;
+    Firstname?: string | null;
+    Surname?: string | null;
+    Avatar?: string | null;
 }
 

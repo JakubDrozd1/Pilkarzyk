@@ -7,7 +7,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms'
-import { Router } from '@angular/router'
+import { Router, RouterLink } from '@angular/router'
 import { JwtHelperService } from '@auth0/angular-jwt'
 import { IonicModule } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
@@ -32,6 +32,7 @@ import { Capacitor } from '@capacitor/core'
     FormsModule,
     TranslateModule,
     SpinnerComponent,
+    RouterLink
   ],
 })
 export class LoginComponent implements OnInit {

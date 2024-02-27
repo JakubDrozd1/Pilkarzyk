@@ -48,7 +48,7 @@ export interface GetAllUsersRequestParams {
     isAvatar?: boolean;
 }
 
-export interface GetAllUsersWithoutGroupAsyncRequestParams {
+export interface GetAllUsersWithoutGroupRequestParams {
     page: number;
     onPage: number;
     sortColumn?: string;
@@ -85,7 +85,6 @@ export interface UpdateUserRequestParams {
 })
 export class UsersApi {
   protected basePath = 'https://jaball.manowski.pl:2100';
-
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
   public encoder: HttpParameterCodec;
@@ -551,8 +550,8 @@ export class UsersApi {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getAllUsersWithoutGroupAsync(
-    requestParameters: GetAllUsersWithoutGroupAsyncRequestParams,
+  public getAllUsersWithoutGroup(
+    requestParameters: GetAllUsersWithoutGroupRequestParams,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -560,8 +559,8 @@ export class UsersApi {
       context?: HttpContext;
     }
   ): Observable<Array<USERS>>;
-  public getAllUsersWithoutGroupAsync(
-    requestParameters: GetAllUsersWithoutGroupAsyncRequestParams,
+  public getAllUsersWithoutGroup(
+    requestParameters: GetAllUsersWithoutGroupRequestParams,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -569,8 +568,8 @@ export class UsersApi {
       context?: HttpContext;
     }
   ): Observable<HttpResponse<Array<USERS>>>;
-  public getAllUsersWithoutGroupAsync(
-    requestParameters: GetAllUsersWithoutGroupAsyncRequestParams,
+  public getAllUsersWithoutGroup(
+    requestParameters: GetAllUsersWithoutGroupRequestParams,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -578,8 +577,8 @@ export class UsersApi {
       context?: HttpContext;
     }
   ): Observable<HttpEvent<Array<USERS>>>;
-  public getAllUsersWithoutGroupAsync(
-    requestParameters: GetAllUsersWithoutGroupAsyncRequestParams,
+  public getAllUsersWithoutGroup(
+    requestParameters: GetAllUsersWithoutGroupRequestParams,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -590,13 +589,13 @@ export class UsersApi {
     const page = requestParameters.page;
     if (page === null || page === undefined) {
       throw new Error(
-        'Required parameter page was null or undefined when calling getAllUsersWithoutGroupAsync.'
+        'Required parameter page was null or undefined when calling getAllUsersWithoutGroup.'
       );
     }
     const onPage = requestParameters.onPage;
     if (onPage === null || onPage === undefined) {
       throw new Error(
-        'Required parameter onPage was null or undefined when calling getAllUsersWithoutGroupAsync.'
+        'Required parameter onPage was null or undefined when calling getAllUsersWithoutGroup.'
       );
     }
     const sortColumn = requestParameters.sortColumn;

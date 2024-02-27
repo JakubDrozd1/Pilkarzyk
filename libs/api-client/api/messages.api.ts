@@ -55,7 +55,7 @@ export interface GetMessageByIdRequestParams {
     messageId: number;
 }
 
-export interface UpdateAnswerMessageAsyncRequestParams {
+export interface UpdateAnswerMessageRequestParams {
     getMessageRequest?: GetMessageRequest;
 }
 
@@ -70,7 +70,6 @@ export interface UpdateMessageRequestParams {
 })
 export class MessagesApi {
   protected basePath = 'https://jaball.manowski.pl:2100';
-
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
   public encoder: HttpParameterCodec;
@@ -699,26 +698,26 @@ export class MessagesApi {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public updateAnswerMessageAsync(
-    requestParameters: UpdateAnswerMessageAsyncRequestParams,
+  public updateAnswerMessage(
+    requestParameters: UpdateAnswerMessageRequestParams,
     observe?: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: undefined; context?: HttpContext }
   ): Observable<any>;
-  public updateAnswerMessageAsync(
-    requestParameters: UpdateAnswerMessageAsyncRequestParams,
+  public updateAnswerMessage(
+    requestParameters: UpdateAnswerMessageRequestParams,
     observe?: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: undefined; context?: HttpContext }
   ): Observable<HttpResponse<any>>;
-  public updateAnswerMessageAsync(
-    requestParameters: UpdateAnswerMessageAsyncRequestParams,
+  public updateAnswerMessage(
+    requestParameters: UpdateAnswerMessageRequestParams,
     observe?: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: undefined; context?: HttpContext }
   ): Observable<HttpEvent<any>>;
-  public updateAnswerMessageAsync(
-    requestParameters: UpdateAnswerMessageAsyncRequestParams,
+  public updateAnswerMessage(
+    requestParameters: UpdateAnswerMessageRequestParams,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: { httpHeaderAccept?: undefined; context?: HttpContext }

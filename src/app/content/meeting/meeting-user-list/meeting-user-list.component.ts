@@ -15,7 +15,7 @@ import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 export class MeetingUserListComponent implements OnInit {
   @Input() user!: GetMessagesUsersMeetingsResponse
   @Input() counter: number = 0
-  
+
   temp: File | null = null
   images: string = ''
   isReady: boolean = false

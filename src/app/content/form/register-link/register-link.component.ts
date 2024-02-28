@@ -52,7 +52,6 @@ export class RegisterLinkComponent implements OnInit {
       })
       .subscribe({
         next: (response) => {
-          console.log(response)
           let decodedToken = this.jwt.decodeToken(response.access_token ?? '')
           if (decodedToken.idUser > 0) {
             localStorage.setItem('access_token', response.access_token ?? '')

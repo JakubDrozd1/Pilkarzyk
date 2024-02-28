@@ -60,7 +60,8 @@ export class ProfileDetailsComponent implements OnInit {
     {
       text: 'Ok',
       handler: (value: { languages: { value: any } }) => {
-        localStorage.setItem('langUser', value.languages.value)
+        // localStorage.setItem('langUser', value.languages.value)
+        localStorage.setItem('lang', value.languages.value)
         window.location.reload()
       },
     },

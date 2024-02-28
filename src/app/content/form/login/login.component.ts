@@ -32,7 +32,7 @@ import { Capacitor } from '@capacitor/core'
     FormsModule,
     TranslateModule,
     SpinnerComponent,
-    RouterLink
+    RouterLink,
   ],
 })
 export class LoginComponent implements OnInit {
@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit {
           grantType: 'password',
           clientId: AppConfig.settings.clientId,
           clientSecret: AppConfig.settings.clientSecretPublic,
-          username: this.loginForm.value.login,
+          username: this.loginForm.value.login.trim().toLowerCase(),
           password: this.loginForm.value.password,
         })
         .subscribe({

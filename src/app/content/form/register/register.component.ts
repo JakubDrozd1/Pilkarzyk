@@ -58,7 +58,12 @@ export class RegisterComponent implements OnInit {
     this.registrationForm = this.fb.group({
       login: [
         '',
-        [Validators.required, customValidator(), Validators.maxLength(50)],
+        [
+          Validators.required,
+          customValidator(),
+          Validators.maxLength(50),
+          Validators.pattern(/^[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ\s0-9_-]*$/),
+        ],
       ],
       password: [
         '',
@@ -110,9 +115,9 @@ export class RegisterComponent implements OnInit {
       this.usersApi
         .addUser({
           getUserRequest: {
-            Login: this.registrationForm.value.login.trim(),
+            Login: this.registrationForm.value.login.trim().toLowerCase(),
             Password: this.registrationForm.value.password,
-            Email: this.registrationForm.value.email.trim(),
+            Email: this.registrationForm.value.email.trim().toLowerCase(),
             Firstname: this.registrationForm.value.firstname.trim(),
             Surname: this.registrationForm.value.surname.trim(),
             PhoneNumber: intNumber,
@@ -127,7 +132,7 @@ export class RegisterComponent implements OnInit {
             this.isReady = true
             this.router.navigate(['/form/login'])
             this.userRegistered.emit({
-              Login: this.registrationForm.value.login,
+              Login: this.registrationForm.value.login.trim().toLowerCase(),
               Password: this.registrationForm.value.password,
             })
             this.registrationForm.reset()

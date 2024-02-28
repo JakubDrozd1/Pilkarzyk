@@ -30,13 +30,7 @@ export class UserService {
             this.usersApi.getUserById({ userId: decodedToken.idUser })
           )
           this.loggedUser = response
-          if (
-            this.loggedUser == null ||
-            this.loggedUser.FIRSTNAME !== decodedToken.unique_name ||
-            this.loggedUser.SURNAME !== decodedToken.family_name ||
-            this.loggedUser.EMAIL !== decodedToken.email ||
-            this.loggedUser.USER_PASSWORD !== decodedToken.jti
-          ) {
+          if (this.loggedUser == null) {
             this.authService.logout()
             return false
           } else {

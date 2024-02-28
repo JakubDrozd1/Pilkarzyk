@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { Component, ElementRef, OnInit } from '@angular/core'
-import { IonicModule } from '@ionic/angular'
+import { AlertController, IonicModule } from '@ionic/angular'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import {
@@ -54,9 +54,16 @@ export class MeetingDetailsComponent implements OnInit {
   public changeButtons = [
     {
       text: this.translate.instant('Save'),
-      role: 'confirm',
+      role: 'submit',
       handler: () => {
         this.updateAnswer()
+      },
+    },
+    {
+      text: this.translate.instant('Cancel'),
+      role: 'cancel',
+      handler: () => {
+        this.setInputs()
       },
     },
   ]
@@ -71,7 +78,8 @@ export class MeetingDetailsComponent implements OnInit {
     public translate: TranslateService,
     private elementRef: ElementRef,
     private refreshDataService: RefreshDataService,
-    public userService: UserService
+    public userService: UserService,
+    private alertCtrl: AlertController
   ) {}
 
   ngOnInit() {
@@ -214,7 +222,8 @@ export class MeetingDetailsComponent implements OnInit {
                 this.translate.instant('Full meeting')
               )
             }
-            this.getDetails()
+            this.selectedValue = ''
+            this.reload()
             this.refreshDataService.refresh('calendar')
             this.refreshDataService.refresh('groups-content')
           },
@@ -223,7 +232,22 @@ export class MeetingDetailsComponent implements OnInit {
           },
         })
     } else if (this.selectedValue == 'wait') {
+      this.selectedValue = ''
+      this.setInputs()
       this.router.navigate(['/message-add', this.defautAnswer.IdMessage])
     }
+  }
+
+  async showAlert() {
+    const alert = await this.alertCtrl.create({
+      header: this.translate.instant('Change decision'),
+      inputs: this.changeInputs,
+      buttons: this.changeButtons,
+      backdropDismiss: false,
+    })
+    alert.present()
+    alert.onDidDismiss().then(() => {
+      this.selectedValue = ''
+    })
   }
 }

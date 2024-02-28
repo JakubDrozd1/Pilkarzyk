@@ -6,8 +6,8 @@
       <ion-item lines="none">
         <ion-input
           class="border"
-          [errorText]="'Login is required' | translate"
-          [label]="'Login' | translate"
+          [errorText]="'Login or email is required' | translate"
+          [label]="'Login or email' | translate"
           labelPlacement="floating"
           formControlName="login"
         >
@@ -25,7 +25,9 @@
         </ion-input>
       </ion-item>
       <ion-label class="click" [routerLink]="['/form/recovery']">
-        <ion-note style="font-size: medium">Odzyskaj hasło</ion-note>
+        <ion-note style="font-size: medium">
+          {{ "Reset password" | translate }}
+        </ion-note>
       </ion-label>
     </ion-list>
     <ion-button type="submit" expand="full">

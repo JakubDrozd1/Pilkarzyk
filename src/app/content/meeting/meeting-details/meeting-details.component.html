@@ -6,7 +6,7 @@
     @if(isReady){
     <div style="display: flex; flex-direction: row-reverse">
       @if(currentDate<(meeting.DateMeeting??0)){
-      <ion-label class="click" [id]="'change-decision' + meeting.IdMeeting">
+      <ion-label class="click" (click)="showAlert()">
         <ion-icon slot="end" size="large" name="hand-right-outline"></ion-icon>
       </ion-label>
       } @if(meeting.IdAuthor===userService.loggedUser.ID_USER){
@@ -87,17 +87,10 @@
   </ion-card>
   @if( meeting.Description){
   <ion-card>
-    <ion-card-header> Opis </ion-card-header>
+    <ion-card-header> {{ "Description" | translate }} </ion-card-header>
     <ion-list [inset]="true">
       <ion-item>{{ meeting.Description }}</ion-item>
     </ion-list>
   </ion-card>
-  }
-  <ion-alert
-    [trigger]="'change-decision' + meeting.IdMeeting"
-    [header]="'Change decision' | translate"
-    [inputs]="changeInputs"
-    [buttons]="changeButtons"
-  ></ion-alert>
-  }
+  } }
 </ion-content>

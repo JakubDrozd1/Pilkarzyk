@@ -136,6 +136,10 @@
   "The password reset link has expired": "The password reset link has expired",
   "Send": "Send",
   "Password reset": "A message with a password reset link has been sent to the provided email address",
+  "Login or email is required": "Login or email is required",
+  "Login or email": "Login or email",
+  "Incorrect login format": "Incorrect login format",
+  "Reset password": "Reset password",
 
   "Group is null": "Group doesn't exist.",
   "User is null": "User doesn't exist",
@@ -153,5 +157,7 @@
   "Username is null": "The account with the given login does not exist.",
   "Account exist with this email": "Account exist with this email",
   "Report problem": "Report an error",
-  "Invitation alredy send": "An invitation has already been sent to this user"
+  "Invitation alredy send": "An invitation has already been sent to this user",
+  "Email is null": "Konto o podanym emailu nie istnieje.",
+  "Account is null": "Konto z podanymi danymi logowania nie istnieje."
 }

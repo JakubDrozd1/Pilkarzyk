@@ -47,6 +47,9 @@ export function customValidator(): ValidatorFn {
       if (trimmedValue.charAt(trimmedValue.length - 1) === ' ') {
         return { trailingSpace: true }
       }
+      if (/\S\s+\S/.test(trimmedValue)) {
+        return { beetweenSpace: true }
+      }
     } else {
       return { onlySpace: true }
     }

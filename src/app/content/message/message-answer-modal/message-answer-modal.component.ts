@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
-import { IonicModule } from '@ionic/angular'
+import { AlertController, IonicModule } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import {
   GetMeetingGroupsResponse,
@@ -51,7 +51,8 @@ export class MessageAnswerModalComponent implements OnInit {
     private refreshDataService: RefreshDataService,
     public translate: TranslateService,
     private route: ActivatedRoute,
-    private meetingsApi: MeetingsApi
+    private meetingsApi: MeetingsApi,
+    private alertController: AlertController
   ) {
     this.displayDate = moment().format()
     this.messageForm = this.fb.group({
@@ -120,7 +121,9 @@ export class MessageAnswerModalComponent implements OnInit {
         })
         .subscribe({
           next: () => {
-            this.alert.presentToast(this.translate.instant('Answered successfully'))
+            this.alert.presentToast(
+              this.translate.instant('Answered successfully')
+            )
             this.refreshDataService.refresh('notification')
             this.refreshDataService.refresh('calendar')
             this.isReady = true

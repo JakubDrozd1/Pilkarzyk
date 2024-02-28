@@ -12,6 +12,7 @@ import { GetMeetingUsersResponse, UsersMeetingsApi } from 'libs/api-client'
 import { DataService } from './service/data/data.service'
 import { PushNotifications } from '@capacitor/push-notifications'
 import { LocalNotifications } from '@capacitor/local-notifications'
+import { Device } from '@capacitor/device'
 
 register()
 
@@ -42,32 +43,32 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.setLanguage()
+    console.log(window.navigator.language)
     if (Capacitor.isNativePlatform()) {
       this.registerNotifications()
     }
   }
 
-  setLanguage() {
-    let lang = localStorage.getItem('lang')
-    if (lang != null) {
+  async setLanguage() {
+    let lang = localStorage.getItem('langUser')
+    if (lang == null) {
+      if (Capacitor.isNativePlatform()) {
+        lang = (await Device.getLanguageCode()).value
+        console.log(lang)
+      } else {
+        lang = window.navigator.language
+      }
+      if (lang == 'pl' || lang == 'en') {
+        this.translate.setDefaultLang(lang)
+        this.translate.use(lang)
+      } else {
+        lang = 'en'
+        this.translate.setDefaultLang(lang)
+        this.translate.use(lang)
+      }
+    } else {
       this.translate.setDefaultLang(lang)
       this.translate.use(lang)
-    } else {
-      const userLang = navigator.language.split('-')[0]
-      const defaultLang = this.translate.getBrowserLang()
-      let langToUse = this.translate.getLangs().includes(userLang)
-        ? userLang
-        : defaultLang
-      if (langToUse == 'pl' || langToUse == 'en') {
-        this.translate.setDefaultLang(langToUse)
-        this.translate.use(langToUse)
-        localStorage.setItem('lang', langToUse)
-      } else {
-        langToUse = 'en'
-        this.translate.setDefaultLang(langToUse)
-        this.translate.use(langToUse)
-        localStorage.setItem('lang', langToUse)
-      }
     }
   }
 

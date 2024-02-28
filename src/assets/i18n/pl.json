@@ -136,6 +136,10 @@
   "The password reset link has expired": "Link do resetu hasła wygasł",
   "Send": "Wyślij",
   "Password reset": "Wysłano wiadomość z linkiem do resetu hasła na podany email",
+  "Login or email is required": "Login lub email jest wymagany",
+  "Login or email": "Login lub email",
+  "Incorrect login format": "Zły format loginu",
+  "Reset password":"Odzyskaj hasło",
 
   "Group is null": "Grupa nie istnieje.",
   "User is null": "Użytkownik nie istnieje.",
@@ -153,5 +157,7 @@
   "Username is null": "Konto o podanym loginie nie istnieje.",
   "Account exist with this email": "Istnieje już konto z tym emailem",
   "Report problem": "Zgłoś błąd",
-  "Invitation alredy send": "Wysłano już zaproszenie do tego użytkownika"
+  "Invitation alredy send": "Wysłano już zaproszenie do tego użytkownika",
+  "Email is null": "Konto o podanym emailu nie istnieje.",
+  "Account is null": "Konto z podanymi danymi logowania nie istnieje."
 }

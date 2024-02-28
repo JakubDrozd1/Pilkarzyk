@@ -51,7 +51,7 @@ export class MessageUserListComponent implements OnInit {
           page: 0,
           onPage: -1,
           isAvatar: true,
-          sortColumn: 'ID_MESSAGE',
+          sortColumn: 'DATE_RESPONSE',
           sortMode: 'ASC',
         })
         .subscribe({

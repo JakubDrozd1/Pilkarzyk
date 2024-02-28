@@ -17,6 +17,7 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
 import { UserService } from 'src/app/service/user/user.service'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { ActivatedRoute, Router } from '@angular/router'
+import { customValidator } from 'src/app/helper/customValidators'
 
 @Component({
   selector: 'app-profile',
@@ -112,8 +113,9 @@ export class ProfileComponent implements OnInit {
               '',
               [
                 Validators.required,
-                Validators.minLength(3),
-                Validators.maxLength(25),
+                customValidator(),
+                Validators.maxLength(50),
+                Validators.pattern(/^[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ\s0-9_-]*$/),
               ],
             ],
           })
@@ -127,18 +129,18 @@ export class ProfileComponent implements OnInit {
               '',
               [
                 Validators.required,
-                Validators.pattern('^[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]+$'),
-                Validators.minLength(3),
-                Validators.maxLength(25),
+                Validators.pattern(/^[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ\s]*$/),
+                customValidator(),
+                Validators.maxLength(50),
               ],
             ],
             surname: [
               '',
               [
                 Validators.required,
-                Validators.pattern('^[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ]+$'),
-                Validators.minLength(3),
-                Validators.maxLength(25),
+                Validators.pattern(/^[a-zA-ZęóąśłżźćńĘÓĄŚŁŻŹĆŃ\s]*$/),
+                customValidator(),
+                Validators.maxLength(50),
               ],
             ],
           })
@@ -166,7 +168,7 @@ export class ProfileComponent implements OnInit {
           {
             updateColumnUserRequest.getUpdateUserRequest = {
               Column: ['EMAIL'],
-              Email: this.profileForm.value.email,
+              Email: this.profileForm.value.email.trim().toLowerCase(),
             }
             this.message = this.translate.instant('Mail successfully updated')
           }
@@ -186,7 +188,7 @@ export class ProfileComponent implements OnInit {
           {
             updateColumnUserRequest.getUpdateUserRequest = {
               Column: ['LOGIN'],
-              Login: this.profileForm.value.login,
+              Login: this.profileForm.value.login.trim().toLowerCase(),
             }
             this.message = this.translate.instant('Login successfully updated')
           }
@@ -195,8 +197,8 @@ export class ProfileComponent implements OnInit {
           {
             updateColumnUserRequest.getUpdateUserRequest = {
               Column: ['FIRSTNAME', 'SURNAME'],
-              Firstname: this.profileForm.value.firstname,
-              Surname: this.profileForm.value.surname,
+              Firstname: this.profileForm.value.firstname.trim(),
+              Surname: this.profileForm.value.surname.trim(),
             }
             this.message = this.translate.instant(
               'Full name successfully updated'
@@ -207,6 +209,7 @@ export class ProfileComponent implements OnInit {
 
       this.usersApi.updateColumnUser(updateColumnUserRequest).subscribe({
         next: () => {
+          this.userService.getDetails()
           this.refreshDataService.refresh('profile-edit')
           this.cancel()
           this.alert.presentToast(this.message)

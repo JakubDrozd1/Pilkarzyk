@@ -33,6 +33,7 @@ export class AppComponent implements OnInit {
   title = 'pilkarzyk'
   meetingNotificationSubscription: Subscription = new Subscription()
   meeting: GetMeetingUsersResponse[] = []
+  lang: string | null = ''
 
   constructor(
     public translate: TranslateService,
@@ -49,26 +50,49 @@ export class AppComponent implements OnInit {
     }
   }
 
-  async setLanguage() {
-    let lang = localStorage.getItem('langUser')
-    if (lang == null) {
-      if (Capacitor.isNativePlatform()) {
-        lang = (await Device.getLanguageCode()).value
-        console.log(lang)
-      } else {
-        lang = window.navigator.language
-      }
-      if (lang == 'pl' || lang == 'en') {
-        this.translate.setDefaultLang(lang)
-        this.translate.use(lang)
-      } else {
-        lang = 'en'
-        this.translate.setDefaultLang(lang)
-        this.translate.use(lang)
-      }
-    } else {
+  // async setLanguage() {
+  //   this.lang = localStorage.getItem('langUser')
+  //   if (this.lang == null) {
+  //     if (Capacitor.isNativePlatform()) {
+  //       this.lang = (await Device.getLanguageCode()).value
+  //     } else {
+  //       this.lang = window.navigator.language
+  //     }
+  //     if (this.lang == 'pl' || this.lang == 'en') {
+  //       this.translate.setDefaultLang(this.lang)
+  //       this.translate.use(this.lang)
+  //     } else {
+  //       this.lang = 'en'
+  //       this.translate.setDefaultLang(this.lang)
+  //       this.translate.use(this.lang)
+  //     }
+  //   } else {
+  //     this.translate.setDefaultLang(this.lang)
+  //     this.translate.use(this.lang)
+  //   }
+  // }
+  
+  setLanguage() {
+    let lang = localStorage.getItem('lang')
+    if (lang != null) {
       this.translate.setDefaultLang(lang)
       this.translate.use(lang)
+    } else {
+      const userLang = navigator.language.split('-')[0]
+      const defaultLang = this.translate.getBrowserLang()
+      let langToUse = this.translate.getLangs().includes(userLang)
+        ? userLang
+        : defaultLang
+      if (langToUse == 'pl' || langToUse == 'en') {
+        this.translate.setDefaultLang(langToUse)
+        this.translate.use(langToUse)
+        localStorage.setItem('lang', langToUse)
+      } else {
+        langToUse = 'en'
+        this.translate.setDefaultLang(langToUse)
+        this.translate.use(langToUse)
+        localStorage.setItem('lang', langToUse)
+      }
     }
   }
 

@@ -44,7 +44,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.setLanguage()
-    console.log(window.navigator.language)
     if (Capacitor.isNativePlatform()) {
       this.registerNotifications()
     }

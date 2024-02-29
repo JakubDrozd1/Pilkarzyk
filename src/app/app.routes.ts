@@ -216,6 +216,20 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'policy',
+    loadComponent: () =>
+      import('./helper/privacy-policy/privacy-policy.component').then(
+        (m) => m.PrivacyPolicyComponent
+      ),
+  },
+  {
+    path: 'delete-info',
+    loadComponent: () =>
+      import('./helper/delete-account-info/delete-account-info.component').then(
+        (m) => m.DeleteAccountInfoComponent
+      ),
+  },
+  {
     path: '**',
     redirectTo: 'form/login',
     pathMatch: 'full',

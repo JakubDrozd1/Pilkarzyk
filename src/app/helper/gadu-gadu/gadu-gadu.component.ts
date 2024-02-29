@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, Input, OnInit } from '@angular/core'
 import { IonicModule } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
@@ -11,6 +11,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
   imports: [CommonModule, IonicModule, TranslateModule],
 })
 export class GaduGaduComponent implements OnInit {
+  @Input() message: string = this.translate.instant('Report problem')
+  
   constructor(public translate: TranslateService) {}
 
   ngOnInit() {}

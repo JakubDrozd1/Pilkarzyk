@@ -19,7 +19,7 @@ export class NotificationService implements OnDestroy {
     private groupInvite: GroupInvitesApi,
     private dataService: DataService
   ) {
-    this.refreshSubscription = interval(1000).subscribe(() => {
+    this.refreshSubscription = interval(10000).subscribe(() => {
       this.getDetails()
     })
     this.getDetails()

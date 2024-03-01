@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { Component, ElementRef, OnInit } from '@angular/core'
-import { AlertController, IonicModule } from '@ionic/angular'
+import { AlertController, IonicModule, RefresherEventDetail } from '@ionic/angular'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import {
@@ -21,6 +21,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { UserService } from 'src/app/service/user/user.service'
 import * as moment from 'moment'
+import { IonRefresherCustomEvent } from '@ionic/core'
 
 @Component({
   selector: 'app-meeting-details',
@@ -249,5 +250,12 @@ export class MeetingDetailsComponent implements OnInit {
     alert.onDidDismiss().then(() => {
       this.selectedValue = ''
     })
+  }
+
+  handleRefresh($event: IonRefresherCustomEvent<RefresherEventDetail>) {
+    setTimeout(() => {
+      this.reload()
+      $event.target.complete()
+    }, 2000)
   }
 }

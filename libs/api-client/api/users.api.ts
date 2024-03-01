@@ -61,8 +61,9 @@ export interface GetUserByIdRequestParams {
 }
 
 export interface GetUserByLoginAndPasswordRequestParams {
-    login: string;
     password: string;
+    login?: string;
+    email?: string;
 }
 
 export interface SendInvitationEmailRequestParams {
@@ -871,18 +872,14 @@ export class UsersApi {
       context?: HttpContext;
     }
   ): Observable<any> {
-    const login = requestParameters.login;
-    if (login === null || login === undefined) {
-      throw new Error(
-        'Required parameter login was null or undefined when calling getUserByLoginAndPassword.'
-      );
-    }
     const password = requestParameters.password;
     if (password === null || password === undefined) {
       throw new Error(
         'Required parameter password was null or undefined when calling getUserByLoginAndPassword.'
       );
     }
+    const login = requestParameters.login;
+    const email = requestParameters.email;
 
     let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
     if (login !== undefined && login !== null) {
@@ -890,6 +887,13 @@ export class UsersApi {
         localVarQueryParameters,
         <any>login,
         'Login'
+      );
+    }
+    if (email !== undefined && email !== null) {
+      localVarQueryParameters = this.addToHttpParams(
+        localVarQueryParameters,
+        <any>email,
+        'Email'
       );
     }
     if (password !== undefined && password !== null) {

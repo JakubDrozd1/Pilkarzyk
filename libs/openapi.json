@@ -2296,7 +2296,13 @@
           {
             "name": "Login",
             "in": "query",
-            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Email",
+            "in": "query",
             "schema": {
               "type": "string"
             }

@@ -23,6 +23,15 @@
 </ion-header>
 <app-spinner [isReady]="!isReady"></app-spinner>
 <ion-content>
+  <ion-refresher
+    slot="fixed"
+    [pullFactor]="0.5"
+    [pullMin]="100"
+    [pullMax]="200"
+    (ionRefresh)="handleRefresh($event)"
+  >
+    <app-spinner [isReady]="true"></app-spinner>
+  </ion-refresher>
   @if(isReady){
   <ion-card>
     <ion-card-header>

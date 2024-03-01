@@ -61,8 +61,9 @@ export interface GetUserByIdRequestParams {
 }
 
 export interface GetUserByLoginAndPasswordRequestParams {
-    login: string;
     password: string;
+    login?: string;
+    email?: string;
 }
 
 export interface SendInvitationEmailRequestParams {
@@ -551,19 +552,21 @@ export class UsersApi {
     public getUserByLoginAndPassword(requestParameters: GetUserByLoginAndPasswordRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<USERS>>;
     public getUserByLoginAndPassword(requestParameters: GetUserByLoginAndPasswordRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<USERS>>;
     public getUserByLoginAndPassword(requestParameters: GetUserByLoginAndPasswordRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
-        const login = requestParameters.login;
-        if (login === null || login === undefined) {
-            throw new Error('Required parameter login was null or undefined when calling getUserByLoginAndPassword.');
-        }
         const password = requestParameters.password;
         if (password === null || password === undefined) {
             throw new Error('Required parameter password was null or undefined when calling getUserByLoginAndPassword.');
         }
+        const login = requestParameters.login;
+        const email = requestParameters.email;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (login !== undefined && login !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>login, 'Login');
+        }
+        if (email !== undefined && email !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>email, 'Email');
         }
         if (password !== undefined && password !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,

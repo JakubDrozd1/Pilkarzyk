@@ -7,7 +7,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms'
-import { IonicModule } from '@ionic/angular'
+import { IonicModule, SelectChangeEventDetail } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import {
   GetGroupsUsersResponse,
@@ -23,6 +23,7 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { ActivatedRoute } from '@angular/router'
 import { UserService } from 'src/app/service/user/user.service'
+import { IonSelectCustomEvent } from '@ionic/core'
 
 @Component({
   selector: 'app-meeting',
@@ -78,6 +79,7 @@ export class MeetingComponent implements OnInit {
         this.isEdit = false
         this.isHome = false
         this.idGroup = parseInt(params?.['idGroup'])
+        this.getLastMeeting(this.idGroup)
       } else if (params?.['idMeeting'] > 0) {
         this.idMeeting = parseInt(params?.['idMeeting'])
         this.isEdit = true
@@ -233,7 +235,42 @@ export class MeetingComponent implements OnInit {
     }
   }
 
+  getLastMeeting(idGroup: number) {
+    if (idGroup > 0) {
+      this.isReady = false
+      this.meetingsApi
+        .getAllMeetings({
+          idGroup: idGroup,
+          page: 0,
+          onPage: 1,
+          sortColumn: 'ID_MEETING',
+          sortMode: 'DESC',
+        })
+        .subscribe({
+          next: (response) => {
+            this.meeting = response[0]
+            if (this.meeting) {
+              this.meetingForm.get('place')?.setValue(this.meeting.Place)
+              this.meetingForm.get('quantity')?.setValue(this.meeting.Quantity)
+              this.meetingForm
+                .get('description')
+                ?.setValue(this.meeting.Description)
+            }
+            this.isReady = true
+          },
+          error: (error) => {
+            this.alert.handleError(error)
+            this.isReady = true
+          },
+        })
+    }
+  }
+
   cancel() {
     window.history.back()
+  }
+
+  triggerEvent($event: IonSelectCustomEvent<SelectChangeEventDetail<any>>) {
+    this.getLastMeeting($event.detail.value.IdGroup)
   }
 }

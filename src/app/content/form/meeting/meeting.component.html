@@ -21,6 +21,7 @@
           [placeholder]="'Select a group' | translate"
           formControlName="group"
           fill="outline"
+          (ionChange)="triggerEvent($event)"
         >
           @for(group of groups; track $index){
           <ion-select-option [value]="group">

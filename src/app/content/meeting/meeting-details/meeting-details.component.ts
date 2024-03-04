@@ -1,6 +1,10 @@
 import { CommonModule } from '@angular/common'
 import { Component, ElementRef, OnInit } from '@angular/core'
-import { AlertController, IonicModule, RefresherEventDetail } from '@ionic/angular'
+import {
+  AlertController,
+  IonicModule,
+  RefresherEventDetail,
+} from '@ionic/angular'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import {
@@ -68,6 +72,7 @@ export class MeetingDetailsComponent implements OnInit {
       },
     },
   ]
+  color: string = ''
 
   constructor(
     private route: ActivatedRoute,
@@ -133,6 +138,7 @@ export class MeetingDetailsComponent implements OnInit {
                   message.IdUser === this.userService.loggedUser.ID_USER
               )[0]
               this.setInputs()
+              this.setColor(this.defautAnswer)
               this.filteredMessages = responses.messages.filter(
                 (message) => message.Answer === 'yes'
               )
@@ -162,6 +168,31 @@ export class MeetingDetailsComponent implements OnInit {
           this.isReady = true
         },
       })
+  }
+  
+  setColor(defautAnswer: GetMessagesUsersMeetingsResponse) {
+    switch (defautAnswer.Answer) {
+      case 'yes': {
+        this.color = 'success'
+        break
+      }
+      case 'no': {
+        this.color = 'danger'
+        break
+      }
+      case 'wait': {
+        this.color = 'warning'
+        break
+      }
+      case 'readed': {
+        this.color = 'medium'
+        break
+      }
+      default: {
+        this.color = ''
+        break
+      }
+    }
   }
 
   cancel() {

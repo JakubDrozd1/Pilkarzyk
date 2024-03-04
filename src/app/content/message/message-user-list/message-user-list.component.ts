@@ -8,6 +8,8 @@ import { GetMessagesUsersMeetingsResponse, MessagesApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { IonRefresherCustomEvent } from '@ionic/core'
+import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'app-message-user-list',
@@ -27,11 +29,13 @@ export class MessageUserListComponent implements OnInit {
   messages: GetMessagesUsersMeetingsResponse[] = []
   isReady: boolean = false
   acceptCounter: number = 0
+  private subscription: Subscription = new Subscription()
 
   constructor(
     private route: ActivatedRoute,
     private messagesApi: MessagesApi,
-    private alert: Alert
+    private alert: Alert,
+    private refreshDataService: RefreshDataService
   ) {}
 
   ngOnInit() {
@@ -41,6 +45,13 @@ export class MessageUserListComponent implements OnInit {
         this.getDetails()
       }
     })
+    this.subscription.add(
+      this.refreshDataService.refreshSubject.subscribe((index) => {
+        if (index === 'message-user-list') {
+          this.getDetails()
+        }
+      })
+    )
   }
 
   getDetails() {

@@ -23,6 +23,10 @@
         color="danger"
         name="alert-circle-outline"
       ></ion-icon>
+      } @if(user.IdUser==userService.loggedUser.ID_USER){
+      <ion-label class="click" (click)="showAlert()" slot="end">
+        <ion-icon size="large" name="sync-circle-outline"></ion-icon>
+      </ion-label>
       }
     </ion-item>
   </ion-card-content>

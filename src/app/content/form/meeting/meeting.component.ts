@@ -113,6 +113,9 @@ export class MeetingComponent implements OnInit {
             this.groups = response
           } else {
             this.groups = response.filter((obj) => obj.AccountType === 1)
+            if (this.groups.length == 1) {
+              this.meetingForm.get('group')?.setValue(this.groups[0])
+            }
           }
         },
         error: (error) => {

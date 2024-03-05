@@ -6,13 +6,13 @@ import {
   GetMeetingGroupsResponse,
   MeetingsApi,
 } from 'libs/api-client'
-import { MeetingContentComponent } from '../../meeting/meeting-content/meeting-content.component'
+import { MeetingContentComponent } from '../../content/meeting/meeting-content/meeting-content.component'
 import * as moment from 'moment'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { Subscription } from 'rxjs'
 import { UserService } from 'src/app/service/user/user.service'
-import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
+import { SpinnerComponent } from '../../helper/spinner/spinner.component'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { IonRefresherCustomEvent } from '@ionic/core'
 import { NotificationService } from 'src/app/service/notification/notification.service'

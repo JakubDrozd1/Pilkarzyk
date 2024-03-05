@@ -4,7 +4,7 @@ import { IonicModule } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
 import { RouterLink } from '@angular/router'
-import { LogoutComponent } from '../../profile/logout/logout.component'
+import { LogoutComponent } from '../../content/profile/logout/logout.component'
 import { UserService } from 'src/app/service/user/user.service'
 import { NotificationService } from 'src/app/service/notification/notification.service'
 

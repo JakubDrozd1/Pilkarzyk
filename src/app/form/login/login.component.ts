@@ -15,7 +15,7 @@ import { NotificationTokensApi, TokenApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { AppConfig } from 'src/app/service/app-config'
 import { AuthService } from 'src/app/service/auth/auth.service'
-import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
+import { SpinnerComponent } from '../../helper/spinner/spinner.component'
 import { PushNotifications } from '@capacitor/push-notifications'
 import { Capacitor } from '@capacitor/core'
 

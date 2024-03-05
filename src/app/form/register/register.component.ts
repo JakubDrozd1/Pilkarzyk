@@ -15,7 +15,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { AuthService } from 'src/app/service/auth/auth.service'
-import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
+import { SpinnerComponent } from '../../helper/spinner/spinner.component'
 import {
   ComparePasswordValidator,
   customValidator,

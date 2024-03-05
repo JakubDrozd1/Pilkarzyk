@@ -16,7 +16,7 @@ import {
   MeetingsApi,
 } from 'libs/api-client'
 import { Subscription, forkJoin } from 'rxjs'
-import { MeetingComponent } from '../../form/meeting/meeting.component'
+import { MeetingComponent } from '../../../form/meeting/meeting.component'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { MeetingContentComponent } from '../../meeting/meeting-content/meeting-content.component'
 import { Alert } from 'src/app/helper/alert'

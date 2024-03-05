@@ -6,7 +6,7 @@ import {
 } from '@angular/router'
 import { inject } from '@angular/core'
 import { IsLogged } from './helper/isLogged'
-import { RegisterLinkComponent } from './content/form/register-link/register-link.component'
+import { RegisterLinkComponent } from './form/register-link/register-link.component'
 import { UserService } from './service/user/user.service'
 import { DownloadComponent } from './helper/download/download.component'
 
@@ -24,7 +24,7 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./controller/tab/tab.component').then((m) => m.TabComponent),
+      import('./tabs/tab/tab.component').then((m) => m.TabComponent),
     canActivate: [IsLoggedFn, MainCanActivateFn],
     children: [
       {
@@ -37,7 +37,7 @@ export const routes: Routes = [
       {
         path: 'groups/add',
         loadComponent: () =>
-          import('./content/form/groups/groups.component').then(
+          import('./form/groups/groups.component').then(
             (m) => m.GroupsComponent
           ),
       },
@@ -51,7 +51,7 @@ export const routes: Routes = [
       {
         path: 'groups/:idGroup/add-meeting',
         loadComponent: () =>
-          import('./content/form/meeting/meeting.component').then(
+          import('./form/meeting/meeting.component').then(
             (m) => m.MeetingComponent
           ),
       },
@@ -65,7 +65,7 @@ export const routes: Routes = [
       {
         path: 'groups/:idGroup/add-user/:mode',
         loadComponent: () =>
-          import('./content/form/users/users.component').then(
+          import('./form/users/users.component').then(
             (m) => m.UsersComponent
           ),
       },
@@ -93,7 +93,7 @@ export const routes: Routes = [
       {
         path: 'home/add-meeting',
         loadComponent: () =>
-          import('./content/form/meeting/meeting.component').then(
+          import('./form/meeting/meeting.component').then(
             (m) => m.MeetingComponent
           ),
       },
@@ -121,7 +121,7 @@ export const routes: Routes = [
       {
         path: 'account/edit/:mode',
         loadComponent: () =>
-          import('./content/form/profile/profile.component').then(
+          import('./form/profile/profile.component').then(
             (m) => m.ProfileComponent
           ),
       },
@@ -129,7 +129,7 @@ export const routes: Routes = [
         path: 'account/edit-pass',
         loadComponent: () =>
           import(
-            './content/form/profile-password/profile-password.component'
+            './form/profile-password/profile-password.component'
           ).then((m) => m.ProfilePasswordComponent),
       },
       {
@@ -170,7 +170,7 @@ export const routes: Routes = [
       {
         path: 'meeting/:idMeeting/edit',
         loadComponent: () =>
-          import('./content/form/meeting/meeting.component').then(
+          import('./form/meeting/meeting.component').then(
             (m) => m.MeetingComponent
           ),
       },
@@ -188,19 +188,19 @@ export const routes: Routes = [
   {
     path: 'form',
     loadComponent: () =>
-      import('./controller/auth/auth.component').then((m) => m.AuthComponent),
+      import('./tabs/auth/auth.component').then((m) => m.AuthComponent),
     children: [
       {
         path: 'login',
         loadComponent: () =>
-          import('./content/form/login/login.component').then(
+          import('./form/login/login.component').then(
             (m) => m.LoginComponent
           ),
       },
       {
         path: 'register',
         loadComponent: () =>
-          import('./content/form/register/register.component').then(
+          import('./form/register/register.component').then(
             (m) => m.RegisterComponent
           ),
       },
@@ -208,7 +208,7 @@ export const routes: Routes = [
         path: 'recovery',
         loadComponent: () =>
           import(
-            './content/form/password-recovery/password-recovery.component'
+            './form/password-recovery/password-recovery.component'
           ).then((m) => m.PasswordRecoveryComponent),
       },
       {
@@ -225,7 +225,7 @@ export const routes: Routes = [
   {
     path: 'recovery/:idResetPassword',
     loadComponent: () =>
-      import('./content/form/password-reset/password-reset.component').then(
+      import('./form/password-reset/password-reset.component').then(
         (m) => m.PasswordResetComponent
       ),
   },

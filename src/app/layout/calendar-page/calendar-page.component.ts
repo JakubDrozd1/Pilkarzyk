@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { Component } from '@angular/core'
 import { IonicModule } from '@ionic/angular'
-import { CalendarContentComponent } from '../../content/calendar/calendar-content/calendar-content.component'
+import { CalendarContentComponent } from '../../controller/calendar-content/calendar-content.component'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { GaduGaduComponent } from "../../helper/gadu-gadu/gadu-gadu.component";

@@ -10,7 +10,7 @@ import {
 import { IonicModule } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { Alert } from 'src/app/helper/alert'
-import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
+import { SpinnerComponent } from '../../helper/spinner/spinner.component'
 import { ResetPasswordsApi } from 'libs/api-client'
 
 @Component({

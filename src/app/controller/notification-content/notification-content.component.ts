@@ -15,14 +15,14 @@ import {
   MessagesApi,
   UsersMeetingsApi,
 } from 'libs/api-client'
-import { MessageContentComponent } from '../../message/message-content/message-content.component'
+import { MessageContentComponent } from '../../content/message/message-content/message-content.component'
 import { Observable, Subscription, forkJoin } from 'rxjs'
 import { Alert } from 'src/app/helper/alert'
 import { DataService } from 'src/app/service/data/data.service'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import * as moment from 'moment'
 import { FormsModule } from '@angular/forms'
-import { GroupsInviteComponent } from '../../groups/groups-invite/groups-invite.component'
+import { GroupsInviteComponent } from '../../content/groups/groups-invite/groups-invite.component'
 import { UserService } from 'src/app/service/user/user.service'
 import { SwiperContainer } from 'swiper/element'
 import { IonRefresherCustomEvent } from '@ionic/core'

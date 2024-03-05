@@ -18,7 +18,7 @@ import { GroupInvitesApi, GroupsApi, USERS, UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { UserService } from 'src/app/service/user/user.service'
-import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
+import { SpinnerComponent } from '../../helper/spinner/spinner.component'
 import { UserValidator } from 'src/app/helper/customValidators'
 
 @Component({

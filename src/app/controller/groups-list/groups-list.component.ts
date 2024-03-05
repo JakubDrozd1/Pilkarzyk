@@ -20,7 +20,7 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
 import { Alert } from 'src/app/helper/alert'
 import { UserService } from 'src/app/service/user/user.service'
 import { FormsModule } from '@angular/forms'
-import { GroupsUserListComponent } from '../groups-user-list/groups-user-list.component'
+import { GroupsUserListComponent } from '../../content/groups/groups-user-list/groups-user-list.component'
 import { SwiperContainer } from 'swiper/element'
 import { IonRefresherCustomEvent } from '@ionic/core'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common'
 import { Component, Input, OnInit } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { IonicModule } from '@ionic/angular'
-import { MeetingComponent } from '../../form/meeting/meeting.component'
+import { MeetingComponent } from '../../../form/meeting/meeting.component'
 import { MeetingContentComponent } from '../../meeting/meeting-content/meeting-content.component'
 import {
   GetGroupInviteResponse,

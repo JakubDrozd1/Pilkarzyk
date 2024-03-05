@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common'
 import { Component } from '@angular/core'
 import { IonicModule } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
-import { GroupsListComponent } from 'src/app/content/groups/groups-list/groups-list.component'
+import { GroupsListComponent } from 'src/app/controller/groups-list/groups-list.component'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { GaduGaduComponent } from "../../helper/gadu-gadu/gadu-gadu.component";
 

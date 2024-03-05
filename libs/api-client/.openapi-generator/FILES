@@ -40,6 +40,7 @@ model/get-token-response.ts
 model/get-update-meeting-request.ts
 model/get-update-user-request.ts
 model/get-user-request.ts
+model/get-users-by-login-and-password-request.ts
 model/get-users-meetings-request.ts
 model/groups.ts
 model/messages.ts

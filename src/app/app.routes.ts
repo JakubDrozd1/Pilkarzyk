@@ -98,32 +98,46 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'profile',
+        path: 'account',
         loadComponent: () =>
-          import('./layout/profile-page/profile-page.component').then(
-            (m) => m.ProfilePageComponent
+          import('./layout/account-page/account-page.component').then(
+            (m) => m.AccountPageComponent
           ),
       },
       {
-        path: 'profile/edit',
+        path: 'account/profile',
+        loadComponent: () =>
+          import(
+            './content/profile/profile-details/profile-details.component'
+          ).then((m) => m.ProfileDetailsComponent),
+      },
+      {
+        path: 'account/edit',
         loadComponent: () =>
           import('./content/profile/profile-edit/profile-edit.component').then(
             (m) => m.ProfileEditComponent
           ),
       },
       {
-        path: 'profile/edit/:mode',
+        path: 'account/edit/:mode',
         loadComponent: () =>
           import('./content/form/profile/profile.component').then(
             (m) => m.ProfileComponent
           ),
       },
       {
-        path: 'profile/edit-pass',
+        path: 'account/edit-pass',
         loadComponent: () =>
           import(
             './content/form/profile-password/profile-password.component'
           ).then((m) => m.ProfilePasswordComponent),
+      },
+      {
+        path: 'account/about',
+        loadComponent: () =>
+          import(
+            './content/account/account-about/account-about.component'
+          ).then((m) => m.AccountAboutComponent),
       },
       {
         path: 'notification',

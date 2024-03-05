@@ -6,7 +6,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core'
-import { ActivatedRoute, RouterLink } from '@angular/router'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { IonicModule } from '@ionic/angular'
 import {
   GetGroupsUsersResponse,
@@ -77,7 +77,8 @@ export class GroupsContentComponent implements OnInit {
     private groupsApi: GroupsApi,
     public userService: UserService,
     public translate: TranslateService,
-    public notificationService: NotificationService
+    public notificationService: NotificationService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -204,5 +205,9 @@ export class GroupsContentComponent implements OnInit {
 
   showMenuItems() {
     this.showMenuItem = !this.showMenuItem
+  }
+
+  cancel() {
+    this.router.navigate(['/groups'])
   }
 }

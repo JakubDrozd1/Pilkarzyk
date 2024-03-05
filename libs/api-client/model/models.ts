@@ -21,6 +21,7 @@ export * from './get-token-response';
 export * from './get-update-meeting-request';
 export * from './get-update-user-request';
 export * from './get-user-request';
+export * from './get-users-by-login-and-password-request';
 export * from './get-users-meetings-request';
 export * from './messages';
 export * from './problem-details';

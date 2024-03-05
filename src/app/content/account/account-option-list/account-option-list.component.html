@@ -1,0 +1,89 @@
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title style="text-align: center">
+        <ion-label>{{ userService.loggedUser.LOGIN }}</ion-label>
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item
+        lines="full"
+        [routerLink]="['profile']"
+        button
+        detail="true"
+        class="title"
+      >
+        <ion-icon name="person-outline"></ion-icon>
+        <ion-label>{{ "Profile" | translate }}</ion-label>
+      </ion-item>
+    </ion-card-content>
+
+    <ion-card-content>
+      <ion-item
+        lines="full"
+        [routerLink]="['edit']"
+        button
+        detail="true"
+        class="title"
+      >
+        <ion-icon name="settings-outline"></ion-icon>
+        <ion-label>{{ "Settings" | translate }}</ion-label>
+      </ion-item>
+    </ion-card-content>
+
+    <ion-card-content>
+      <ion-item lines="full" button detail="true" class="title">
+        <ion-icon name="notifications-outline"></ion-icon>
+        <ion-label>{{ "Notifications" | translate }}</ion-label>
+      </ion-item>
+    </ion-card-content>
+    <ion-card-content>
+      <ion-item
+        [routerLink]="['edit-pass']"
+        lines="full"
+        button
+        detail="true"
+        class="title"
+      >
+        <ion-icon name="lock-closed-outline"></ion-icon>
+        <ion-label>{{ "Password" | translate }}</ion-label>
+      </ion-item>
+    </ion-card-content>
+
+    <ion-card-content>
+      <ion-item
+        lines="full"
+        button
+        detail="true"
+        class="title"
+        (click)="setOpen(true)"
+      >
+        <ion-picker
+          [columns]="pickerColumns"
+          [buttons]="pickerButtons"
+          [isOpen]="isPickerOpen"
+          (didDismiss)="setOpen(false)"
+        ></ion-picker>
+        <ion-icon name="globe-outline"></ion-icon>
+        <ion-label>{{ "Language" | translate }}</ion-label>
+      </ion-item>
+    </ion-card-content>
+
+    <ion-card-content>
+      <ion-item
+        lines="full"
+        [routerLink]="['/profile/edit']"
+        button
+        detail="true"
+        class="title"
+      >
+        <ion-icon name="information-circle-outline"></ion-icon>
+        <ion-label>O Aplikacji</ion-label>
+      </ion-item>
+    </ion-card-content>
+    <ion-card-content>
+      <app-logout></app-logout>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

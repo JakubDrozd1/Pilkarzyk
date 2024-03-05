@@ -1,22 +1,58 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="cancel()">{{ "Cancel" | translate }}</ion-button>
+      <ion-button (click)="cancel()">{{ "Back" | translate }}</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content>
   <app-spinner [isReady]="!isReady"></app-spinner>
-
+  <ion-refresher
+    slot="fixed"
+    [pullFactor]="0.5"
+    [pullMin]="100"
+    [pullMax]="200"
+    (ionRefresh)="handleRefresh($event)"
+  >
+    <app-spinner [isReady]="true"></app-spinner>
+  </ion-refresher>
   @if(isReady && user){
   <ion-list>
+    <ion-avatar class="avatar">
+      <input
+        type="file"
+        id="fileInput"
+        style="display: none"
+        accept=".jpeg, .jpg, .png, .gif"
+        (change)="onFileSelected($event)"
+      />
+      @if(temp){
+      <img
+        [src]="temp"
+        alt="Przycisk"
+        (click)="openFileInput()"
+        style="cursor: pointer"
+      />
+      }@else{
+      <img
+        src="https://ionicframework.com/docs/img/demos/avatar.svg"
+        alt="Przycisk"
+        (click)="openFileInput()"
+        style="cursor: pointer"
+      />
+      }
+      <ion-icon
+        (click)="openFileInput()"
+        size="large"
+        class="icon-avatar"
+        name="brush-outline"
+      ></ion-icon>
+    </ion-avatar>
     <ion-card>
       <ion-card-content>
-        <ion-item lines="none" class="label">
-          <ion-label>{{ "FIRSTNAME & LASTNAME" | translate }}</ion-label>
-        </ion-item>
+        <ion-label>{{ "FIRSTNAME & LASTNAME" | translate }}</ion-label>
         <ion-item
-          [routerLink]="['/profile/edit/name']"
+          [routerLink]="['name']"
           lines="full"
           class="title"
           button
@@ -27,11 +63,9 @@
         </ion-item>
       </ion-card-content>
       <ion-card-content>
-        <ion-item lines="none" class="label">
-          <ion-label>{{ "E-MAIL" | translate }}</ion-label>
-        </ion-item>
+        <ion-label>{{ "E-MAIL" | translate }}</ion-label>
         <ion-item
-          [routerLink]="['/profile/edit/mail']"
+          [routerLink]="['mail']"
           lines="full"
           class="title"
           button
@@ -42,11 +76,9 @@
         </ion-item>
       </ion-card-content>
       <ion-card-content>
-        <ion-item lines="none" class="label">
-          <ion-label>{{ "PHONE NUMBER" | translate }}</ion-label>
-        </ion-item>
+        <ion-label>{{ "PHONE NUMBER" | translate }}</ion-label>
         <ion-item
-          [routerLink]="['/profile/edit/phone']"
+          [routerLink]="['phone']"
           lines="full"
           class="title"
           button
@@ -63,11 +95,9 @@
         </ion-item>
       </ion-card-content>
       <ion-card-content>
-        <ion-item lines="none" class="label">
-          <ion-label>{{ "LOGIN" | translate }}</ion-label>
-        </ion-item>
+        <ion-label>{{ "LOGIN" | translate }}</ion-label>
         <ion-item
-          [routerLink]="['/profile/edit/login']"
+          [routerLink]="['login']"
           lines="full"
           class="title"
           button

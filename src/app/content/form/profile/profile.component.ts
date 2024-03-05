@@ -223,6 +223,6 @@ export class ProfileComponent implements OnInit {
   }
 
   cancel() {
-    this.router.navigate(['/profile/edit'])
+    this.router.navigate(['/account/edit'])
   }
 }

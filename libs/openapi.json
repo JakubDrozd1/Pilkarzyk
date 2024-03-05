@@ -2180,6 +2180,36 @@
             "description": "Success"
           }
         }
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "changePassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUsersByLoginAndPasswordRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUsersByLoginAndPasswordRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUsersByLoginAndPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
       }
     },
     "/api/users/{userId}": {
@@ -2302,6 +2332,13 @@
           },
           {
             "name": "Email",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "PasswordNew",
             "in": "query",
             "schema": {
               "type": "string"
@@ -3480,6 +3517,31 @@
           "GroupCounter": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetUsersByLoginAndPasswordRequest": {
+        "required": [
+          "Password"
+        ],
+        "type": "object",
+        "properties": {
+          "Login": {
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "type": "string",
+            "nullable": true
+          },
+          "PasswordNew": {
+            "type": "string",
+            "nullable": true
+          },
+          "Password": {
+            "minLength": 1,
+            "type": "string"
           }
         },
         "additionalProperties": false

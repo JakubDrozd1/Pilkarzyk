@@ -45,7 +45,8 @@ export class ProfilePasswordComponent implements OnInit {
     private router: Router
   ) {
     this.profilePasswordForm = this.fb.group({
-      password: [
+      passwordOld: ['', [Validators.required]],
+      passwordNew: [
         '',
         [
           Validators.required,
@@ -63,7 +64,7 @@ export class ProfilePasswordComponent implements OnInit {
   ngOnInit() {}
 
   cancel() {
-    this.router.navigate(['/profile'])
+    this.router.navigate(['/account'])
   }
 
   onSubmit() {
@@ -71,11 +72,11 @@ export class ProfilePasswordComponent implements OnInit {
     if (this.profilePasswordForm.valid) {
       this.isReady = false
       this.usersApi
-        .updateColumnUser({
-          userId: Number(this.userService.loggedUser.ID_USER),
-          getUpdateUserRequest: {
-            Column: ['USER_PASSWORD'],
-            UserPassword: this.profilePasswordForm.value.password,
+        .changePassword({
+          getUsersByLoginAndPasswordRequest: {
+            Login: this.userService.loggedUser.LOGIN,
+            Password: this.profilePasswordForm.value.passwordOld,
+            PasswordNew: this.profilePasswordForm.value.passwordNew,
           },
         })
         .subscribe({
@@ -87,7 +88,6 @@ export class ProfilePasswordComponent implements OnInit {
           },
           error: (error) => {
             this.alert.handleError(error)
-            this.cancel()
             this.isReady = true
           },
         })

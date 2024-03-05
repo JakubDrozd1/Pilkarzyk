@@ -141,6 +141,8 @@
   "Incorrect login format": "Zły format loginu",
   "Reset password": "Odzyskaj hasło",
   "Send a report": "Wyślij zgłoszenie",
+  "New password": "Nowe hasło",
+  "Repeat new password": "Powtórz nowe hasło",
 
   "Group is null": "Grupa nie istnieje.",
   "User is null": "Użytkownik nie istnieje.",

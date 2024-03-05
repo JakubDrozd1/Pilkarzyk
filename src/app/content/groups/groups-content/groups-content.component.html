@@ -1,13 +1,10 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{ nameGroup }} </ion-title>
-    <ion-buttons slot="end">
-      <ion-back-button
-        text=""
-        icon="arrow-back-outline"
-        [routerLink]="['/groups']"
-      >
-      </ion-back-button>
+    <ion-title slot="end">{{ nameGroup }} </ion-title>
+    <ion-buttons slot="start">
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()"> {{ "Back" | translate }} </ion-button>
+    </ion-buttons>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

@@ -102,6 +102,7 @@ ion-button:active {
 
 ion-item {
   --border-color: var(--ion-color-secondary);
+  border-radius: 10px;
 }
 
 .border {
@@ -172,4 +173,8 @@ ion-toast::part(button) {
 ion-toast::part(button):active {
   filter: brightness(150%);
   transform: scale(0.8);
+}
+
+ion-card{
+  border-radius: 20px;
 }

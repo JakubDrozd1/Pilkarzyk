@@ -1,29 +1,59 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()"> {{ "Back" | translate }} </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
 <app-spinner [isReady]="!isReady"></app-spinner>
-@if(isReady){
 <ion-content>
-  <ion-avatar class="avatar">
-    <input
-      type="file"
-      id="fileInput"
-      style="display: none"
-      accept=".jpeg, .jpg, .png, .gif"
-      (change)="onFileSelected($event)"
-    />
-    @if(temp){
-    <img
-      [src]="temp"
-      alt="Przycisk"
-      (click)="openFileInput()"
-      style="cursor: pointer"
-    />
-    }@else{
-    <img
-      src="https://ionicframework.com/docs/img/demos/avatar.svg"
-      alt="Przycisk"
-      (click)="openFileInput()"
-      style="cursor: pointer"
-    />
-    }
-  </ion-avatar>
+  <ion-refresher
+    slot="fixed"
+    [pullFactor]="0.5"
+    [pullMin]="100"
+    [pullMax]="200"
+    (ionRefresh)="handleRefresh($event)"
+  >
+    <app-spinner [isReady]="true"></app-spinner>
+  </ion-refresher>
+  @if(isReady){
+  <ion-card>
+    <ion-card-header class="profile-card">
+      <div class="data">
+        <ion-item lines="full" slot="start">
+          {{ user.FIRSTNAME }} {{ user.SURNAME }}
+        </ion-item>
+        <ion-note>{{ user.LOGIN }}</ion-note>
+      </div>
+      <ion-card-content>
+        <ion-avatar slot="end" class="avatar">
+          @if(temp){
+          <img [src]="temp" alt="img" />
+          }@else{
+          <img
+            alt="img"
+            src="https://ionicframework.com/docs/img/demos/avatar.svg"
+          />
+          }
+        </ion-avatar>
+      </ion-card-content>
+    </ion-card-header>
+    <ion-card-content>
+      <p>
+        <ion-label>
+          {{ "Participated in" | translate }}
+          {{ acceptMeetings }} {{ "meetings" | translate }}
+        </ion-label>
+      </p>
+      <p>
+        <ion-label>
+          @if(allMeetings){
+          {{ "Frequency:" | translate }} {{ allMeetings }} % }@else{
+          {{ "Frequency:" | translate }} 0 % }
+        </ion-label>
+      </p>
+    </ion-card-content>
+  </ion-card>
+  }
 </ion-content>
-}

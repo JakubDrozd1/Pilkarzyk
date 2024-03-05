@@ -21,7 +21,12 @@
         <img alt="img" [src]="image" />
       </ion-avatar>
       }
-      <ion-label> {{ user.FIRSTNAME }} {{ user.SURNAME }} </ion-label>
+      <ion-label
+        [routerLink]="['/profile', user.ID_USER]"
+        class="click"
+      >
+        {{ user.FIRSTNAME }} {{ user.SURNAME }}
+      </ion-label>
     </ion-chip>
   </ion-card-header>
   <div class="buttons">

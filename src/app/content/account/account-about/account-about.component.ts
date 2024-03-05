@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component';
@@ -19,7 +19,11 @@ import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component';
   ],
 })
 export class AccountAboutComponent implements OnInit {
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit() {}
+
+  cancel() {
+    this.router.navigate(['/account'])
+  }
 }

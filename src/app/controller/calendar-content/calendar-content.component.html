@@ -12,6 +12,7 @@
   </ion-refresher>
   <ion-list [inset]="true" class="calendar">
     <ion-datetime
+      [firstDayOfWeek]="1"
       [(ngModel)]="selectedDate"
       (ngModelChange)="onDateChange($event)"
       presentation="date"

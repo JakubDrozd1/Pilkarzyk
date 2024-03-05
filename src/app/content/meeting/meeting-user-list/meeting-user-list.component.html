@@ -16,18 +16,32 @@
       </ion-avatar>
       }
       {{ counter + 1 }}.&nbsp;
-      <ion-label> {{ user.Firstname }} {{ user.Surname }} </ion-label>
-      @if(counter+1>(user.Quantity??0)&&user.Answer=='yes'){
-      <ion-icon
-        size="large"
-        color="danger"
-        name="alert-circle-outline"
-      ></ion-icon>
-      } @if(user.IdUser==userService.loggedUser.ID_USER){
-      <ion-label class="click" (click)="showAlert()" slot="end">
-        <ion-icon size="large" name="sync-circle-outline"></ion-icon>
+      <ion-label [routerLink]="['/profile', user.IdUser]" class="click">
+        {{ user.Firstname }} {{ user.Surname }}
       </ion-label>
-      }
+      <ion-label
+        style="
+          display: flex;
+          flex-direction: row-reverse;
+          align-items: center;
+          justify-content: flex-start;
+        "
+      >
+        @if(counter+1>(user.Quantity??0)&&user.Answer=='yes'){
+        <ion-icon
+          size="large"
+          color="danger"
+          name="alert-circle-outline"
+        ></ion-icon>
+        } @if(user.IdUser==userService.loggedUser.ID_USER){
+        <ion-icon
+          class="click"
+          (click)="showAlert()"
+          size="large"
+          name="sync-circle-outline"
+        ></ion-icon>
+        }
+      </ion-label>
     </ion-item>
   </ion-card-content>
 </ion-card>

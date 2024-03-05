@@ -9,7 +9,7 @@
     <ion-card-content>
       <ion-item
         lines="full"
-        [routerLink]="['profile']"
+        [routerLink]="['/profile', userService.loggedUser.ID_USER]"
         button
         detail="true"
         class="title"
@@ -33,7 +33,13 @@
     </ion-card-content>
 
     <ion-card-content>
-      <ion-item lines="full" button detail="true" class="title">
+      <ion-item
+        lines="full"
+        [routerLink]="['notification']"
+        button
+        detail="true"
+        class="title"
+      >
         <ion-icon name="notifications-outline"></ion-icon>
         <ion-label>{{ "Notifications" | translate }}</ion-label>
       </ion-item>
@@ -73,13 +79,13 @@
     <ion-card-content>
       <ion-item
         lines="full"
-        [routerLink]="['/profile/edit']"
+        [routerLink]="['about']"
         button
         detail="true"
         class="title"
       >
         <ion-icon name="information-circle-outline"></ion-icon>
-        <ion-label>O Aplikacji</ion-label>
+        <ion-label>{{ "About" | translate }}</ion-label>
       </ion-item>
     </ion-card-content>
     <ion-card-content>

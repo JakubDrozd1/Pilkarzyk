@@ -65,9 +65,7 @@ export const routes: Routes = [
       {
         path: 'groups/:idGroup/add-user/:mode',
         loadComponent: () =>
-          import('./form/users/users.component').then(
-            (m) => m.UsersComponent
-          ),
+          import('./form/users/users.component').then((m) => m.UsersComponent),
       },
       {
         path: 'groups/:idGroup/add-organizer',
@@ -105,13 +103,6 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'account/profile',
-        loadComponent: () =>
-          import(
-            './content/profile/profile-details/profile-details.component'
-          ).then((m) => m.ProfileDetailsComponent),
-      },
-      {
         path: 'account/edit',
         loadComponent: () =>
           import('./content/profile/profile-edit/profile-edit.component').then(
@@ -128,9 +119,16 @@ export const routes: Routes = [
       {
         path: 'account/edit-pass',
         loadComponent: () =>
+          import('./form/profile-password/profile-password.component').then(
+            (m) => m.ProfilePasswordComponent
+          ),
+      },
+      {
+        path: 'account/notification',
+        loadComponent: () =>
           import(
-            './form/profile-password/profile-password.component'
-          ).then((m) => m.ProfilePasswordComponent),
+            './content/account/account-notification/account-notification.component'
+          ).then((m) => m.AccountNotificationComponent),
       },
       {
         path: 'account/about',
@@ -138,6 +136,27 @@ export const routes: Routes = [
           import(
             './content/account/account-about/account-about.component'
           ).then((m) => m.AccountAboutComponent),
+      },
+      {
+        path: 'account/about/info',
+        loadComponent: () =>
+          import(
+            './content/account/account-about-info/account-about-info.component'
+          ).then((m) => m.AccountAboutInfoComponent),
+      },
+      {
+        path: 'account/about/contact',
+        loadComponent: () =>
+          import(
+            './content/account/account-about-contact/account-about-contact.component'
+          ).then((m) => m.AccountAboutContactComponent),
+      },
+      {
+        path: 'profile/:idUser',
+        loadComponent: () =>
+          import(
+            './content/profile/profile-details/profile-details.component'
+          ).then((m) => m.ProfileDetailsComponent),
       },
       {
         path: 'notification',
@@ -193,9 +212,7 @@ export const routes: Routes = [
       {
         path: 'login',
         loadComponent: () =>
-          import('./form/login/login.component').then(
-            (m) => m.LoginComponent
-          ),
+          import('./form/login/login.component').then((m) => m.LoginComponent),
       },
       {
         path: 'register',
@@ -207,9 +224,9 @@ export const routes: Routes = [
       {
         path: 'recovery',
         loadComponent: () =>
-          import(
-            './form/password-recovery/password-recovery.component'
-          ).then((m) => m.PasswordRecoveryComponent),
+          import('./form/password-recovery/password-recovery.component').then(
+            (m) => m.PasswordRecoveryComponent
+          ),
       },
       {
         path: '',

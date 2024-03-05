@@ -7,7 +7,7 @@ import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { UserService } from 'src/app/service/user/user.service'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { Alert } from 'src/app/helper/alert'
-import { Router, ActivatedRoute } from '@angular/router'
+import { Router, ActivatedRoute, RouterLink } from '@angular/router'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 
 @Component({
@@ -15,7 +15,13 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
   templateUrl: './meeting-user-list.component.html',
   styleUrls: ['./meeting-user-list.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, SpinnerComponent, TranslateModule],
+  imports: [
+    CommonModule,
+    IonicModule,
+    SpinnerComponent,
+    TranslateModule,
+    RouterLink,
+  ],
 })
 export class MeetingUserListComponent implements OnInit {
   @Input() user!: GetMessagesUsersMeetingsResponse

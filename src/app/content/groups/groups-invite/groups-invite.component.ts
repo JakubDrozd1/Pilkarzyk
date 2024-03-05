@@ -16,6 +16,7 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
+import { RouterLink } from '@angular/router'
 
 @Component({
   selector: 'app-groups-invite',
@@ -30,6 +31,7 @@ import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
     FormsModule,
     TranslateModule,
     SpinnerComponent,
+    RouterLink,
   ],
 })
 export class GroupsInviteComponent implements OnInit {

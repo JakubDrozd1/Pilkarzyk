@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { Component, Input, OnInit } from '@angular/core'
+import { RouterLink } from '@angular/router'
 import { IonicModule } from '@ionic/angular'
 import { GetGroupsUsersResponse } from 'libs/api-client'
 import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
@@ -9,12 +10,12 @@ import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
   templateUrl: './groups-user-list.component.html',
   styleUrls: ['./groups-user-list.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule],
+  imports: [CommonModule, IonicModule, RouterLink],
 })
 export class GroupsUserListComponent implements OnInit {
   @Input() user!: GetGroupsUsersResponse
   @Input() counter: number = 0
-  
+
   temp: File | null = null
   images: string = ''
   isReady: boolean = false

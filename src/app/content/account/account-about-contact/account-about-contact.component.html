@@ -1,0 +1,15 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()"> {{ "Back" | translate }} </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <p>{{ "ContactInfo1" | translate }}</p>
+  <p>
+    <a href="mailto:jakub.drozd@proman.com.pl">jakub.drozd&#64;proman.com.pl</a>
+  </p>
+  <p>{{ "ContactInfo2" | translate }}</p>
+  <p><app-gadu-gadu></app-gadu-gadu></p>
+</ion-content>

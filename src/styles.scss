@@ -175,6 +175,9 @@ ion-toast::part(button):active {
   transform: scale(0.8);
 }
 
-ion-card{
+ion-card {
+  border-radius: 20px;
+}
+ion-textarea {
   border-radius: 20px;
 }

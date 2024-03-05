@@ -152,7 +152,7 @@ export const routes: Routes = [
           ).then((m) => m.AccountAboutContactComponent),
       },
       {
-        path: 'profile/:idUser',
+        path: 'account/profile/:idUser',
         loadComponent: () =>
           import(
             './content/profile/profile-details/profile-details.component'

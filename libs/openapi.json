@@ -1933,6 +1933,56 @@
         }
       }
     },
+    "/api/teams/{meetingId}": {
+      "get": {
+        "tags": [
+          "Teams"
+        ],
+        "operationId": "GetAllTeamsFromMeeting",
+        "parameters": [
+          {
+            "name": "meetingId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TEAMS"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TEAMS"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TEAMS"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/token": {
       "post": {
         "tags": [
@@ -2180,6 +2230,36 @@
             "description": "Success"
           }
         }
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "changePassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUsersByLoginAndPasswordRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUsersByLoginAndPasswordRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUsersByLoginAndPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
       }
     },
     "/api/users/{userId}": {
@@ -2302,6 +2382,13 @@
           },
           {
             "name": "Email",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "PasswordNew",
             "in": "query",
             "schema": {
               "type": "string"
@@ -3304,6 +3391,25 @@
         },
         "additionalProperties": false
       },
+      "GetTeamRequest": {
+        "type": "object",
+        "properties": {
+          "IdMeeting": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "Color": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "GetTokenRequest": {
         "type": "object",
         "properties": {
@@ -3484,6 +3590,31 @@
         },
         "additionalProperties": false
       },
+      "GetUsersByLoginAndPasswordRequest": {
+        "required": [
+          "Password"
+        ],
+        "type": "object",
+        "properties": {
+          "Login": {
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "type": "string",
+            "nullable": true
+          },
+          "PasswordNew": {
+            "type": "string",
+            "nullable": true
+          },
+          "Password": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
       "GetUsersMeetingsRequest": {
         "type": "object",
         "properties": {
@@ -3492,6 +3623,13 @@
           },
           "Message": {
             "$ref": "#/components/schemas/GetMessageRequest"
+          },
+          "Team": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GetTeamRequest"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3589,6 +3727,30 @@
           "POINT": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TEAMS": {
+        "type": "object",
+        "properties": {
+          "ID_TEAMS": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IDMEETING": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "Color": {
+            "type": "string",
             "nullable": true
           }
         },

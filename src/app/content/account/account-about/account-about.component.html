@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()"> {{ "Back" | translate }} </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card>
+    <ion-card-content>
+      <ion-item
+        lines="full"
+        [routerLink]="['info']"
+        button
+        detail="true"
+        class="title"
+      >
+        <ion-icon name="information-circle-outline"></ion-icon>
+        <ion-label>{{ "Information" | translate }}</ion-label>
+      </ion-item>
+    </ion-card-content>
+
+    <ion-card-content>
+      <ion-item
+        lines="full"
+        [routerLink]="['/policy']"
+        button
+        detail="true"
+        class="title"
+      >
+        <ion-icon name="shield-outline"></ion-icon>
+        <ion-label>{{ "Privacy policy" | translate }}</ion-label>
+      </ion-item>
+    </ion-card-content>
+
+    <ion-card-content>
+      <ion-item
+        lines="full"
+        [routerLink]="['/delete-info']"
+        button
+        detail="true"
+        class="title"
+      >
+        <ion-icon name="trash-outline"></ion-icon>
+        <ion-label>{{ "Delete account" | translate }}</ion-label>
+      </ion-item>
+    </ion-card-content>
+    <ion-card-content>
+      <ion-item
+        [routerLink]="['contact']"
+        lines="full"
+        button
+        detail="true"
+        class="title"
+      >
+        <ion-icon name="call-outline"></ion-icon>
+        <ion-label>{{ "Contact" | translate }}</ion-label>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

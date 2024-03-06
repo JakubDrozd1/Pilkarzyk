@@ -10,11 +10,13 @@
  * Do not edit the class manually.
  */
 import { GetMeetingRequest } from './get-meeting-request';
+import { GetTeamRequest } from './get-team-request';
 import { GetMessageRequest } from './get-message-request';
 
 
 export interface GetUsersMeetingsRequest { 
     Meeting?: GetMeetingRequest;
     Message?: GetMessageRequest;
+    Team?: Array<GetTeamRequest> | null;
 }
 

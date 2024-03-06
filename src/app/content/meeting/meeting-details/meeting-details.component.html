@@ -7,7 +7,12 @@
     <div style="display: flex; flex-direction: row-reverse">
       @if(currentDate<(meeting.DateMeeting??0)){
       <ion-label class="click" (click)="showAlert()">
-        <ion-icon slot="end" size="large" name="hand-right-outline"></ion-icon>
+        <ion-icon
+          [color]="color"
+          slot="end"
+          size="large"
+          name="sync-circle-outline"
+        ></ion-icon>
       </ion-label>
       } @if(meeting.IdAuthor===userService.loggedUser.ID_USER){
       <ion-label
@@ -51,7 +56,12 @@
           <img alt="img" [src]="image" />
         </ion-avatar>
         }
-        <ion-label> {{ user.FIRSTNAME }} {{ user.SURNAME }} </ion-label>
+        <ion-label
+          [routerLink]="['/account/profile', user.ID_USER]"
+          class="click"
+        >
+          {{ user.FIRSTNAME }} {{ user.SURNAME }}
+        </ion-label>
       </ion-chip>
     </ion-card-content>
     <ion-card-content>

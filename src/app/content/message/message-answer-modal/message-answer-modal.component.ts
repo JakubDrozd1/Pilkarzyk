@@ -52,7 +52,6 @@ export class MessageAnswerModalComponent implements OnInit {
     public translate: TranslateService,
     private route: ActivatedRoute,
     private meetingsApi: MeetingsApi,
-    private alertController: AlertController
   ) {
     this.displayDate = moment().format()
     this.messageForm = this.fb.group({

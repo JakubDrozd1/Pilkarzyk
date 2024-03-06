@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()"> {{ "Back" | translate }} </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-text style="font-size: x-large">
+    {{ "Notifications received" | translate }}
+  </ion-text>
+  <div style="padding: 20px">
+    <ion-toggle></ion-toggle>
+    <ion-label>{{ "Invitation to the group" | translate }} </ion-label>
+    <br /><br />
+    <ion-toggle></ion-toggle
+    ><ion-label>{{ "Meeting invitation" | translate }}</ion-label
+    ><br /><br />
+    <ion-toggle></ion-toggle>
+    <ion-label>{{ "Changing a decision in a meeting" | translate }}</ion-label>
+    <br /><br />
+  </div>
+</ion-content>

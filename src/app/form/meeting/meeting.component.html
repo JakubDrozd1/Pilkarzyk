@@ -1,0 +1,106 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">
+        {{ "Cancel" | translate }}
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <app-spinner [isReady]="!isReady"></app-spinner>
+  @if(isReady){
+  <form [formGroup]="meetingForm" (ngSubmit)="onSubmit()">
+    <ion-list [inset]="true">
+      @if(isHome){
+      <ion-item lines="none">
+        <ion-select
+          justify="space-between"
+          aria-label="Groups"
+          interface="popover"
+          [placeholder]="'Select a group' | translate"
+          formControlName="group"
+          fill="outline"
+          (ionChange)="triggerEvent($event)"
+        >
+          @for(group of groups; track $index){
+          <ion-select-option [value]="group">
+            {{ group.Name }}
+          </ion-select-option>
+          }
+        </ion-select>
+      </ion-item>
+      }
+      <ion-item lines="none">
+        <ion-label> {{ "Date of meeting" | translate }} </ion-label>
+        <ion-datetime-button datetime="datetime"> </ion-datetime-button>
+      </ion-item>
+      <ion-modal [keepContentsMounted]="true">
+        <ng-template>
+          <ion-datetime
+            [firstDayOfWeek]="1"
+            [min]="displayDate"
+            max="2124-10-31"
+            id="datetime"
+            formControlName="dateMeeting"
+            [showDefaultButtons]="true"
+            [doneText]="'Done' | translate"
+            [cancelText]="'Cancel' | translate"
+          ></ion-datetime>
+        </ng-template>
+      </ion-modal>
+      <ion-item lines="none">
+        <ion-input
+          class="border"
+          helperText=" "
+          [label]="'Place' | translate"
+          labelPlacement="floating"
+          formControlName="place"
+          type="text"
+        >
+        </ion-input>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-input
+          class="border"
+          min="1"
+          helperText=" "
+          [label]="'Number of people' | translate"
+          labelPlacement="floating"
+          formControlName="quantity"
+          type="number"
+        >
+        </ion-input>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-textarea
+          class="border"
+          helperText=" "
+          [label]="'Description' | translate"
+          labelPlacement="floating"
+          formControlName="description"
+          type="text"
+          maxlength="100"
+        >
+        </ion-textarea>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-checkbox
+          labelPlacement="end"
+          justify="start"
+          formControlName="presence"
+        >
+          {{ "Check if you will also come" | translate }}
+        </ion-checkbox>
+      </ion-item>
+    </ion-list>
+    <ion-button type="submit" expand="full">
+      @if(isEdit){
+      {{ "Save" | translate }}
+      }@else {
+      {{ "Add" | translate }}
+      }
+    </ion-button>
+  </form>
+  }
+</ion-content>

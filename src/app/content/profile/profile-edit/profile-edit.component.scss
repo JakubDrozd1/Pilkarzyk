@@ -2,7 +2,49 @@
   transform: scale(0.97);
   filter: brightness(120%);
 }
+.title {
+  margin-top: 5px;
+}
 .label {
   font-size: 13px;
   color: var(--ion-color-tririary);
+}
+ion-label {
+  font-size: 15px;
+  padding: 5px;
+}
+.avatar {
+  margin: auto;
+  width: auto !important;
+  height: auto !important;
+  max-width: 200px !important;
+  max-height: 200px !important;
+  margin-top: 10px !important;
+  min-width: 200px !important;
+  min-height: 200px !important;
+  position: relative;
+}
+.avatar:active {
+  filter: brightness(120%);
+}
+img {
+  min-width: 200px !important;
+  min-height: 200px !important;
+}
+ion-avatar {
+  text-align: right;
+}
+
+.icon-avatar {
+  font-size: 24px;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: var(--ion-color-primary);
+  border-radius: 50px;
+  padding: 7px;
+}
+.icon-avatar:active {
+  transform: scale(0.97);
+  filter: brightness(120%);
 }

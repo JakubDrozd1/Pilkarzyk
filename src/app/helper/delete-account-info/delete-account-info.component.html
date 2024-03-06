@@ -1,12 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()"> {{ "Back" | translate }} </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 <ion-content class="ion-padding">
   <ion-text color="dark">
-    <ion-header>Usuń swoje konto</ion-header>
+    <ion-header class="headerInfo">Usuń swoje konto</ion-header>
     <ion-text class="padding">
       Jeśli zastanawiasz się nad usunięciem swojego konta, pamiętaj, że jest to
       decyzja trwała. Zanim podejmiesz tę decyzję, przeczytaj dokładnie kroki i
       konsekwencje.
     </ion-text>
-    <ion-header>
+    <ion-header class="headerInfo">
       Ważne uwagi przed złożeniem prośby o usunięcie konta
     </ion-header>
     <ion-label class="padding">
@@ -14,7 +21,7 @@
       zgodnie z instrukcjami, aby usunąć swoje konto, tylko jeśli jesteś
       pewien/a, że chcesz to zrobić.
     </ion-label>
-    <ion-header>Usuwanie konta użytkownika</ion-header>
+    <ion-header class="headerInfo">Usuwanie konta użytkownika</ion-header>
     <ion-text class="padding">
       Użytkownicy mogą samodzielnie zainicjować proces usunięcia konta, prosząc
       o to nasz zespół obsługi klienta.

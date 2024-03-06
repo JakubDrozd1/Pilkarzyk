@@ -1,0 +1,27 @@
+<ion-tabs>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="home" class="ion-activatable ripple-parent">
+      <ion-icon name="home-outline"></ion-icon>
+      {{ "Start" | translate }}
+    </ion-tab-button>
+    <ion-tab-button tab="notification" class="ion-activatable ripple-parent">
+      <ion-icon name="notifications-outline"></ion-icon>
+      {{ "Invitations" | translate }}
+      @if(receivedData>0){
+      <ion-badge>{{ receivedData }} </ion-badge>
+      }
+    </ion-tab-button>
+    <ion-tab-button tab="groups" class="ion-activatable ripple-parent">
+      <ion-icon name="people-outline"></ion-icon>
+      {{ "Groups" | translate }}
+    </ion-tab-button>
+    <ion-tab-button tab="calendar" class="ion-activatable ripple-parent">
+      <ion-icon name="calendar-outline"></ion-icon>
+      {{ "Calendar" | translate }}
+    </ion-tab-button>
+    <ion-tab-button tab="account" class="ion-activatable ripple-parent">
+      <ion-icon name="person-outline"></ion-icon>
+      {{ "Account" | translate }}
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>

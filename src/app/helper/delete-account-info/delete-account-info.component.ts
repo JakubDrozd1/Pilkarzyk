@@ -14,5 +14,9 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
 export class DeleteAccountInfoComponent implements OnInit {
   constructor(public translate: TranslateService) {}
 
-  ngOnInit() {}
+  ngOnInit() { }
+  
+  cancel() {
+    window.history.back()
+  }
 }

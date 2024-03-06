@@ -19,6 +19,7 @@
     <ion-modal [keepContentsMounted]="true">
       <ng-template>
         <ion-datetime
+          [firstDayOfWeek]="1"
           [min]="displayDate"
           [max]="maxDate"
           id="datetime"

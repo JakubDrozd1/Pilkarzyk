@@ -4,7 +4,7 @@ import { IonicModule } from '@ionic/angular'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { GaduGaduComponent } from '../../helper/gadu-gadu/gadu-gadu.component'
-import { NotificationContentComponent } from 'src/app/content/notification/notification-content/notification-content.component'
+import { NotificationContentComponent } from 'src/app/controller/notification-content/notification-content.component'
 
 @Component({
   selector: 'app-notification-page',

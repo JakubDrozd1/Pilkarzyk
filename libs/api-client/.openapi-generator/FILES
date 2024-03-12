@@ -11,6 +11,7 @@ api/messages.api.ts
 api/notification-tokens.api.ts
 api/rankings.api.ts
 api/reset-passwords.api.ts
+api/teams.api.ts
 api/token.api.ts
 api/users-meetings.api.ts
 api/users.api.ts
@@ -35,6 +36,8 @@ model/get-notification-token-request.ts
 model/get-ranking-request.ts
 model/get-rankings-users-groups-response.ts
 model/get-reset-password-response.ts
+model/get-team-request.ts
+model/get-team-table-message-request.ts
 model/get-token-request.ts
 model/get-token-response.ts
 model/get-update-meeting-request.ts
@@ -47,6 +50,7 @@ model/messages.ts
 model/models.ts
 model/problem-details.ts
 model/rankings.ts
+model/teams.ts
 model/users.ts
 param.ts
 variables.ts

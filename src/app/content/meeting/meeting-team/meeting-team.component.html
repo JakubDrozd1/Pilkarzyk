@@ -1,0 +1,107 @@
+<ion-header>
+  <ion-toolbar>
+    @if(!isEdit){
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()"> {{ "Back" | translate }} </ion-button>
+    </ion-buttons>
+    @if(isReady){ @if(meeting.IdAuthor===userService.loggedUser.ID_USER){
+    <ion-label
+      style="padding-right: 10px"
+      class="click"
+      slot="end"
+      (click)="swapEdit()"
+    >
+      <ion-icon size="large" name="create-outline"></ion-icon>
+    </ion-label>
+    } } } @if(isEdit){
+    <ion-icon
+      style="padding-right: 10px"
+      class="click"
+      slot="end"
+      (click)="save()"
+      name="checkmark-outline"
+      size="large"
+      color="success"
+    ></ion-icon>
+    <ion-icon
+      style="padding-right: 10px"
+      class="click"
+      slot="end"
+      (click)="leave()"
+      name="close-outline"
+      size="large"
+      color="danger"
+    ></ion-icon>
+    }
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  @if(isReady){ @if(!isEdit){
+  <ion-card>
+    <ion-card-header>
+      <ion-label class="name">
+        <ion-label>
+          {{ "No Team" | translate }}
+        </ion-label>
+        <ion-icon size="large" slot="end" name="people-outline"></ion-icon>
+      </ion-label>
+    </ion-card-header>
+    @for(user of arrays[0]; track $index){
+    <ion-chip>
+      @if(user.Avatar == null){
+      <ion-avatar>
+        <img
+          alt="img"
+          src="https://ionicframework.com/docs/img/demos/avatar.svg"
+        />
+      </ion-avatar>
+      } @else {
+      <ion-avatar>
+        <img alt="img" [src]="images[user.IdUser ?? 0]" />
+      </ion-avatar>
+      }
+
+      <ion-label>{{ user.Firstname }} {{ user.Surname }}</ion-label>
+    </ion-chip>
+    }
+  </ion-card>
+  @for(team of teams; track $index){
+  <ion-card>
+    <ion-card-header>
+      <ion-label class="name">
+        <ion-label>{{ team.NAME }}</ion-label>
+        <ion-icon
+          size="large"
+          slot="end"
+          name="shirt"
+          [style.color]="team.COLOR"
+        ></ion-icon>
+      </ion-label>
+    </ion-card-header>
+    @for(user of arrays[team.ID_TEAM??0]; track $index){
+    <ion-chip>
+      @if(user.Avatar == null){
+      <ion-avatar>
+        <img
+          alt="img"
+          src="https://ionicframework.com/docs/img/demos/avatar.svg"
+        />
+      </ion-avatar>
+      } @else {
+      <ion-avatar>
+        <img alt="img" [src]="images[user.IdUser ?? 0]" />
+      </ion-avatar>
+      }
+      <ion-label>{{ user.Firstname }} {{ user.Surname }}</ion-label>
+    </ion-chip>
+    }
+  </ion-card>
+  } } @if(isEdit){
+  <app-meeting-team-list
+    [messages]="filteredMessages"
+    [teams]="teams"
+    [images]="images"
+    (changes)="getChanges($event)"
+  ></app-meeting-team-list>
+  } }
+</ion-content>

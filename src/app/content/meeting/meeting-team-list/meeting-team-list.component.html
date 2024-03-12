@@ -1,0 +1,85 @@
+@if(isReady){
+<div
+  style="
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-content: center;
+    align-items: flex-start;
+    justify-content: space-between;
+  "
+  cdkDropListGroup
+>
+  <div [ngStyle]="{ 'max-width': isNative ? '22vh' : '' }" class="box">
+    <ion-text class="name"> {{ "No Team" | translate }}&nbsp;&nbsp; </ion-text>
+    <ion-icon size="medium" slot="end" name="people-outline"></ion-icon>
+
+    <div
+      cdkDropList
+      id="0"
+      style="min-height: 10vh; min-width: 20vh"
+      [cdkDropListData]="arrays['0']"
+      cdkDropListOrientation="horizontal"
+      (cdkDropListDropped)="drop($event)"
+      [cdkDropListConnectedTo]="connectedTo"
+      cdkDropListSortingDisabled
+    >
+      @for (item of arrays['0']; track $index) {
+      <div class="item" cdkDrag>
+        @if(item.Avatar == null){
+        <ion-avatar>
+          <img
+            alt="img"
+            src="https://ionicframework.com/docs/img/demos/avatar.svg"
+          />
+        </ion-avatar>
+        } @else {
+        <ion-avatar slot="start">
+          <img alt="img" [src]="images[item.IdUser ?? 0]" />
+        </ion-avatar>
+        }
+        <div>{{ item.Firstname }}</div>
+        <div>&nbsp;{{ item.Surname }}</div>
+      </div>
+
+      }
+    </div>
+  </div>
+  @for(team of teams; track $index){
+  <div [ngStyle]="{ 'max-width': isNative ? '22vh' : '' }" class="box">
+    <ion-text class="name"> {{ team.NAME }}&nbsp;&nbsp; </ion-text>
+    <ion-icon slot="end" name="shirt" [style.color]="team.COLOR"></ion-icon>
+    <div
+      style="min-height: 10vh; min-width: 20vh"
+      cdkDropList
+      cdkDropListSortingDisabled
+      cdkDropListOrientation="horizontal"
+      [id]="team.ID_TEAM?.toString() ?? ''"
+      [cdkDropListData]="arrays[team.ID_TEAM ?? '']"
+      (cdkDropListDropped)="drop($event)"
+      [cdkDropListConnectedTo]="connectedTo"
+    >
+      @for (item of arrays[team.ID_TEAM ?? '']; track $index) {
+
+      <div class="item" cdkDropListSortingDisabled cdkDrag>
+        @if(item.Avatar == null){
+        <ion-avatar>
+          <img
+            alt="img"
+            src="https://ionicframework.com/docs/img/demos/avatar.svg"
+          />
+        </ion-avatar>
+        } @else {
+        <ion-avatar slot="start">
+          <img alt="img" [src]="images[item.IdUser ?? 0]" />
+        </ion-avatar>
+        }
+        <div>{{ item.Firstname }}</div>
+        <div>&nbsp;{{ item.Surname }}</div>
+      </div>
+      }
+    </div>
+  </div>
+  }
+</div>
+}

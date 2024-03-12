@@ -1380,6 +1380,36 @@
             "description": "Success"
           }
         }
+      },
+      "put": {
+        "tags": [
+          "Messages"
+        ],
+        "operationId": "UpdateTeamMessageAsync",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetTeamTableMessageRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetTeamTableMessageRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetTeamTableMessageRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
       }
     },
     "/api/messages/{messageId}": {
@@ -1926,6 +1956,56 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GetResetPasswordResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/teams/{meetingId}": {
+      "get": {
+        "tags": [
+          "Teams"
+        ],
+        "operationId": "GetAllTeamsFromMeeting",
+        "parameters": [
+          {
+            "name": "meetingId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TEAMS"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TEAMS"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TEAMS"
+                  }
                 }
               }
             }
@@ -3216,6 +3296,11 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "IdTeam": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3337,6 +3422,48 @@
           "DateAdd": {
             "type": "string",
             "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetTeamRequest": {
+        "type": "object",
+        "properties": {
+          "IdMeeting": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Name": {
+            "type": "string",
+            "nullable": true
+          },
+          "Color": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetTeamTableMessageRequest": {
+        "type": "object",
+        "properties": {
+          "Teams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TEAMS"
+            },
+            "nullable": true
+          },
+          "UpdatedTeams": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/GetMessagesUsersMeetingsResponse"
+              }
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3554,6 +3681,13 @@
           },
           "Message": {
             "$ref": "#/components/schemas/GetMessageRequest"
+          },
+          "Team": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GetTeamRequest"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3593,6 +3727,11 @@
           "DATE_RESPONSE": {
             "type": "string",
             "format": "date-time",
+            "nullable": true
+          },
+          "IDTEAM": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           }
         },
@@ -3651,6 +3790,30 @@
           "POINT": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TEAMS": {
+        "type": "object",
+        "properties": {
+          "ID_TEAM": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IDMEETING": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "NAME": {
+            "type": "string",
+            "nullable": true
+          },
+          "COLOR": {
+            "type": "string",
             "nullable": true
           }
         },

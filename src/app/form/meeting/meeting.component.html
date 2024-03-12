@@ -69,6 +69,7 @@
           labelPlacement="floating"
           formControlName="quantity"
           type="number"
+          (keypress)="checkInputQuantity($event)"
         >
         </ion-input>
       </ion-item>
@@ -93,6 +94,39 @@
           {{ "Check if you will also come" | translate }}
         </ion-checkbox>
       </ion-item>
+      <ion-item lines="none">
+        <ion-checkbox
+          labelPlacement="end"
+          justify="start"
+          formControlName="teams"
+          (ngModelChange)="changeTeam($event)"
+        >
+          {{ "Add teams" | translate }}
+        </ion-checkbox>
+      </ion-item>
+      @if(this.meetingForm.value.teams){
+      <ion-item lines="none">
+        <ion-input
+          class="border"
+          minlength="1"
+          maxlength="1"
+          helperText=" "
+          [label]="'Number of teams' | translate"
+          labelPlacement="floating"
+          formControlName="quantityTeams"
+          type="number"
+          (keypress)="checkInputQuantityTeams($event)"
+        >
+        </ion-input>
+      </ion-item>
+      @if(this.meetingForm.value.quantityTeams>1){ @for(team of
+      getNumberArray(this.meetingForm.value.quantityTeams) ; track $index){
+      <app-team-generator
+        [counter]="$index"
+        [color]="color[$index]"
+        (dataEvent)="collectData($event)"
+      ></app-team-generator>
+      } } }
     </ion-list>
     <ion-button type="submit" expand="full">
       @if(isEdit){

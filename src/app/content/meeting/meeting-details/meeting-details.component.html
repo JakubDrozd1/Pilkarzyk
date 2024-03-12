@@ -104,7 +104,23 @@
       <ion-label> {{ acceptMeeting }} / {{ meeting.Quantity }}</ion-label>
     </ion-card-content>
   </ion-card>
-  @if( meeting.Description){
+
+  @if(teams.length>0){
+  <ion-card
+    class="click"
+    [routerLink]="['/meeting', meeting.IdMeeting, 'team']"
+  >
+    <ion-card-header> {{ "Teams" | translate }}</ion-card-header>
+    @for(team of teams; track $index){
+    <ion-item lines="full">
+      {{ team.NAME }}
+      <ion-icon slot="end" name="shirt" [style.color]="team.COLOR"></ion-icon>
+    </ion-item>
+    <br />
+    }
+  </ion-card>
+
+  } @if( meeting.Description){
   <ion-card>
     <ion-card-header> {{ "Description" | translate }} </ion-card-header>
     <ion-list [inset]="true">

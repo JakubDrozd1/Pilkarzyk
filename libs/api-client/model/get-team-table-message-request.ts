@@ -9,14 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { GetMeetingRequest } from './get-meeting-request';
-import { GetTeamRequest } from './get-team-request';
-import { GetMessageRequest } from './get-message-request';
+import { GetMessagesUsersMeetingsResponse } from './get-messages-users-meetings-response';
+import { TEAMS } from './teams';
 
 
-export interface GetUsersMeetingsRequest { 
-    Meeting?: GetMeetingRequest;
-    Message?: GetMessageRequest;
-    Team?: Array<GetTeamRequest> | null;
+export interface GetTeamTableMessageRequest { 
+    Teams?: Array<TEAMS> | null;
+    UpdatedTeams?: { [key: string]: Array<GetMessagesUsersMeetingsResponse>; } | null;
 }
 

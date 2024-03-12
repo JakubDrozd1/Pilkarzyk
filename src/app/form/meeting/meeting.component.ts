@@ -24,6 +24,8 @@ import { SpinnerComponent } from '../../helper/spinner/spinner.component'
 import { ActivatedRoute } from '@angular/router'
 import { UserService } from 'src/app/service/user/user.service'
 import { IonSelectCustomEvent } from '@ionic/core'
+import { TeamGeneratorComponent } from '../team-generator/team-generator.component'
+import { OneToTenValidator } from 'src/app/helper/customValidators'
 
 @Component({
   selector: 'app-meeting',
@@ -37,6 +39,7 @@ import { IonSelectCustomEvent } from '@ionic/core'
     FormsModule,
     TranslateModule,
     SpinnerComponent,
+    TeamGeneratorComponent,
   ],
 })
 export class MeetingComponent implements OnInit {
@@ -52,6 +55,23 @@ export class MeetingComponent implements OnInit {
   idMeeting: number = 0
   meeting!: GetMessagesUsersMeetingsResponse
   isEdit: boolean = true
+  numbers: string[] = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+  color: string[] = [
+    '#ff0000',
+    '#0000ff',
+    '#008000',
+    '#ffffff',
+    '#000000',
+    '#ff84fe',
+    '#ffff00',
+    '#800080',
+    '#ffa500',
+  ]
+  collectedData: {
+    number: number
+    name: string
+    color: string
+  }[] = []
 
   constructor(
     private fb: FormBuilder,
@@ -70,10 +90,12 @@ export class MeetingComponent implements OnInit {
       quantity: ['', Validators.required],
       description: [''],
       presence: [true],
+      teams: [false],
     })
   }
 
   ngOnInit() {
+    this.color.sort(() => Math.random() - 0.5)
     this.route.params.subscribe((params) => {
       if (params?.['idGroup'] > 0) {
         this.isEdit = false
@@ -131,40 +153,81 @@ export class MeetingComponent implements OnInit {
     if (this.meetingForm.valid) {
       this.isReady = false
       if (!this.isEdit) {
-        this.meetingsApi
-          .addMeeting({
-            getUsersMeetingsRequest: {
-              Meeting: {
-                DateMeeting: this.meetingForm.value.dateMeeting,
-                Place: this.meetingForm.value.place,
-                Quantity: this.meetingForm.value.quantity,
-                Description: this.meetingForm.value.description,
-                IdGroup: this.isHome
-                  ? this.meetingForm.value.group.IdGroup
-                  : this.idGroup,
-                IdAuthor: this.userService.loggedUser.ID_USER,
+        if (this.collectedData.length > 0) {
+          this.meetingsApi
+            .addMeeting({
+              getUsersMeetingsRequest: {
+                Meeting: {
+                  DateMeeting: this.meetingForm.value.dateMeeting,
+                  Place: this.meetingForm.value.place,
+                  Quantity: this.meetingForm.value.quantity,
+                  Description: this.meetingForm.value.description,
+                  IdGroup: this.isHome
+                    ? this.meetingForm.value.group.IdGroup
+                    : this.idGroup,
+                  IdAuthor: this.userService.loggedUser.ID_USER,
+                },
+                Message: {
+                  IdUser: this.userService.loggedUser.ID_USER,
+                  Answer: this.meetingForm.value.presence ? 'yes' : 'no',
+                },
+                Team: this.collectedData.map((item) => ({
+                  Name: item.name,
+                  Color: item.color,
+                })),
               },
-              Message: {
-                IdUser: this.userService.loggedUser.ID_USER,
-                Answer: this.meetingForm.value.presence ? 'yes' : 'no',
+            })
+            .subscribe({
+              next: () => {
+                this.alert.presentToast(
+                  this.translate.instant('Successully added meeting')
+                )
+                this.meetingForm.reset()
+                this.refreshDataService.refresh('groups-content')
+                this.cancel()
               },
-            },
-          })
-          .subscribe({
-            next: () => {
-              this.alert.presentToast(
-                this.translate.instant('Successully added meeting')
-              )
-              this.meetingForm.reset()
-              this.refreshDataService.refresh('groups-content')
-              this.cancel()
-            },
-            error: (error) => {
-              this.alert.handleError(error)
-              this.cancel()
-              this.isReady = true
-            },
-          })
+              error: (error) => {
+                this.alert.handleError(error)
+                this.cancel()
+                this.isReady = true
+              },
+            })
+        } else {
+          this.meetingsApi
+            .addMeeting({
+              getUsersMeetingsRequest: {
+                Meeting: {
+                  DateMeeting: this.meetingForm.value.dateMeeting,
+                  Place: this.meetingForm.value.place,
+                  Quantity: this.meetingForm.value.quantity,
+                  Description: this.meetingForm.value.description,
+                  IdGroup: this.isHome
+                    ? this.meetingForm.value.group.IdGroup
+                    : this.idGroup,
+                  IdAuthor: this.userService.loggedUser.ID_USER,
+                },
+                Message: {
+                  IdUser: this.userService.loggedUser.ID_USER,
+                  Answer: this.meetingForm.value.presence ? 'yes' : 'no',
+                },
+              },
+            })
+            .subscribe({
+              next: () => {
+                this.alert.presentToast(
+                  this.translate.instant('Successully added meeting')
+                )
+                this.meetingForm.reset()
+                this.refreshDataService.refresh('groups-content')
+                this.cancel()
+              },
+              error: (error) => {
+                this.alert.handleError(error)
+                this.cancel()
+                this.isReady = true
+              },
+            })
+        }
       } else {
         this.meetingsApi
           .updateColumnMeeting({
@@ -272,5 +335,65 @@ export class MeetingComponent implements OnInit {
 
   triggerEvent($event: IonSelectCustomEvent<SelectChangeEventDetail<any>>) {
     this.getLastMeeting($event.detail.value.IdGroup)
+  }
+
+  getNumberArray(endNumber: number): number[] {
+    return Array.from({ length: endNumber }, (_, index) => index)
+  }
+
+  checkInputQuantityTeams(event: KeyboardEvent): void {
+    const charCode = event.key
+    if (!this.numbers.includes(charCode)) {
+      event.preventDefault()
+    } else {
+      let newValue
+      if (this.meetingForm.value.quantityTeams) {
+        newValue = this.meetingForm.value.quantityTeams + charCode
+      } else {
+        newValue = charCode
+      }
+      if (newValue.length > 1 && newValue !== '10') {
+        event.preventDefault()
+      }
+    }
+  }
+
+  checkInputQuantity(event: KeyboardEvent): void {
+    const charCode = event.key
+    if (!this.numbers.includes(charCode)) {
+      event.preventDefault()
+    } else {
+      let newValue
+      if (this.meetingForm.value.quantity) {
+        newValue = this.meetingForm.value.quantity + charCode
+      } else {
+        newValue = charCode
+      }
+      if (newValue.length > 2 && newValue !== '100') {
+        event.preventDefault()
+      }
+    }
+  }
+
+  collectData($event: { number: number; name: string; color: string }) {
+    const existingIndex = this.collectedData.findIndex(
+      (data) => data.number === $event.number
+    )
+    if (existingIndex !== -1) {
+      this.collectedData[existingIndex] = $event
+    } else {
+      this.collectedData.push($event)
+    }
+  }
+
+  changeTeam($event: any) {
+    if ($event) {
+      this.meetingForm.addControl(
+        'quantityTeams',
+        this.fb.control('', OneToTenValidator())
+      )
+    } else {
+      this.meetingForm.removeControl('quantityTeams')
+    }
   }
 }

@@ -13,9 +13,7 @@ import {
 } from 'libs/api-client'
 import { forkJoin } from 'rxjs'
 import { Alert } from 'src/app/helper/alert'
-import {
-  convertBase64ToFile,
-} from 'src/app/helper/convertBase64ToFile'
+import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
 import { UserService } from 'src/app/service/user/user.service'
 import { MeetingTeamListComponent } from '../meeting-team-list/meeting-team-list.component'
 
@@ -216,6 +214,7 @@ export class MeetingTeamComponent implements OnInit {
           this.alert.presentToast(
             this.translate.instant('Changes successfully saved')
           )
+          this.isEdit = false
           this.getDetails()
         },
         error: (error) => {

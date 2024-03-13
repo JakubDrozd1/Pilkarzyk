@@ -46,6 +46,7 @@
             [showDefaultButtons]="true"
             [doneText]="'Done' | translate"
             [cancelText]="'Cancel' | translate"
+            [locale]="lang"
           ></ion-datetime>
         </ng-template>
       </ion-modal>
@@ -128,7 +129,7 @@
       ></app-team-generator>
       } } }
     </ion-list>
-    <ion-button type="submit" expand="full">
+    <ion-button shape="round" type="submit" expand="full">
       @if(isEdit){
       {{ "Save" | translate }}
       }@else {

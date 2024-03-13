@@ -17,17 +17,17 @@
     [meeting]="meeting"
     [isCurrent]="true"
   ></app-meeting-content>
-  } }@else {
-  <ion-item style="padding: 5px" lines="none">
-    {{ "You have no meetings today" | translate }}
-  </ion-item>
-  }} @if(isReady){ @if(meetingsExpired.length > 0){
+  } }} @if(isReady){ @if(meetingsExpired.length > 0){
   <ion-item lines="full">{{ "Archival" | translate }}</ion-item>
   @for(meeting of meetingsExpired; track $index){
   <app-meeting-content
     [meeting]="meeting"
     [isCurrent]="false"
   ></app-meeting-content>
+  } @if(meetingsActive.length<=0&&meetingsExpired.length<=0){
+  <ion-item style="padding: 5px" lines="none">
+    {{ "You have no meetings today" | translate }}
+  </ion-item>
   }
   <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>

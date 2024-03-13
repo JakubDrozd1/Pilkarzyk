@@ -43,6 +43,7 @@ export class MessageAnswerModalComponent implements OnInit {
   message!: MESSAGES
   isReady: boolean = true
   meeting!: GetMeetingGroupsResponse
+  lang: string = ''
 
   constructor(
     private fb: FormBuilder,
@@ -51,7 +52,7 @@ export class MessageAnswerModalComponent implements OnInit {
     private refreshDataService: RefreshDataService,
     public translate: TranslateService,
     private route: ActivatedRoute,
-    private meetingsApi: MeetingsApi,
+    private meetingsApi: MeetingsApi
   ) {
     this.displayDate = moment().format()
     this.messageForm = this.fb.group({
@@ -60,6 +61,7 @@ export class MessageAnswerModalComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.lang = localStorage.getItem('langUser') ?? 'en'
     this.route.params.subscribe((params) => {
       if (params?.['idMessage'] > 0) {
         this.idMessage = parseInt(params?.['idMessage'])

@@ -72,6 +72,7 @@ export class MeetingComponent implements OnInit {
     name: string
     color: string
   }[] = []
+  lang: string = ''
 
   constructor(
     private fb: FormBuilder,
@@ -95,6 +96,7 @@ export class MeetingComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.lang = localStorage.getItem('langUser') ?? 'en'
     this.color.sort(() => Math.random() - 0.5)
     this.route.params.subscribe((params) => {
       if (params?.['idGroup'] > 0) {

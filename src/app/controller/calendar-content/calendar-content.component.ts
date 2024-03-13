@@ -60,7 +60,7 @@ export class CalendarContentComponent implements OnInit {
         }
       })
     )
-    this.lang = localStorage.getItem('lang') ?? 'en'
+    this.lang = localStorage.getItem('langUser') ?? 'en'
     this.getDetails()
   }
 

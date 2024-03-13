@@ -170,6 +170,8 @@
   "Color": "Color",
   "Old password": "Old password",
   "Add teams": "Add teams",
+  "Yes": "Yes",
+  "No": "No",
 
   "Group is null": "Group doesn't exist.",
   "User is null": "User doesn't exist",

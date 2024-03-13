@@ -41,7 +41,7 @@ export class MeetingTeamComponent implements OnInit {
   isEdit: boolean = false
   public changeButtons = [
     {
-      text: this.translate.instant('yes'),
+      text: this.translate.instant('Yes'),
       role: 'submit',
       handler: () => {
         this.isEdit = false
@@ -49,20 +49,20 @@ export class MeetingTeamComponent implements OnInit {
       },
     },
     {
-      text: this.translate.instant('no'),
+      text: this.translate.instant('No'),
       role: 'cancel',
     },
   ]
   public okButtons = [
     {
-      text: this.translate.instant('yes'),
+      text: this.translate.instant('Yes'),
       role: 'submit',
       handler: () => {
         this.saveTeams()
       },
     },
     {
-      text: this.translate.instant('no'),
+      text: this.translate.instant('No'),
       role: 'cancel',
     },
   ]
@@ -225,6 +225,5 @@ export class MeetingTeamComponent implements OnInit {
 
   getChanges($event: { [key: string]: GetMessagesUsersMeetingsResponse[] }) {
     this.arrays = $event
-    console.log(this.arrays)
   }
 }

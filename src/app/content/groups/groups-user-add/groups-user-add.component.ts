@@ -84,7 +84,6 @@ export class GroupsUserAddComponent implements OnInit {
               return true
             }
           })
-          console.log(this.invites)
           this.isReady = true
         },
         error: (error) => {

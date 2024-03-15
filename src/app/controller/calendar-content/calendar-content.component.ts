@@ -74,7 +74,6 @@ export class CalendarContentComponent implements OnInit {
         sortColumn: 'DATE_MEETING',
         sortMode: 'ASC',
         idUser: this.userService.loggedUser.ID_USER,
-        answer: 'yes',
         withMessages: true,
       })
       .subscribe({
@@ -141,7 +140,6 @@ export class CalendarContentComponent implements OnInit {
             sortMode: 'ASC',
             dateFrom: startOfDay,
             dateTo: endOfDay,
-            answer: 'yes',
             idUser: this.userService.loggedUser.ID_USER,
             withMessages: true,
           })

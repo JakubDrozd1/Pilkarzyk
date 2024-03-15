@@ -17,7 +17,14 @@
     [meeting]="meeting"
     [isCurrent]="true"
   ></app-meeting-content>
-  } }} @if(isReady){ @if(meetingsExpired.length > 0){
+  } } @if(rejectedActiveMeeting.length > 0){
+  <ion-item lines="full">{{ "Rejected" | translate }}</ion-item>
+  @for(meeting of rejectedActiveMeeting; track $index){
+  <app-meeting-content
+    [meeting]="meeting"
+    [isCurrent]="true"
+  ></app-meeting-content>
+  } } @if(meetingsExpired.length > 0){
   <ion-item lines="full">{{ "Archival" | translate }}</ion-item>
   @for(meeting of meetingsExpired; track $index){
   <app-meeting-content

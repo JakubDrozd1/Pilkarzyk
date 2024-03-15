@@ -28,18 +28,19 @@
     </ion-button>
     }}
   </ion-list>
+
   <app-spinner [isReady]="!isReadyRefresh"></app-spinner>
-  @if(isReadyRefresh){@if(selectedDate){ @if(selectedDate.length>0){ @for (item
-  of meetingsSelected; track $index) {
-  <app-meeting-content
-    [meeting]="item"
-    component="calendar"
-  ></app-meeting-content>
-  } }@else { @for (item of meetings; track $index) {
-  <app-meeting-content
-    [meeting]="item"
-    component="calendar"
-  ></app-meeting-content>
-  } }}}
+
+  @if(isReadyRefresh){ @if(selectedDate.length>0){ @for (item of
+  meetingsSelected; track $index) {
+
+  <app-meeting-content [meeting]="item"></app-meeting-content>
+  } } @else if(meetings.length>0){ @for (item of meetings; track $index) {
+  <app-meeting-content [meeting]="item"></app-meeting-content>
+  } }@else {
+  <ion-item style="padding: 5px" lines="none">
+    {{ "You have no meetings today" | translate }}
+  </ion-item>
+  } }
 </ion-content>
 }

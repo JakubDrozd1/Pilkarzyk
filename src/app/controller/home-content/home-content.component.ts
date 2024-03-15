@@ -61,6 +61,7 @@ export class HomeContentComponent implements OnInit {
   isOrganizer: boolean = false
   counter: number = 1
   formattedDateTime: string = ''
+  rejectedActiveMeeting: GetMeetingGroupsResponse[] = []
 
   constructor(
     private alert: Alert,
@@ -97,6 +98,16 @@ export class HomeContentComponent implements OnInit {
         answer: 'yes',
         withMessages: true,
       }),
+      rejectedActiveMeeting: this.meetingsApi.getAllMeetings({
+        page: 0,
+        onPage: -1,
+        sortColumn: 'DATE_MEETING',
+        sortMode: 'ASC',
+        dateFrom: this.formattedDateTime,
+        idUser: this.userService.loggedUser.ID_USER,
+        answer: 'no',
+        withMessages: true,
+      }),
       expiredMeetign: this.meetingsApi.getAllMeetings({
         page: 0,
         onPage: 5,
@@ -109,6 +120,7 @@ export class HomeContentComponent implements OnInit {
       }),
     }).subscribe({
       next: (responses) => {
+        this.rejectedActiveMeeting = responses.rejectedActiveMeeting
         this.meetingsActive = responses.activeMeeting
         this.meetingsExpired = responses.expiredMeetign
         this.isReady = true

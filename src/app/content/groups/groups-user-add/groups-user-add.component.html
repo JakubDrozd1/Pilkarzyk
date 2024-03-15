@@ -32,7 +32,14 @@
       <ion-card-header>{{ "Date sent" | translate }}</ion-card-header>
     </div>
     @for(invite of invites; track $index){
-    <div style="display: flex; justify-content: space-between">
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        padding-left: 5px;
+        padding-right: 5px;
+      "
+    >
       <div style="display: flex">
         <ion-chip> {{ invite.Email }} </ion-chip>
       </div>

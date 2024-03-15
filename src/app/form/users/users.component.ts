@@ -64,7 +64,7 @@ export class UsersComponent implements OnInit {
           getGroupInviteRequest: {
             IdGroup: this.idGroup,
             IdAuthor: this.userService.loggedUser.ID_USER,
-            Email: this.addNewUserForm.value.email,
+            Email: this.addNewUserForm.value.email.toLowerCase().trim(),
           },
         })
         .subscribe({

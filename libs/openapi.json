@@ -1054,6 +1054,14 @@
             }
           },
           {
+            "name": "IdAuthor",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
             "name": "Answer",
             "in": "query",
             "schema": {
@@ -2954,7 +2962,8 @@
           },
           "IdUser": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "IdAuthor": {
             "type": "integer",

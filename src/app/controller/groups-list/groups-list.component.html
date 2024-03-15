@@ -79,8 +79,14 @@
   <ion-item class="header" lines="none">
     {{ "No groups" | translate }}
   </ion-item>
-  } } } @if(userService.loggedUser.IS_ADMIN ||
+  } } } @if(!userService.loggedUser.IS_ADMIN &&
   (userService.loggedUser.GROUP_COUNTER??0)>0){
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button [routerLink]="['add']">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  } @if(userService.loggedUser.IS_ADMIN){
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button>
       <ion-icon name="add"></ion-icon>

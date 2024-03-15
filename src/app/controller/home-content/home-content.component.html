@@ -32,7 +32,13 @@
   <ion-item style="padding: 5px" lines="none">
     {{ "You have no meetings today" | translate }}
   </ion-item>
-  } } @if(isOrganizer){
+  } } @if(!userService.loggedUser.IS_ADMIN && isOrganizer){
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button [routerLink]="['add-meeting']">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  } @if(userService.loggedUser.IS_ADMIN){
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button>
       <ion-icon name="add"></ion-icon>

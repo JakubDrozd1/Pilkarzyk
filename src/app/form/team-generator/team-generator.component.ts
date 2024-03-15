@@ -30,7 +30,7 @@ export class TeamGeneratorComponent implements OnInit {
 
   @Input() counter: number = 0
   @Input() color: string = ''
-  name: string = ''
+  @Input() name: string = ''
   isReady: boolean = false
   customColor: string = ''
   customName: string = ''
@@ -43,7 +43,9 @@ export class TeamGeneratorComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.name = 'Team ' + this.counter
+    if (this.name == '') {
+      this.name = 'Team ' + this.counter
+    }
     this.sendData()
   }
 

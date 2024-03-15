@@ -127,9 +127,6 @@ export class GroupsContentComponent implements OnInit {
           if (this.groupUser) {
             this.permission = Boolean(this.groupUser.AccountType)
           }
-          if (!this.permission) {
-            this.permission = Boolean(this.userService.loggedUser.IS_ADMIN)
-          }
           this.isReady = true
           this.visitedMeetings = false
         },

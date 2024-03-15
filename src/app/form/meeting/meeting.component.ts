@@ -1,3 +1,4 @@
+import { TeamsApi } from './../../../../libs/api-client/api/teams.api'
 import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import {
@@ -15,9 +16,10 @@ import {
   GroupsUsersApi,
   MeetingsApi,
   MessagesApi,
+  TEAMS,
 } from 'libs/api-client'
 import * as moment from 'moment'
-import { Observable } from 'rxjs'
+import { Observable, forkJoin } from 'rxjs'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { SpinnerComponent } from '../../helper/spinner/spinner.component'
@@ -73,6 +75,7 @@ export class MeetingComponent implements OnInit {
     color: string
   }[] = []
   lang: string = ''
+  teams: TEAMS[] = []
 
   constructor(
     private fb: FormBuilder,
@@ -83,7 +86,8 @@ export class MeetingComponent implements OnInit {
     public translate: TranslateService,
     private route: ActivatedRoute,
     private userService: UserService,
-    private messagesApi: MessagesApi
+    private messagesApi: MessagesApi,
+    private teamsApi: TeamsApi
   ) {
     this.meetingForm = this.fb.group({
       dateMeeting: ['', Validators.required],
@@ -92,6 +96,7 @@ export class MeetingComponent implements OnInit {
       description: [''],
       presence: [true],
       teams: [false],
+      quantityTeams: [],
     })
   }
 
@@ -141,6 +146,7 @@ export class MeetingComponent implements OnInit {
             this.groups = response.filter((obj) => obj.AccountType === 1)
             if (this.groups.length == 1) {
               this.meetingForm.get('group')?.setValue(this.groups[0])
+              this.getLastMeeting(this.groups[0].IdGroup ?? 0)
             }
           }
         },
@@ -269,34 +275,45 @@ export class MeetingComponent implements OnInit {
   getMeeting() {
     if (this.idMeeting > 0) {
       this.isReady = false
-      this.messagesApi
-        .getAllMessages({
+      forkJoin({
+        meeting: this.messagesApi.getAllMessages({
           idMeeting: this.idMeeting,
           idUser: this.userService.loggedUser.ID_USER,
           page: 0,
           onPage: -1,
-        })
-        .subscribe({
-          next: (response) => {
-            this.meeting = response[0]
+        }),
+        teams: this.teamsApi.getAllTeamsFromMeeting({
+          meetingId: this.idMeeting,
+        }),
+      }).subscribe({
+        next: (responses) => {
+          this.meeting = responses.meeting[0]
+          this.teams = responses.teams
+          this.meetingForm
+            .get('dateMeeting')
+            ?.setValue(this.meeting.DateMeeting)
+          this.meetingForm.get('place')?.setValue(this.meeting.Place)
+          this.meetingForm.get('quantity')?.setValue(this.meeting.Quantity)
+          this.meetingForm
+            .get('description')
+            ?.setValue(this.meeting.Description)
+          this.meetingForm
+            .get('presence')
+            ?.setValue(this.meeting.Answer == 'yes')
+          if (responses.teams.length > 0) {
+            this.meetingForm.get('teams')?.setValue('true')
             this.meetingForm
-              .get('dateMeeting')
-              ?.setValue(this.meeting.DateMeeting)
-            this.meetingForm.get('place')?.setValue(this.meeting.Place)
-            this.meetingForm.get('quantity')?.setValue(this.meeting.Quantity)
-            this.meetingForm
-              .get('description')
-              ?.setValue(this.meeting.Description)
-            this.meetingForm
-              .get('presence')
-              ?.setValue(this.meeting.Answer == 'yes')
-            this.isReady = true
-          },
-          error: (error) => {
-            this.alert.handleError(error)
-            this.isReady = true
-          },
-        })
+              .get('quantityTeams')
+              ?.setValue(responses.teams.length)
+          }
+
+          this.isReady = true
+        },
+        error: (error) => {
+          this.alert.handleError(error)
+          this.isReady = true
+        },
+      })
     }
   }
 
@@ -310,6 +327,7 @@ export class MeetingComponent implements OnInit {
           onPage: 1,
           sortColumn: 'ID_MEETING',
           sortMode: 'DESC',
+          idAuthor: this.userService.loggedUser.ID_USER,
         })
         .subscribe({
           next: (response) => {

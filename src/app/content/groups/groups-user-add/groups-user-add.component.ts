@@ -72,7 +72,19 @@ export class GroupsUserAddComponent implements OnInit {
       })
       .subscribe({
         next: (response) => {
-          this.invites = response
+          const currentDate = new Date()
+          const twentyFourHoursAgo = new Date(
+            currentDate.getTime() - 24 * 60 * 60 * 1000
+          )
+          this.invites = response.filter((invite) => {
+            if (invite.IdUser == null) {
+              const dateAdd = new Date(String(invite.DateAdd))
+              return dateAdd > twentyFourHoursAgo
+            } else {
+              return true
+            }
+          })
+          console.log(this.invites)
           this.isReady = true
         },
         error: (error) => {

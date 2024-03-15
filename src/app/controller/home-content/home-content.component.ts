@@ -65,7 +65,7 @@ export class HomeContentComponent implements OnInit {
   constructor(
     private alert: Alert,
     private refreshDataService: RefreshDataService,
-    private userService: UserService,
+    public userService: UserService,
     public translate: TranslateService,
     public notificationService: NotificationService,
     private groupsUsersApi: GroupsUsersApi,

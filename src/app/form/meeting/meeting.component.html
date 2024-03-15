@@ -95,6 +95,7 @@
           {{ "Check if you will also come" | translate }}
         </ion-checkbox>
       </ion-item>
+      @if(!isEdit){
       <ion-item lines="none">
         <ion-checkbox
           labelPlacement="end"
@@ -120,14 +121,22 @@
         >
         </ion-input>
       </ion-item>
-      @if(this.meetingForm.value.quantityTeams>1){ @for(team of
+      @if(!isEdit){ @if(this.meetingForm.value.quantityTeams>1){ @for(team of
       getNumberArray(this.meetingForm.value.quantityTeams) ; track $index){
       <app-team-generator
         [counter]="$index"
         [color]="color[$index]"
         (dataEvent)="collectData($event)"
       ></app-team-generator>
-      } } }
+      } } }} @if(isEdit){ @if(teams.length>0){ @for(team of teams ; track
+      $index){
+      <app-team-generator
+        [counter]="$index"
+        [name]="team.NAME ?? ''"
+        [color]="team.COLOR ?? ''"
+        (dataEvent)="collectData($event)"
+      ></app-team-generator
+      >} } }}
     </ion-list>
     <ion-button shape="round" type="submit" expand="full">
       @if(isEdit){

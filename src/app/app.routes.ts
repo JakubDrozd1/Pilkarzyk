@@ -243,7 +243,7 @@ export const routes: Routes = [
     ],
   },
   {
-    path: 'register/:idGroup',
+    path: 'register/:idGroupInvite',
     component: RegisterLinkComponent,
   },
   {

@@ -11,13 +11,12 @@
  */
 
 
-export interface GetEmailSenderRequest { 
-    To?: string | null;
-    Name?: string | null;
-    Surname?: string | null;
-    GroupName?: string | null;
-    IdGroup?: number;
-    BlindCarbonCopy?: Array<string> | null;
-    CarbonCopy?: Array<string> | null;
+export interface GROUPINVITE { 
+    ID_GROUP_INVITE?: number | null;
+    IDGROUP?: number;
+    IDUSER?: number | null;
+    EMAIL?: string | null;
+    IDAUTHOR?: number;
+    DATE_ADD?: string | null;
 }
 

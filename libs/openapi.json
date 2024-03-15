@@ -195,6 +195,13 @@
               "type": "integer",
               "format": "int32"
             }
+          },
+          {
+            "name": "Email",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -256,6 +263,47 @@
         "responses": {
           "200": {
             "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/group-invites/{groupInviteId}": {
+      "get": {
+        "tags": [
+          "GroupInvites"
+        ],
+        "operationId": "GetGroupInviteById",
+        "parameters": [
+          {
+            "name": "groupInviteId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GROUP_INVITE"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GROUP_INVITE"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GROUP_INVITE"
+                }
+              }
+            }
           }
         }
       }
@@ -1006,6 +1054,14 @@
             }
           },
           {
+            "name": "IdAuthor",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
             "name": "Answer",
             "in": "query",
             "schema": {
@@ -1371,6 +1427,36 @@
             "application/*+json": {
               "schema": {
                 "$ref": "#/components/schemas/GetMessageRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Messages"
+        ],
+        "operationId": "UpdateTeamMessageAsync",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetTeamTableMessageRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetTeamTableMessageRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetTeamTableMessageRequest"
               }
             }
           }
@@ -2553,38 +2639,6 @@
         }
       }
     },
-    "/api/users/sendInvitationEmail": {
-      "post": {
-        "tags": [
-          "Users"
-        ],
-        "operationId": "SendInvitationEmail",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetEmailSenderRequest"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetEmailSenderRequest"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetEmailSenderRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
     "/api/users-meetings/all": {
       "get": {
         "tags": [
@@ -2767,6 +2821,39 @@
         },
         "additionalProperties": false
       },
+      "GROUP_INVITE": {
+        "type": "object",
+        "properties": {
+          "ID_GROUP_INVITE": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IDGROUP": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "IDUSER": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "EMAIL": {
+            "type": "string",
+            "nullable": true
+          },
+          "IDAUTHOR": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "DATE_ADD": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "GetChatMessageRequest": {
         "type": "object",
         "properties": {
@@ -2835,46 +2922,6 @@
         },
         "additionalProperties": false
       },
-      "GetEmailSenderRequest": {
-        "type": "object",
-        "properties": {
-          "To": {
-            "type": "string",
-            "nullable": true
-          },
-          "Name": {
-            "type": "string",
-            "nullable": true
-          },
-          "Surname": {
-            "type": "string",
-            "nullable": true
-          },
-          "GroupName": {
-            "type": "string",
-            "nullable": true
-          },
-          "IdGroup": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "BlindCarbonCopy": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "CarbonCopy": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "GetGroupInviteRequest": {
         "type": "object",
         "properties": {
@@ -2884,11 +2931,16 @@
           },
           "IdUser": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "IdAuthor": {
             "type": "integer",
             "format": "int32"
+          },
+          "Email": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2910,7 +2962,8 @@
           },
           "IdUser": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "nullable": true
           },
           "IdAuthor": {
             "type": "integer",
@@ -2933,6 +2986,10 @@
             "nullable": true
           },
           "Surname": {
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
             "type": "string",
             "nullable": true
           }
@@ -3039,6 +3096,11 @@
             "nullable": true
           },
           "IdAuthor": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IdGroup": {
             "type": "integer",
             "format": "int32",
             "nullable": true
@@ -3266,6 +3328,11 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "IdTeam": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3405,6 +3472,29 @@
           },
           "Color": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetTeamTableMessageRequest": {
+        "type": "object",
+        "properties": {
+          "Teams": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TEAMS"
+            },
+            "nullable": true
+          },
+          "UpdatedTeams": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/GetMessagesUsersMeetingsResponse"
+              }
+            },
             "nullable": true
           }
         },
@@ -3670,6 +3760,11 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          },
+          "IDTEAM": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3735,7 +3830,7 @@
       "TEAMS": {
         "type": "object",
         "properties": {
-          "ID_TEAMS": {
+          "ID_TEAM": {
             "type": "integer",
             "format": "int32",
             "nullable": true
@@ -3745,11 +3840,11 @@
             "format": "int32",
             "nullable": true
           },
-          "Name": {
+          "NAME": {
             "type": "string",
             "nullable": true
           },
-          "Color": {
+          "COLOR": {
             "type": "string",
             "nullable": true
           }

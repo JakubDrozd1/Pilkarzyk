@@ -9,14 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { GetMessagesUsersMeetingsResponse } from './get-messages-users-meetings-response';
+import { TEAMS } from './teams';
 
 
-export interface GetGroupInvitePaginationRequest { 
-    Page: number;
-    OnPage: number;
-    SortColumn?: string | null;
-    SortMode?: string | null;
-    IdUser?: number | null;
-    IdGroup?: number | null;
+export interface GetTeamTableMessageRequest { 
+    Teams?: Array<TEAMS> | null;
+    UpdatedTeams?: { [key: string]: Array<GetMessagesUsersMeetingsResponse>; } | null;
 }
 

@@ -7,7 +7,19 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  @if(isReady){ @if(permission){
+  @if(isReady){ @if(permission && !userService.loggedUser.IS_ADMIN){
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    @if(selectedSegment == 'meetings'){
+    <ion-fab-button [routerLink]="['add-meeting']">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+    } @if (selectedSegment == 'members') {
+    <ion-fab-button [routerLink]="['add-user']">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+    }
+  </ion-fab>
+  } @if(userService.loggedUser.IS_ADMIN){
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button>
       <ion-icon name="add"></ion-icon>
@@ -33,7 +45,6 @@
           <ion-icon size="large" name="person-add-outline"></ion-icon>
         </ion-fab-button>
       </div>
-      @if(userService.loggedUser.IS_ADMIN){
       <div class="custom-fab">
         <ion-button size="small" [routerLink]="['add-organizer']">
           {{ "Settings" | translate }}
@@ -46,10 +57,9 @@
           <ion-icon size="large" name="settings-outline"></ion-icon>
         </ion-fab-button>
       </div>
-      }
     </ion-fab-list>
   </ion-fab>
-  }}
+  } }
 
   <ion-segment
     [(ngModel)]="selectedSegment"

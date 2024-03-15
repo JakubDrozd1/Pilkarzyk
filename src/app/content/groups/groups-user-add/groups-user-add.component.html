@@ -6,62 +6,50 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-button [routerLink]="['old']" expand="block">
-    {{ "Add existing user" | translate }}
-  </ion-button>
+  <app-users [idGroup]="idGroup"></app-users>
 
-  <ion-button [routerLink]="['new']" expand="block">
-    {{ "Add new user" | translate }}
-  </ion-button>
   <app-spinner [isReady]="!isReady"></app-spinner>
+  <ion-refresher
+    slot="fixed"
+    [pullFactor]="0.5"
+    [pullMin]="100"
+    [pullMax]="200"
+    (ionRefresh)="handleRefresh($event)"
+  >
+    <app-spinner [isReady]="true"></app-spinner>
+  </ion-refresher>
+
   @if(isReady && invites.length>0){
+  <ion-text style="margin: 20px; font-size: x-large">
+    {{ "Invitations sent" | translate }}
+  </ion-text>
   <ion-card>
-    <ion-row>
-      <ion-col>
-        <ion-card-header>
-          {{ "Invitations sent" | translate }}
-        </ion-card-header>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-card-header>
-          {{ "First name and last name" | translate }}
-        </ion-card-header>
-      </ion-col>
-      <ion-col>
-        <ion-card-header>{{ "Date sent" | translate }}</ion-card-header>
-      </ion-col>
-    </ion-row>
+    <div style="display: flex">
+      <ion-card-header>
+        {{ "Email" | translate }}
+      </ion-card-header>
+
+      <ion-card-header>{{ "Date sent" | translate }}</ion-card-header>
+    </div>
     @for(invite of invites; track $index){
-    <ion-row>
-      <ion-col>
-        <ion-item lines="full">
-          <ion-card-header>
-            <div>
-              {{ invite.Firstname }}
-            </div>
-            <div>
-              {{ invite.Surname }}
-            </div>
-          </ion-card-header>
-        </ion-item>
-      </ion-col>
-      <ion-col>
-        <ion-item lines="full">
-          <ion-card-header>
-            <div>
-              {{ invite.DateAdd | date : "dd.MM.yyyy" }}
-            </div>
-            <div>
-              {{ invite.DateAdd | date : "HH:mm:ss" }}
-            </div>
-          </ion-card-header>
-        </ion-item>
-      </ion-col>
-    </ion-row>
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        padding-left: 5px;
+        padding-right: 5px;
+      "
+    >
+      <div style="display: flex">
+        <ion-chip> {{ invite.Email }} </ion-chip>
+      </div>
+      <div style="display: flex">
+        <ion-chip>
+          {{ invite.DateAdd | date : "dd.MM.yyyy HH:mm:ss" }}
+        </ion-chip>
+      </div>
+    </div>
     }
   </ion-card>
-
   }
 </ion-content>

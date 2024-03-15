@@ -15,12 +15,13 @@ export interface GetGroupInviteResponse {
     Name?: string | null;
     IdGroupInvite?: number;
     IdGroup?: number;
-    IdUser?: number;
+    IdUser?: number | null;
     IdAuthor?: number;
     DateAdd?: string;
     FirstnameAuthor?: string | null;
     SurnameAuthor?: string | null;
     Firstname?: string | null;
     Surname?: string | null;
+    Email?: string | null;
 }
 

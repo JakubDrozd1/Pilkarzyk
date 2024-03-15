@@ -19,5 +19,6 @@ export interface MESSAGES {
     DATE_ADD?: string | null;
     WAITING_TIME?: string | null;
     DATE_RESPONSE?: string | null;
+    IDTEAM?: number | null;
 }
 

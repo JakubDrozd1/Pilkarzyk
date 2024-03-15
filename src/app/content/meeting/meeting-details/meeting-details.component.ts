@@ -1,3 +1,4 @@
+import { TeamsApi } from './../../../../../libs/api-client/api/teams.api'
 import { CommonModule } from '@angular/common'
 import { Component, ElementRef, OnInit } from '@angular/core'
 import {
@@ -12,6 +13,7 @@ import {
   GetMessagesUsersMeetingsResponse,
   MeetingsApi,
   MessagesApi,
+  TEAMS,
   USERS,
   UsersApi,
 } from 'libs/api-client'
@@ -26,6 +28,7 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
 import { UserService } from 'src/app/service/user/user.service'
 import * as moment from 'moment'
 import { IonRefresherCustomEvent } from '@ionic/core'
+import { MeetingTeamListComponent } from '../meeting-team-list/meeting-team-list.component'
 
 @Component({
   selector: 'app-meeting-details',
@@ -38,6 +41,7 @@ import { IonRefresherCustomEvent } from '@ionic/core'
     SpinnerComponent,
     RouterLink,
     TranslateModule,
+    MeetingTeamListComponent,
   ],
 })
 export class MeetingDetailsComponent implements OnInit {
@@ -73,6 +77,7 @@ export class MeetingDetailsComponent implements OnInit {
     },
   ]
   color: string = ''
+  teams: TEAMS[] = []
 
   constructor(
     private route: ActivatedRoute,
@@ -85,7 +90,8 @@ export class MeetingDetailsComponent implements OnInit {
     private elementRef: ElementRef,
     private refreshDataService: RefreshDataService,
     public userService: UserService,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private teamsApi: TeamsApi
   ) {}
 
   ngOnInit() {
@@ -128,8 +134,12 @@ export class MeetingDetailsComponent implements OnInit {
             user: this.usersApi.getUserById({
               userId: this.meeting.IdAuthor ?? 0,
             }),
+            teams: this.teamsApi.getAllTeamsFromMeeting({
+              meetingId: this.idMeeting,
+            }),
           }).subscribe({
             next: (responses) => {
+              this.teams = responses.teams
               let element: number = this.elementRef.nativeElement.offsetWidth
               this.counter = Math.round(element / 60)
               this.user = responses.user
@@ -169,7 +179,7 @@ export class MeetingDetailsComponent implements OnInit {
         },
       })
   }
-  
+
   setColor(defautAnswer: GetMessagesUsersMeetingsResponse) {
     switch (defautAnswer.Answer) {
       case 'yes': {

@@ -1,3 +1,8 @@
 <ion-content class="ion-padding">
+  <app-spinner [isReady]="!isReady"></app-spinner>
+  @if(isReady && !isExpired){
   <app-register (userRegistered)="onUserRegistered($event)"></app-register>
+  } @if(isExpired){
+  <ion-text> Zaproszenie wygasło</ion-text>
+  }
 </ion-content>

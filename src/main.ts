@@ -14,6 +14,7 @@ import { AppConfig } from './app/service/app-config'
 import { TokenInterceptor } from './app/helper/TokenInterceptor'
 import { TranslateHttpLoader } from '@ngx-translate/http-loader'
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async'
 
 export function tokenGetter() {
   return localStorage.getItem('access_token')
@@ -60,5 +61,6 @@ bootstrapApplication(AppComponent, {
     ),
     importProvidersFrom(HttpClientModule),
     provideRouter(routes),
+    provideAnimationsAsync(),
   ],
 }).catch((err) => console.error(err))

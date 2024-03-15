@@ -5,7 +5,6 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { CalendarContentComponent } from 'src/app/controller/calendar-content/calendar-content.component'
 import { GaduGaduComponent } from 'src/app/helper/gadu-gadu/gadu-gadu.component'
 import { AccountOptionListComponent } from '../../controller/account-option-list/account-option-list.component'
-import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 
 @Component({
   selector: 'app-account-page',
@@ -23,12 +22,8 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
 })
 export class AccountPageComponent implements OnInit {
   constructor(
-    private refreshDataService: RefreshDataService,
     public translate: TranslateService
   ) {}
   ngOnInit(): void {}
 
-  ionViewWillEnter() {
-    this.refreshDataService.refresh('profile-details')
-  }
 }

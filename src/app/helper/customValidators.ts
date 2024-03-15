@@ -56,3 +56,13 @@ export function customValidator(): ValidatorFn {
     return null
   }
 }
+
+export function OneToTenValidator(): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    const inputValue = control.value
+    if (isNaN(inputValue) || inputValue < 2 || inputValue > 10) {
+      return { oneToNine: true }
+    }
+    return null
+  }
+}

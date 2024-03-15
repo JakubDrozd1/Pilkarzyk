@@ -1,11 +1,15 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
-import { IonicModule } from '@ionic/angular'
+import { IonicModule, RefresherEventDetail } from '@ionic/angular'
 import { TranslateModule } from '@ngx-translate/core'
 import { GetGroupInviteResponse, GroupInvitesApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
+import { UsersComponent } from '../../../form/users/users.component'
+import { IonRefresherCustomEvent } from '@ionic/core'
+import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'app-groups-user-add',
@@ -18,21 +22,35 @@ import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
     TranslateModule,
     SpinnerComponent,
     RouterLink,
+    UsersComponent,
   ],
 })
 export class GroupsUserAddComponent implements OnInit {
   idGroup: number = 0
   invites: GetGroupInviteResponse[] = []
   isReady: boolean = true
+  private subscription: Subscription = new Subscription()
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private groupInvites: GroupInvitesApi,
-    private alert: Alert
+    private alert: Alert,
+    private refreshDataService: RefreshDataService
   ) {}
 
   ngOnInit() {
+    this.subscription.add(
+      this.refreshDataService.refreshSubject.subscribe((index) => {
+        if (index === 'invite') {
+          this.reload()
+        }
+      })
+    )
+    this.reload()
+  }
+
+  reload() {
     this.route.params.subscribe((params) => {
       if (params?.['idGroup'] > 0) {
         this.idGroup = parseInt(params?.['idGroup'])
@@ -54,7 +72,18 @@ export class GroupsUserAddComponent implements OnInit {
       })
       .subscribe({
         next: (response) => {
-          this.invites = response
+          const currentDate = new Date()
+          const twentyFourHoursAgo = new Date(
+            currentDate.getTime() - 24 * 60 * 60 * 1000
+          )
+          this.invites = response.filter((invite) => {
+            if (invite.IdUser == null) {
+              const dateAdd = new Date(String(invite.DateAdd))
+              return dateAdd > twentyFourHoursAgo
+            } else {
+              return true
+            }
+          })
           this.isReady = true
         },
         error: (error) => {
@@ -67,5 +96,12 @@ export class GroupsUserAddComponent implements OnInit {
 
   cancel() {
     this.router.navigate(['/groups', this.idGroup])
+  }
+
+  handleRefresh($event: IonRefresherCustomEvent<RefresherEventDetail>) {
+    setTimeout(() => {
+      this.getDetails()
+      $event.target.complete()
+    }, 2000)
   }
 }

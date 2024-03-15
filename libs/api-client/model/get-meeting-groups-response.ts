@@ -19,5 +19,6 @@ export interface GetMeetingGroupsResponse {
     Quantity?: number | null;
     IdMeeting?: number | null;
     IdAuthor?: number | null;
+    IdGroup?: number | null;
 }
 

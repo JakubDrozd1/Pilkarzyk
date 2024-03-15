@@ -22,7 +22,6 @@ index.ts
 model/get-chat-message-request.ts
 model/get-chat-messages-response.ts
 model/get-create-group-request.ts
-model/get-email-sender-request.ts
 model/get-group-invite-request.ts
 model/get-group-invite-response.ts
 model/get-group-request.ts
@@ -37,6 +36,7 @@ model/get-ranking-request.ts
 model/get-rankings-users-groups-response.ts
 model/get-reset-password-response.ts
 model/get-team-request.ts
+model/get-team-table-message-request.ts
 model/get-token-request.ts
 model/get-token-response.ts
 model/get-update-meeting-request.ts
@@ -44,6 +44,7 @@ model/get-update-user-request.ts
 model/get-user-request.ts
 model/get-users-by-login-and-password-request.ts
 model/get-users-meetings-request.ts
+model/groupinvite.ts
 model/groups.ts
 model/messages.ts
 model/models.ts

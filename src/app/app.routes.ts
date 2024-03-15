@@ -194,6 +194,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'meeting/:idMeeting/team',
+        loadComponent: () =>
+          import('./content/meeting/meeting-team/meeting-team.component').then(
+            (m) => m.MeetingTeamComponent
+          ),
+      },
+      {
         path: 'download',
         component: DownloadComponent,
       },
@@ -236,7 +243,7 @@ export const routes: Routes = [
     ],
   },
   {
-    path: 'register/:idGroup',
+    path: 'register/:idGroupInvite',
     component: RegisterLinkComponent,
   },
   {

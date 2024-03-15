@@ -49,6 +49,7 @@ export interface GetAllMeetingsRequestParams {
     dateTo?: string;
     idGroup?: number;
     idUser?: number;
+    idAuthor?: number;
     answer?: string;
     withMessages?: boolean;
 }
@@ -430,6 +431,7 @@ export class MeetingsApi {
     const dateTo = requestParameters.dateTo;
     const idGroup = requestParameters.idGroup;
     const idUser = requestParameters.idUser;
+    const idAuthor = requestParameters.idAuthor;
     const answer = requestParameters.answer;
     const withMessages = requestParameters.withMessages;
 
@@ -488,6 +490,13 @@ export class MeetingsApi {
         localVarQueryParameters,
         <any>idUser,
         'IdUser'
+      );
+    }
+    if (idAuthor !== undefined && idAuthor !== null) {
+      localVarQueryParameters = this.addToHttpParams(
+        localVarQueryParameters,
+        <any>idAuthor,
+        'IdAuthor'
       );
     }
     if (answer !== undefined && answer !== null) {

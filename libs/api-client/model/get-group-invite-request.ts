@@ -13,7 +13,8 @@
 
 export interface GetGroupInviteRequest { 
     IdGroup?: number;
-    IdUser?: number;
+    IdUser?: number | null;
     IdAuthor?: number;
+    Email?: string | null;
 }
 

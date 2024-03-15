@@ -12,9 +12,9 @@
 
 
 export interface TEAMS { 
-    ID_TEAMS?: number | null;
+    ID_TEAM?: number | null;
     IDMEETING?: number | null;
-    Name?: string | null;
-    Color?: string | null;
+    NAME?: string | null;
+    COLOR?: string | null;
 }
 

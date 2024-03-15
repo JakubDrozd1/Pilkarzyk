@@ -58,7 +58,11 @@ export class AccountOptionListComponent implements OnInit {
     public notificationService: NotificationService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    window.addEventListener('popstate', () => {
+      this.setOpen(false)
+    })
+  }
 
   setOpen(isOpen: boolean) {
     this.isPickerOpen = isOpen

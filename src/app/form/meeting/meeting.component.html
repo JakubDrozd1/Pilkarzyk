@@ -46,6 +46,7 @@
             [showDefaultButtons]="true"
             [doneText]="'Done' | translate"
             [cancelText]="'Cancel' | translate"
+            [locale]="lang"
           ></ion-datetime>
         </ng-template>
       </ion-modal>
@@ -69,6 +70,7 @@
           labelPlacement="floating"
           formControlName="quantity"
           type="number"
+          (keypress)="checkInputQuantity($event)"
         >
         </ion-input>
       </ion-item>
@@ -93,8 +95,50 @@
           {{ "Check if you will also come" | translate }}
         </ion-checkbox>
       </ion-item>
+      @if(!isEdit){
+      <ion-item lines="none">
+        <ion-checkbox
+          labelPlacement="end"
+          justify="start"
+          formControlName="teams"
+          (ngModelChange)="changeTeam($event)"
+        >
+          {{ "Add teams" | translate }}
+        </ion-checkbox>
+      </ion-item>
+      @if(this.meetingForm.value.teams){
+      <ion-item lines="none">
+        <ion-input
+          class="border"
+          minlength="1"
+          maxlength="1"
+          helperText=" "
+          [label]="'Number of teams' | translate"
+          labelPlacement="floating"
+          formControlName="quantityTeams"
+          type="number"
+          (keypress)="checkInputQuantityTeams($event)"
+        >
+        </ion-input>
+      </ion-item>
+      @if(!isEdit){ @if(this.meetingForm.value.quantityTeams>1){ @for(team of
+      getNumberArray(this.meetingForm.value.quantityTeams) ; track $index){
+      <app-team-generator
+        [counter]="$index"
+        [color]="color[$index]"
+        (dataEvent)="collectData($event)"
+      ></app-team-generator>
+      } } }} @if(isEdit){ @if(teams.length>0){ @for(team of teams ; track
+      $index){
+      <app-team-generator
+        [counter]="$index"
+        [name]="team.NAME ?? ''"
+        [color]="team.COLOR ?? ''"
+        (dataEvent)="collectData($event)"
+      ></app-team-generator
+      >} } }}
     </ion-list>
-    <ion-button type="submit" expand="full">
+    <ion-button shape="round" type="submit" expand="full">
       @if(isEdit){
       {{ "Save" | translate }}
       }@else {

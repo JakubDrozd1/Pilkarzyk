@@ -68,6 +68,7 @@ export class MeetingComponent implements OnInit {
     '#ffff00',
     '#800080',
     '#ffa500',
+    '#808080',
   ]
   collectedData: {
     number: number

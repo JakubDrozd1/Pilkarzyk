@@ -97,6 +97,7 @@ export class MeetingComponent implements OnInit {
       description: [''],
       presence: [true],
       teams: [false],
+      isIndependent: [false],
       quantityTeams: [],
     })
   }
@@ -276,45 +277,35 @@ export class MeetingComponent implements OnInit {
   getMeeting() {
     if (this.idMeeting > 0) {
       this.isReady = false
-      forkJoin({
-        meeting: this.messagesApi.getAllMessages({
+      this.messagesApi
+        .getAllMessages({
           idMeeting: this.idMeeting,
           idUser: this.userService.loggedUser.ID_USER,
           page: 0,
           onPage: -1,
-        }),
-        teams: this.teamsApi.getAllTeamsFromMeeting({
-          meetingId: this.idMeeting,
-        }),
-      }).subscribe({
-        next: (responses) => {
-          this.meeting = responses.meeting[0]
-          this.teams = responses.teams
-          this.meetingForm
-            .get('dateMeeting')
-            ?.setValue(this.meeting.DateMeeting)
-          this.meetingForm.get('place')?.setValue(this.meeting.Place)
-          this.meetingForm.get('quantity')?.setValue(this.meeting.Quantity)
-          this.meetingForm
-            .get('description')
-            ?.setValue(this.meeting.Description)
-          this.meetingForm
-            .get('presence')
-            ?.setValue(this.meeting.Answer == 'yes')
-          if (responses.teams.length > 0) {
-            this.meetingForm.get('teams')?.setValue('true')
+        })
+        .subscribe({
+          next: (response) => {
+            console.log(response)
+            this.meeting = response[0]
             this.meetingForm
-              .get('quantityTeams')
-              ?.setValue(responses.teams.length)
-          }
-
-          this.isReady = true
-        },
-        error: (error) => {
-          this.alert.handleError(error)
-          this.isReady = true
-        },
-      })
+              .get('dateMeeting')
+              ?.setValue(this.meeting.DateMeeting)
+            this.meetingForm.get('place')?.setValue(this.meeting.Place)
+            this.meetingForm.get('quantity')?.setValue(this.meeting.Quantity)
+            this.meetingForm
+              .get('description')
+              ?.setValue(this.meeting.Description)
+            this.meetingForm
+              .get('presence')
+              ?.setValue(this.meeting.Answer == 'yes')
+            this.isReady = true
+          },
+          error: (error) => {
+            this.alert.handleError(error)
+            this.isReady = true
+          },
+        })
     }
   }
 

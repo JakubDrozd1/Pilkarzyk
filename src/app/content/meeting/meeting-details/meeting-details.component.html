@@ -112,10 +112,10 @@
       <ion-card-header> {{ "Teams" | translate }} </ion-card-header>
       @if(userService.loggedUser.ID_USER==meeting.IdAuthor ||
       userService.loggedUser.IS_ADMIN){
-      <div style="padding-right: 10px">
-        <ion-button shape="round" [id]="'add-team' + counterModal">
-          <ion-icon size="large" name="add-circle-outline"></ion-icon>
-        </ion-button>
+      <div style="padding: 5px">
+        <ion-fab-button [id]="'add-team' + counterModal" size="small">
+          <ion-icon name="add-outline"></ion-icon>
+        </ion-fab-button>
       </div>
       }
     </div>
@@ -146,7 +146,8 @@
   </ion-card>
   } }
 </ion-content>
-@if(isReady){
+@if(isReady&& (userService.loggedUser.ID_USER==meeting.IdAuthor ||
+userService.loggedUser.IS_ADMIN)){
 <ion-modal
   [trigger]="'add-team' + counterModal"
   (willDismiss)="onWillDismiss()"

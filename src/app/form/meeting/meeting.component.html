@@ -32,7 +32,9 @@
       </ion-item>
       }
       <ion-item lines="none">
-        <ion-label> {{ "Date of meeting" | translate }} </ion-label>
+        <ion-label class="ion-text-wrap">
+          {{ "Date of meeting" | translate }}
+        </ion-label>
         <ion-datetime-button datetime="datetime"> </ion-datetime-button>
       </ion-item>
       <ion-modal [keepContentsMounted]="true">
@@ -107,6 +109,16 @@
         </ion-checkbox>
       </ion-item>
       @if(this.meetingForm.value.teams){
+      <ion-item lines="none">
+        <ion-checkbox
+          labelPlacement="end"
+          justify="start"
+          formControlName="isIndependent"
+          class="ion-text-wrap"
+        >
+          Umożliw użytkownikom samodzielne dołączanie do drużyny.
+        </ion-checkbox>
+      </ion-item>
       <ion-item lines="none">
         <ion-input
           class="border"

@@ -9,3 +9,8 @@ ion-select {
 ion-item {
   padding-top: 5px;
 }
+.checklist ion-item > ion-input {
+    align-self: start;
+    margin-top: 0.3rem;
+    margin-right: 0.3rem;
+}

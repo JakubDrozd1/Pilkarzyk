@@ -2069,6 +2069,43 @@
         }
       }
     },
+    "/api/teams": {
+      "post": {
+        "tags": [
+          "Teams"
+        ],
+        "operationId": "AddTeams",
+        "parameters": [
+          {
+            "name": "IdMeeting",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Color",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/token": {
       "post": {
         "tags": [
@@ -3096,6 +3133,11 @@
             "nullable": true
           },
           "IdAuthor": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "IdGroup": {
             "type": "integer",
             "format": "int32",
             "nullable": true

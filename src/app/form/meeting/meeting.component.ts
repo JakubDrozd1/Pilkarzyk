@@ -168,9 +168,9 @@ export class MeetingComponent implements OnInit {
               getUsersMeetingsRequest: {
                 Meeting: {
                   DateMeeting: this.meetingForm.value.dateMeeting,
-                  Place: this.meetingForm.value.place,
+                  Place: this.meetingForm.value.place.trim(),
                   Quantity: this.meetingForm.value.quantity,
-                  Description: this.meetingForm.value.description,
+                  Description: this.meetingForm.value.description.trim(),
                   IdGroup: this.isHome
                     ? this.meetingForm.value.group.IdGroup
                     : this.idGroup,
@@ -181,8 +181,8 @@ export class MeetingComponent implements OnInit {
                   Answer: this.meetingForm.value.presence ? 'yes' : 'no',
                 },
                 Team: this.collectedData.map((item) => ({
-                  Name: item.name,
-                  Color: item.color,
+                  Name: item.name.trim(),
+                  Color: item.color.trim(),
                 })),
               },
             })
@@ -207,9 +207,9 @@ export class MeetingComponent implements OnInit {
               getUsersMeetingsRequest: {
                 Meeting: {
                   DateMeeting: this.meetingForm.value.dateMeeting,
-                  Place: this.meetingForm.value.place,
+                  Place: this.meetingForm.value.place.trim(),
                   Quantity: this.meetingForm.value.quantity,
-                  Description: this.meetingForm.value.description,
+                  Description: this.meetingForm.value.description.trim(),
                   IdGroup: this.isHome
                     ? this.meetingForm.value.group.IdGroup
                     : this.idGroup,
@@ -243,9 +243,9 @@ export class MeetingComponent implements OnInit {
             meetingId: this.idMeeting,
             getUpdateMeetingRequest: {
               DateMeeting: this.meetingForm.value.dateMeeting,
-              Place: this.meetingForm.value.place,
+              Place: this.meetingForm.value.place.trim(),
               Quantity: this.meetingForm.value.quantity,
-              Description: this.meetingForm.value.description,
+              Description: this.meetingForm.value.description.trim(),
               Message: {
                 IdMeeting: this.idMeeting,
                 IdUser: this.userService.loggedUser.ID_USER,

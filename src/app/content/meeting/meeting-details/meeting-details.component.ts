@@ -4,6 +4,7 @@ import { Component, ElementRef, OnInit } from '@angular/core'
 import {
   AlertController,
   IonicModule,
+  ModalController,
   RefresherEventDetail,
 } from '@ionic/angular'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
@@ -27,8 +28,14 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { UserService } from 'src/app/service/user/user.service'
 import * as moment from 'moment'
-import { IonRefresherCustomEvent } from '@ionic/core'
+import {
+  IonModalCustomEvent,
+  IonRefresherCustomEvent,
+  OverlayEventDetail,
+} from '@ionic/core'
 import { MeetingTeamListComponent } from '../meeting-team-list/meeting-team-list.component'
+import { FormsModule } from '@angular/forms'
+import iro from '@jaames/iro'
 
 @Component({
   selector: 'app-meeting-details',
@@ -42,6 +49,7 @@ import { MeetingTeamListComponent } from '../meeting-team-list/meeting-team-list
     RouterLink,
     TranslateModule,
     MeetingTeamListComponent,
+    FormsModule,
   ],
 })
 export class MeetingDetailsComponent implements OnInit {
@@ -77,7 +85,13 @@ export class MeetingDetailsComponent implements OnInit {
     },
   ]
   color: string = ''
+  teamColor: string = '#000000'
   teams: TEAMS[] = []
+  name: string = 'Team'
+  colorPicker: any
+  disabled: boolean = false
+  colorRegex = /^#(?:[0-9a-fA-F]{3}){1,2}$/
+  counterModal: number = 0
 
   constructor(
     private route: ActivatedRoute,
@@ -91,7 +105,8 @@ export class MeetingDetailsComponent implements OnInit {
     private refreshDataService: RefreshDataService,
     public userService: UserService,
     private alertCtrl: AlertController,
-    private teamsApi: TeamsApi
+    private teamsApi: TeamsApi,
+    private modalCtrl: ModalController
   ) {}
 
   ngOnInit() {
@@ -139,6 +154,7 @@ export class MeetingDetailsComponent implements OnInit {
             }),
           }).subscribe({
             next: (responses) => {
+              this.counterModal++
               this.teams = responses.teams
               let element: number = this.elementRef.nativeElement.offsetWidth
               this.counter = Math.round(element / 60)
@@ -298,5 +314,61 @@ export class MeetingDetailsComponent implements OnInit {
       this.reload()
       $event.target.complete()
     }, 2000)
+  }
+
+  onWillDismiss() {
+    this.disabled = false
+  }
+
+  getPicker() {
+    this.colorPicker = iro.ColorPicker('#picker' + this.counterModal, {
+      width: 100,
+      color: '#fff',
+    })
+    this.colorPicker.on('color:change', (color: { hexString: any }) => {
+      this.teamColor = color.hexString
+    })
+    this.disabled = true
+  }
+
+  addTeam() {
+    if (this.name == '') {
+      this.name = 'Team ' + Math.floor(Math.random() * 100) + 1
+    }
+    if (this.teamColor == '' || !this.colorRegex.test(this.teamColor)) {
+      this.teamColor = this.genHexColor()
+    }
+    this.teamsApi
+      .addTeams({
+        color: this.teamColor,
+        idMeeting: this.idMeeting,
+        name: this.name,
+      })
+      .subscribe({
+        next: () => {
+          this.name = 'Team'
+          this.teamColor = '#000000'
+          this.alert.presentToast('Dodano drużynę')
+          this.disabled = false
+          this.modalCtrl.dismiss('picker')
+          this.reload()
+        },
+        error: (error) => {
+          this.alert.handleError(error)
+          this.disabled = false
+          this.name = 'Team'
+          this.teamColor = '#000000'
+          this.modalCtrl.dismiss('picker')
+        },
+      })
+  }
+
+  genHexColor(): string {
+    const randomColor = Math.floor(Math.random() * 16777215).toString(16)
+    return `#${randomColor}`
+  }
+
+  counterUp() {
+    this.counterModal++
   }
 }

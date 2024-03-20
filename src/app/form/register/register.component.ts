@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, EventEmitter, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import {
   FormBuilder,
   FormGroup,
@@ -38,7 +38,7 @@ import {
 })
 export class RegisterComponent implements OnInit {
   @Output() userRegistered: EventEmitter<any> = new EventEmitter()
-
+  @Input() email: string | null | undefined
   readonly phoneMask: MaskitoOptions = {
     mask: [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/],
   }
@@ -46,6 +46,7 @@ export class RegisterComponent implements OnInit {
     (el as HTMLIonInputElement).getInputElement()
   registrationForm: FormGroup
   isReady: boolean = true
+  isDisabled: boolean = false
 
   constructor(
     private fb: FormBuilder,
@@ -104,6 +105,10 @@ export class RegisterComponent implements OnInit {
     if (this.authService.login()) {
       this.navigate()
     }
+    if (this.email) {
+      this.registrationForm.get('email')?.setValue(this.email)
+      this.registrationForm.get('email')?.disable()
+    }
   }
 
   onSubmit() {
@@ -117,7 +122,11 @@ export class RegisterComponent implements OnInit {
           getUserRequest: {
             Login: this.registrationForm.value.login.trim().toLowerCase(),
             Password: this.registrationForm.value.password,
-            Email: this.registrationForm.value.email.trim().toLowerCase(),
+            Email: this.registrationForm
+              .get('email')
+              ?.getRawValue()
+              .trim()
+              .toLowerCase(),
             Firstname: this.registrationForm.value.firstname.trim(),
             Surname: this.registrationForm.value.surname.trim(),
             PhoneNumber: intNumber,

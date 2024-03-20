@@ -4,7 +4,6 @@ import { IonicModule } from '@ionic/angular'
 import { RegisterComponent } from '../register/register.component'
 import {
   GROUPINVITE,
-  GetGroupInviteResponse,
   GroupInvitesApi,
   GroupsUsersApi,
   TokenApi,
@@ -68,15 +67,23 @@ export class RegisterLinkComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.groupInvite = response
-          let dateAdd = new Date(String(this.groupInvite.DATE_ADD))
-          let dateExpire = new Date(
-            dateAdd.getTime() + 24 * 60 * 60 * 1000
-          ).toISOString()
-          let currentDate = new Date().toISOString()
-          if (dateExpire < currentDate) {
-            this.isExpired = true
+          if (
+            this.groupInvite &&
+            this.groupInvite.DATE_ADD != null &&
+            this.groupInvite.EMAIL != null
+          ) {
+            let dateAdd = new Date(String(this.groupInvite.DATE_ADD))
+            let dateExpire = new Date(
+              dateAdd.getTime() + 24 * 60 * 60 * 1000
+            ).toISOString()
+            let currentDate = new Date().toISOString()
+            if (dateExpire < currentDate) {
+              this.isExpired = true
+            } else {
+              this.isExpired = false
+            }
           } else {
-            this.isExpired = false
+            this.isExpired = true
           }
           this.isReady = true
         },
@@ -111,6 +118,18 @@ export class RegisterLinkComponent implements OnInit {
             })
             .subscribe({
               next: () => {
+                this.groupInvitesApi
+                  .deleteGroupInvite({
+                    groupInvitedId: this.idGroupInvite ?? 0,
+                  })
+                  .subscribe({
+                    next: () => {
+                      console.log('OK')
+                    },
+                    error: (error) => {
+                      this.alert.handleError(error)
+                    },
+                  })
                 localStorage.removeItem('access_token')
                 localStorage.removeItem('refresh_token')
               },

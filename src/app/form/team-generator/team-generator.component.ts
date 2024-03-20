@@ -5,7 +5,6 @@ import { IonicModule, ModalController } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
 import iro from '@jaames/iro'
-import { IonModalCustomEvent, OverlayEventDetail } from '@ionic/core'
 
 @Component({
   selector: 'app-team-generator',
@@ -59,10 +58,10 @@ export class TeamGeneratorComponent implements OnInit {
     })
     this.disabled = true
   }
-  onWillDismiss($event: IonModalCustomEvent<OverlayEventDetail<any>>) {
+
+  onWillDismiss() {
     this.disabled = false
   }
-  updateTeam() {}
 
   setColor(arg0: string) {
     this.colorPicker.setColor(arg0)

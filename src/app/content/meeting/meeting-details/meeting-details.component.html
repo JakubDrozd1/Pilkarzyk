@@ -65,14 +65,14 @@
       </ion-chip>
     </ion-card-content>
     <ion-card-content>
-      <ion-item lines="none">
-        <ion-icon name="calendar-outline"></ion-icon>
+      <ion-item lines="full">
+        <ion-icon class="icon" name="calendar-outline"></ion-icon>
         <ion-label>
           {{ meeting.DateMeeting | date : "dd.MM.yyyy HH:mm" }}
         </ion-label>
       </ion-item>
       <ion-item lines="full" class="title">
-        <ion-icon name="location-outline"></ion-icon>
+        <ion-icon class="icon" name="location-outline"></ion-icon>
         <ion-label>
           {{ meeting.Place }}
         </ion-label>
@@ -98,29 +98,46 @@
           <img alt="img" [src]="image" />
         </ion-avatar>
         } }@else { @if($index==counter){
-        <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
+        <ion-icon class="icon" name="ellipsis-horizontal-outline"></ion-icon>
         } }}
       </ion-item>
       <ion-label> {{ acceptMeeting }} / {{ meeting.Quantity }}</ion-label>
     </ion-card-content>
   </ion-card>
 
-  @if(teams.length>0){
-  <ion-card
-    class="click"
-    [routerLink]="['/meeting', meeting.IdMeeting, 'team']"
-  >
-    <ion-card-header> {{ "Teams" | translate }}</ion-card-header>
-    @for(team of teams; track $index){
-    <ion-item lines="full">
-      {{ team.NAME }}
-      <ion-icon slot="end" name="shirt" [style.color]="team.COLOR"></ion-icon>
-    </ion-item>
-    <br />
-    }
+  <ion-card>
+    <div
+      style="display: flex; justify-content: space-between; align-items: center"
+    >
+      <ion-card-header> {{ "Teams" | translate }} </ion-card-header>
+      @if(userService.loggedUser.ID_USER==meeting.IdAuthor ||
+      userService.loggedUser.IS_ADMIN){
+      <div style="padding: 5px">
+        <ion-fab-button [id]="'add-team' + counterModal" size="small">
+          <ion-icon name="add-outline"></ion-icon>
+        </ion-fab-button>
+      </div>
+      }
+    </div>
+    <ion-card-content>
+      <div class="click" [routerLink]="['/meeting', meeting.IdMeeting, 'team']">
+        @if(teams.length>0){ @for(team of teams; track $index){
+
+        <ion-item lines="full">
+          {{ team.NAME }}
+          <ion-icon
+            class="icon"
+            slot="end"
+            name="shirt"
+            [style.color]="team.COLOR"
+          ></ion-icon>
+        </ion-item>
+        } }
+      </div>
+    </ion-card-content>
   </ion-card>
 
-  } @if( meeting.Description){
+  @if(meeting.Description){
   <ion-card>
     <ion-card-header> {{ "Description" | translate }} </ion-card-header>
     <ion-list [inset]="true">
@@ -129,3 +146,53 @@
   </ion-card>
   } }
 </ion-content>
+@if(isReady){ @if( userService.loggedUser.ID_USER==meeting.IdAuthor ||
+userService.loggedUser.IS_ADMIN){
+<ion-modal
+  [trigger]="'add-team' + counterModal"
+  (willDismiss)="onWillDismiss()"
+>
+  <ng-template>
+    <ion-content class="ion-padding">
+      <ion-text> {{ "Modify team" | translate }}</ion-text>
+      <div class="modal-content">
+        <ion-item>
+          <ion-input
+            [label]="'Name' | translate"
+            labelPlacement="stacked"
+            type="text"
+            [(ngModel)]="name"
+            maxlength="30"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            [label]="'Color' | translate"
+            labelPlacement="stacked"
+            type="text"
+            [(ngModel)]="teamColor"
+            [value]="teamColor"
+            maxlength="7"
+          ></ion-input>
+          <ion-button [disabled]="disabled" (click)="getPicker()">
+            <ion-icon name="brush-outline"> </ion-icon>
+          </ion-button>
+          <ion-icon
+            size="large"
+            slot="end"
+            name="shirt"
+            [style.color]="teamColor"
+          ></ion-icon>
+        </ion-item>
+        <div
+          style="padding-top: 10px; width: 100%"
+          [id]="'picker' + counterModal"
+        ></div>
+      </div>
+      <ion-button expand="full" (click)="addTeam()" shape="round">
+        Ok
+      </ion-button>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+}}

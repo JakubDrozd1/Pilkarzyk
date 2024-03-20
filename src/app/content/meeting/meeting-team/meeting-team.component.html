@@ -4,7 +4,8 @@
     <ion-buttons slot="start">
       <ion-button (click)="cancel()"> {{ "Back" | translate }} </ion-button>
     </ion-buttons>
-    @if(isReady){ @if(meeting.IdAuthor===userService.loggedUser.ID_USER){
+    @if(isReady){
+    @if(meeting.IdAuthor===userService.loggedUser.ID_USER||userService.loggedUser.IS_ADMIN){
     <ion-label
       style="padding-right: 10px"
       class="click"
@@ -36,6 +37,16 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
+  <app-spinner [isReady]="!isReady"></app-spinner>
+  <ion-refresher
+    slot="fixed"
+    [pullFactor]="0.5"
+    [pullMin]="100"
+    [pullMax]="200"
+    (ionRefresh)="handleRefresh($event)"
+  >
+    <app-spinner [isReady]="true"></app-spinner>
+  </ion-refresher>
   @if(isReady){ @if(!isEdit){
   <ion-card>
     <ion-card-header>
@@ -70,12 +81,45 @@
     <ion-card-header>
       <ion-label class="name">
         <ion-label>{{ team.NAME }}</ion-label>
-        <ion-icon
-          size="large"
-          slot="end"
-          name="shirt"
-          [style.color]="team.COLOR"
-        ></ion-icon>
+        <div style="display: flex; align-items: center">
+          <ion-icon
+            size="large"
+            slot="end"
+            name="shirt"
+            [style.color]="team.COLOR"
+            style="padding: 5px"
+          ></ion-icon>
+          @if(userService.loggedUser.ID_USER==meeting.IdAuthor ||
+          userService.loggedUser.IS_ADMIN){
+          <ion-icon
+            name="brush-outline"
+            size="large"
+            slot="end"
+            class="click"
+            [id]="'edit-team' + team.ID_TEAM"
+            (click)="setTeam(team)"
+          >
+          </ion-icon>
+          } @if(meeting.IsIndependent){ @if(isUserYes){ @if(isUserInTeam(team)){
+          <ion-icon
+            name="add-outline"
+            size="large"
+            slot="end"
+            color="success"
+            class="click"
+            (click)="addToTeam(team)"
+          ></ion-icon>
+          } @if(!isUserInTeam(team)){
+          <ion-icon
+            name="remove-outline"
+            size="large"
+            slot="end"
+            color="danger"
+            class="click"
+            (click)="removeFromTeam(team)"
+          ></ion-icon>
+          }}}
+        </div>
       </ion-label>
     </ion-card-header>
     @for(user of arrays[team.ID_TEAM??0]; track $index){
@@ -96,7 +140,74 @@
     </ion-chip>
     }
   </ion-card>
-  } } @if(isEdit){
+
+  @if(isReady&& (userService.loggedUser.ID_USER==meeting.IdAuthor ||
+  userService.loggedUser.IS_ADMIN)){
+  <ion-modal
+    [trigger]="'edit-team' + team.ID_TEAM"
+    (willDismiss)="onWillDismiss()"
+  >
+    <ng-template>
+      <ion-content class="ion-padding">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          "
+        >
+          <ion-text> {{ "Modify team" | translate }}</ion-text>
+          <ion-button
+            size="small"
+            color="danger"
+            (click)="deleteTeam(team)"
+            shape="round"
+          >
+            {{ "Delete" | translate }}
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </div>
+        <div class="modal-content">
+          <ion-item>
+            <ion-input
+              [label]="'Name' | translate"
+              labelPlacement="stacked"
+              type="text"
+              [(ngModel)]="name"
+              maxlength="30"
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+              [label]="'Color' | translate"
+              labelPlacement="stacked"
+              type="text"
+              [(ngModel)]="teamColor"
+              [value]="teamColor"
+              maxlength="7"
+            ></ion-input>
+            <ion-button [disabled]="disabled" (click)="getPicker(team)">
+              <ion-icon name="brush-outline"> </ion-icon>
+            </ion-button>
+            <ion-icon
+              size="large"
+              slot="end"
+              name="shirt"
+              [style.color]="teamColor"
+            ></ion-icon>
+          </ion-item>
+          <div
+            style="padding-top: 10px; width: 100%"
+            [id]="'picker' + team.ID_TEAM"
+          ></div>
+        </div>
+        <ion-button expand="full" (click)="editTeam(team)" shape="round">
+          Ok
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+  } } } @if(isEdit){
   <app-meeting-team-list
     [messages]="filteredMessages"
     [teams]="teams"

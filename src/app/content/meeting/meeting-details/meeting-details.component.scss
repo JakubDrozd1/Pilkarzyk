@@ -5,7 +5,7 @@ ion-item {
   width: 100%;
   margin-top: 5px;
 }
-ion-icon {
+.icon {
   padding-right: 10px;
 }
 ion-avatar {
@@ -17,4 +17,15 @@ ion-avatar {
 }
 .click {
   padding: 5px;
+}
+ion-modal {
+  padding-bottom: 20vh;
+  padding-top: 20vh;
+  padding-right: 5vh;
+  padding-left: 5vh;
+  background: rgba(0, 0, 0, 0.7);
+}
+.modal-content {
+  margin: 20px;
+  margin-top: 40px;
 }

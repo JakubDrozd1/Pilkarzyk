@@ -173,6 +173,9 @@
   "Yes": "Yes",
   "No": "No",
   "Rejected": "Rejected",
+  "Allow users to join a team on their own.": "Allow users to join a team on their own.",
+  "Delete": "Delete",
+  "The invitation has expired": "The invitation has expired",
 
   "Group is null": "Group doesn't exist.",
   "User is null": "User doesn't exist",

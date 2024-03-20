@@ -16,10 +16,7 @@
 </ion-item>
 
 <ion-content>
-  <ion-modal
-    [trigger]="'open-modal' + counter"
-    (willDismiss)="onWillDismiss($event)"
-  >
+  <ion-modal [trigger]="'open-modal' + counter" (willDismiss)="onWillDismiss()">
     <ng-template>
       <ion-content class="ion-padding">
         <ion-text> {{ "Modify team" | translate }}</ion-text>
@@ -30,6 +27,7 @@
               labelPlacement="stacked"
               type="text"
               [(ngModel)]="name"
+              maxlength="30"
             ></ion-input>
           </ion-item>
           <ion-item>
@@ -40,6 +38,7 @@
               [(ngModel)]="color"
               (change)="setColor(color)"
               [value]="color"
+              maxlength="7"
             ></ion-input>
             <ion-button [disabled]="disabled" (click)="getPicker()">
               <ion-icon name="brush-outline"> </ion-icon>
@@ -56,7 +55,9 @@
             [id]="'picker' + counter"
           ></div>
         </div>
-        <ion-button expand="full" (click)="dismiss()" shape="round">Ok</ion-button>
+        <ion-button expand="full" (click)="dismiss()" shape="round"
+          >Ok</ion-button
+        >
       </ion-content>
     </ng-template>
   </ion-modal>

@@ -7,9 +7,12 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
+
 <ion-content class="ion-padding">
   <app-spinner [isReady]="!isReady"></app-spinner>
+
   @if(isReady){
+
   <form [formGroup]="meetingForm" (ngSubmit)="onSubmit()">
     <ion-list [inset]="true">
       @if(isHome){
@@ -31,10 +34,14 @@
         </ion-select>
       </ion-item>
       }
+
       <ion-item lines="none">
-        <ion-label> {{ "Date of meeting" | translate }} </ion-label>
+        <ion-label class="ion-text-wrap">
+          {{ "Date of meeting" | translate }}
+        </ion-label>
         <ion-datetime-button datetime="datetime"> </ion-datetime-button>
       </ion-item>
+
       <ion-modal [keepContentsMounted]="true">
         <ng-template>
           <ion-datetime
@@ -50,6 +57,7 @@
           ></ion-datetime>
         </ng-template>
       </ion-modal>
+
       <ion-item lines="none">
         <ion-input
           class="border"
@@ -61,6 +69,7 @@
         >
         </ion-input>
       </ion-item>
+
       <ion-item lines="none">
         <ion-input
           class="border"
@@ -74,6 +83,7 @@
         >
         </ion-input>
       </ion-item>
+
       <ion-item lines="none">
         <ion-textarea
           class="border"
@@ -86,6 +96,7 @@
         >
         </ion-textarea>
       </ion-item>
+
       <ion-item lines="none">
         <ion-checkbox
           labelPlacement="end"
@@ -95,7 +106,21 @@
           {{ "Check if you will also come" | translate }}
         </ion-checkbox>
       </ion-item>
-      @if(!isEdit){
+
+      @if(isEdit){
+      <ion-item lines="none">
+        <ion-checkbox
+          labelPlacement="end"
+          justify="start"
+          formControlName="isIndependent"
+          class="ion-text-wrap"
+        >
+          <div class="ion-text-wrap">
+            {{ "Allow users to join a team on their own." | translate }}
+          </div>
+        </ion-checkbox>
+      </ion-item>
+      } @if(!isEdit){
       <ion-item lines="none">
         <ion-checkbox
           labelPlacement="end"
@@ -106,7 +131,21 @@
           {{ "Add teams" | translate }}
         </ion-checkbox>
       </ion-item>
-      @if(this.meetingForm.value.teams){
+
+      @if(meetingForm.value.teams){
+
+      <ion-item lines="none">
+        <ion-checkbox
+          labelPlacement="end"
+          justify="start"
+          formControlName="isIndependent"
+        >
+          <div class="ion-text-wrap">
+            {{ "Allow users to join a team on their own." | translate }}
+          </div>
+        </ion-checkbox>
+      </ion-item>
+
       <ion-item lines="none">
         <ion-input
           class="border"
@@ -121,23 +160,34 @@
         >
         </ion-input>
       </ion-item>
-      @if(!isEdit){ @if(this.meetingForm.value.quantityTeams>1){ @for(team of
-      getNumberArray(this.meetingForm.value.quantityTeams) ; track $index){
+
+      @if(teams.length>0){ @for(team of teams; track $index){
+      @if(meetingForm.value.quantityTeams >= $index+1){
+
+      <app-team-generator
+        [counter]="team.ID_TEAM ?? 0"
+        [color]="team.COLOR ?? ''"
+        [name]="team.NAME ?? ''"
+        (dataEvent)="collectData($event)"
+      ></app-team-generator>
+      } } @if(teams.length < meetingForm.value.quantityTeams){ @for(item of
+      getNumberArray(meetingForm.value.quantityTeams-teams.length); track
+      $index) {
+
+      <app-team-generator [color]="color[$index]"></app-team-generator>
+
+      } } }@else{ @if(meetingForm.value.quantityTeams>1){ @for(team of
+      getNumberArray(meetingForm.value.quantityTeams) ; track $index){
       <app-team-generator
         [counter]="$index"
         [color]="color[$index]"
         (dataEvent)="collectData($event)"
-      ></app-team-generator>
-      } } }} @if(isEdit){ @if(teams.length>0){ @for(team of teams ; track
-      $index){
-      <app-team-generator
-        [counter]="$index"
-        [name]="team.NAME ?? ''"
-        [color]="team.COLOR ?? ''"
-        (dataEvent)="collectData($event)"
-      ></app-team-generator
-      >} } }}
+      >
+      </app-team-generator>
+
+      } } } } }
     </ion-list>
+
     <ion-button shape="round" type="submit" expand="full">
       @if(isEdit){
       {{ "Save" | translate }}

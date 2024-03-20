@@ -2,7 +2,11 @@ import { MessagesApi } from './../../../../../libs/api-client/api/messages.api'
 import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { AlertController, IonicModule } from '@ionic/angular'
+import {
+  AlertController,
+  IonicModule,
+  RefresherEventDetail,
+} from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import {
   GetMeetingGroupsResponse,
@@ -16,6 +20,10 @@ import { Alert } from 'src/app/helper/alert'
 import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
 import { UserService } from 'src/app/service/user/user.service'
 import { MeetingTeamListComponent } from '../meeting-team-list/meeting-team-list.component'
+import { FormsModule } from '@angular/forms'
+import iro from '@jaames/iro'
+import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
+import { IonRefresherCustomEvent } from '@ionic/core'
 
 @Component({
   selector: 'app-meeting-team',
@@ -27,6 +35,8 @@ import { MeetingTeamListComponent } from '../meeting-team-list/meeting-team-list
     IonicModule,
     TranslateModule,
     MeetingTeamListComponent,
+    FormsModule,
+    SpinnerComponent,
   ],
 })
 export class MeetingTeamComponent implements OnInit {
@@ -66,6 +76,13 @@ export class MeetingTeamComponent implements OnInit {
       role: 'cancel',
     },
   ]
+  name: string = ''
+  teamColor: string = ''
+  disabled: boolean = false
+  colorPicker: any
+  isUserYes: boolean = false
+  colorRegex = /^#(?:[0-9a-fA-F]{3}){1,2}$/
+
   constructor(
     public translate: TranslateService,
     private route: ActivatedRoute,
@@ -85,6 +102,7 @@ export class MeetingTeamComponent implements OnInit {
       }
     })
   }
+  
   getDetails() {
     this.teams = []
     this.filteredMessages = []
@@ -113,6 +131,14 @@ export class MeetingTeamComponent implements OnInit {
               this.filteredMessages = responses.messages.filter(
                 (message) => message.Answer === 'yes'
               )
+              for (let user of this.filteredMessages) {
+                if (user.IdUser == this.userService.loggedUser.ID_USER) {
+                  this.isUserYes = true
+                  break
+                } else {
+                  this.isUserYes = false
+                }
+              }
               this.teams.forEach((team) => {
                 const teamId = team.ID_TEAM || 0
 
@@ -225,5 +251,180 @@ export class MeetingTeamComponent implements OnInit {
 
   getChanges($event: { [key: string]: GetMessagesUsersMeetingsResponse[] }) {
     this.arrays = $event
+  }
+
+  addToTeam(team: TEAMS) {
+    this.isReady = false
+    const updatedTeams: {
+      [key: string]: Array<GetMessagesUsersMeetingsResponse>
+    } = {}
+    updatedTeams[String(team.ID_TEAM)] = [
+      {
+        IdMeeting: this.idMeeting,
+        IdUser: this.userService.loggedUser.ID_USER,
+        IdAuthor: this.userService.loggedUser.ID_USER,
+      },
+    ]
+    this.messagesApi
+      .updateTeamMessageAsync({
+        getTeamTableMessageRequest: {
+          Teams: [team],
+          UpdatedTeams: updatedTeams,
+        },
+      })
+      .subscribe({
+        next: () => {
+          this.getDetails()
+          this.isReady = true
+        },
+        error: (error) => {
+          this.alert.handleError(error)
+          this.isReady = true
+        },
+      })
+  }
+
+  isUserInTeam(team: TEAMS) {
+    for (let user of this.arrays[team.ID_TEAM ?? 0]) {
+      return !(user.IdUser == this.userService.loggedUser.ID_USER)
+    }
+    return true
+  }
+
+  onWillDismiss() {
+    this.disabled = false
+  }
+
+  getPicker(team: TEAMS) {
+    this.colorPicker = iro.ColorPicker('#picker' + team.ID_TEAM, {
+      width: 100,
+      color: '#fff',
+    })
+    this.colorPicker.on('color:change', (color: { hexString: any }) => {
+      this.teamColor = color.hexString
+    })
+    this.disabled = true
+  }
+
+  setTeam(team: TEAMS) {
+    this.teamColor = team.COLOR ?? ''
+    this.name = team.NAME ?? ''
+  }
+
+  editTeam(team: TEAMS) {
+    if (this.name == '') {
+      this.name = 'Team ' + Math.floor(Math.random() * 100) + 1
+    }
+    if (this.teamColor == '' || !this.colorRegex.test(this.teamColor)) {
+      this.teamColor = this.genHexColor()
+    }
+    this.isReady = false
+    this.teamsApi
+      .updateTeam({
+        idMeeting: this.idMeeting,
+        color: this.teamColor,
+        name: this.name,
+        teamId: team.ID_TEAM ?? 0,
+      })
+      .subscribe({
+        next: () => {
+          this.alert.presentToast('Zaaktualizowano pomyslnie')
+          this.disabled = false
+          this.getDetails()
+          this.isReady = true
+        },
+        error: (error) => {
+          this.alert.handleError(error)
+          this.disabled = false
+          this.isReady = true
+        },
+      })
+  }
+
+  genHexColor(): string {
+    const randomColor = Math.floor(Math.random() * 16777215).toString(16)
+    return `#${randomColor}`
+  }
+
+  removeFromTeam(team: TEAMS) {
+    this.isReady = false
+    const updatedTeams: {
+      [key: string]: Array<GetMessagesUsersMeetingsResponse>
+    } = {}
+    updatedTeams[String(0)] = [
+      {
+        IdMeeting: this.idMeeting,
+        IdUser: this.userService.loggedUser.ID_USER,
+        IdAuthor: this.userService.loggedUser.ID_USER,
+        IdTeam: team.ID_TEAM,
+      },
+    ]
+    this.messagesApi
+      .updateTeamMessageAsync({
+        getTeamTableMessageRequest: {
+          Teams: [team],
+          UpdatedTeams: updatedTeams,
+        },
+      })
+      .subscribe({
+        next: () => {
+          this.getDetails()
+          this.isReady = true
+        },
+        error: (error) => {
+          this.alert.handleError(error)
+          this.isReady = true
+        },
+      })
+  }
+
+  handleRefresh($event: IonRefresherCustomEvent<RefresherEventDetail>) {
+    setTimeout(() => {
+      this.getDetails()
+      $event.target.complete()
+    }, 2000)
+  }
+
+  async deleteTeam(team: TEAMS) {
+    const alert = await this.alertCtrl.create({
+      header: 'Na pewno usunąć drużyne?',
+      buttons: [
+        {
+          text: this.translate.instant('Yes'),
+          role: 'submit',
+          handler: () => {
+            this.isEdit = false
+            this.delete(team)
+          },
+        },
+        {
+          text: this.translate.instant('No'),
+          role: 'cancel',
+        },
+      ],
+      backdropDismiss: false,
+    })
+    alert.present()
+  }
+
+  delete(team: TEAMS) {
+    this.isReady = false
+    this.teamsApi
+      .deleteTeam({
+        teamId: team.ID_TEAM ?? 0,
+      })
+      .subscribe({
+        next: () => {
+          this.alert.presentToast('Pomyślnie usunięto')
+          this.alertCtrl.dismiss()
+          this.getDetails()
+          this.isReady = true
+        },
+        error: (error) => {
+          this.alert.handleError(error)
+          this.alertCtrl.dismiss()
+          this.isReady = true
+        },
+      })
   }
 }

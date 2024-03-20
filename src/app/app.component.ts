@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
-import { RouterModule } from '@angular/router'
+import { Component, NgZone, OnInit } from '@angular/core'
+import { Router, RouterModule } from '@angular/router'
 import { Capacitor } from '@capacitor/core'
 import { IonicModule } from '@ionic/angular'
 import { HttpClientModule } from '@angular/common/http'
@@ -10,7 +10,11 @@ import { Subscription } from 'rxjs'
 import { UserService } from './service/user/user.service'
 import { GetMeetingUsersResponse, UsersMeetingsApi } from 'libs/api-client'
 import { DataService } from './service/data/data.service'
-import { PushNotifications } from '@capacitor/push-notifications'
+import {
+  ActionPerformed,
+  PushNotificationActionPerformed,
+  PushNotifications,
+} from '@capacitor/push-notifications'
 import { LocalNotifications } from '@capacitor/local-notifications'
 import { Device } from '@capacitor/device'
 
@@ -39,13 +43,41 @@ export class AppComponent implements OnInit {
     public translate: TranslateService,
     private userService: UserService,
     private usersMeetingsApi: UsersMeetingsApi,
-    private dataService: DataService
+    private dataService: DataService,
+    private router: Router,
+    private zone: NgZone
   ) {}
 
   ngOnInit(): void {
     this.setLanguage()
+
     if (Capacitor.isNativePlatform()) {
       this.registerNotifications()
+      PushNotifications.addListener(
+        'pushNotificationActionPerformed',
+        (notification: ActionPerformed) => {
+          this.zone.run(() => {
+            if (notification.notification.data.NotificationId) {
+              this.router.navigate(['/notification'])
+            }
+
+            if (notification.notification.data.MeetingNotificationId) {
+              this.router.navigate([
+                '/meeting',
+                Number(notification.notification.data.MeetingNotificationId),
+              ])
+            }
+
+            if (notification.notification.data.TeamNotificationId) {
+              this.router.navigate([
+                '/meeting',
+                Number(notification.notification.data.TeamNotificationId),
+                'team',
+              ])
+            }
+          })
+        }
+      )
     }
   }
 
@@ -70,7 +102,7 @@ export class AppComponent implements OnInit {
       this.translate.use(this.lang)
     }
   }
-  
+
   getNotification(idUserNotification: number, idMeetingNotification: number) {
     if (this.userService.loggedUser != null) {
       if (

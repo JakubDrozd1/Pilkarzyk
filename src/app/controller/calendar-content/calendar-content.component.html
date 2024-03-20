@@ -31,9 +31,8 @@
 
   <app-spinner [isReady]="!isReadyRefresh"></app-spinner>
 
-  @if(isReadyRefresh){ @if(selectedDate.length>0){ @for (item of
+  @if(isReadyRefresh){ @if(selectedDate && selectedDate.length>0){ @for (item of
   meetingsSelected; track $index) {
-
   <app-meeting-content [meeting]="item"></app-meeting-content>
   } } @else if(meetings.length>0){ @for (item of meetings; track $index) {
   <app-meeting-content [meeting]="item"></app-meeting-content>

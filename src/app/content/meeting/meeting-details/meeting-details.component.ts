@@ -28,11 +28,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { UserService } from 'src/app/service/user/user.service'
 import * as moment from 'moment'
-import {
-  IonModalCustomEvent,
-  IonRefresherCustomEvent,
-  OverlayEventDetail,
-} from '@ionic/core'
+import { IonRefresherCustomEvent } from '@ionic/core'
 import { MeetingTeamListComponent } from '../meeting-team-list/meeting-team-list.component'
 import { FormsModule } from '@angular/forms'
 import iro from '@jaames/iro'
@@ -63,7 +59,7 @@ export class MeetingDetailsComponent implements OnInit {
   filteredMessages: GetMessagesUsersMeetingsResponse[] = []
   images: any[] = []
   counter: number = 5
-  defautAnswer!: GetMessagesUsersMeetingsResponse
+  defaultAnswer!: GetMessagesUsersMeetingsResponse
   public changeInputs: any
   selectedValue: string = ''
   currentDate: any
@@ -110,6 +106,9 @@ export class MeetingDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.defaultAnswer = {
+      Answer: null,
+    }
     this.currentDate = moment().toISOString()
     this.subscription.add(
       this.refreshDataService.refreshSubject.subscribe((index) => {
@@ -159,12 +158,12 @@ export class MeetingDetailsComponent implements OnInit {
               let element: number = this.elementRef.nativeElement.offsetWidth
               this.counter = Math.round(element / 60)
               this.user = responses.user
-              this.defautAnswer = responses.messages.filter(
+              this.defaultAnswer = responses.messages.filter(
                 (message) =>
                   message.IdUser === this.userService.loggedUser.ID_USER
               )[0]
               this.setInputs()
-              this.setColor(this.defautAnswer)
+              this.setColor(this.defaultAnswer)
               this.filteredMessages = responses.messages.filter(
                 (message) => message.Answer === 'yes'
               )
@@ -186,6 +185,7 @@ export class MeetingDetailsComponent implements OnInit {
               } else {
                 this.isReady = true
               }
+              this.isReady = true
             },
           })
         },
@@ -231,7 +231,7 @@ export class MeetingDetailsComponent implements OnInit {
         label: this.translate.instant('I WILL COME'),
         type: 'radio',
         value: 'yes',
-        checked: this.defautAnswer.Answer == 'yes',
+        checked: this.defaultAnswer.Answer == 'yes',
         handler: (input: { value: any }) => {
           this.selectedValue = input.value
         },
@@ -240,7 +240,7 @@ export class MeetingDetailsComponent implements OnInit {
         label: this.translate.instant('I WONT COME'),
         type: 'radio',
         value: 'no',
-        checked: this.defautAnswer.Answer == 'no',
+        checked: this.defaultAnswer.Answer == 'no',
         handler: (input: { value: any }) => {
           this.selectedValue = input.value
         },
@@ -249,7 +249,7 @@ export class MeetingDetailsComponent implements OnInit {
         label: this.translate.instant('GIVE ME TIME'),
         type: 'radio',
         value: 'wait',
-        checked: this.defautAnswer.Answer == 'wait',
+        checked: this.defaultAnswer.Answer == 'wait',
         handler: (input: { value: any }) => {
           this.selectedValue = input.value
         },
@@ -292,7 +292,7 @@ export class MeetingDetailsComponent implements OnInit {
     } else if (this.selectedValue == 'wait') {
       this.selectedValue = ''
       this.setInputs()
-      this.router.navigate(['/message-add', this.defautAnswer.IdMessage])
+      this.router.navigate(['/message-add', this.defaultAnswer.IdMessage])
     }
   }
 

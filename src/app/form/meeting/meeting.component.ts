@@ -130,6 +130,9 @@ export class MeetingComponent implements OnInit {
     this.meetingForm
       .get('dateMeeting')
       ?.setValue(moment().add(this.delay, 'hours').format())
+    this.meetingForm.get('quantityTeams')?.valueChanges.subscribe(() => {
+      this.collectedData = []
+    })
   }
 
   getPermission() {
@@ -176,6 +179,7 @@ export class MeetingComponent implements OnInit {
                     ? this.meetingForm.value.group.IdGroup
                     : this.idGroup,
                   IdAuthor: this.userService.loggedUser.ID_USER,
+                  IsIndependent: this.meetingForm.value.isIndependent,
                 },
                 Message: {
                   IdUser: this.userService.loggedUser.ID_USER,
@@ -215,6 +219,7 @@ export class MeetingComponent implements OnInit {
                     ? this.meetingForm.value.group.IdGroup
                     : this.idGroup,
                   IdAuthor: this.userService.loggedUser.ID_USER,
+                  IsIndependent: this.meetingForm.value.isIndependent,
                 },
                 Message: {
                   IdUser: this.userService.loggedUser.ID_USER,
@@ -247,12 +252,19 @@ export class MeetingComponent implements OnInit {
               Place: this.meetingForm.value.place.trim(),
               Quantity: this.meetingForm.value.quantity,
               Description: this.meetingForm.value.description.trim(),
+              IsIndependent: this.meetingForm.value.isIndependent,
               Message: {
                 IdMeeting: this.idMeeting,
                 IdUser: this.userService.loggedUser.ID_USER,
                 Answer: this.meetingForm.value.presence ? 'yes' : 'no',
               },
-              Column: ['DATE_MEETING', 'PLACE', 'QUANTITY', 'DESCRIPTION'],
+              Column: [
+                'DATE_MEETING',
+                'PLACE',
+                'QUANTITY',
+                'DESCRIPTION',
+                'IS_INDEPENDENT',
+              ],
             },
           })
           .subscribe({
@@ -286,7 +298,6 @@ export class MeetingComponent implements OnInit {
         })
         .subscribe({
           next: (response) => {
-            console.log(response)
             this.meeting = response[0]
             this.meetingForm
               .get('dateMeeting')
@@ -299,6 +310,9 @@ export class MeetingComponent implements OnInit {
             this.meetingForm
               .get('presence')
               ?.setValue(this.meeting.Answer == 'yes')
+            this.meetingForm
+              .get('isIndependent')
+              ?.setValue(this.meeting.IsIndependent)
             this.isReady = true
           },
           error: (error) => {
@@ -311,6 +325,9 @@ export class MeetingComponent implements OnInit {
 
   getLastMeeting(idGroup: number) {
     if (idGroup > 0) {
+      this.collectedData = []
+      this.meetingForm.get('teams')?.reset()
+      this.meetingForm.get('quantityTeams')?.reset()
       this.isReady = false
       this.meetingsApi
         .getAllMeetings({
@@ -325,11 +342,50 @@ export class MeetingComponent implements OnInit {
           next: (response) => {
             this.meeting = response[0]
             if (this.meeting) {
-              this.meetingForm.get('place')?.setValue(this.meeting.Place)
-              this.meetingForm.get('quantity')?.setValue(this.meeting.Quantity)
-              this.meetingForm
-                .get('description')
-                ?.setValue(this.meeting.Description)
+              this.teamsApi
+                .getAllTeamsFromMeeting({
+                  meetingId: this.meeting.IdMeeting ?? 0,
+                })
+                .subscribe({
+                  next: (response) => {
+                    if (this.meeting) {
+                      this.meetingForm
+                        .get('place')
+                        ?.setValue(this.meeting.Place)
+                      this.meetingForm
+                        .get('quantity')
+                        ?.setValue(this.meeting.Quantity)
+                      this.meetingForm
+                        .get('description')
+                        ?.setValue(this.meeting.Description)
+                      this.meetingForm
+                        .get('isIndependent')
+                        ?.setValue(this.meeting.IsIndependent)
+                    }
+                    this.teams = response
+                    if (this.teams.length > 0) {
+                      this.meetingForm.get('teams')?.setValue(true)
+                      this.meetingForm.addControl(
+                        'quantityTeams',
+                        this.fb.control('', OneToTenValidator())
+                      )
+                      this.meetingForm
+                        .get('quantityTeams')
+                        ?.valueChanges.subscribe(() => {
+                          this.collectedData = []
+                        })
+                      this.meetingForm
+                        .get('quantityTeams')
+                        ?.setValue(this.teams.length)
+                    }
+
+                    this.isReady = true
+                  },
+                  error: (error) => {
+                    this.alert.handleError(error)
+                    this.isReady = true
+                  },
+                })
             }
             this.isReady = true
           },
@@ -404,8 +460,12 @@ export class MeetingComponent implements OnInit {
         'quantityTeams',
         this.fb.control('', OneToTenValidator())
       )
+      this.meetingForm.get('quantityTeams')?.valueChanges.subscribe(() => {
+        this.collectedData = []
+      })
     } else {
       this.meetingForm.removeControl('quantityTeams')
+      this.collectedData = []
     }
   }
 }

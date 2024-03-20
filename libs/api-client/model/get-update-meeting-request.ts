@@ -17,6 +17,7 @@ export interface GetUpdateMeetingRequest {
     Place?: string | null;
     Quantity?: number | null;
     Description?: string | null;
+    IsIndependent?: boolean | null;
     Column?: Array<string> | null;
     Message?: GetMessageRequest;
 }

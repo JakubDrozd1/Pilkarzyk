@@ -146,8 +146,8 @@
   </ion-card>
   } }
 </ion-content>
-@if(isReady&& (userService.loggedUser.ID_USER==meeting.IdAuthor ||
-userService.loggedUser.IS_ADMIN)){
+@if(isReady){ @if( userService.loggedUser.ID_USER==meeting.IdAuthor ||
+userService.loggedUser.IS_ADMIN){
 <ion-modal
   [trigger]="'add-team' + counterModal"
   (willDismiss)="onWillDismiss()"
@@ -195,4 +195,4 @@ userService.loggedUser.IS_ADMIN)){
     </ion-content>
   </ng-template>
 </ion-modal>
-}
+}}

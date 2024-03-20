@@ -18,5 +18,6 @@ export interface GetMeetingRequest {
     Description?: string | null;
     IdGroup?: number | null;
     IdAuthor?: number | null;
+    IsIndependent?: boolean | null;
 }
 

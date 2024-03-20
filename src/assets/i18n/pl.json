@@ -173,6 +173,8 @@
   "Yes": "Tak",
   "No": "Nie",
   "Rejected": "Odrzucone",
+  "Allow users to join a team on their own.": "Umożliw użytkownikom samodzielne dołączanie do drużyny.",
+  "Delete": "Usuń",
 
   "Group is null": "Grupa nie istnieje.",
   "User is null": "Użytkownik nie istnieje.",

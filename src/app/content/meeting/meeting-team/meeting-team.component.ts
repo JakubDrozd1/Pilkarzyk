@@ -102,6 +102,7 @@ export class MeetingTeamComponent implements OnInit {
       }
     })
   }
+  
   getDetails() {
     this.teams = []
     this.filteredMessages = []

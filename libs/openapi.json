@@ -3209,6 +3209,10 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "IsIndependent": {
+            "type": "boolean",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3242,6 +3246,10 @@
           "IdAuthor": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          },
+          "IsIndependent": {
+            "type": "boolean",
             "nullable": true
           }
         },
@@ -3437,6 +3445,10 @@
           "IdTeam": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          },
+          "IsIndependent": {
+            "type": "boolean",
             "nullable": true
           }
         },
@@ -3681,6 +3693,10 @@
           },
           "Description": {
             "type": "string",
+            "nullable": true
+          },
+          "IsIndependent": {
+            "type": "boolean",
             "nullable": true
           },
           "Column": {

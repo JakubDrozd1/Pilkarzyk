@@ -100,7 +100,7 @@
             (click)="setTeam(team)"
           >
           </ion-icon>
-          } @if(isUserYes){ @if(isUserInTeam(team)){
+          } @if(meeting.IsIndependent){ @if(isUserYes){ @if(isUserInTeam(team)){
           <ion-icon
             name="add-outline"
             size="large"
@@ -118,7 +118,7 @@
             class="click"
             (click)="removeFromTeam(team)"
           ></ion-icon>
-          }}
+          }}}
         </div>
       </ion-label>
     </ion-card-header>
@@ -163,7 +163,7 @@
             (click)="deleteTeam(team)"
             shape="round"
           >
-            Usuń
+            {{ "Delete" | translate }}
             <ion-icon name="trash-outline"></ion-icon>
           </ion-button>
         </div>

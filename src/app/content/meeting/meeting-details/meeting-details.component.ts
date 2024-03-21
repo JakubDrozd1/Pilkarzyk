@@ -92,6 +92,7 @@ export class MeetingDetailsComponent implements OnInit {
   counterModal: number = 0
   guestName: string = 'Guest'
   guests: GUESTS[] = []
+  component: string = ''
 
   constructor(
     private route: ActivatedRoute,
@@ -111,6 +112,7 @@ export class MeetingDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.setComponent()
     this.defaultAnswer = {
       Answer: null,
     }
@@ -239,7 +241,18 @@ export class MeetingDetailsComponent implements OnInit {
   }
 
   cancel() {
-    window.history.back()
+    if (window.location.pathname.includes('home')) {
+      this.router.navigate(['/home'])
+    }
+    if (window.location.pathname.includes('groups')) {
+      this.router.navigate(['/groups'])
+    }
+    if (window.location.pathname.includes('notification')) {
+      this.router.navigate(['/notification'])
+    }
+    if (window.location.pathname.includes('calendar')) {
+      this.router.navigate(['/calendar'])
+    }
   }
 
   setInputs() {
@@ -309,7 +322,12 @@ export class MeetingDetailsComponent implements OnInit {
     } else if (this.selectedValue == 'wait') {
       this.selectedValue = ''
       this.setInputs()
-      this.router.navigate(['/message-add', this.defaultAnswer.IdMessage])
+      this.router.navigate([
+        '/home/meeting',
+        this.idMeeting,
+        'answer',
+        this.defaultAnswer.IdMessage,
+      ])
     }
   }
 
@@ -414,5 +432,20 @@ export class MeetingDetailsComponent implements OnInit {
           this.isReady = true
         },
       })
+  }
+
+  setComponent() {
+    if (window.location.pathname.includes('home')) {
+      this.component = 'home'
+    }
+    if (window.location.pathname.includes('groups')) {
+      this.component = 'groups'
+    }
+    if (window.location.pathname.includes('notification')) {
+      this.component = 'notification'
+    }
+    if (window.location.pathname.includes('calendar')) {
+      this.component = 'calendar'
+    }
   }
 }

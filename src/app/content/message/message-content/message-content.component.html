@@ -62,7 +62,7 @@
     <span>{{ "NEW" | translate }}</span>
   </ion-fab>
   }
-  <ion-card-header [routerLink]="['/meeting', message.IdMeeting]" class="click">
+  <ion-card-header [routerLink]="['meeting', message.IdMeeting]" class="click">
     <ion-card-title>
       <div style="display: flex">
         <div style="text-align: left; width: 100%">
@@ -77,7 +77,7 @@
     </ion-card-title>
   </ion-card-header>
   <ion-card-content
-    [routerLink]="['/meeting', message.IdMeeting]"
+    [routerLink]="['meeting', message.IdMeeting]"
     class="click"
   >
     <ion-label>
@@ -144,7 +144,7 @@
       class="button"
       size="small"
       shape="round"
-      [routerLink]="['/message-add', message.IdMessage]"
+      [routerLink]="['message-add', message.IdMessage]"
     >
       <ion-label color="warning">
         <ion-icon size="large" name="time-outline"></ion-icon>

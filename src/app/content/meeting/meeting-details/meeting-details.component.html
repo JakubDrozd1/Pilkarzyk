@@ -14,15 +14,13 @@
           name="sync-outline"
         ></ion-icon>
       </ion-label>
-      } @if(meeting.IdAuthor===userService.loggedUser.ID_USER){
-      <ion-label
-        class="click"
-        [routerLink]="['/meeting', meeting.IdMeeting, 'edit']"
-      >
+      } @if(userService.loggedUser.ID_USER==meeting.IdAuthor ||
+      userService.loggedUser.IS_ADMIN){
+      <ion-label class="click" [routerLink]="['edit']">
         <ion-icon slot="end" size="large" name="create-outline"></ion-icon>
       </ion-label>
 
-      <ion-label class="click" [id]="'add-guest'">
+      <ion-label class="click" [id]="'add-guest' + component">
         <ion-icon slot="end" size="large" name="person-add-outline"></ion-icon>
       </ion-label>
       }
@@ -30,8 +28,8 @@
     }
   </ion-toolbar>
 </ion-header>
-<app-spinner [isReady]="!isReady"></app-spinner>
 <ion-content>
+  <app-spinner [isReady]="!isReady"></app-spinner>
   <ion-refresher
     slot="fixed"
     [pullFactor]="0.5"
@@ -60,10 +58,7 @@
           <img alt="img" [src]="image" />
         </ion-avatar>
         }
-        <ion-label
-          [routerLink]="['/account/profile', user.ID_USER]"
-          class="click"
-        >
+        <ion-label [routerLink]="['profile', user.ID_USER]" class="click">
           {{ user.FIRSTNAME }} {{ user.SURNAME }}
         </ion-label>
       </ion-chip>
@@ -83,12 +78,7 @@
       </ion-item>
     </ion-card-content>
     <ion-card-content>
-      <ion-item
-        class="button"
-        lines="full"
-        button
-        [routerLink]="['/message', meeting.IdMeeting]"
-      >
+      <ion-item class="button" lines="full" button [routerLink]="['message']">
         @for(image of images; track $index){ @if($index<counter){ @if(image ==
         null){
         <ion-avatar>
@@ -117,14 +107,17 @@
       @if(userService.loggedUser.ID_USER==meeting.IdAuthor ||
       userService.loggedUser.IS_ADMIN){
       <div style="padding: 5px">
-        <ion-fab-button [id]="'add-team' + counterModal" size="small">
+        <ion-fab-button
+          [id]="'add-team' + counterModal + component"
+          size="small"
+        >
           <ion-icon name="add-outline"></ion-icon>
         </ion-fab-button>
       </div>
       }
     </div>
     <ion-card-content>
-      <div class="click" [routerLink]="['/meeting', meeting.IdMeeting, 'team']">
+      <div class="click" [routerLink]="['team']">
         @if(teams.length>0){ @for(team of teams; track $index){
 
         <ion-item lines="full">
@@ -153,7 +146,7 @@
 @if(isReady){ @if( userService.loggedUser.ID_USER==meeting.IdAuthor ||
 userService.loggedUser.IS_ADMIN){
 <ion-modal
-  [trigger]="'add-team' + counterModal"
+  [trigger]="'add-team' + counterModal + component"
   (willDismiss)="onWillDismiss()"
   class="team"
 >
@@ -203,7 +196,7 @@ userService.loggedUser.IS_ADMIN){
   </ng-template>
 </ion-modal>
 
-<ion-modal [trigger]="'add-guest'" class="guest">
+<ion-modal [trigger]="'add-guest' + component" class="guest">
   <ng-template>
     <ion-content class="ion-padding">
       <ion-text style="font-size: larger; padding: 10px">

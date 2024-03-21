@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { IonicModule, RefresherEventDetail } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { MeetingUserListComponent } from '../../meeting/meeting-user-list/meeting-user-list.component'
@@ -43,7 +43,8 @@ export class MessageUserListComponent implements OnInit {
     private alert: Alert,
     private refreshDataService: RefreshDataService,
     private guestsApi: GuestsApi,
-    public translate: TranslateService
+    public translate: TranslateService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -117,7 +118,19 @@ export class MessageUserListComponent implements OnInit {
   }
 
   cancel() {
-    window.history.back()
+    let meetingPath = '/meeting/' + this.idMeeting
+    if (window.location.pathname.includes('home')) {
+      this.router.navigate(['/home' + meetingPath])
+    }
+    if (window.location.pathname.includes('groups')) {
+      this.router.navigate(['/groups' + meetingPath])
+    }
+    if (window.location.pathname.includes('notification')) {
+      this.router.navigate(['/notification' + meetingPath])
+    }
+    if (window.location.pathname.includes('calendar')) {
+      this.router.navigate(['/calendar' + meetingPath])
+    }
   }
 
   handleRefresh($event: IonRefresherCustomEvent<RefresherEventDetail>) {

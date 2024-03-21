@@ -23,7 +23,7 @@ import { Observable, forkJoin } from 'rxjs'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { SpinnerComponent } from '../../helper/spinner/spinner.component'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { UserService } from 'src/app/service/user/user.service'
 import { IonSelectCustomEvent } from '@ionic/core'
 import { TeamGeneratorComponent } from '../team-generator/team-generator.component'
@@ -88,7 +88,8 @@ export class MeetingComponent implements OnInit {
     private route: ActivatedRoute,
     private userService: UserService,
     private messagesApi: MessagesApi,
-    private teamsApi: TeamsApi
+    private teamsApi: TeamsApi,
+    private router: Router
   ) {
     this.meetingForm = this.fb.group({
       dateMeeting: ['', Validators.required],
@@ -328,6 +329,9 @@ export class MeetingComponent implements OnInit {
       this.collectedData = []
       this.meetingForm.get('teams')?.reset()
       this.meetingForm.get('quantityTeams')?.reset()
+      this.meetingForm.get('place')?.reset()
+      this.meetingForm.get('quantity')?.reset()
+      this.meetingForm.get('description')?.reset()
       this.isReady = false
       this.meetingsApi
         .getAllMeetings({
@@ -398,7 +402,28 @@ export class MeetingComponent implements OnInit {
   }
 
   cancel() {
-    window.history.back()
+    if (!this.isEdit) {
+      if (window.location.pathname.includes('home')) {
+        this.router.navigate(['/home'])
+      }
+      if (window.location.pathname.includes('groups')) {
+        this.router.navigate(['/groups' + this.idGroup])
+      }
+    } else {
+      var meetingPath = '/meeting/' + this.idMeeting
+      if (window.location.pathname.includes('home')) {
+        this.router.navigate(['/home' + meetingPath])
+      }
+      if (window.location.pathname.includes('groups')) {
+        this.router.navigate(['/groups' + meetingPath])
+      }
+      if (window.location.pathname.includes('notification')) {
+        this.router.navigate(['/notification' + meetingPath])
+      }
+      if (window.location.pathname.includes('calendar')) {
+        this.router.navigate(['/calendar' + meetingPath])
+      }
+    }
   }
 
   triggerEvent($event: IonSelectCustomEvent<SelectChangeEventDetail<any>>) {

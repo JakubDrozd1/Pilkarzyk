@@ -16,7 +16,7 @@
       </ion-avatar>
       }
       {{ counter + 1 }}.&nbsp; @if(user.IdUser!=null){
-      <ion-label [routerLink]="['/account/profile', user.IdUser]" class="click">
+      <ion-label [routerLink]="['profile', user.IdUser]" class="click">
         {{ user.Firstname }} {{ user.Surname }} </ion-label
       >}@else {
       <ion-label> {{ user.Firstname }} {{ user.Surname }} </ion-label>

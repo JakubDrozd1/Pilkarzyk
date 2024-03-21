@@ -1,7 +1,7 @@
 import { MessagesApi } from './../../../../../libs/api-client/api/messages.api'
 import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import {
   AlertController,
   IonicModule,
@@ -93,7 +93,8 @@ export class MeetingTeamComponent implements OnInit {
     private teamsApi: TeamsApi,
     private alert: Alert,
     private alertCtrl: AlertController,
-    private guestsApi: GuestsApi
+    private guestsApi: GuestsApi,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -141,7 +142,7 @@ export class MeetingTeamComponent implements OnInit {
                 IdMeeting: guest.IDMEETING,
                 Avatar: null,
                 IdGuest: guest.ID_GUEST,
-                IdTeam: guest.IDTEAM
+                IdTeam: guest.IDTEAM,
               }))
               this.filteredMessages = this.filteredMessages.concat(
                 responses.messages.filter((message) => message.Answer === 'yes')
@@ -215,7 +216,19 @@ export class MeetingTeamComponent implements OnInit {
   }
 
   cancel() {
-    window.history.back()
+    let meetingPath = '/meeting/' + this.idMeeting
+    if (window.location.pathname.includes('home')) {
+      this.router.navigate(['/home' + meetingPath])
+    }
+    if (window.location.pathname.includes('groups')) {
+      this.router.navigate(['/groups' + meetingPath])
+    }
+    if (window.location.pathname.includes('notification')) {
+      this.router.navigate(['/notification' + meetingPath])
+    }
+    if (window.location.pathname.includes('calendar')) {
+      this.router.navigate(['/calendar' + meetingPath])
+    }
   }
 
   swapEdit() {

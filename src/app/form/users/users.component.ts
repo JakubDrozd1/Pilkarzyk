@@ -38,7 +38,6 @@ export class UsersComponent implements OnInit {
   addNewUserForm: FormGroup
   isReadyNewUser: boolean = true
   isReadyExistingUser: boolean = false
-  mode: string = ''
 
   constructor(
     private fb: FormBuilder,

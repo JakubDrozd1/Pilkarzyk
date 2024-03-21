@@ -22,6 +22,7 @@ ion-modal {
   padding-right: 5vh;
   padding-left: 5vh;
   background: rgba(0, 0, 0, 0.7);
+  --border-radius: 20px !important;
 }
 .modal-content {
   margin: 20px;

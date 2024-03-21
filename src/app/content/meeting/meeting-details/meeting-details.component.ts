@@ -10,8 +10,10 @@ import {
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import {
+  GUESTS,
   GetMeetingGroupsResponse,
   GetMessagesUsersMeetingsResponse,
+  GuestsApi,
   MeetingsApi,
   MessagesApi,
   TEAMS,
@@ -83,11 +85,13 @@ export class MeetingDetailsComponent implements OnInit {
   color: string = ''
   teamColor: string = '#000000'
   teams: TEAMS[] = []
-  name: string = 'Team'
+  teamName: string = 'Team'
   colorPicker: any
   disabled: boolean = false
   colorRegex = /^#(?:[0-9a-fA-F]{3}){1,2}$/
   counterModal: number = 0
+  guestName: string = 'Guest'
+  guests: GUESTS[] = []
 
   constructor(
     private route: ActivatedRoute,
@@ -102,7 +106,8 @@ export class MeetingDetailsComponent implements OnInit {
     public userService: UserService,
     private alertCtrl: AlertController,
     private teamsApi: TeamsApi,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private guestsApi: GuestsApi
   ) {}
 
   ngOnInit() {
@@ -151,9 +156,13 @@ export class MeetingDetailsComponent implements OnInit {
             teams: this.teamsApi.getAllTeamsFromMeeting({
               meetingId: this.idMeeting,
             }),
+            guests: this.guestsApi.getAllGuestFromMeeting({
+              meetingId: this.idMeeting,
+            }),
           }).subscribe({
             next: (responses) => {
               this.counterModal++
+              this.guests = responses.guests
               this.teams = responses.teams
               let element: number = this.elementRef.nativeElement.offsetWidth
               this.counter = Math.round(element / 60)
@@ -164,8 +173,16 @@ export class MeetingDetailsComponent implements OnInit {
               )[0]
               this.setInputs()
               this.setColor(this.defaultAnswer)
-              this.filteredMessages = responses.messages.filter(
-                (message) => message.Answer === 'yes'
+              this.filteredMessages = responses.guests.map((guest) => ({
+                Answer: 'yes',
+                Firstname: guest.NAME,
+                Surname: this.translate.instant('(GUEST)'),
+                IdMeeting: guest.IDMEETING,
+                Avatar: null,
+                IdGuest: guest.ID_GUEST,
+              }))
+              this.filteredMessages = this.filteredMessages.concat(
+                responses.messages.filter((message) => message.Answer === 'yes')
               )
               this.acceptMeeting = this.filteredMessages.length
               convertStringsToImages(this.filteredMessages).then((files) => {
@@ -332,8 +349,8 @@ export class MeetingDetailsComponent implements OnInit {
   }
 
   addTeam() {
-    if (this.name == '') {
-      this.name = 'Team ' + Math.floor(Math.random() * 100) + 1
+    if (this.teamName == '') {
+      this.teamName = 'Team ' + Math.floor(Math.random() * 100) + 1
     }
     if (this.teamColor == '' || !this.colorRegex.test(this.teamColor)) {
       this.teamColor = this.genHexColor()
@@ -342,13 +359,15 @@ export class MeetingDetailsComponent implements OnInit {
       .addTeams({
         color: this.teamColor,
         idMeeting: this.idMeeting,
-        name: this.name,
+        name: this.teamName,
       })
       .subscribe({
         next: () => {
-          this.name = 'Team'
+          this.teamName = 'Team'
           this.teamColor = '#000000'
-          this.alert.presentToast('Dodano drużynę')
+          this.alert.presentToast(
+            this.translate.instant('Team added successfully.')
+          )
           this.disabled = false
           this.modalCtrl.dismiss('picker')
           this.reload()
@@ -356,7 +375,7 @@ export class MeetingDetailsComponent implements OnInit {
         error: (error) => {
           this.alert.handleError(error)
           this.disabled = false
-          this.name = 'Team'
+          this.teamName = 'Team'
           this.teamColor = '#000000'
           this.modalCtrl.dismiss('picker')
         },
@@ -370,5 +389,30 @@ export class MeetingDetailsComponent implements OnInit {
 
   counterUp() {
     this.counterModal++
+  }
+
+  addGuest() {
+    this.isReady = false
+    this.guestsApi
+      .addGuests({
+        getGuestRequest: {
+          IdMeeting: this.idMeeting,
+          Name: this.guestName,
+        },
+      })
+      .subscribe({
+        next: () => {
+          this.alert.presentToast(
+            this.translate.instant('Guest added successfully.')
+          )
+          this.guestName = 'Guest'
+          this.isReady = true
+          this.getDetails()
+        },
+        error: (error) => {
+          this.alert.handleError(error)
+          this.isReady = true
+        },
+      })
   }
 }

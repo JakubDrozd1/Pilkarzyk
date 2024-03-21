@@ -58,7 +58,14 @@
       </ion-label>
     </ion-card-header>
     @for(user of arrays[0]; track $index){
-    <ion-chip>
+    <ion-chip
+      [ngStyle]="{
+        background:
+          userService.loggedUser.ID_USER == user.IdUser
+            ? 'var(--ion-color-primary)'
+            : ''
+      }"
+    >
       @if(user.Avatar == null){
       <ion-avatar>
         <img
@@ -92,7 +99,7 @@
           @if(userService.loggedUser.ID_USER==meeting.IdAuthor ||
           userService.loggedUser.IS_ADMIN){
           <ion-icon
-            name="brush-outline"
+            name="create-outline"
             size="large"
             slot="end"
             class="click"
@@ -123,7 +130,14 @@
       </ion-label>
     </ion-card-header>
     @for(user of arrays[team.ID_TEAM??0]; track $index){
-    <ion-chip>
+    <ion-chip
+      [ngStyle]="{
+        background:
+          userService.loggedUser.ID_USER == user.IdUser
+            ? 'var(--ion-color-primary)'
+            : ''
+      }"
+    >
       @if(user.Avatar == null){
       <ion-avatar>
         <img

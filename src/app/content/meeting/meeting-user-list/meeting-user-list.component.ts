@@ -1,7 +1,11 @@
 import { CommonModule } from '@angular/common'
 import { Component, Input, OnInit } from '@angular/core'
 import { AlertController, IonicModule } from '@ionic/angular'
-import { GetMessagesUsersMeetingsResponse, MessagesApi } from 'libs/api-client'
+import {
+  GetMessagesUsersMeetingsResponse,
+  GuestsApi,
+  MessagesApi,
+} from 'libs/api-client'
 import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { UserService } from 'src/app/service/user/user.service'
@@ -59,7 +63,8 @@ export class MeetingUserListComponent implements OnInit {
     private alert: Alert,
     private alertCtrl: AlertController,
     private router: Router,
-    private refreshDataService: RefreshDataService
+    private refreshDataService: RefreshDataService,
+    private guestsApi: GuestsApi
   ) {}
 
   ngOnInit() {
@@ -194,5 +199,49 @@ export class MeetingUserListComponent implements OnInit {
 
   reload() {
     this.getDetails()
+  }
+
+  async deleteGuest(guest: GetMessagesUsersMeetingsResponse) {
+    const alert = await this.alertCtrl.create({
+      header: this.translate.instant(
+        'Are you sure you want to remove the guest?'
+      ),
+      buttons: [
+        {
+          text: this.translate.instant('Yes'),
+          role: 'submit',
+          handler: () => {
+            this.delete(guest)
+          },
+        },
+        {
+          text: this.translate.instant('No'),
+          role: 'cancel',
+        },
+      ],
+      backdropDismiss: false,
+    })
+    alert.present()
+  }
+
+  delete(guest: GetMessagesUsersMeetingsResponse) {
+    this.isReady = false
+    this.guestsApi
+      .deleteGuests({
+        guestsId: guest.IdGuest ?? 0,
+      })
+      .subscribe({
+        next: () => {
+          this.isReady = true
+          this.alert.presentToast(
+            this.translate.instant('The guest was successfully removed.')
+          )
+          this.refreshDataService.refresh('message-user-list')
+        },
+        error: (error) => {
+          this.isReady = true
+          this.alert.handleError(error)
+        },
+      })
   }
 }

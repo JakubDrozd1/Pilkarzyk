@@ -32,6 +32,7 @@ export interface GetMessagesUsersMeetingsResponse {
     IdAuthor?: number | null;
     IdGroup?: number | null;
     IdTeam?: number | null;
+    IdGuest?: number | null;
     IsIndependent?: boolean | null;
 }
 

@@ -17,15 +17,30 @@ ion-avatar {
 }
 .click {
   padding: 5px;
+  margin-right: 5px;
+  margin-left: 5px;
 }
-ion-modal {
+.team {
   padding-bottom: 20vh;
   padding-top: 20vh;
   padding-right: 5vh;
   padding-left: 5vh;
   background: rgba(0, 0, 0, 0.7);
+  --border-radius: 20px !important;
 }
 .modal-content {
+  margin: 20px;
+  margin-top: 40px;
+}
+.guest {
+  padding-bottom: 40vh;
+  padding-top: 30vh;
+  padding-right: 5vh;
+  padding-left: 5vh;
+  background: rgba(0, 0, 0, 0.7);
+  --border-radius: 20px !important;
+}
+.modal-content-guest {
   margin: 20px;
   margin-top: 40px;
 }

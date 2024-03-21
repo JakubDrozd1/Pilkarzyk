@@ -1,5 +1,6 @@
 export * from './groupinvite';
 export * from './groups';
+export * from './guests';
 export * from './get-chat-message-request';
 export * from './get-chat-messages-response';
 export * from './get-create-group-request';
@@ -7,6 +8,7 @@ export * from './get-group-invite-request';
 export * from './get-group-invite-response';
 export * from './get-group-request';
 export * from './get-groups-users-response';
+export * from './get-guest-request';
 export * from './get-meeting-groups-response';
 export * from './get-meeting-request';
 export * from './get-meeting-users-response';

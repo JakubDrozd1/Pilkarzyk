@@ -179,8 +179,20 @@ ion-card {
   border-radius: 20px;
 }
 ion-textarea {
-  border-radius: 20px;
+  --border-radius: 20px;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+.alert-wrapper.ion-overlay-wrapper.sc-ion-alert-md {
+  border-radius: 20px !important;
+}
+ion-modal {
+  --border-radius: 20px !important;
+}

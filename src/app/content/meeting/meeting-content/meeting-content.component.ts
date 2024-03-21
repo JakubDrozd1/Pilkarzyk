@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular'
 import {
   GetMeetingGroupsResponse,
   GetMessagesUsersMeetingsResponse,
+  GuestsApi,
   MessagesApi,
   USERS,
   UsersApi,
@@ -32,7 +33,7 @@ import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
 export class MeetingContentComponent implements OnInit {
   @Input() meeting!: GetMeetingGroupsResponse
   @Input() isCurrent: boolean = true
-  
+
   acceptMeeting: number = 0
   filteredMessages: GetMessagesUsersMeetingsResponse[] = []
   isReady: boolean = false
@@ -44,7 +45,8 @@ export class MeetingContentComponent implements OnInit {
     private messagesApi: MessagesApi,
     private alert: Alert,
     public translate: TranslateService,
-    private usersApi: UsersApi
+    private usersApi: UsersApi,
+    private guestsApi: GuestsApi
   ) {}
 
   ngOnInit() {
@@ -61,6 +63,9 @@ export class MeetingContentComponent implements OnInit {
       }),
       user: this.usersApi.getUserById({
         userId: this.meeting.IdAuthor ?? 0,
+      }),
+      guest: this.guestsApi.getAllGuestFromMeeting({
+        meetingId: Number(this.meeting.IdMeeting),
       }),
     }).subscribe({
       next: (responses) => {
@@ -82,7 +87,8 @@ export class MeetingContentComponent implements OnInit {
         } else {
           this.isReady = true
         }
-        this.acceptMeeting = this.filteredMessages.length
+        this.acceptMeeting =
+          this.filteredMessages.length + responses.guest.length
       },
       error: (error) => {
         this.alert.handleError(error)

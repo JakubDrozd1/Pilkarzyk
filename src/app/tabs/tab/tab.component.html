@@ -1,25 +1,45 @@
 <ion-tabs>
   <ion-tab-bar slot="bottom">
-    <ion-tab-button routerLink="/home" class="ion-activatable ripple-parent">
+    <ion-tab-button
+      routerLink="/home"
+      tab="home"
+      class="ion-activatable ripple-parent"
+    >
       <ion-icon name="home-outline"></ion-icon>
       {{ "Start" | translate }}
     </ion-tab-button>
-    <ion-tab-button routerLink="/notification" class="ion-activatable ripple-parent">
+    <ion-tab-button
+      routerLink="/notification"
+      tab="notification"
+      class="ion-activatable ripple-parent"
+    >
       <ion-icon name="notifications-outline"></ion-icon>
       {{ "Invitations" | translate }}
       @if(receivedData>0){
       <ion-badge>{{ receivedData }} </ion-badge>
       }
     </ion-tab-button>
-    <ion-tab-button routerLink="/groups" class="ion-activatable ripple-parent">
+    <ion-tab-button
+      routerLink="/groups"
+      tab="groups"
+      class="ion-activatable ripple-parent"
+    >
       <ion-icon name="people-outline"></ion-icon>
       {{ "Groups" | translate }}
     </ion-tab-button>
-    <ion-tab-button routerLink="/calendar" class="ion-activatable ripple-parent">
+    <ion-tab-button
+      routerLink="/calendar"
+      tab="calendar"
+      class="ion-activatable ripple-parent"
+    >
       <ion-icon name="calendar-outline"></ion-icon>
       {{ "Calendar" | translate }}
     </ion-tab-button>
-    <ion-tab-button routerLink="/account" class="ion-activatable ripple-parent">
+    <ion-tab-button
+      routerLink="/account"
+      tab="account"
+      class="ion-activatable ripple-parent"
+    >
       <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
       {{ "More" | translate }}
     </ion-tab-button>

@@ -1,19 +1,14 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { IonicModule, RefresherEventDetail } from '@ionic/angular'
-import { MeetingsApi, MessagesApi, USERS, UsersApi } from 'libs/api-client'
+import { MessagesApi, USERS, UsersApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { LogoutComponent } from '../logout/logout.component'
-import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
-import { Subscription, forkJoin } from 'rxjs'
+import { forkJoin } from 'rxjs'
 import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
-import { convertFileToBase64 } from 'src/app/helper/convertFileToBase64'
-import { UserService } from 'src/app/service/user/user.service'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
-import { GaduGaduComponent } from '../../../helper/gadu-gadu/gadu-gadu.component'
-import { ActivatedRoute, Route, Router, RouterLink } from '@angular/router'
-import { NotificationService } from 'src/app/service/notification/notification.service'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import * as moment from 'moment'
 import { IonRefresherCustomEvent } from '@ionic/core'
 
@@ -39,13 +34,16 @@ export class ProfileDetailsComponent implements OnInit {
   idUser: number = 0
   allMeetings: number = 0
   acceptMeetings: number = 0
+  idMeeting: number = 0
+  idGroup: number = 0
 
   constructor(
     private usersApi: UsersApi,
     private alert: Alert,
     public translate: TranslateService,
     private route: ActivatedRoute,
-    private messagesApi: MessagesApi
+    private messagesApi: MessagesApi,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -53,6 +51,16 @@ export class ProfileDetailsComponent implements OnInit {
       if (params?.['idUser'] > 0) {
         this.idUser = parseInt(params?.['idUser'])
         this.getDetails()
+      }
+    })
+    this.route.params.subscribe((params) => {
+      if (params?.['idMeeting'] > 0) {
+        this.idMeeting = parseInt(params?.['idMeeting'])
+      }
+    })
+    this.route.params.subscribe((params) => {
+      if (params?.['idGroup'] > 0) {
+        this.idGroup = parseInt(params?.['idGroup'])
       }
     })
   }
@@ -101,7 +109,32 @@ export class ProfileDetailsComponent implements OnInit {
   }
 
   cancel() {
-    window.history.back()
+    if (window.location.pathname.includes('message')) {
+      var meetingPath = '/meeting/' + this.idMeeting + '/message'
+    } else {
+      var meetingPath = '/meeting/' + this.idMeeting
+    }
+    if (window.location.pathname.includes('home')) {
+      this.router.navigate(['/home' + meetingPath])
+    }
+    if (window.location.pathname.includes('groups')) {
+      if (window.location.pathname.includes('meeting')) {
+        this.router.navigate(['/groups' + meetingPath])
+      } else if (this.idGroup > 0) {
+        this.router.navigate(['/groups/' + this.idGroup])
+      } else {
+        this.router.navigate(['/groups'])
+      }
+    }
+    if (window.location.pathname.includes('notification')) {
+      this.router.navigate(['/notification' + meetingPath])
+    }
+    if (window.location.pathname.includes('calendar')) {
+      this.router.navigate(['/calendar' + meetingPath])
+    }
+    if (window.location.pathname.includes('account')) {
+      this.router.navigate(['/account'])
+    }
   }
 
   handleRefresh($event: IonRefresherCustomEvent<RefresherEventDetail>) {

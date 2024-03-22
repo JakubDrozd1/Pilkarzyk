@@ -6,6 +6,7 @@ api/chat-messages.api.ts
 api/group-invites.api.ts
 api/groups-users.api.ts
 api/groups.api.ts
+api/guests.api.ts
 api/meetings.api.ts
 api/messages.api.ts
 api/notification-tokens.api.ts
@@ -26,6 +27,7 @@ model/get-group-invite-request.ts
 model/get-group-invite-response.ts
 model/get-group-request.ts
 model/get-groups-users-response.ts
+model/get-guest-request.ts
 model/get-meeting-groups-response.ts
 model/get-meeting-request.ts
 model/get-meeting-users-response.ts
@@ -46,6 +48,7 @@ model/get-users-by-login-and-password-request.ts
 model/get-users-meetings-request.ts
 model/groupinvite.ts
 model/groups.ts
+model/guests.ts
 model/messages.ts
 model/models.ts
 model/problem-details.ts

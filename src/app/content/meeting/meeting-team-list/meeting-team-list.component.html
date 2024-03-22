@@ -25,7 +25,16 @@
       cdkDropListSortingDisabled
     >
       @for (item of arrays['0']; track $index) {
-      <div class="item" cdkDrag>
+      <div
+        class="item"
+        cdkDrag
+        [ngStyle]="{
+          background:
+            userService.loggedUser.ID_USER == item.IdUser
+              ? 'var(--ion-color-primary)'
+              : ''
+        }"
+      >
         @if(item.Avatar == null){
         <ion-avatar>
           <img
@@ -61,7 +70,17 @@
     >
       @for (item of arrays[team.ID_TEAM ?? '']; track $index) {
 
-      <div class="item" cdkDropListSortingDisabled cdkDrag>
+      <div
+        class="item"
+        cdkDropListSortingDisabled
+        cdkDrag
+        [ngStyle]="{
+          background:
+            userService.loggedUser.ID_USER == item.IdUser
+              ? 'var(--ion-color-primary)'
+              : ''
+        }"
+      >
         @if(item.Avatar == null){
         <ion-avatar>
           <img

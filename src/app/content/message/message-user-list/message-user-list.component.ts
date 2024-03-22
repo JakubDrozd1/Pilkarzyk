@@ -1,15 +1,20 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { IonicModule, RefresherEventDetail } from '@ionic/angular'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { MeetingUserListComponent } from '../../meeting/meeting-user-list/meeting-user-list.component'
-import { GetMessagesUsersMeetingsResponse, MessagesApi } from 'libs/api-client'
+import {
+  GUESTS,
+  GetMessagesUsersMeetingsResponse,
+  GuestsApi,
+  MessagesApi,
+} from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { IonRefresherCustomEvent } from '@ionic/core'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
-import { Subscription } from 'rxjs'
+import { Subscription, forkJoin } from 'rxjs'
 
 @Component({
   selector: 'app-message-user-list',
@@ -30,12 +35,16 @@ export class MessageUserListComponent implements OnInit {
   isReady: boolean = false
   acceptCounter: number = 0
   private subscription: Subscription = new Subscription()
+  guests: GUESTS[] = []
 
   constructor(
     private route: ActivatedRoute,
     private messagesApi: MessagesApi,
     private alert: Alert,
-    private refreshDataService: RefreshDataService
+    private refreshDataService: RefreshDataService,
+    private guestsApi: GuestsApi,
+    public translate: TranslateService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -57,18 +66,33 @@ export class MessageUserListComponent implements OnInit {
   getDetails() {
     if (this.idMeeting > 0) {
       this.isReady = false
-      this.messagesApi
-        .getAllMessages({
+      forkJoin({
+        messages: this.messagesApi.getAllMessages({
           idMeeting: this.idMeeting,
           page: 0,
           onPage: -1,
           isAvatar: true,
           sortColumn: 'DATE_RESPONSE',
           sortMode: 'ASC',
-        })
-        .subscribe({
-          next: (response) => {
-            this.messages = response.sort((a, b) => {
+        }),
+        guests: this.guestsApi.getAllGuestFromMeeting({
+          meetingId: this.idMeeting,
+        }),
+      }).subscribe({
+        next: (responses) => {
+          this.messages = responses.guests.map((guest) => ({
+            Answer: 'yes',
+            Firstname: guest.NAME,
+            Surname: this.translate.instant('(GUEST)'),
+            IdMeeting: guest.IDMEETING,
+            Avatar: null,
+            Quantity: responses.messages[0].Quantity,
+            IdAuthor: responses.messages[0].IdAuthor,
+            IdGuest: guest.ID_GUEST,
+          }))
+          this.messages = this.messages
+            .concat(responses.messages)
+            .sort((a, b) => {
               const priority: { [key: string]: number } = {
                 yes: 1,
                 wait: 2,
@@ -80,21 +104,33 @@ export class MessageUserListComponent implements OnInit {
               const answerB = b.Answer || 'null'
               return priority[answerA] - priority[answerB]
             })
-            this.acceptCounter = response.filter(
-              (message) => message.Answer === 'yes'
-            ).length
-            this.isReady = true
-          },
-          error: (error) => {
-            this.isReady = true
-            this.alert.handleError(error)
-          },
-        })
+          this.acceptCounter = responses.messages.filter(
+            (message) => message.Answer === 'yes'
+          ).length
+          this.isReady = true
+        },
+        error: (error) => {
+          this.isReady = true
+          this.alert.handleError(error)
+        },
+      })
     }
   }
 
   cancel() {
-    window.history.back()
+    let meetingPath = '/meeting/' + this.idMeeting
+    if (window.location.pathname.includes('home')) {
+      this.router.navigate(['/home' + meetingPath])
+    }
+    if (window.location.pathname.includes('groups')) {
+      this.router.navigate(['/groups' + meetingPath])
+    }
+    if (window.location.pathname.includes('notification')) {
+      this.router.navigate(['/notification' + meetingPath])
+    }
+    if (window.location.pathname.includes('calendar')) {
+      this.router.navigate(['/calendar' + meetingPath])
+    }
   }
 
   handleRefresh($event: IonRefresherCustomEvent<RefresherEventDetail>) {

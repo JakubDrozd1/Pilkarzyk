@@ -6,6 +6,7 @@ import {
   GROUPS,
   GetMessagesUsersMeetingsResponse,
   GroupsApi,
+  GuestsApi,
   MessagesApi,
   USERS,
   UsersApi,
@@ -63,7 +64,8 @@ export class MessageContentComponent implements OnInit {
     private refreshDataService: RefreshDataService,
     public translate: TranslateService,
     private usersApi: UsersApi,
-    private groupsApi: GroupsApi
+    private groupsApi: GroupsApi,
+    private guestsApi: GuestsApi
   ) {}
 
   ngOnInit() {
@@ -90,12 +92,16 @@ export class MessageContentComponent implements OnInit {
       group: this.groupsApi.getGroupById({
         groupId: this.message.IdGroup ?? 0,
       }),
+      guests: this.guestsApi.getAllGuestFromMeeting({
+        meetingId: Number(this.message.IdMeeting),
+      }),
     }).subscribe({
       next: (responses) => {
         this.filteredMessages = responses.messages.filter(
           (message) => message.Answer === 'yes'
         )
-        this.acceptMeeting = this.filteredMessages.length
+        this.acceptMeeting =
+          this.filteredMessages.length + responses.guests.length
         this.user = responses.user
         this.group = responses.group
         const base64String = responses.user.AVATAR

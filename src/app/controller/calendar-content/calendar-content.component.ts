@@ -95,8 +95,8 @@ export class CalendarContentComponent implements OnInit {
                 textColor = 'var(--ion-color-secondary-contrast)'
                 backgroundColor = 'var(--ion-color-secondary)'
               } else {
-                textColor = 'var(--ion-color-secondary-contrast)'
-                backgroundColor = 'var(--ion-color-secondary)'
+                textColor = 'var(--ion-color-warning-contrast)'
+                backgroundColor = 'var(--ion-color-warning)'
               }
               return {
                 date: this.formatDate(item.DateMeeting),

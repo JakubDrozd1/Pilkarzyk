@@ -15,10 +15,12 @@
         <img alt="img" [src]="images" />
       </ion-avatar>
       }
-      {{ counter + 1 }}.&nbsp;
-      <ion-label [routerLink]="['/account/profile', user.IdUser]" class="click">
-        {{ user.Firstname }} {{ user.Surname }}
-      </ion-label>
+      {{ counter + 1 }}.&nbsp; @if(user.IdUser!=null){
+      <ion-label [routerLink]="['profile', user.IdUser]" class="click">
+        {{ user.Firstname }} {{ user.Surname }} </ion-label
+      >}@else {
+      <ion-label> {{ user.Firstname }} {{ user.Surname }} </ion-label>
+      }
       <ion-label
         style="
           display: flex;
@@ -39,6 +41,16 @@
           (click)="showAlert()"
           size="large"
           name="sync-circle-outline"
+        ></ion-icon>
+        }
+        @if((userService.loggedUser.IS_ADMIN||userService.loggedUser.ID_USER==user.IdAuthor)
+        && user.IdUser==null){
+        <ion-icon
+          class="click"
+          color="danger"
+          (click)="deleteGuest(user)"
+          size="large"
+          name="trash-outline"
         ></ion-icon>
         }
       </ion-label>

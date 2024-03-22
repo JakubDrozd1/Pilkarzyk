@@ -1,7 +1,7 @@
 import { MessagesApi } from './../../../../../libs/api-client/api/messages.api'
 import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import {
   AlertController,
   IonicModule,
@@ -11,6 +11,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import {
   GetMeetingGroupsResponse,
   GetMessagesUsersMeetingsResponse,
+  GuestsApi,
   MeetingsApi,
   TEAMS,
   TeamsApi,
@@ -82,6 +83,7 @@ export class MeetingTeamComponent implements OnInit {
   colorPicker: any
   isUserYes: boolean = false
   colorRegex = /^#(?:[0-9a-fA-F]{3}){1,2}$/
+  idGroup: number = 0
 
   constructor(
     public translate: TranslateService,
@@ -91,7 +93,9 @@ export class MeetingTeamComponent implements OnInit {
     private messagesApi: MessagesApi,
     private teamsApi: TeamsApi,
     private alert: Alert,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private guestsApi: GuestsApi,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -101,8 +105,13 @@ export class MeetingTeamComponent implements OnInit {
         this.getDetails()
       }
     })
+    this.route.params.subscribe((params) => {
+      if (params?.['idGroup'] > 0) {
+        this.idGroup = parseInt(params?.['idGroup'])
+      }
+    })
   }
-  
+
   getDetails() {
     this.teams = []
     this.filteredMessages = []
@@ -125,11 +134,24 @@ export class MeetingTeamComponent implements OnInit {
             teams: this.teamsApi.getAllTeamsFromMeeting({
               meetingId: this.idMeeting,
             }),
+            guests: this.guestsApi.getAllGuestFromMeeting({
+              meetingId: this.idMeeting,
+            }),
           }).subscribe({
             next: (responses) => {
               this.teams = responses.teams
-              this.filteredMessages = responses.messages.filter(
-                (message) => message.Answer === 'yes'
+
+              this.filteredMessages = responses.guests.map((guest) => ({
+                Answer: 'yes',
+                Firstname: guest.NAME,
+                Surname: this.translate.instant('(GUEST)'),
+                IdMeeting: guest.IDMEETING,
+                Avatar: null,
+                IdGuest: guest.ID_GUEST,
+                IdTeam: guest.IDTEAM,
+              }))
+              this.filteredMessages = this.filteredMessages.concat(
+                responses.messages.filter((message) => message.Answer === 'yes')
               )
               for (let user of this.filteredMessages) {
                 if (user.IdUser == this.userService.loggedUser.ID_USER) {
@@ -200,7 +222,19 @@ export class MeetingTeamComponent implements OnInit {
   }
 
   cancel() {
-    window.history.back()
+    let meetingPath = '/meeting/' + this.idMeeting
+    if (window.location.pathname.includes('home')) {
+      this.router.navigate(['/home' + meetingPath])
+    }
+    if (window.location.pathname.includes('groups')) {
+      this.router.navigate(['/groups/' + this.idGroup + meetingPath])
+    }
+    if (window.location.pathname.includes('notification')) {
+      this.router.navigate(['/notification' + meetingPath])
+    }
+    if (window.location.pathname.includes('calendar')) {
+      this.router.navigate(['/calendar' + meetingPath])
+    }
   }
 
   swapEdit() {
@@ -387,7 +421,9 @@ export class MeetingTeamComponent implements OnInit {
 
   async deleteTeam(team: TEAMS) {
     const alert = await this.alertCtrl.create({
-      header: 'Na pewno usunąć drużyne?',
+      header: this.translate.instant(
+        'Are you sure you want to delete the team?'
+      ),
       buttons: [
         {
           text: this.translate.instant('Yes'),
@@ -415,7 +451,9 @@ export class MeetingTeamComponent implements OnInit {
       })
       .subscribe({
         next: () => {
-          this.alert.presentToast('Pomyślnie usunięto')
+          this.alert.presentToast(
+            this.translate.instant('Team successfully deleted.')
+          )
           this.alertCtrl.dismiss()
           this.getDetails()
           this.isReady = true

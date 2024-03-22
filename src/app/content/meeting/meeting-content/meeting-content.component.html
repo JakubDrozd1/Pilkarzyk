@@ -57,7 +57,7 @@
 </ion-card>
 } @if(isReady){
 <ion-card
-  [routerLink]="['/meeting', meeting.IdMeeting]"
+  [routerLink]="['meeting', meeting.IdMeeting]"
   class="click"
   [ngStyle]="{ opacity: !isCurrent ? '0.5' : '1' }"
 >

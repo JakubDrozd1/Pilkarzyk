@@ -20,6 +20,63 @@ const IsLoggedFn: CanActivateFn = (
   return inject(IsLogged).canActivate(route, state)
 }
 
+const meetingChildren = [
+  {
+    path: '',
+    loadComponent: () =>
+      import(
+        './content/meeting/meeting-details/meeting-details.component'
+      ).then((m) => m.MeetingDetailsComponent),
+  },
+  {
+    path: 'edit',
+    loadComponent: () =>
+      import('./form/meeting/meeting.component').then(
+        (m) => m.MeetingComponent
+      ),
+  },
+  {
+    path: 'team',
+    loadComponent: () =>
+      import('./content/meeting/meeting-team/meeting-team.component').then(
+        (m) => m.MeetingTeamComponent
+      ),
+  },
+  {
+    path: 'answer/:idMessage',
+    loadComponent: () =>
+      import(
+        './content/message/message-answer-modal/message-answer-modal.component'
+      ).then((m) => m.MessageAnswerModalComponent),
+  },
+  {
+    path: 'profile/:idUser',
+    loadComponent: () =>
+      import(
+        './content/profile/profile-details/profile-details.component'
+      ).then((m) => m.ProfileDetailsComponent),
+  },
+  {
+    path: 'message',
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import(
+            './content/message/message-user-list/message-user-list.component'
+          ).then((m) => m.MessageUserListComponent),
+      },
+      {
+        path: 'profile/:idUser',
+        loadComponent: () =>
+          import(
+            './content/profile/profile-details/profile-details.component'
+          ).then((m) => m.ProfileDetailsComponent),
+      },
+    ],
+  },
+]
+
 export const routes: Routes = [
   {
     path: '',
@@ -28,177 +85,214 @@ export const routes: Routes = [
     canActivate: [IsLoggedFn, MainCanActivateFn],
     children: [
       {
-        path: 'groups',
-        loadComponent: () =>
-          import('./layout/groups-page/groups-page.component').then(
-            (m) => m.GroupsPageComponent
-          ),
-      },
-      {
-        path: 'groups/add',
-        loadComponent: () =>
-          import('./form/groups/groups.component').then(
-            (m) => m.GroupsComponent
-          ),
-      },
-      {
-        path: 'groups/:idGroup',
-        loadComponent: () =>
-          import(
-            './content/groups/groups-content/groups-content.component'
-          ).then((m) => m.GroupsContentComponent),
-      },
-      {
-        path: 'groups/:idGroup/add-meeting',
-        loadComponent: () =>
-          import('./form/meeting/meeting.component').then(
-            (m) => m.MeetingComponent
-          ),
-      },
-      {
-        path: 'groups/:idGroup/add-user',
-        loadComponent: () =>
-          import(
-            './content/groups/groups-user-add/groups-user-add.component'
-          ).then((m) => m.GroupsUserAddComponent),
-      },
-      {
-        path: 'groups/:idGroup/add-user/:mode',
-        loadComponent: () =>
-          import('./form/users/users.component').then((m) => m.UsersComponent),
-      },
-      {
-        path: 'groups/:idGroup/add-organizer',
-        loadComponent: () =>
-          import(
-            './content/groups/groups-organizer/groups-organizer.component'
-          ).then((m) => m.GroupsOrganizerComponent),
-      },
-      {
-        path: 'calendar',
-        loadComponent: () =>
-          import('./layout/calendar-page/calendar-page.component').then(
-            (m) => m.CalendarPageComponent
-          ),
-      },
-      {
         path: 'home',
-        loadComponent: () =>
-          import('./layout/home-page/home-page.component').then(
-            (m) => m.HomePageComponent
-          ),
-      },
-      {
-        path: 'home/add-meeting',
-        loadComponent: () =>
-          import('./form/meeting/meeting.component').then(
-            (m) => m.MeetingComponent
-          ),
-      },
-      {
-        path: 'account',
-        loadComponent: () =>
-          import('./layout/account-page/account-page.component').then(
-            (m) => m.AccountPageComponent
-          ),
-      },
-      {
-        path: 'account/edit',
-        loadComponent: () =>
-          import('./content/profile/profile-edit/profile-edit.component').then(
-            (m) => m.ProfileEditComponent
-          ),
-      },
-      {
-        path: 'account/edit/:mode',
-        loadComponent: () =>
-          import('./form/profile/profile.component').then(
-            (m) => m.ProfileComponent
-          ),
-      },
-      {
-        path: 'account/edit-pass',
-        loadComponent: () =>
-          import('./form/profile-password/profile-password.component').then(
-            (m) => m.ProfilePasswordComponent
-          ),
-      },
-      {
-        path: 'account/notification',
-        loadComponent: () =>
-          import(
-            './content/account/account-notification/account-notification.component'
-          ).then((m) => m.AccountNotificationComponent),
-      },
-      {
-        path: 'account/about',
-        loadComponent: () =>
-          import(
-            './content/account/account-about/account-about.component'
-          ).then((m) => m.AccountAboutComponent),
-      },
-      {
-        path: 'account/about/info',
-        loadComponent: () =>
-          import(
-            './content/account/account-about-info/account-about-info.component'
-          ).then((m) => m.AccountAboutInfoComponent),
-      },
-      {
-        path: 'account/about/contact',
-        loadComponent: () =>
-          import(
-            './content/account/account-about-contact/account-about-contact.component'
-          ).then((m) => m.AccountAboutContactComponent),
-      },
-      {
-        path: 'account/profile/:idUser',
-        loadComponent: () =>
-          import(
-            './content/profile/profile-details/profile-details.component'
-          ).then((m) => m.ProfileDetailsComponent),
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./layout/home-page/home-page.component').then(
+                (m) => m.HomePageComponent
+              ),
+          },
+          {
+            path: 'add-meeting',
+            loadComponent: () =>
+              import('./form/meeting/meeting.component').then(
+                (m) => m.MeetingComponent
+              ),
+          },
+          {
+            path: 'meeting/:idMeeting',
+            children: meetingChildren,
+          },
+        ],
       },
       {
         path: 'notification',
-        loadComponent: () =>
-          import('./layout/notification-page/notification-page.component').then(
-            (m) => m.NotificationPageComponent
-          ),
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import(
+                './layout/notification-page/notification-page.component'
+              ).then((m) => m.NotificationPageComponent),
+          },
+          {
+            path: 'message-add/:idMessage',
+            loadComponent: () =>
+              import(
+                './content/message/message-answer-modal/message-answer-modal.component'
+              ).then((m) => m.MessageAnswerModalComponent),
+          },
+          {
+            path: 'meeting/:idMeeting',
+            children: meetingChildren,
+          },
+        ],
       },
       {
-        path: 'message/:idMeeting',
-        loadComponent: () =>
-          import(
-            './content/message/message-user-list/message-user-list.component'
-          ).then((m) => m.MessageUserListComponent),
+        path: 'groups',
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./layout/groups-page/groups-page.component').then(
+                (m) => m.GroupsPageComponent
+              ),
+          },
+          {
+            path: 'profile/:idUser',
+            loadComponent: () =>
+              import(
+                './content/profile/profile-details/profile-details.component'
+              ).then((m) => m.ProfileDetailsComponent),
+          },
+          {
+            path: 'add',
+            loadComponent: () =>
+              import('./form/groups/groups.component').then(
+                (m) => m.GroupsComponent
+              ),
+          },
+          {
+            path: ':idGroup',
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import(
+                    './content/groups/groups-content/groups-content.component'
+                  ).then((m) => m.GroupsContentComponent),
+              },
+              {
+                path: 'add-meeting',
+                loadComponent: () =>
+                  import('./form/meeting/meeting.component').then(
+                    (m) => m.MeetingComponent
+                  ),
+              },
+              {
+                path: 'add-user',
+                loadComponent: () =>
+                  import(
+                    './content/groups/groups-user-add/groups-user-add.component'
+                  ).then((m) => m.GroupsUserAddComponent),
+              },
+              {
+                path: 'add-organizer',
+                loadComponent: () =>
+                  import(
+                    './content/groups/groups-organizer/groups-organizer.component'
+                  ).then((m) => m.GroupsOrganizerComponent),
+              },
+              {
+                path: 'profile/:idUser',
+                loadComponent: () =>
+                  import(
+                    './content/profile/profile-details/profile-details.component'
+                  ).then((m) => m.ProfileDetailsComponent),
+              },
+              {
+                path: 'meeting/:idMeeting',
+                children: meetingChildren,
+              },
+            ],
+          },
+        ],
       },
       {
-        path: 'message-add/:idMessage',
-        loadComponent: () =>
-          import(
-            './content/message/message-answer-modal/message-answer-modal.component'
-          ).then((m) => m.MessageAnswerModalComponent),
+        path: 'calendar',
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./layout/calendar-page/calendar-page.component').then(
+                (m) => m.CalendarPageComponent
+              ),
+          },
+          {
+            path: 'meeting/:idMeeting',
+            children: meetingChildren,
+          },
+        ],
       },
       {
-        path: 'meeting/:idMeeting',
-        loadComponent: () =>
-          import(
-            './content/meeting/meeting-details/meeting-details.component'
-          ).then((m) => m.MeetingDetailsComponent),
-      },
-      {
-        path: 'meeting/:idMeeting/edit',
-        loadComponent: () =>
-          import('./form/meeting/meeting.component').then(
-            (m) => m.MeetingComponent
-          ),
-      },
-      {
-        path: 'meeting/:idMeeting/team',
-        loadComponent: () =>
-          import('./content/meeting/meeting-team/meeting-team.component').then(
-            (m) => m.MeetingTeamComponent
-          ),
+        path: 'account',
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./layout/account-page/account-page.component').then(
+                (m) => m.AccountPageComponent
+              ),
+          },
+          {
+            path: 'edit',
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import(
+                    './content/profile/profile-edit/profile-edit.component'
+                  ).then((m) => m.ProfileEditComponent),
+              },
+              {
+                path: ':mode',
+                loadComponent: () =>
+                  import('./form/profile/profile.component').then(
+                    (m) => m.ProfileComponent
+                  ),
+              },
+            ],
+          },
+          {
+            path: 'edit-pass',
+            loadComponent: () =>
+              import('./form/profile-password/profile-password.component').then(
+                (m) => m.ProfilePasswordComponent
+              ),
+          },
+          {
+            path: 'notification',
+            loadComponent: () =>
+              import(
+                './content/account/account-notification/account-notification.component'
+              ).then((m) => m.AccountNotificationComponent),
+          },
+          {
+            path: 'about',
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import(
+                    './content/account/account-about/account-about.component'
+                  ).then((m) => m.AccountAboutComponent),
+              },
+              {
+                path: 'info',
+                loadComponent: () =>
+                  import(
+                    './content/account/account-about-info/account-about-info.component'
+                  ).then((m) => m.AccountAboutInfoComponent),
+              },
+              {
+                path: 'contact',
+                loadComponent: () =>
+                  import(
+                    './content/account/account-about-contact/account-about-contact.component'
+                  ).then((m) => m.AccountAboutContactComponent),
+              },
+            ],
+          },
+          {
+            path: 'profile/:idUser',
+            loadComponent: () =>
+              import(
+                './content/profile/profile-details/profile-details.component'
+              ).then((m) => m.ProfileDetailsComponent),
+          },
+        ],
       },
       {
         path: 'download',

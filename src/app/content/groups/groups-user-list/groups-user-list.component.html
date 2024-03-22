@@ -34,7 +34,11 @@
       </ion-avatar>
       }
       {{ counter + 1 }}.&nbsp;
-      <ion-label [routerLink]="['/account/profile', user.IdUser]" class="click">
+      <ion-label
+        style="cursor: pointer"
+        [routerLink]="['profile', user.IdUser]"
+        class="click"
+      >
         {{ user.Firstname }} {{ user.Surname }}
       </ion-label>
       @if(user.PhoneNumber!=null){

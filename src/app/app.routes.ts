@@ -73,6 +73,13 @@ const meetingChildren = [
             './content/profile/profile-details/profile-details.component'
           ).then((m) => m.ProfileDetailsComponent),
       },
+      {
+        path: 'answer/:idMessage',
+        loadComponent: () =>
+          import(
+            './content/message/message-answer-modal/message-answer-modal.component'
+          ).then((m) => m.MessageAnswerModalComponent),
+      },
     ],
   },
 ]
@@ -282,6 +289,20 @@ export const routes: Routes = [
                   import(
                     './content/account/account-about-contact/account-about-contact.component'
                   ).then((m) => m.AccountAboutContactComponent),
+              },
+              {
+                path: 'policy',
+                loadComponent: () =>
+                  import(
+                    './helper/privacy-policy/privacy-policy.component'
+                  ).then((m) => m.PrivacyPolicyComponent),
+              },
+              {
+                path: 'delete-info',
+                loadComponent: () =>
+                  import(
+                    './helper/delete-account-info/delete-account-info.component'
+                  ).then((m) => m.DeleteAccountInfoComponent),
               },
             ],
           },

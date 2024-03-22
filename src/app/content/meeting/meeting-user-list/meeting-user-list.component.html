@@ -35,7 +35,8 @@
           color="danger"
           name="alert-circle-outline"
         ></ion-icon>
-        } @if(user.IdUser==userService.loggedUser.ID_USER){
+        } @if(currentDate<(user.DateMeeting??0)){
+        @if(user.IdUser==userService.loggedUser.ID_USER){
         <ion-icon
           class="click"
           (click)="showAlert()"
@@ -52,7 +53,7 @@
           size="large"
           name="trash-outline"
         ></ion-icon>
-        }
+        }}
       </ion-label>
     </ion-item>
   </ion-card-content>

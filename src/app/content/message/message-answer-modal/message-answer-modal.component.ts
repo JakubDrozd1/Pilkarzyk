@@ -7,7 +7,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { AlertController, IonicModule } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import {
@@ -44,6 +44,8 @@ export class MessageAnswerModalComponent implements OnInit {
   isReady: boolean = true
   meeting!: GetMeetingGroupsResponse
   lang: string = ''
+  idMeeting: number = 0
+  idGroup: number = 0
 
   constructor(
     private fb: FormBuilder,
@@ -52,7 +54,8 @@ export class MessageAnswerModalComponent implements OnInit {
     private refreshDataService: RefreshDataService,
     public translate: TranslateService,
     private route: ActivatedRoute,
-    private meetingsApi: MeetingsApi
+    private meetingsApi: MeetingsApi,
+    private router: Router
   ) {
     this.displayDate = moment().format()
     this.messageForm = this.fb.group({
@@ -66,6 +69,16 @@ export class MessageAnswerModalComponent implements OnInit {
       if (params?.['idMessage'] > 0) {
         this.idMessage = parseInt(params?.['idMessage'])
         this.getDetails()
+      }
+    })
+    this.route.params.subscribe((params) => {
+      if (params?.['idGroup'] > 0) {
+        this.idGroup = parseInt(params?.['idGroup'])
+      }
+    })
+    this.route.params.subscribe((params) => {
+      if (params?.['idMeeting'] > 0) {
+        this.idMeeting = parseInt(params?.['idMeeting'])
       }
     })
     this.messageForm.get('dateMeeting')?.setValue(moment().format())
@@ -140,6 +153,26 @@ export class MessageAnswerModalComponent implements OnInit {
   }
 
   cancel() {
-    window.history.back()
+    if (window.location.pathname.includes('message')) {
+      var answerPath = '/meeting/' + this.idMeeting + '/message'
+    } else {
+      var answerPath = '/meeting/' + this.idMeeting
+    }
+    if (window.location.pathname.includes('home')) {
+      this.router.navigate(['/home' + answerPath])
+    }
+    if (window.location.pathname.includes('groups')) {
+      this.router.navigate(['/groups/' + this.idGroup + answerPath])
+    }
+    if (window.location.pathname.includes('notification')) {
+      if (window.location.pathname.includes('meeting')) {
+        this.router.navigate(['/notification' + answerPath])
+      } else {
+        this.router.navigate(['/notification'])
+      }
+    }
+    if (window.location.pathname.includes('calendar')) {
+      this.router.navigate(['/calendar' + answerPath])
+    }
   }
 }

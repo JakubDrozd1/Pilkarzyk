@@ -36,6 +36,7 @@ export class MessageUserListComponent implements OnInit {
   acceptCounter: number = 0
   private subscription: Subscription = new Subscription()
   guests: GUESTS[] = []
+  idGroup: number = 0
 
   constructor(
     private route: ActivatedRoute,
@@ -52,6 +53,11 @@ export class MessageUserListComponent implements OnInit {
       if (params?.['idMeeting'] > 0) {
         this.idMeeting = parseInt(params?.['idMeeting'])
         this.getDetails()
+      }
+    })
+    this.route.params.subscribe((params) => {
+      if (params?.['idGroup'] > 0) {
+        this.idGroup = parseInt(params?.['idGroup'])
       }
     })
     this.subscription.add(
@@ -123,7 +129,7 @@ export class MessageUserListComponent implements OnInit {
       this.router.navigate(['/home' + meetingPath])
     }
     if (window.location.pathname.includes('groups')) {
-      this.router.navigate(['/groups' + meetingPath])
+      this.router.navigate(['/groups/' + this.idGroup + meetingPath])
     }
     if (window.location.pathname.includes('notification')) {
       this.router.navigate(['/notification' + meetingPath])

@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core'
 import { IonicModule } from '@ionic/angular'
 import { GaduGaduComponent } from '../gadu-gadu/gadu-gadu.component'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-delete-account-info',
@@ -12,11 +13,15 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
   imports: [CommonModule, IonicModule, GaduGaduComponent, TranslateModule],
 })
 export class DeleteAccountInfoComponent implements OnInit {
-  constructor(public translate: TranslateService) {}
+  constructor(public translate: TranslateService, private router: Router) {}
 
-  ngOnInit() { }
-  
+  ngOnInit() {}
+
   cancel() {
-    window.history.back()
+    if (window.location.pathname.includes('account')) {
+      this.router.navigate(['/account/about'])
+    } else {
+      window.history.back()
+    }
   }
 }

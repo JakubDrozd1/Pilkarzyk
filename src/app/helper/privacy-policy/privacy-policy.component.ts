@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
+import { Router } from '@angular/router'
 import { IonicModule } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
@@ -11,11 +12,15 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
   imports: [CommonModule, IonicModule, TranslateModule],
 })
 export class PrivacyPolicyComponent implements OnInit {
-  constructor(public translate: TranslateService) {}
+  constructor(public translate: TranslateService, private router: Router) {}
 
   ngOnInit() {}
 
   cancel() {
-    window.history.back()
+    if (window.location.pathname.includes('account')) {
+      this.router.navigate(['/account/about'])
+    } else {
+      window.history.back()
+    }
   }
 }

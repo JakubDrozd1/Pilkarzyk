@@ -333,37 +333,20 @@ export class MeetingDetailsComponent implements OnInit {
   }
 
   answer() {
+    var answerPath =
+      '/meeting/' + this.idMeeting + '/answer/' + this.defaultAnswer.IdMessage
+
     if (window.location.pathname.includes('home')) {
-      this.router.navigate([
-        '/home/meeting',
-        this.idMeeting,
-        'answer',
-        this.defaultAnswer.IdMessage,
-      ])
+      this.router.navigate(['/home' + answerPath])
     }
     if (window.location.pathname.includes('groups')) {
-      this.router.navigate([
-        '/groups/' + this.idGroup + '/meeting',
-        this.idMeeting,
-        'answer',
-        this.defaultAnswer.IdMessage,
-      ])
+      this.router.navigate(['/groups/' + this.idGroup + answerPath])
     }
     if (window.location.pathname.includes('notification')) {
-      this.router.navigate([
-        '/notification/meeting',
-        this.idMeeting,
-        'answer',
-        this.defaultAnswer.IdMessage,
-      ])
+      this.router.navigate(['/notification' + answerPath])
     }
     if (window.location.pathname.includes('calendar')) {
-      this.router.navigate([
-        '/calendar/meeting',
-        this.idMeeting,
-        'answer',
-        this.defaultAnswer.IdMessage,
-      ])
+      this.router.navigate(['/calendar' + answerPath])
     }
   }
 

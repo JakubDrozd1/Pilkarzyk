@@ -13,6 +13,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { Alert } from 'src/app/helper/alert'
 import { Router, ActivatedRoute, RouterLink } from '@angular/router'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
+import * as moment from 'moment'
 
 @Component({
   selector: 'app-meeting-user-list',
@@ -35,7 +36,7 @@ export class MeetingUserListComponent implements OnInit {
   images: string = ''
   isReady: boolean = false
   color: string = ''
-  defautAnswer!: GetMessagesUsersMeetingsResponse
+  defaultAnswer!: GetMessagesUsersMeetingsResponse
   selectedValue: string = ''
   acceptMeeting: number = 0
   public changeInputs: any
@@ -55,6 +56,9 @@ export class MeetingUserListComponent implements OnInit {
       },
     },
   ]
+  idMeeting: number = 0
+  idGroup: number = 0
+  currentDate: any
 
   constructor(
     public userService: UserService,
@@ -64,10 +68,23 @@ export class MeetingUserListComponent implements OnInit {
     private alertCtrl: AlertController,
     private router: Router,
     private refreshDataService: RefreshDataService,
-    private guestsApi: GuestsApi
+    private guestsApi: GuestsApi,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
+    this.route.params.subscribe((params) => {
+      if (params?.['idMeeting'] > 0) {
+        this.idMeeting = parseInt(params?.['idMeeting'])
+      }
+    })
+    this.route.params.subscribe((params) => {
+      if (params?.['idGroup'] > 0) {
+        this.idGroup = parseInt(params?.['idGroup'])
+      }
+    })
+    this.currentDate = moment().toISOString()
+
     this.getDetails()
   }
 
@@ -109,7 +126,7 @@ export class MeetingUserListComponent implements OnInit {
       }
     }
     if (this.user) {
-      this.defautAnswer = this.user
+      this.defaultAnswer = this.user
       this.setInputs()
     }
   }
@@ -148,7 +165,27 @@ export class MeetingUserListComponent implements OnInit {
     } else if (this.selectedValue == 'wait') {
       this.selectedValue = ''
       this.setInputs()
-      this.router.navigate(['/message-add', this.defautAnswer.IdMessage])
+      this.answer()
+    }
+  }
+
+  answer() {
+    var answerPath =
+      '/meeting/' +
+      this.idMeeting +
+      '/message/answer/' +
+      this.defaultAnswer.IdMessage
+    if (window.location.pathname.includes('home')) {
+      this.router.navigate(['/home' + answerPath])
+    }
+    if (window.location.pathname.includes('groups')) {
+      this.router.navigate(['/groups/' + this.idGroup + answerPath])
+    }
+    if (window.location.pathname.includes('notification')) {
+      this.router.navigate(['/notification' + answerPath])
+    }
+    if (window.location.pathname.includes('calendar')) {
+      this.router.navigate(['/calendar' + answerPath])
     }
   }
 
@@ -171,7 +208,7 @@ export class MeetingUserListComponent implements OnInit {
         label: this.translate.instant('I WILL COME'),
         type: 'radio',
         value: 'yes',
-        checked: this.defautAnswer.Answer == 'yes',
+        checked: this.defaultAnswer.Answer == 'yes',
         handler: (input: { value: any }) => {
           this.selectedValue = input.value
         },
@@ -180,7 +217,7 @@ export class MeetingUserListComponent implements OnInit {
         label: this.translate.instant('I WONT COME'),
         type: 'radio',
         value: 'no',
-        checked: this.defautAnswer.Answer == 'no',
+        checked: this.defaultAnswer.Answer == 'no',
         handler: (input: { value: any }) => {
           this.selectedValue = input.value
         },
@@ -189,7 +226,7 @@ export class MeetingUserListComponent implements OnInit {
         label: this.translate.instant('GIVE ME TIME'),
         type: 'radio',
         value: 'wait',
-        checked: this.defautAnswer.Answer == 'wait',
+        checked: this.defaultAnswer.Answer == 'wait',
         handler: (input: { value: any }) => {
           this.selectedValue = input.value
         },

@@ -28,6 +28,8 @@ import { UserService } from 'src/app/service/user/user.service'
 import { IonSelectCustomEvent } from '@ionic/core'
 import { TeamGeneratorComponent } from '../team-generator/team-generator.component'
 import { OneToTenValidator } from 'src/app/helper/customValidators'
+import { Capacitor } from '@capacitor/core'
+import { Device } from '@capacitor/device'
 
 @Component({
   selector: 'app-meeting',
@@ -75,7 +77,7 @@ export class MeetingComponent implements OnInit {
     name: string
     color: string
   }[] = []
-  lang: string = ''
+  lang: string | null = ''
   teams: TEAMS[] = []
 
   constructor(
@@ -104,7 +106,7 @@ export class MeetingComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.lang = localStorage.getItem('langUser') ?? 'en'
+    this.setLanguage()
     this.color.sort(() => Math.random() - 0.5)
     this.route.params.subscribe((params) => {
       if (window.location.pathname.includes('edit')) {
@@ -496,6 +498,28 @@ export class MeetingComponent implements OnInit {
     } else {
       this.meetingForm.removeControl('quantityTeams')
       this.collectedData = []
+    }
+  }
+
+  async setLanguage() {
+    this.lang = localStorage.getItem('langUser')
+    if (this.lang == null) {
+      if (Capacitor.isNativePlatform()) {
+        this.lang = (await Device.getLanguageCode()).value
+      } else {
+        this.lang = window.navigator.language
+      }
+      if (this.lang == 'pl' || this.lang == 'en') {
+        this.translate.setDefaultLang(this.lang)
+        this.translate.use(this.lang)
+      } else {
+        this.lang = 'en'
+        this.translate.setDefaultLang(this.lang)
+        this.translate.use(this.lang)
+      }
+    } else {
+      this.translate.setDefaultLang(this.lang)
+      this.translate.use(this.lang)
     }
   }
 }

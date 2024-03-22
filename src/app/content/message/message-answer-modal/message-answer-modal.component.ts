@@ -20,6 +20,8 @@ import * as moment from 'moment'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
+import { Capacitor } from '@capacitor/core'
+import { Device } from '@capacitor/device'
 
 @Component({
   selector: 'app-message-answer-modal',
@@ -43,7 +45,7 @@ export class MessageAnswerModalComponent implements OnInit {
   message!: MESSAGES
   isReady: boolean = true
   meeting!: GetMeetingGroupsResponse
-  lang: string = ''
+  lang: string | null = ''
   idMeeting: number = 0
   idGroup: number = 0
 
@@ -64,7 +66,7 @@ export class MessageAnswerModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.lang = localStorage.getItem('langUser') ?? 'en'
+    this.setLanguage()
     this.route.params.subscribe((params) => {
       if (params?.['idMessage'] > 0) {
         this.idMessage = parseInt(params?.['idMessage'])
@@ -173,6 +175,28 @@ export class MessageAnswerModalComponent implements OnInit {
     }
     if (window.location.pathname.includes('calendar')) {
       this.router.navigate(['/calendar' + answerPath])
+    }
+  }
+
+  async setLanguage() {
+    this.lang = localStorage.getItem('langUser')
+    if (this.lang == null) {
+      if (Capacitor.isNativePlatform()) {
+        this.lang = (await Device.getLanguageCode()).value
+      } else {
+        this.lang = window.navigator.language
+      }
+      if (this.lang == 'pl' || this.lang == 'en') {
+        this.translate.setDefaultLang(this.lang)
+        this.translate.use(this.lang)
+      } else {
+        this.lang = 'en'
+        this.translate.setDefaultLang(this.lang)
+        this.translate.use(this.lang)
+      }
+    } else {
+      this.translate.setDefaultLang(this.lang)
+      this.translate.use(this.lang)
     }
   }
 }

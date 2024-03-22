@@ -93,6 +93,7 @@ export class MeetingDetailsComponent implements OnInit {
   guestName: string = 'Guest'
   guests: GUESTS[] = []
   component: string = ''
+  idGroup: number = 0
 
   constructor(
     private route: ActivatedRoute,
@@ -132,6 +133,11 @@ export class MeetingDetailsComponent implements OnInit {
       if (params?.['idMeeting'] > 0) {
         this.idMeeting = parseInt(params?.['idMeeting'])
         this.getDetails()
+      }
+    })
+    this.route.params.subscribe((params) => {
+      if (params?.['idGroup'] > 0) {
+        this.idGroup = parseInt(params?.['idGroup'])
       }
     })
   }
@@ -245,7 +251,7 @@ export class MeetingDetailsComponent implements OnInit {
       this.router.navigate(['/home'])
     }
     if (window.location.pathname.includes('groups')) {
-      this.router.navigate(['/groups'])
+      this.router.navigate(['/groups/' + this.idGroup])
     }
     if (window.location.pathname.includes('notification')) {
       this.router.navigate(['/notification'])
@@ -322,8 +328,38 @@ export class MeetingDetailsComponent implements OnInit {
     } else if (this.selectedValue == 'wait') {
       this.selectedValue = ''
       this.setInputs()
+      this.answer()
+    }
+  }
+
+  answer() {
+    if (window.location.pathname.includes('home')) {
       this.router.navigate([
         '/home/meeting',
+        this.idMeeting,
+        'answer',
+        this.defaultAnswer.IdMessage,
+      ])
+    }
+    if (window.location.pathname.includes('groups')) {
+      this.router.navigate([
+        '/groups/' + this.idGroup + '/meeting',
+        this.idMeeting,
+        'answer',
+        this.defaultAnswer.IdMessage,
+      ])
+    }
+    if (window.location.pathname.includes('notification')) {
+      this.router.navigate([
+        '/notification/meeting',
+        this.idMeeting,
+        'answer',
+        this.defaultAnswer.IdMessage,
+      ])
+    }
+    if (window.location.pathname.includes('calendar')) {
+      this.router.navigate([
+        '/calendar/meeting',
         this.idMeeting,
         'answer',
         this.defaultAnswer.IdMessage,

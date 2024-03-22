@@ -1,3 +1,4 @@
+import { UserService } from './../../../service/user/user.service'
 import {
   CdkDropListGroup,
   CdkDropList,
@@ -47,7 +48,7 @@ export class MeetingTeamListComponent implements OnInit {
   isNative: boolean = true
   temp: File | null = null
 
-  constructor() {}
+  constructor(public userService: UserService) {}
 
   ngOnInit() {
     this.isNative = Capacitor.isNativePlatform()

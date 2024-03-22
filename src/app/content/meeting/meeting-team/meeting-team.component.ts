@@ -83,6 +83,7 @@ export class MeetingTeamComponent implements OnInit {
   colorPicker: any
   isUserYes: boolean = false
   colorRegex = /^#(?:[0-9a-fA-F]{3}){1,2}$/
+  idGroup: number = 0
 
   constructor(
     public translate: TranslateService,
@@ -102,6 +103,11 @@ export class MeetingTeamComponent implements OnInit {
       if (params?.['idMeeting'] > 0) {
         this.idMeeting = parseInt(params?.['idMeeting'])
         this.getDetails()
+      }
+    })
+    this.route.params.subscribe((params) => {
+      if (params?.['idGroup'] > 0) {
+        this.idGroup = parseInt(params?.['idGroup'])
       }
     })
   }
@@ -221,7 +227,7 @@ export class MeetingTeamComponent implements OnInit {
       this.router.navigate(['/home' + meetingPath])
     }
     if (window.location.pathname.includes('groups')) {
-      this.router.navigate(['/groups' + meetingPath])
+      this.router.navigate(['/groups/' + this.idGroup + meetingPath])
     }
     if (window.location.pathname.includes('notification')) {
       this.router.navigate(['/notification' + meetingPath])

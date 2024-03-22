@@ -107,24 +107,29 @@ export class MeetingComponent implements OnInit {
     this.lang = localStorage.getItem('langUser') ?? 'en'
     this.color.sort(() => Math.random() - 0.5)
     this.route.params.subscribe((params) => {
-      if (params?.['idGroup'] > 0) {
-        this.isEdit = false
-        this.isHome = false
-        this.idGroup = parseInt(params?.['idGroup'])
-        this.getLastMeeting(this.idGroup)
-      } else if (params?.['idMeeting'] > 0) {
+      if (window.location.pathname.includes('edit')) {
         this.idMeeting = parseInt(params?.['idMeeting'])
         this.isEdit = true
         this.isHome = false
         this.getMeeting()
+        if (params?.['idGroup'] > 0) {
+          this.idGroup = parseInt(params?.['idGroup'])
+        }
       } else {
-        this.getPermission()
-        this.isHome = true
-        this.isEdit = false
-        this.meetingForm.addControl(
-          'group',
-          this.fb.control('', Validators.required)
-        )
+        if (params?.['idGroup'] > 0) {
+          this.isEdit = false
+          this.isHome = false
+          this.idGroup = parseInt(params?.['idGroup'])
+          this.getLastMeeting(this.idGroup)
+        } else {
+          this.getPermission()
+          this.isHome = true
+          this.isEdit = false
+          this.meetingForm.addControl(
+            'group',
+            this.fb.control('', Validators.required)
+          )
+        }
       }
     })
     this.displayDate = moment().add(this.delay, 'hours').format()
@@ -407,7 +412,7 @@ export class MeetingComponent implements OnInit {
         this.router.navigate(['/home'])
       }
       if (window.location.pathname.includes('groups')) {
-        this.router.navigate(['/groups' + this.idGroup])
+        this.router.navigate(['/groups/' + this.idGroup])
       }
     } else {
       var meetingPath = '/meeting/' + this.idMeeting
@@ -415,7 +420,7 @@ export class MeetingComponent implements OnInit {
         this.router.navigate(['/home' + meetingPath])
       }
       if (window.location.pathname.includes('groups')) {
-        this.router.navigate(['/groups' + meetingPath])
+        this.router.navigate(['/groups/' + this.idGroup + meetingPath])
       }
       if (window.location.pathname.includes('notification')) {
         this.router.navigate(['/notification' + meetingPath])

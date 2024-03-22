@@ -186,6 +186,13 @@ export const routes: Routes = [
                   ).then((m) => m.GroupsOrganizerComponent),
               },
               {
+                path: 'profile/:idUser',
+                loadComponent: () =>
+                  import(
+                    './content/profile/profile-details/profile-details.component'
+                  ).then((m) => m.ProfileDetailsComponent),
+              },
+              {
                 path: 'meeting/:idMeeting',
                 children: meetingChildren,
               },
@@ -287,42 +294,6 @@ export const routes: Routes = [
           },
         ],
       },
-
-      // {
-      //   path: 'message/:idMeeting',
-      //   loadComponent: () =>
-      //     import(
-      //       './content/message/message-user-list/message-user-list.component'
-      //     ).then((m) => m.MessageUserListComponent),
-      // },
-      // {
-      //   path: 'message-add/:idMessage',
-      //   loadComponent: () =>
-      //     import(
-      //       './content/message/message-answer-modal/message-answer-modal.component'
-      //     ).then((m) => m.MessageAnswerModalComponent),
-      // },
-      // {
-      //   path: 'meeting/:idMeeting',
-      //   loadComponent: () =>
-      //     import(
-      //       './content/meeting/meeting-details/meeting-details.component'
-      //     ).then((m) => m.MeetingDetailsComponent),
-      // },
-      // {
-      //   path: 'meeting/:idMeeting/edit',
-      //   loadComponent: () =>
-      //     import('./form/meeting/meeting.component').then(
-      //       (m) => m.MeetingComponent
-      //     ),
-      // },
-      // {
-      //   path: 'meeting/:idMeeting/team',
-      //   loadComponent: () =>
-      //     import('./content/meeting/meeting-team/meeting-team.component').then(
-      //       (m) => m.MeetingTeamComponent
-      //     ),
-      // },
       {
         path: 'download',
         component: DownloadComponent,

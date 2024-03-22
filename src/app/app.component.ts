@@ -63,14 +63,14 @@ export class AppComponent implements OnInit {
 
             if (notification.notification.data.MeetingNotificationId) {
               this.router.navigate([
-                '/meeting',
+                '/home/meeting',
                 Number(notification.notification.data.MeetingNotificationId),
               ])
             }
 
             if (notification.notification.data.TeamNotificationId) {
               this.router.navigate([
-                '/meeting',
+                '/home/meeting',
                 Number(notification.notification.data.TeamNotificationId),
                 'team',
               ])

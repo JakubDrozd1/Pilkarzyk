@@ -56,11 +56,21 @@ ion-tab-button:active {
   transform: scale(1.2);
 }
 
-ion-tab-button:hover {
-  --color-selected: var(--ion-color-secondary);
-  font-weight: bold;
-  transition: transform 0.2s ease-in-out;
-  transform: scale(1.2);
+@media (any-hover: hover) {
+  ion-tab-button:hover {
+    --color-selected: var(--ion-color-secondary);
+    font-weight: bold;
+    transition: transform 0.2s ease-in-out;
+    transform: scale(1.2);
+  }
+
+  ion-tab-button:hover::before {
+    transform: scaleX(1);
+  }
+}
+
+ion-tab-button.tab-selected::before {
+  transform: scaleX(1);
 }
 
 ion-tab-button::before {
@@ -74,11 +84,6 @@ ion-tab-button::before {
   transform-origin: bottom;
   transform: scaleX(0);
   transition: transform 0.3s ease-in-out;
-}
-
-ion-tab-button:hover::before,
-ion-tab-button.tab-selected::before {
-  transform: scaleX(1);
 }
 
 ion-fab[vertical="bottom"][horizontal="end"] ion-fab-list {

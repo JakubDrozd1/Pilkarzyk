@@ -35,6 +35,7 @@ export class ProfileDetailsComponent implements OnInit {
   allMeetings: number = 0
   acceptMeetings: number = 0
   idMeeting: number = 0
+  idGroup: number = 0
 
   constructor(
     private usersApi: UsersApi,
@@ -55,6 +56,11 @@ export class ProfileDetailsComponent implements OnInit {
     this.route.params.subscribe((params) => {
       if (params?.['idMeeting'] > 0) {
         this.idMeeting = parseInt(params?.['idMeeting'])
+      }
+    })
+    this.route.params.subscribe((params) => {
+      if (params?.['idGroup'] > 0) {
+        this.idGroup = parseInt(params?.['idGroup'])
       }
     })
   }
@@ -114,6 +120,8 @@ export class ProfileDetailsComponent implements OnInit {
     if (window.location.pathname.includes('groups')) {
       if (window.location.pathname.includes('meeting')) {
         this.router.navigate(['/groups' + meetingPath])
+      } else if (this.idGroup > 0) {
+        this.router.navigate(['/groups/' + this.idGroup])
       } else {
         this.router.navigate(['/groups'])
       }
@@ -123,6 +131,9 @@ export class ProfileDetailsComponent implements OnInit {
     }
     if (window.location.pathname.includes('calendar')) {
       this.router.navigate(['/calendar' + meetingPath])
+    }
+    if (window.location.pathname.includes('account')) {
+      this.router.navigate(['/account'])
     }
   }
 

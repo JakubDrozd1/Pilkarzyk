@@ -5,6 +5,9 @@ import { IonicModule, ModalController } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
 import iro from '@jaames/iro'
+import { EditTeamModalComponent } from 'src/app/modal/edit-team-modal/edit-team-modal.component'
+import { Router } from '@angular/router'
+import { EditTeamGeneratorModalComponent } from 'src/app/modal/edit-team-generator-modal/edit-team-generator-modal.component'
 
 @Component({
   selector: 'app-team-generator',
@@ -18,6 +21,7 @@ import iro from '@jaames/iro'
     FormsModule,
     TranslateModule,
     SpinnerComponent,
+    EditTeamGeneratorModalComponent,
   ],
 })
 export class TeamGeneratorComponent implements OnInit {
@@ -30,15 +34,20 @@ export class TeamGeneratorComponent implements OnInit {
   @Input() counter: number = 0
   @Input() color: string = ''
   @Input() name: string = ''
+  @Input() idMeeting: number = 0
+
   isReady: boolean = false
   customColor: string = ''
   customName: string = ''
   disabled: boolean = false
   colorcode: string = ''
   colorPicker: any
+  modalOpened: boolean = false
+
   constructor(
     public translate: TranslateService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -48,42 +57,36 @@ export class TeamGeneratorComponent implements OnInit {
     this.sendData()
   }
 
-  getPicker() {
-    this.colorPicker = iro.ColorPicker('#picker' + this.counter, {
-      width: 100,
-      color: '#fff',
-    })
-    this.colorPicker.on('color:change', (color: { hexString: any }) => {
-      this.setHexColor(color.hexString)
-    })
-    this.disabled = true
-  }
-
-  onWillDismiss() {
-    this.disabled = false
-  }
-
-  setColor(arg0: string) {
-    this.colorPicker.setColor(arg0)
-  }
-
-  setHexColor(arg0: string) {
-    this.color = arg0
-  }
-
-  dismiss() {
-    if (this.name == '') {
-      this.name = 'Team ' + this.counter
-    }
-    this.sendData()
-    this.modalCtrl.dismiss()
-  }
-
   sendData() {
     this.dataEvent.emit({
       number: this.counter,
       name: this.name,
       color: this.color,
+    })
+  }
+
+  async openModalEditTeamGenerator() {
+    const modal = await this.modalCtrl.create({
+      component: EditTeamGeneratorModalComponent,
+      componentProps: {
+        color: this.color,
+        name: this.name,
+      },
+      backdropDismiss: false,
+    })
+    this.router.navigateByUrl(this.router.url + '?modalOpened=true')
+    this.modalOpened = true
+    modal.present()
+    await modal.onWillDismiss()
+    modal.onDidDismiss().then((data) => {
+      if (data.data != null) {
+        this.color = data.data.color
+        this.name = data.data.name
+        if (this.name == '') {
+          this.name = 'Team ' + this.counter
+        }
+        this.sendData()
+      }
     })
   }
 }

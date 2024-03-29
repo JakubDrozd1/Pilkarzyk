@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 import { IonicModule } from '@ionic/angular'
 
-import { TeamGeneratorComponent } from './team-generator.component'
+import { AddTeamModalComponent } from './add-team-modal.component'
 
-describe('TeamGeneratorComponent', () => {
-  let component: TeamGeneratorComponent
-  let fixture: ComponentFixture<TeamGeneratorComponent>
+describe('AddTeamModalComponent', () => {
+  let component: AddTeamModalComponent
+  let fixture: ComponentFixture<AddTeamModalComponent>
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [TeamGeneratorComponent],
+      declarations: [AddTeamModalComponent],
       imports: [IonicModule.forRoot()],
     }).compileComponents()
 
-    fixture = TestBed.createComponent(TeamGeneratorComponent)
+    fixture = TestBed.createComponent(AddTeamModalComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   }))

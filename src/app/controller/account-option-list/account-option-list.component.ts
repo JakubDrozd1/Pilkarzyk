@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core'
 import { IonicModule } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
-import { RouterLink } from '@angular/router'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { LogoutComponent } from '../../content/profile/logout/logout.component'
 import { UserService } from 'src/app/service/user/user.service'
 import { NotificationService } from 'src/app/service/notification/notification.service'
@@ -52,10 +52,13 @@ export class AccountOptionListComponent implements OnInit {
     },
   ]
   isPickerOpen: boolean = false
+
   constructor(
     public userService: UserService,
     public translate: TranslateService,
-    public notificationService: NotificationService
+    public notificationService: NotificationService,
+    public router: Router,
+    public route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -65,6 +68,15 @@ export class AccountOptionListComponent implements OnInit {
   }
 
   setOpen(isOpen: boolean) {
+    if (isOpen) {
+      this.router.navigateByUrl(this.router.url + '?modalOpened=true')
+    } else {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { modalOpened: null },
+        replaceUrl: true,
+      })
+    }
     this.isPickerOpen = isOpen
   }
 }

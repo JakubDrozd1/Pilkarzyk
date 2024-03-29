@@ -14,6 +14,7 @@ import { Alert } from 'src/app/helper/alert'
 import { Router, ActivatedRoute, RouterLink } from '@angular/router'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import * as moment from 'moment'
+import { MeetingComponent } from 'src/app/form/meeting/meeting.component'
 
 @Component({
   selector: 'app-meeting-user-list',
@@ -26,6 +27,7 @@ import * as moment from 'moment'
     SpinnerComponent,
     TranslateModule,
     RouterLink,
+    MeetingComponent,
   ],
 })
 export class MeetingUserListComponent implements OnInit {
@@ -59,6 +61,7 @@ export class MeetingUserListComponent implements OnInit {
   idMeeting: number = 0
   idGroup: number = 0
   currentDate: any
+  alertOpened: boolean = false
 
   constructor(
     public userService: UserService,
@@ -84,7 +87,13 @@ export class MeetingUserListComponent implements OnInit {
       }
     })
     this.currentDate = moment().toISOString()
-
+    window.addEventListener('popstate', async () => {
+      if (this.alertOpened) {
+        if (this.alertCtrl.getTop() != null) {
+          this.alertCtrl.dismiss()
+        }
+      }
+    })
     this.getDetails()
   }
 
@@ -196,10 +205,22 @@ export class MeetingUserListComponent implements OnInit {
       buttons: this.changeButtons,
       backdropDismiss: false,
     })
+    this.router.navigateByUrl(this.router.url + '?alertOpened=true')
+    this.alertOpened = true
     alert.present()
     alert.onDidDismiss().then(() => {
       this.selectedValue = ''
+      this.cancelAlert()
     })
+  }
+
+  cancelAlert() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { alertOpened: null },
+      replaceUrl: true,
+    })
+    this.alertOpened = false
   }
 
   setInputs() {
@@ -258,7 +279,13 @@ export class MeetingUserListComponent implements OnInit {
       ],
       backdropDismiss: false,
     })
+    this.router.navigateByUrl(this.router.url + '?alertOpened=true')
     alert.present()
+    this.alertOpened = true
+    alert.onDidDismiss().then(() => {
+      this.selectedValue = ''
+      this.cancelAlert()
+    })
   }
 
   delete(guest: GetMessagesUsersMeetingsResponse) {

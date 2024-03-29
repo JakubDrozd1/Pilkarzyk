@@ -103,8 +103,7 @@
             size="large"
             slot="end"
             class="click"
-            [id]="'edit-team' + team.ID_TEAM"
-            (click)="setTeam(team)"
+            (click)="openModalEditTeam(team)"
           >
           </ion-icon>
           } @if(meeting.IsIndependent){ @if(isUserYes){ @if(isUserInTeam(team)){
@@ -154,74 +153,7 @@
     </ion-chip>
     }
   </ion-card>
-
-  @if(isReady&& (userService.loggedUser.ID_USER==meeting.IdAuthor ||
-  userService.loggedUser.IS_ADMIN)){
-  <ion-modal
-    [trigger]="'edit-team' + team.ID_TEAM"
-    (willDismiss)="onWillDismiss()"
-  >
-    <ng-template>
-      <ion-content class="ion-padding">
-        <div
-          style="
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-          "
-        >
-          <ion-text> {{ "Modify team" | translate }}</ion-text>
-          <ion-button
-            size="small"
-            color="danger"
-            (click)="deleteTeam(team)"
-            shape="round"
-          >
-            {{ "Delete" | translate }}
-            <ion-icon name="trash-outline"></ion-icon>
-          </ion-button>
-        </div>
-        <div class="modal-content">
-          <ion-item>
-            <ion-input
-              [label]="'Name' | translate"
-              labelPlacement="stacked"
-              type="text"
-              [(ngModel)]="name"
-              maxlength="30"
-            ></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-input
-              [label]="'Color' | translate"
-              labelPlacement="stacked"
-              type="text"
-              [(ngModel)]="teamColor"
-              [value]="teamColor"
-              maxlength="7"
-            ></ion-input>
-            <ion-button [disabled]="disabled" (click)="getPicker(team)">
-              <ion-icon name="brush-outline"> </ion-icon>
-            </ion-button>
-            <ion-icon
-              size="large"
-              slot="end"
-              name="shirt"
-              [style.color]="teamColor"
-            ></ion-icon>
-          </ion-item>
-          <div
-            style="padding-top: 10px; width: 100%"
-            [id]="'picker' + team.ID_TEAM"
-          ></div>
-        </div>
-        <ion-button expand="full" (click)="editTeam(team)" shape="round">
-          Ok
-        </ion-button>
-      </ion-content>
-    </ng-template>
-  </ion-modal>
-  } } } @if(isEdit){
+  } } @if(isEdit){
   <app-meeting-team-list
     [messages]="filteredMessages"
     [teams]="teams"

@@ -30,6 +30,7 @@ import { TeamGeneratorComponent } from '../team-generator/team-generator.compone
 import { OneToTenValidator } from 'src/app/helper/customValidators'
 import { Capacitor } from '@capacitor/core'
 import { Device } from '@capacitor/device'
+import { EditTeamGeneratorModalComponent } from 'src/app/modal/edit-team-generator-modal/edit-team-generator-modal.component'
 
 @Component({
   selector: 'app-meeting',
@@ -44,6 +45,7 @@ import { Device } from '@capacitor/device'
     TranslateModule,
     SpinnerComponent,
     TeamGeneratorComponent,
+    EditTeamGeneratorModalComponent
   ],
 })
 export class MeetingComponent implements OnInit {
@@ -206,12 +208,13 @@ export class MeetingComponent implements OnInit {
                 )
                 this.meetingForm.reset()
                 this.refreshDataService.refresh('groups-content')
+                this.isReady = true
                 this.cancel()
               },
               error: (error) => {
                 this.alert.handleError(error)
-                this.cancel()
                 this.isReady = true
+                this.cancel()
               },
             })
         } else {
@@ -242,12 +245,13 @@ export class MeetingComponent implements OnInit {
                 )
                 this.meetingForm.reset()
                 this.refreshDataService.refresh('groups-content')
+                this.isReady = true
                 this.cancel()
               },
               error: (error) => {
                 this.alert.handleError(error)
-                this.cancel()
                 this.isReady = true
+                this.cancel()
               },
             })
         }
@@ -282,12 +286,13 @@ export class MeetingComponent implements OnInit {
               )
               this.meetingForm.reset()
               this.refreshDataService.refresh('meeting-details')
+              this.isReady = true
               this.cancel()
             },
             error: (error) => {
               this.alert.handleError(error)
-              this.cancel()
               this.isReady = true
+              this.cancel()
             },
           })
       }

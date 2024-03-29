@@ -20,7 +20,7 @@
         <ion-icon slot="end" size="large" name="create-outline"></ion-icon>
       </ion-label>
 
-      <ion-label class="click" [id]="'add-guest' + component">
+      <ion-label class="click" (click)="openModalAddGuest()">
         <ion-icon slot="end" size="large" name="person-add-outline"></ion-icon>
       </ion-label>
       }
@@ -107,10 +107,7 @@
       @if(userService.loggedUser.ID_USER==meeting.IdAuthor ||
       userService.loggedUser.IS_ADMIN){
       <div style="padding: 5px">
-        <ion-fab-button
-          [id]="'add-team' + counterModal + component"
-          size="small"
-        >
+        <ion-fab-button size="small" (click)="openModalAddTeam()">
           <ion-icon name="add-outline"></ion-icon>
         </ion-fab-button>
       </div>
@@ -143,80 +140,3 @@
   </ion-card>
   } }
 </ion-content>
-@if(isReady){ @if( userService.loggedUser.ID_USER==meeting.IdAuthor ||
-userService.loggedUser.IS_ADMIN){
-<ion-modal
-  [trigger]="'add-team' + counterModal + component"
-  (willDismiss)="onWillDismiss()"
-  class="team"
->
-  <ng-template>
-    <ion-content class="ion-padding">
-      <ion-text style="font-size: larger; padding: 10px">
-        {{ "Modify team" | translate }}
-      </ion-text>
-      <div class="modal-content">
-        <ion-item>
-          <ion-input
-            [label]="'Name' | translate"
-            labelPlacement="stacked"
-            type="text"
-            [(ngModel)]="teamName"
-            maxlength="30"
-          ></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-input
-            [label]="'Color' | translate"
-            labelPlacement="stacked"
-            type="text"
-            [(ngModel)]="teamColor"
-            [value]="teamColor"
-            maxlength="7"
-          ></ion-input>
-          <ion-button [disabled]="disabled" (click)="getPicker()">
-            <ion-icon name="brush-outline"> </ion-icon>
-          </ion-button>
-          <ion-icon
-            size="large"
-            slot="end"
-            name="shirt"
-            [style.color]="teamColor"
-          ></ion-icon>
-        </ion-item>
-        <div
-          style="padding-top: 10px; width: 100%"
-          [id]="'picker' + counterModal"
-        ></div>
-      </div>
-      <ion-button expand="full" (click)="addTeam()" shape="round">
-        {{ "OK" | translate }}
-      </ion-button>
-    </ion-content>
-  </ng-template>
-</ion-modal>
-
-<ion-modal [trigger]="'add-guest' + component" class="guest">
-  <ng-template>
-    <ion-content class="ion-padding">
-      <ion-text style="font-size: larger; padding: 10px">
-        {{ "Add guest" | translate }}
-      </ion-text>
-      <div class="modal-content-guest">
-        <ion-item>
-          <ion-input
-            [label]="'Name' | translate"
-            labelPlacement="stacked"
-            type="text"
-            [(ngModel)]="guestName"
-            maxlength="30"
-          ></ion-input>
-        </ion-item>
-      </div>
-      <ion-button expand="full" (click)="addGuest()" shape="round">
-        {{ "OK" | translate }}
-      </ion-button>
-    </ion-content>
-  </ng-template>
-</ion-modal>
-}}

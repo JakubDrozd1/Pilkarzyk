@@ -185,6 +185,7 @@
   "The guest was successfully removed.": "The guest was successfully removed.",
   "Are you sure you want to delete the team?": "Are you sure you want to delete the team?",
   "Team successfully deleted.": "Team successfully deleted.",
+  "Add team": "Add team",
 
   "Group is null": "Group doesn't exist.",
   "User is null": "User doesn't exist",

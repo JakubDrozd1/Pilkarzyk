@@ -20,13 +20,9 @@ ion-avatar {
   margin-right: 5px;
   margin-left: 5px;
 }
-.team {
-  padding-bottom: 20vh;
-  padding-top: 20vh;
-  padding-right: 5vh;
-  padding-left: 5vh;
-  background: rgba(0, 0, 0, 0.7);
-  --border-radius: 20px !important;
+ion-modal {
+  min-height: 20vh !important;
+  --width: 20vh !important;
 }
 .modal-content {
   margin: 20px;

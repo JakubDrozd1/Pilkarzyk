@@ -95,6 +95,7 @@ export class MessageUserListComponent implements OnInit {
             Quantity: responses.messages[0].Quantity,
             IdAuthor: responses.messages[0].IdAuthor,
             IdGuest: guest.ID_GUEST,
+            DateMeeting: responses.messages[0].DateMeeting,
           }))
           this.messages = this.messages
             .concat(responses.messages)

@@ -13,11 +13,11 @@ import { IonicModule } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { NotificationTokensApi, TokenApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'
-import { AppConfig } from 'src/app/service/app-config'
 import { AuthService } from 'src/app/service/auth/auth.service'
 import { SpinnerComponent } from '../../helper/spinner/spinner.component'
 import { PushNotifications } from '@capacitor/push-notifications'
 import { Capacitor } from '@capacitor/core'
+import { environment } from 'src/environments/environment'
 
 @Component({
   selector: 'app-login',
@@ -69,8 +69,8 @@ export class LoginComponent implements OnInit {
       this.tokenApi
         .generateToken({
           grantType: 'password',
-          clientId: AppConfig.settings.clientId,
-          clientSecret: AppConfig.settings.clientSecretPublic,
+          clientId: environment.clientId,
+          clientSecret: environment.clientSecretPublic,
           username: this.loginForm.value.login.trim().toLowerCase(),
           password: this.loginForm.value.password,
         })

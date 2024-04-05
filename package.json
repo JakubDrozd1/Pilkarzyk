@@ -9,7 +9,8 @@
     "test": "ng test",
     "swagger:download": "node libs/download-spec.js",
     "swagger:generate": "openapi-generator-cli generate -g typescript-angular --type-mappings=set=Array --additional-properties=serviceSuffix=Api,serviceFileSuffix=.api,fileNaming=kebab-case,useSingleRequestParameter=true,useTags=true -i ./libs/openapi.json -o ./libs/api-client/",
-    "swagger": "npm run swagger:download && npm run swagger:generate"
+    "swagger": "npm run swagger:download && npm run swagger:generate",
+    "deploy": "rm package-lock.json && npm install && ng build --configuration production --output-path $npm_config_path"
   },
   "private": true,
   "dependencies": {

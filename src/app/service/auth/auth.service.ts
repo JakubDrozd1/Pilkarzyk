@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { Observable, of, throwError } from 'rxjs'
 import { JwtHelperService } from '@auth0/angular-jwt'
 import { TokenApi } from 'libs/api-client'
-import { AppConfig } from '../app-config'
+import { environment } from 'src/environments/environment'
 
 @Injectable({
   providedIn: 'root',
@@ -43,8 +43,8 @@ export class AuthService {
     if (refreshToken) {
       return this.tokenApi.generateToken({
         grantType: 'refresh_token',
-        clientId: AppConfig.settings.clientId,
-        clientSecret: AppConfig.settings.clientSecretPublic,
+        clientId: environment.clientId,
+        clientSecret: environment.clientSecretPublic,
         refreshToken: refreshToken,
       })
     }

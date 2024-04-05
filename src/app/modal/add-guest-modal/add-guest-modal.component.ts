@@ -24,6 +24,7 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
 })
 export class AddGuestModalComponent implements OnInit {
   @Input() idMeeting: number = 0
+  @Input() isOpened: boolean = false
   isReady: Boolean = false
   guestName: string = 'Guest'
 
@@ -39,7 +40,9 @@ export class AddGuestModalComponent implements OnInit {
 
   ngOnInit() {
     window.addEventListener('popstate', async () => {
-      this.cancel()
+      if (this.isOpened) {
+        this.cancel()
+      }
     })
   }
 
@@ -79,6 +82,7 @@ export class AddGuestModalComponent implements OnInit {
       queryParams: { modalOpened: null },
       replaceUrl: true,
     })
+    this.isOpened = false
     this.modalCtrl.dismiss(null, 'cancel')
   }
 }

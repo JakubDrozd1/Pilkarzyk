@@ -22,6 +22,7 @@ import { TeamGeneratorComponent } from 'src/app/form/team-generator/team-generat
 export class EditTeamGeneratorModalComponent implements OnInit {
   @Input() color: string = '#000000'
   @Input() name: string = 'Team'
+  @Input() isOpened: boolean = false
 
   colors: string[] = [
     '#ff0000',
@@ -45,7 +46,9 @@ export class EditTeamGeneratorModalComponent implements OnInit {
 
   ngOnInit() {
     window.addEventListener('popstate', async () => {
-      this.cancel(false)
+      if (this.isOpened) {
+        this.cancel(false)
+      }
     })
   }
 
@@ -59,6 +62,7 @@ export class EditTeamGeneratorModalComponent implements OnInit {
       queryParams: { modalOpened: null },
       replaceUrl: true,
     })
+    this.isOpened = false
     if (isSendData) {
       this.modalCtrl.dismiss({ color: this.color, name: this.name }, 'cancel')
     } else {

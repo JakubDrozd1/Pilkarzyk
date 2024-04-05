@@ -132,7 +132,7 @@ export class MeetingDetailsComponent implements OnInit {
     window.addEventListener('popstate', async () => {
       if (this.alertOpened) {
         if (this.alertCtrl.getTop() != null) {
-          this.alertCtrl.dismiss()
+          this.alertCtrl.dismiss(null, 'cancel')
         }
       }
     })
@@ -144,6 +144,7 @@ export class MeetingDetailsComponent implements OnInit {
       component: AddTeamModalComponent,
       componentProps: {
         idMeeting: this.idMeeting,
+        isOpened: true
       },
       backdropDismiss: false,
     })
@@ -158,6 +159,7 @@ export class MeetingDetailsComponent implements OnInit {
       component: AddGuestModalComponent,
       componentProps: {
         idMeeting: this.idMeeting,
+        isOpened: true
       },
       backdropDismiss: false,
     })

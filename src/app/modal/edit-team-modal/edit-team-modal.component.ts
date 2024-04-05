@@ -61,7 +61,7 @@ export class EditTeamModalComponent implements OnInit {
     window.addEventListener('popstate', async () => {
       if (this.alertOpened) {
         if (this.alertCtrl.getTop() != null) {
-          this.alertCtrl.dismiss()
+          this.alertCtrl.dismiss(null, 'cancel')
         }
       } else {
         this.cancel()

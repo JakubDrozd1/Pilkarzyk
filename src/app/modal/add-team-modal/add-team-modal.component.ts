@@ -24,6 +24,7 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
 })
 export class AddTeamModalComponent implements OnInit {
   @Input() idMeeting: number = 0
+  @Input() isOpened: boolean = false
 
   teamName: string = 'Team'
   teamColor: string = '#000000'
@@ -53,7 +54,9 @@ export class AddTeamModalComponent implements OnInit {
 
   ngOnInit() {
     window.addEventListener('popstate', async () => {
-      this.cancel()
+      if (this.isOpened) {
+        this.cancel()
+      }
     })
   }
 
@@ -95,6 +98,7 @@ export class AddTeamModalComponent implements OnInit {
       queryParams: { modalOpened: null },
       replaceUrl: true,
     })
+    this.isOpened = false
     this.modalCtrl.dismiss(null, 'cancel')
   }
 

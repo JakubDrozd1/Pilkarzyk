@@ -11,9 +11,9 @@ import {
 import { ActivatedRoute } from '@angular/router'
 import { Alert } from 'src/app/helper/alert'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
-import { AppConfig } from 'src/app/service/app-config'
 import { JwtHelperService } from '@auth0/angular-jwt'
 import { SpinnerComponent } from '../../helper/spinner/spinner.component'
+import { environment } from 'src/environments/environment'
 
 @Component({
   selector: 'app-register-link',
@@ -98,8 +98,8 @@ export class RegisterLinkComponent implements OnInit {
     this.tokenApi
       .generateToken({
         grantType: 'password',
-        clientId: AppConfig.settings.clientId,
-        clientSecret: AppConfig.settings.clientSecretPublic,
+        clientId: environment.clientId,
+        clientSecret: environment.clientSecretPublic,
         username: user.Login,
         password: user.Password,
       })

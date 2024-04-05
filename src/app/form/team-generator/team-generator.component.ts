@@ -71,6 +71,7 @@ export class TeamGeneratorComponent implements OnInit {
       componentProps: {
         color: this.color,
         name: this.name,
+        isOpened: true,
       },
       backdropDismiss: false,
     })

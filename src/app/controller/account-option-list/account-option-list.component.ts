@@ -63,17 +63,19 @@ export class AccountOptionListComponent implements OnInit {
 
   ngOnInit() {
     window.addEventListener('popstate', () => {
-      this.setOpen(false)
+      if (this.isPickerOpen) {
+        this.setOpen(false)
+      }
     })
   }
 
   setOpen(isOpen: boolean) {
     if (isOpen) {
-      this.router.navigateByUrl(this.router.url + '?modalOpened=true')
+      this.router.navigateByUrl(this.router.url + '?pickerOpened=true')
     } else {
       this.router.navigate([], {
         relativeTo: this.route,
-        queryParams: { modalOpened: null },
+        queryParams: { pickerOpened: null },
         replaceUrl: true,
       })
     }

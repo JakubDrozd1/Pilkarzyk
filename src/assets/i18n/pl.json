@@ -186,6 +186,7 @@
   "Are you sure you want to delete the team?": "Na pewno usunąć drużyne?",
   "Team successfully deleted.": "Pomyślnie usunięto drużynę.",
   "Add team": "Dodaj drużynę",
+  "or phone number": "lub numeru telefonu",
 
   "Group is null": "Grupa nie istnieje.",
   "User is null": "Użytkownik nie istnieje.",
@@ -205,5 +206,6 @@
   "Report problem": "Zgłoś błąd",
   "Invitation alredy send": "Wysłano już zaproszenie do tego użytkownika",
   "Email is null": "Konto o podanym emailu nie istnieje.",
-  "Account is null": "Konto z podanymi danymi logowania nie istnieje."
+  "Account is null": "Konto z podanymi danymi logowania nie istnieje.",
+  "User with this phone number dont exist": "Użytkownik z podanym numerem telefonu nie istnieje."
 }

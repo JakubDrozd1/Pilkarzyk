@@ -181,6 +181,22 @@
             }
           },
           {
+            "name": "DateFrom",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "DateTo",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
             "name": "IdUser",
             "in": "query",
             "schema": {
@@ -3140,6 +3156,11 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          },
+          "PHONE_NUMBER": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3254,6 +3275,11 @@
           "Email": {
             "type": "string",
             "nullable": true
+          },
+          "PhoneNumber": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3304,6 +3330,11 @@
           },
           "Email": {
             "type": "string",
+            "nullable": true
+          },
+          "PhoneNumber": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           }
         },

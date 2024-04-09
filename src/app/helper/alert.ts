@@ -25,6 +25,7 @@ export class Alert {
     'Invitation alredy send',
     'Email is null',
     'Account is null',
+    'User with this phone number dont exist',
   ]
   button: ToastButton = {
     icon: 'close-circle-outline',

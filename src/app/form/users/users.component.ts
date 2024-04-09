@@ -16,6 +16,7 @@ import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { UserService } from 'src/app/service/user/user.service'
 import { SpinnerComponent } from '../../helper/spinner/spinner.component'
+import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core'
 
 @Component({
   selector: 'app-users',
@@ -38,7 +39,13 @@ export class UsersComponent implements OnInit {
   addNewUserForm: FormGroup
   isReadyNewUser: boolean = true
   isReadyExistingUser: boolean = false
-
+  readonly phoneMask: MaskitoOptions = {
+    mask: [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/],
+  }
+  readonly maskPredicate: MaskitoElementPredicateAsync = async (el) =>
+    (el as HTMLIonInputElement).getInputElement()
+  intNumber: number = 0
+  
   constructor(
     private fb: FormBuilder,
     private alert: Alert,
@@ -49,6 +56,7 @@ export class UsersComponent implements OnInit {
   ) {
     this.addNewUserForm = this.fb.group({
       email: ['', [Validators.email]],
+      phoneNumber: ['', [Validators.minLength(11)]],
     })
   }
 
@@ -57,29 +65,39 @@ export class UsersComponent implements OnInit {
   onSubmitNew() {
     this.addNewUserForm.markAllAsTouched()
     if (this.addNewUserForm.valid) {
-      this.isReadyNewUser = false
-      this.groupInviteApi
-        .addGroupInvite({
-          getGroupInviteRequest: {
-            IdGroup: this.idGroup,
-            IdAuthor: this.userService.loggedUser.ID_USER,
-            Email: this.addNewUserForm.value.email.toLowerCase().trim(),
-          },
-        })
-        .subscribe({
-          next: () => {
-            this.isReadyNewUser = true
-            this.alert.presentToast(
-              this.translate.instant('Invited successfully')
-            )
-            this.addNewUserForm.reset()
-            this.refreshDataService.refresh('invite')
-          },
-          error: (error) => {
-            this.alert.handleError(error)
-            this.isReadyNewUser = true
-          },
-        })
+      if (
+        this.addNewUserForm.value.phoneNumber ||
+        this.addNewUserForm.value.email
+      ) {
+        this.isReadyNewUser = false
+        if (this.addNewUserForm.value.phoneNumber) {
+          let str: string = this.addNewUserForm.value.phoneNumber
+          this.intNumber = parseInt(str.replace(/-/g, ''), 10)
+        }
+        this.groupInviteApi
+          .addGroupInvite({
+            getGroupInviteRequest: {
+              IdGroup: this.idGroup,
+              IdAuthor: this.userService.loggedUser.ID_USER,
+              Email: this.addNewUserForm.value.email?.toLowerCase().trim(),
+              PhoneNumber: this.intNumber,
+            },
+          })
+          .subscribe({
+            next: () => {
+              this.isReadyNewUser = true
+              this.alert.presentToast(
+                this.translate.instant('Invited successfully')
+              )
+              this.addNewUserForm.reset()
+              this.refreshDataService.refresh('invite')
+            },
+            error: (error) => {
+              this.alert.handleError(error)
+              this.isReadyNewUser = true
+            },
+          })
+      }
     }
   }
 }

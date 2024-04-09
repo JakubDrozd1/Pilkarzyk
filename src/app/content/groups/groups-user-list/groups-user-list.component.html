@@ -42,9 +42,9 @@
         {{ user.Firstname }} {{ user.Surname }}
       </ion-label>
       @if(user.PhoneNumber!=null){
-      {{ user.PhoneNumber.toString().slice(0, 3) }}-{{
-        user.PhoneNumber.toString().slice(3, 6)
-      }}-{{ user.PhoneNumber.toString().slice(6) }}
+      {{ user.PhoneNumber.toString().slice(0, 3) }}-
+      {{ user.PhoneNumber.toString().slice(3, 6) }}-
+      {{ user.PhoneNumber.toString().slice(6) }}
       }
     </ion-item>
   </ion-card-content>

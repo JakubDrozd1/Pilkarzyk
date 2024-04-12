@@ -37,7 +37,23 @@
         >
         </ion-input>
       </ion-item>
-      } @for(user of results; track $index){
+      }
+      <ion-item lines="none">
+        <ion-checkbox
+          labelPlacement="end"
+          justify="start"
+          formControlName="isModerated"
+        >
+          <div class="ion-text-wrap">
+            {{
+              "Allow all users to create meetings themselves and inviting new participants"
+                | translate
+            }}
+          </div>
+        </ion-checkbox>
+      </ion-item>
+
+      @for(user of results; track $index){
       <ion-item label-placement="fixed" lines="full" (click)="add(user)">
         {{ user.FIRSTNAME }} {{ user.SURNAME }}
       </ion-item>

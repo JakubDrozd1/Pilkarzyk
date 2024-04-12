@@ -25,6 +25,8 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
 export class EditTeamModalComponent implements OnInit {
   @Input() idMeeting: number = 0
   @Input() team!: TEAMS
+  @Input() isOpened: boolean = false
+  
   isReady: boolean = false
   isEdit: boolean = false
   colors: string[] = [
@@ -75,6 +77,7 @@ export class EditTeamModalComponent implements OnInit {
       queryParams: { modalOpened: null },
       replaceUrl: true,
     })
+    this.isOpened = false
     this.modalCtrl.dismiss(null, 'cancel')
   }
 

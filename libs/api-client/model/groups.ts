@@ -14,5 +14,6 @@
 export interface GROUPS { 
     ID_GROUP?: number | null;
     NAME?: string | null;
+    IS_MODERATED?: boolean;
 }
 

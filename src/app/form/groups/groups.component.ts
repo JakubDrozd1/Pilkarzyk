@@ -36,7 +36,7 @@ import { Router } from '@angular/router'
 export class GroupsComponent implements OnInit {
   groupForm!: FormGroup
   users: USERS[] = []
-  isReady: boolean = false
+  isReady: boolean = true
   results: USERS[] = []
   user: USERS | undefined
 
@@ -59,12 +59,13 @@ export class GroupsComponent implements OnInit {
   onSubmit() {
     this.groupForm.markAllAsTouched()
     if (this.groupForm.valid) {
-      this.isReady = true
+      this.isReady = false
       this.groupsApi
         .addGroup({
           getCreateGroupRequest: {
             GroupRequest: {
               Name: this.groupForm.value.name,
+              IsModerated: !this.groupForm.value.isModerated,
             },
             User: this.userService.loggedUser,
           },
@@ -86,17 +87,19 @@ export class GroupsComponent implements OnInit {
                       ) + response.NAME
                     )
                     this.cancel()
-                    this.isReady = false
+                    this.isReady = true
+                    this.groupForm.reset()
                     this.refreshDataService.refresh('groups-list')
                   },
                   error: (error) => {
-                    this.isReady = false
+                    this.isReady = true
                     this.alert.handleError(error)
                     this.cancel()
                   },
                 })
             } else {
-              this.isReady = false
+              this.isReady = true
+              this.groupForm.reset()
               this.alert.presentToast(
                 this.translate.instant('Successully added group') +
                   response.NAME
@@ -108,13 +111,14 @@ export class GroupsComponent implements OnInit {
           error: (error) => {
             this.alert.handleError(error)
             this.cancel()
-            this.isReady = false
+            this.isReady = true
           },
         })
     }
   }
 
   getDetails() {
+    this.isReady = false
     this.usersApi
       .getAllUsers({
         page: 0,
@@ -129,10 +133,12 @@ export class GroupsComponent implements OnInit {
           this.groupForm = this.fb.group({
             name: ['', Validators.required],
             organizer: ['', UserValidator(this.users)],
+            isModerated: ['false'],
           })
           this.isReady = true
         },
         error: (error) => {
+          this.isReady = true
           this.alert.handleError(error)
         },
       })

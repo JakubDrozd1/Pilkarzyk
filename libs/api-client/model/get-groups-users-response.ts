@@ -24,5 +24,6 @@ export interface GetGroupsUsersResponse {
     IdUser?: number | null;
     Avatar?: string | null;
     GroupCounter?: number | null;
+    IsModerated?: boolean;
 }
 

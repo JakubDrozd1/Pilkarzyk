@@ -19,7 +19,7 @@ import {
   TEAMS,
 } from 'libs/api-client'
 import * as moment from 'moment'
-import { Observable, forkJoin } from 'rxjs'
+import { Observable } from 'rxjs'
 import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { SpinnerComponent } from '../../helper/spinner/spinner.component'

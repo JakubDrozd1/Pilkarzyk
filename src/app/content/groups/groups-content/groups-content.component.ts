@@ -124,8 +124,12 @@ export class GroupsContentComponent implements OnInit {
           this.meetings = responses.meetings
           this.nameGroup = responses.group.NAME
           this.groupUser = responses.groupUser
-          if (this.groupUser) {
-            this.permission = Boolean(this.groupUser.AccountType)
+          if (!this.groupUser.IsModerated) {
+            this.permission = true
+          } else {
+            if (this.groupUser) {
+              this.permission = Boolean(this.groupUser.AccountType)
+            }
           }
           this.isReady = true
           this.visitedMeetings = false

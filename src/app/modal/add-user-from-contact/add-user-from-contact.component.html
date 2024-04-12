@@ -1,31 +1,5 @@
 <div class="helper-container">
-  @if(!isContact){
-  <ion-card
-    style="
-      display: flex;
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      padding: 10px;
-    "
-  >
-    <ion-item lines="none" style="--background: var(--ion-card-background)">
-      <ion-chip style="display: flex; width: 50%">
-        <ion-skeleton-text
-          [animated]="true"
-          style="width: 100%"
-        ></ion-skeleton-text>
-      </ion-chip>
-      <ion-chip style="display: flex; width: 50%">
-        <ion-skeleton-text
-          [animated]="true"
-          style="width: 100%"
-        ></ion-skeleton-text>
-      </ion-chip>
-    </ion-item>
-  </ion-card>
-
-  } @if(isContact){
+  @if(isContact){
   <div style="font-size: larger; margin: 20px">
     {{ "Add a friend from your contacts" | translate }}
   </div>
@@ -33,7 +7,6 @@
   @if(contact.phones){ @if(contact.phones[0].number){
   <ion-card
     style="
-      display: flex;
       display: flex;
       justify-content: center;
       flex-direction: column;
@@ -46,17 +19,24 @@
         [value]="contact.phones[0].number"
         (ionChange)="changeContact($event)"
       >
-        <ion-chip style="display: flex">
+        <ion-chip style="display: flex; justify-content: center">
           {{ contact.name?.display }}
         </ion-chip>
-        <ion-chip style="display: flex">
+        <ion-chip style="display: flex; justify-content: center">
           {{ contact.phones[0].number }}
         </ion-chip>
       </ion-checkbox>
     </ion-item>
   </ion-card>
   }} } } @if(!isNumber) {
-  <div style="font-size: medium; margin: 20px; padding-top: 20vh">
+  <div
+    style="
+      font-size: medium;
+      margin: 20px;
+      padding-top: 20vh;
+      text-align: center;
+    "
+  >
     {{ "There are no contacts to send an invitation to" | translate }}
   </div>
   }

@@ -37,9 +37,15 @@
       type="tel"
     >
     </ion-input>
-    <ion-fab-button size="small" slot="end" (click)="openModalAddUserFromContact()">
+    @if(isMobile){
+    <ion-fab-button
+      size="small"
+      slot="end"
+      (click)="openModalAddUserFromContact()"
+    >
       <ion-icon name="book-outline"> </ion-icon>
     </ion-fab-button>
+    }
   </ion-item>
 
   <ion-button type="submit" shape="round" expand="full" class="padding">

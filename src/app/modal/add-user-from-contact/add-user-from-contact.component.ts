@@ -136,8 +136,9 @@ export class AddUserFromContactComponent implements OnInit {
         this.groupsInvite = responses.invites
         if (Capacitor.isNativePlatform()) {
           this.getContactsData()
+        } else {
+          this.isContact = true
         }
-        this.isContact = true
       },
       error: (error) => {
         this.alert.handleError(error)

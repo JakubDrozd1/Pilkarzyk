@@ -7,8 +7,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms'
-import { RouterLink } from '@angular/router'
-import { IonicModule } from '@ionic/angular'
+import { Router, RouterLink } from '@angular/router'
+import { IonicModule, ModalController } from '@ionic/angular'
 import { MaskitoModule } from '@maskito/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { GroupInvitesApi } from 'libs/api-client'
@@ -17,6 +17,7 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
 import { UserService } from 'src/app/service/user/user.service'
 import { SpinnerComponent } from '../../helper/spinner/spinner.component'
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core'
+import { AddUserFromContactComponent } from 'src/app/modal/add-user-from-contact/add-user-from-contact.component'
 
 @Component({
   selector: 'app-users',
@@ -45,14 +46,17 @@ export class UsersComponent implements OnInit {
   readonly maskPredicate: MaskitoElementPredicateAsync = async (el) =>
     (el as HTMLIonInputElement).getInputElement()
   intNumber: number = 0
-  
+  modalOpened: boolean = false
+
   constructor(
     private fb: FormBuilder,
     private alert: Alert,
     private refreshDataService: RefreshDataService,
     private groupInviteApi: GroupInvitesApi,
     private userService: UserService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    private modalCtrl: ModalController,
+    private router: Router
   ) {
     this.addNewUserForm = this.fb.group({
       email: ['', [Validators.email]],
@@ -99,5 +103,20 @@ export class UsersComponent implements OnInit {
           })
       }
     }
+  }
+  
+  async openModalAddUserFromContact() {
+    const modal = await this.modalCtrl.create({
+      component: AddUserFromContactComponent,
+      componentProps: {
+        idGroup: this.idGroup,
+        isOpened: true,
+      },
+      backdropDismiss: false,
+    })
+    this.router.navigateByUrl(this.router.url + '?modalOpened=true')
+    this.modalOpened = true
+    modal.present()
+    await modal.onWillDismiss()
   }
 }

@@ -187,6 +187,8 @@
   "Team successfully deleted.": "Team successfully deleted.",
   "Add team": "Add team",
   "or phone number": "or phone number",
+  "Add a friend from your contacts": "Add a friend from your contacts",
+  "There are no contacts to send an invitation to": "There are no contacts to send an invitation to.",
 
   "Group is null": "Group doesn't exist.",
   "User is null": "User doesn't exist",

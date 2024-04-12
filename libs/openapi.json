@@ -348,6 +348,38 @@
         }
       }
     },
+    "/api/group-invites/multiple": {
+      "post": {
+        "tags": [
+          "GroupInvites"
+        ],
+        "operationId": "AddMultipleGroupInvite",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetMultipleGroupInviteRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetMultipleGroupInviteRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetMultipleGroupInviteRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/groups": {
       "get": {
         "tags": [
@@ -3707,6 +3739,28 @@
           },
           "IsIndependent": {
             "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetMultipleGroupInviteRequest": {
+        "type": "object",
+        "properties": {
+          "IdGroup": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "IdAuthor": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "PhoneNumbers": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
             "nullable": true
           }
         },

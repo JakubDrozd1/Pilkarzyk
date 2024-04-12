@@ -1,7 +1,10 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
-import { IonicModule, RefresherEventDetail } from '@ionic/angular'
+import {
+  IonicModule,
+  RefresherEventDetail,
+} from '@ionic/angular'
 import { TranslateModule } from '@ngx-translate/core'
 import { GetGroupInviteResponse, GroupInvitesApi } from 'libs/api-client'
 import { Alert } from 'src/app/helper/alert'

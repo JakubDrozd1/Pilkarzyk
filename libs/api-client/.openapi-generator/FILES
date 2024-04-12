@@ -33,6 +33,7 @@ model/get-meeting-request.ts
 model/get-meeting-users-response.ts
 model/get-message-request.ts
 model/get-messages-users-meetings-response.ts
+model/get-multiple-group-invite-request.ts
 model/get-notification-token-request.ts
 model/get-ranking-request.ts
 model/get-rankings-users-groups-response.ts

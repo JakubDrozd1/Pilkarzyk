@@ -18,11 +18,10 @@
   >
     <app-spinner [isReady]="true"></app-spinner>
   </ion-refresher>
-
   @if(isReady && invites.length>0){
-  <ion-text class="titleInv">
+  <div class="titleInv">
     {{ "Invitations sent" | translate }}
-  </ion-text>
+  </div>
   <ion-card>
     <div class="colTitle">
       <div class="colLeft">

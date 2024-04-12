@@ -187,6 +187,8 @@
   "Team successfully deleted.": "Pomyślnie usunięto drużynę.",
   "Add team": "Dodaj drużynę",
   "or phone number": "lub numeru telefonu",
+  "Add a friend from your contacts": "Dodaj znajomego z kontaktów",
+  "There are no contacts to send an invitation to": "Brak kontaktów do których można wysłać zaproszenie",
 
   "Group is null": "Grupa nie istnieje.",
   "User is null": "Użytkownik nie istnieje.",

@@ -18,6 +18,7 @@ import { UserService } from 'src/app/service/user/user.service'
 import { SpinnerComponent } from '../../helper/spinner/spinner.component'
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core'
 import { AddUserFromContactComponent } from 'src/app/modal/add-user-from-contact/add-user-from-contact.component'
+import { Capacitor } from '@capacitor/core'
 
 @Component({
   selector: 'app-users',
@@ -47,6 +48,7 @@ export class UsersComponent implements OnInit {
     (el as HTMLIonInputElement).getInputElement()
   intNumber: number = 0
   modalOpened: boolean = false
+  isMobile: boolean = false
 
   constructor(
     private fb: FormBuilder,
@@ -64,7 +66,11 @@ export class UsersComponent implements OnInit {
     })
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (Capacitor.isNativePlatform()) {
+      this.isMobile = true
+    }
+  }
 
   onSubmitNew() {
     this.addNewUserForm.markAllAsTouched()
@@ -104,7 +110,7 @@ export class UsersComponent implements OnInit {
       }
     }
   }
-  
+
   async openModalAddUserFromContact() {
     const modal = await this.modalCtrl.create({
       component: AddUserFromContactComponent,

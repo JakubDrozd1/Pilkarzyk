@@ -18,38 +18,51 @@
   >
     <app-spinner [isReady]="true"></app-spinner>
   </ion-refresher>
-
   @if(isReady && invites.length>0){
-  <ion-text style="margin: 20px; font-size: x-large">
+  <div class="titleInv">
     {{ "Invitations sent" | translate }}
-  </ion-text>
+  </div>
   <ion-card>
-    <div style="display: flex">
-      <ion-card-header>
-        {{ "Email" | translate }}
-      </ion-card-header>
-
-      <ion-card-header>{{ "Date sent" | translate }}</ion-card-header>
-    </div>
-    @for(invite of invites; track $index){
-    <div
-      style="
-        display: flex;
-        justify-content: space-between;
-        padding-left: 5px;
-        padding-right: 5px;
-      "
-    >
-      <div style="display: flex">
-        <ion-chip> {{ invite.Email }} </ion-chip>
+    <div class="colTitle">
+      <div class="colLeft">
+        <div class="text">
+          {{ "Email" | translate }}
+        </div>
+        <div class="text">
+          {{ "Phone number" | translate }}
+        </div>
       </div>
-      <div style="display: flex">
+      <div class="colRight">
+        <div class="text">
+          {{ "Date sent" | translate }}
+        </div>
+      </div>
+    </div>
+  </ion-card>
+
+  @for(invite of invites; track $index){
+  <ion-card>
+    <div class="row">
+      <div class="colLeft">
+        <div style="display: flex">
+          <ion-chip> {{ invite.Email }} </ion-chip>
+        </div>
+        @if(invite.PhoneNumber){
+        <div style="display: flex">
+          <ion-chip>
+            {{ invite.PhoneNumber.toString().slice(0, 3) }}
+            {{ invite.PhoneNumber.toString().slice(3, 6) }}
+            {{ invite.PhoneNumber.toString().slice(6) }}
+          </ion-chip>
+        </div>
+        }
+      </div>
+      <div class="colRight">
         <ion-chip>
           {{ invite.DateAdd | date : "dd.MM.yyyy HH:mm:ss" }}
         </ion-chip>
       </div>
     </div>
-    }
   </ion-card>
-  }
+  } }
 </ion-content>

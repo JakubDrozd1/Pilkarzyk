@@ -181,6 +181,22 @@
             }
           },
           {
+            "name": "DateFrom",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "DateTo",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
             "name": "IdUser",
             "in": "query",
             "schema": {
@@ -325,6 +341,38 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/group-invites/multiple": {
+      "post": {
+        "tags": [
+          "GroupInvites"
+        ],
+        "operationId": "AddMultipleGroupInvite",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetMultipleGroupInviteRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetMultipleGroupInviteRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetMultipleGroupInviteRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Success"
@@ -3140,6 +3188,11 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          },
+          "PHONE_NUMBER": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3254,6 +3307,11 @@
           "Email": {
             "type": "string",
             "nullable": true
+          },
+          "PhoneNumber": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3304,6 +3362,11 @@
           },
           "Email": {
             "type": "string",
+            "nullable": true
+          },
+          "PhoneNumber": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           }
         },
@@ -3676,6 +3739,28 @@
           },
           "IsIndependent": {
             "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetMultipleGroupInviteRequest": {
+        "type": "object",
+        "properties": {
+          "IdGroup": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "IdAuthor": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "PhoneNumbers": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
             "nullable": true
           }
         },

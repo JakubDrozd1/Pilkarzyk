@@ -1,14 +1,20 @@
 import { TeamsApi } from './../../../../../libs/api-client/api/teams.api'
 import { CommonModule } from '@angular/common'
-import { Component, ElementRef, OnInit } from '@angular/core'
+import { Component, ElementRef, HostListener, OnInit } from '@angular/core'
 import {
   AlertController,
   IonicModule,
   ModalController,
+  NavController,
   RefresherEventDetail,
 } from '@ionic/angular'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
-import { ActivatedRoute, Router, RouterLink } from '@angular/router'
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterLink,
+} from '@angular/router'
 import {
   GUESTS,
   GetMeetingGroupsResponse,
@@ -34,6 +40,9 @@ import { IonRefresherCustomEvent } from '@ionic/core'
 import { MeetingTeamListComponent } from '../meeting-team-list/meeting-team-list.component'
 import { FormsModule } from '@angular/forms'
 import iro from '@jaames/iro'
+import { AddTeamModalComponent } from 'src/app/modal/add-team-modal/add-team-modal.component'
+import { AddGuestModalComponent } from 'src/app/modal/add-guest-modal/add-guest-modal.component'
+import { MeetingComponent } from 'src/app/form/meeting/meeting.component'
 
 @Component({
   selector: 'app-meeting-details',
@@ -48,6 +57,8 @@ import iro from '@jaames/iro'
     TranslateModule,
     MeetingTeamListComponent,
     FormsModule,
+    AddTeamModalComponent,
+    MeetingComponent,
   ],
 })
 export class MeetingDetailsComponent implements OnInit {
@@ -83,17 +94,11 @@ export class MeetingDetailsComponent implements OnInit {
     },
   ]
   color: string = ''
-  teamColor: string = '#000000'
   teams: TEAMS[] = []
-  teamName: string = 'Team'
-  colorPicker: any
-  disabled: boolean = false
-  colorRegex = /^#(?:[0-9a-fA-F]{3}){1,2}$/
-  counterModal: number = 0
-  guestName: string = 'Guest'
   guests: GUESTS[] = []
-  component: string = ''
   idGroup: number = 0
+  modalOpened: boolean = false
+  alertOpened: boolean = false
 
   constructor(
     private route: ActivatedRoute,
@@ -113,7 +118,6 @@ export class MeetingDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.setComponent()
     this.defaultAnswer = {
       Answer: null,
     }
@@ -125,7 +129,44 @@ export class MeetingDetailsComponent implements OnInit {
         }
       })
     )
+    window.addEventListener('popstate', async () => {
+      if (this.alertOpened) {
+        if (this.alertCtrl.getTop() != null) {
+          this.alertCtrl.dismiss(null, 'cancel')
+        }
+      }
+    })
     this.reload()
+  }
+
+  async openModalAddTeam() {
+    const modal = await this.modalCtrl.create({
+      component: AddTeamModalComponent,
+      componentProps: {
+        idMeeting: this.idMeeting,
+        isOpened: true
+      },
+      backdropDismiss: false,
+    })
+    this.router.navigateByUrl(this.router.url + '?modalOpened=true')
+    this.modalOpened = true
+    modal.present()
+    await modal.onWillDismiss()
+  }
+
+  async openModalAddGuest() {
+    const modal = await this.modalCtrl.create({
+      component: AddGuestModalComponent,
+      componentProps: {
+        idMeeting: this.idMeeting,
+        isOpened: true
+      },
+      backdropDismiss: false,
+    })
+    this.router.navigateByUrl(this.router.url + '?modalOpened=true')
+    this.modalOpened = true
+    modal.present()
+    await modal.onWillDismiss()
   }
 
   reload() {
@@ -169,7 +210,6 @@ export class MeetingDetailsComponent implements OnInit {
             }),
           }).subscribe({
             next: (responses) => {
-              this.counterModal++
               this.guests = responses.guests
               this.teams = responses.teams
               let element: number = this.elementRef.nativeElement.offsetWidth
@@ -357,10 +397,22 @@ export class MeetingDetailsComponent implements OnInit {
       buttons: this.changeButtons,
       backdropDismiss: false,
     })
+    this.router.navigateByUrl(this.router.url + '?alertOpened=true')
+    this.alertOpened = true
     alert.present()
     alert.onDidDismiss().then(() => {
       this.selectedValue = ''
+      this.cancelAlert()
     })
+  }
+
+  cancelAlert() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { alertOpened: null },
+      replaceUrl: true,
+    })
+    this.alertOpened = false
   }
 
   handleRefresh($event: IonRefresherCustomEvent<RefresherEventDetail>) {
@@ -368,103 +420,5 @@ export class MeetingDetailsComponent implements OnInit {
       this.reload()
       $event.target.complete()
     }, 2000)
-  }
-
-  onWillDismiss() {
-    this.disabled = false
-  }
-
-  getPicker() {
-    this.colorPicker = iro.ColorPicker('#picker' + this.counterModal, {
-      width: 100,
-      color: '#fff',
-    })
-    this.colorPicker.on('color:change', (color: { hexString: any }) => {
-      this.teamColor = color.hexString
-    })
-    this.disabled = true
-  }
-
-  addTeam() {
-    if (this.teamName == '') {
-      this.teamName = 'Team ' + Math.floor(Math.random() * 100) + 1
-    }
-    if (this.teamColor == '' || !this.colorRegex.test(this.teamColor)) {
-      this.teamColor = this.genHexColor()
-    }
-    this.teamsApi
-      .addTeams({
-        color: this.teamColor,
-        idMeeting: this.idMeeting,
-        name: this.teamName,
-      })
-      .subscribe({
-        next: () => {
-          this.teamName = 'Team'
-          this.teamColor = '#000000'
-          this.alert.presentToast(
-            this.translate.instant('Team added successfully.')
-          )
-          this.disabled = false
-          this.modalCtrl.dismiss('picker')
-          this.reload()
-        },
-        error: (error) => {
-          this.alert.handleError(error)
-          this.disabled = false
-          this.teamName = 'Team'
-          this.teamColor = '#000000'
-          this.modalCtrl.dismiss('picker')
-        },
-      })
-  }
-
-  genHexColor(): string {
-    const randomColor = Math.floor(Math.random() * 16777215).toString(16)
-    return `#${randomColor}`
-  }
-
-  counterUp() {
-    this.counterModal++
-  }
-
-  addGuest() {
-    this.isReady = false
-    this.guestsApi
-      .addGuests({
-        getGuestRequest: {
-          IdMeeting: this.idMeeting,
-          Name: this.guestName,
-        },
-      })
-      .subscribe({
-        next: () => {
-          this.alert.presentToast(
-            this.translate.instant('Guest added successfully.')
-          )
-          this.guestName = 'Guest'
-          this.isReady = true
-          this.getDetails()
-        },
-        error: (error) => {
-          this.alert.handleError(error)
-          this.isReady = true
-        },
-      })
-  }
-
-  setComponent() {
-    if (window.location.pathname.includes('home')) {
-      this.component = 'home'
-    }
-    if (window.location.pathname.includes('groups')) {
-      this.component = 'groups'
-    }
-    if (window.location.pathname.includes('notification')) {
-      this.component = 'notification'
-    }
-    if (window.location.pathname.includes('calendar')) {
-      this.component = 'calendar'
-    }
   }
 }

@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, importProvidersFrom } from '@angular/core'
+import { importProvidersFrom } from '@angular/core'
 import { AppComponent } from './app/app.component'
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular'
 import { bootstrapApplication } from '@angular/platform-browser'
@@ -10,36 +10,34 @@ import {
 } from '@angular/common/http'
 import { routes } from './app/app.routes'
 import { JwtModule } from '@auth0/angular-jwt'
-import { AppConfig } from './app/service/app-config'
 import { TokenInterceptor } from './app/helper/TokenInterceptor'
 import { TranslateHttpLoader } from '@ngx-translate/http-loader'
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async'
+import { BASE_PATH } from 'libs/api-client'
+import { environment } from './environments/environment'
 
 export function tokenGetter() {
   return localStorage.getItem('access_token')
 }
 
-export function initializeApp(appConfig: AppConfig) {
-  return () => appConfig.load()
-}
 export function httpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http)
 }
 
 bootstrapApplication(AppComponent, {
   providers: [
-    AppConfig,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initializeApp,
-      deps: [AppConfig],
-      multi: true,
-    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true,
+    },
+    {
+      provide: BASE_PATH,
+      useValue:
+        environment.apiEndpoint.slice(-1) === '/'
+          ? environment.apiEndpoint.slice(0, -1)
+          : environment.apiEndpoint,
     },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     importProvidersFrom(IonicModule.forRoot({})),

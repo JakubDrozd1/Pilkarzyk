@@ -185,6 +185,10 @@
   "The guest was successfully removed.": "The guest was successfully removed.",
   "Are you sure you want to delete the team?": "Are you sure you want to delete the team?",
   "Team successfully deleted.": "Team successfully deleted.",
+  "Add team": "Add team",
+  "or phone number": "or phone number",
+  "Add a friend from your contacts": "Add a friend from your contacts",
+  "There are no contacts to send an invitation to": "There are no contacts to send an invitation to.",
 
   "Group is null": "Group doesn't exist.",
   "User is null": "User doesn't exist",
@@ -203,6 +207,7 @@
   "Account exist with this email": "Account exist with this email",
   "Report problem": "Report an error",
   "Invitation alredy send": "An invitation has already been sent to this user",
-  "Email is null": "Konto o podanym emailu nie istnieje.",
-  "Account is null": "Konto z podanymi danymi logowania nie istnieje."
+  "Email is null": "The account with the given email address does not exist.",
+  "Account is null": "The account with the provided login details does not exist.",
+  "User with this phone number dont exist": "User with this phone number dont exist."
 }

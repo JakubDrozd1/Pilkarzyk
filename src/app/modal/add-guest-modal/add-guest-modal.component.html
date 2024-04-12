@@ -1,0 +1,37 @@
+<div>
+  <div style="font-size: larger; margin: 20px">
+    <ion-text>
+      {{ "Add guest" | translate }}
+    </ion-text>
+  </div>
+  <div class="modal-content">
+    <ion-item>
+      <ion-input
+        [label]="'Name' | translate"
+        labelPlacement="stacked"
+        type="text"
+        [(ngModel)]="guestName"
+        maxlength="30"
+      ></ion-input>
+    </ion-item>
+  </div>
+  <div
+    style="
+      display: flex;
+      margin: 20px;
+      align-items: center;
+      justify-content: center;
+    "
+  >
+    <ion-button expand="full" (click)="addGuest()" shape="round">
+      <ion-label color="success">
+        <ion-icon size="large" name="checkmark-outline"></ion-icon>
+      </ion-label>
+    </ion-button>
+    <ion-button expand="full" (click)="cancel()" shape="round">
+      <ion-label color="danger">
+        <ion-icon size="large" name="close-outline"></ion-icon>
+      </ion-label>
+    </ion-button>
+  </div>
+</div>

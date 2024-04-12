@@ -17,6 +17,7 @@ import {
 } from '@capacitor/push-notifications'
 import { LocalNotifications } from '@capacitor/local-notifications'
 import { Device } from '@capacitor/device'
+import { Contacts } from '@capacitor-community/contacts'
 
 register()
 
@@ -53,6 +54,7 @@ export class AppComponent implements OnInit {
 
     if (Capacitor.isNativePlatform()) {
       this.registerNotifications()
+      this.registerContacts()
       PushNotifications.addListener(
         'pushNotificationActionPerformed',
         (notification: ActionPerformed) => {
@@ -133,6 +135,16 @@ export class AppComponent implements OnInit {
       await LocalNotifications.requestPermissions()
     }
     if (permStatus.receive !== 'granted') {
+      throw new Error('User denied permissions!')
+    }
+  }
+
+  registerContacts = async () => {
+    let permStatus = await Contacts.checkPermissions()
+    if (permStatus.contacts === 'prompt') {
+      await Contacts.requestPermissions()
+    }
+    if (permStatus.contacts !== 'granted') {
       throw new Error('User denied permissions!')
     }
   }

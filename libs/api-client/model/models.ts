@@ -14,6 +14,7 @@ export * from './get-meeting-request';
 export * from './get-meeting-users-response';
 export * from './get-message-request';
 export * from './get-messages-users-meetings-response';
+export * from './get-multiple-group-invite-request';
 export * from './get-notification-token-request';
 export * from './get-ranking-request';
 export * from './get-rankings-users-groups-response';

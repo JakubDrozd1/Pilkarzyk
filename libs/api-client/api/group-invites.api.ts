@@ -24,6 +24,8 @@ import { GROUPINVITE } from '../model/groupinvite';
 import { GetGroupInviteRequest } from '../model/get-group-invite-request';
 // @ts-ignore
 import { GetGroupInviteResponse } from '../model/get-group-invite-response';
+// @ts-ignore
+import { GetMultipleGroupInviteRequest } from '../model/get-multiple-group-invite-request';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -32,6 +34,10 @@ import { Configuration }                                     from '../configurat
 
 export interface AddGroupInviteRequestParams {
     getGroupInviteRequest?: GetGroupInviteRequest;
+}
+
+export interface AddMultipleGroupInviteRequestParams {
+    getMultipleGroupInviteRequest?: GetMultipleGroupInviteRequest;
 }
 
 export interface DeleteGroupInviteRequestParams {
@@ -47,6 +53,8 @@ export interface GetGroupInviteByIdUserRequestParams {
     onPage: number;
     sortColumn?: string;
     sortMode?: string;
+    dateFrom?: string;
+    dateTo?: string;
     idUser?: number;
     idGroup?: number;
     email?: string;
@@ -54,606 +62,461 @@ export interface GetGroupInviteByIdUserRequestParams {
 
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class GroupInvitesApi {
-  protected basePath = 'https://jaball.manowski.pl:2100';
-  public defaultHeaders = new HttpHeaders();
-  public configuration = new Configuration();
-  public encoder: HttpParameterCodec;
 
-  constructor(
-    protected httpClient: HttpClient,
-    @Optional() @Inject(BASE_PATH) basePath: string | string[],
-    @Optional() configuration: Configuration
-  ) {
-    if (configuration) {
-      this.configuration = configuration;
-    }
-    if (typeof this.configuration.basePath !== 'string') {
-      if (Array.isArray(basePath) && basePath.length > 0) {
-        basePath = basePath[0];
-      }
+    protected basePath = 'http://192.168.88.20:45455';
+    public defaultHeaders = new HttpHeaders();
+    public configuration = new Configuration();
+    public encoder: HttpParameterCodec;
 
-      if (typeof basePath !== 'string') {
-        basePath = this.basePath;
-      }
-      this.configuration.basePath = basePath;
-    }
-    this.encoder = this.configuration.encoder || new CustomHttpParameterCodec();
-  }
-
-  // @ts-ignore
-  private addToHttpParams(
-    httpParams: HttpParams,
-    value: any,
-    key?: string
-  ): HttpParams {
-    if (typeof value === 'object' && value instanceof Date === false) {
-      httpParams = this.addToHttpParamsRecursive(httpParams, value);
-    } else {
-      httpParams = this.addToHttpParamsRecursive(httpParams, value, key);
-    }
-    return httpParams;
-  }
-
-  private addToHttpParamsRecursive(
-    httpParams: HttpParams,
-    value?: any,
-    key?: string
-  ): HttpParams {
-    if (value == null) {
-      return httpParams;
-    }
-
-    if (typeof value === 'object') {
-      if (Array.isArray(value)) {
-        (value as any[]).forEach(
-          (elem) =>
-            (httpParams = this.addToHttpParamsRecursive(httpParams, elem, key))
-        );
-      } else if (value instanceof Date) {
-        if (key != null) {
-          httpParams = httpParams.append(
-            key,
-            (value as Date).toISOString().substring(0, 10)
-          );
-        } else {
-          throw Error('key may not be null if value is Date');
+    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string|string[], @Optional() configuration: Configuration) {
+        if (configuration) {
+            this.configuration = configuration;
         }
-      } else {
-        Object.keys(value).forEach(
-          (k) =>
-            (httpParams = this.addToHttpParamsRecursive(
-              httpParams,
-              value[k],
-              key != null ? `${key}.${k}` : k
-            ))
+        if (typeof this.configuration.basePath !== 'string') {
+            if (Array.isArray(basePath) && basePath.length > 0) {
+                basePath = basePath[0];
+            }
+
+            if (typeof basePath !== 'string') {
+                basePath = this.basePath;
+            }
+            this.configuration.basePath = basePath;
+        }
+        this.encoder = this.configuration.encoder || new CustomHttpParameterCodec();
+    }
+
+
+    // @ts-ignore
+    private addToHttpParams(httpParams: HttpParams, value: any, key?: string): HttpParams {
+        if (typeof value === "object" && value instanceof Date === false) {
+            httpParams = this.addToHttpParamsRecursive(httpParams, value);
+        } else {
+            httpParams = this.addToHttpParamsRecursive(httpParams, value, key);
+        }
+        return httpParams;
+    }
+
+    private addToHttpParamsRecursive(httpParams: HttpParams, value?: any, key?: string): HttpParams {
+        if (value == null) {
+            return httpParams;
+        }
+
+        if (typeof value === "object") {
+            if (Array.isArray(value)) {
+                (value as any[]).forEach( elem => httpParams = this.addToHttpParamsRecursive(httpParams, elem, key));
+            } else if (value instanceof Date) {
+                if (key != null) {
+                    httpParams = httpParams.append(key, (value as Date).toISOString().substring(0, 10));
+                } else {
+                   throw Error("key may not be null if value is Date");
+                }
+            } else {
+                Object.keys(value).forEach( k => httpParams = this.addToHttpParamsRecursive(
+                    httpParams, value[k], key != null ? `${key}.${k}` : k));
+            }
+        } else if (key != null) {
+            httpParams = httpParams.append(key, value);
+        } else {
+            throw Error("key may not be null if value is not object or array");
+        }
+        return httpParams;
+    }
+
+    /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public addGroupInvite(requestParameters: AddGroupInviteRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public addGroupInvite(requestParameters: AddGroupInviteRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public addGroupInvite(requestParameters: AddGroupInviteRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public addGroupInvite(requestParameters: AddGroupInviteRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        const getGroupInviteRequest = requestParameters.getGroupInviteRequest;
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (api-pilkarzyk-oauth2) required
+        localVarCredential = this.configuration.lookupCredential('api-pilkarzyk-oauth2');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'text/json',
+            'application/*+json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/group-invites`;
+        return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: getGroupInviteRequest,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
         );
-      }
-    } else if (key != null) {
-      httpParams = httpParams.append(key, value);
-    } else {
-      throw Error('key may not be null if value is not object or array');
-    }
-    return httpParams;
-  }
-
-  /**
-   * @param requestParameters
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public addGroupInvite(
-    requestParameters: AddGroupInviteRequestParams,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<any>;
-  public addGroupInvite(
-    requestParameters: AddGroupInviteRequestParams,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<HttpResponse<any>>;
-  public addGroupInvite(
-    requestParameters: AddGroupInviteRequestParams,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<HttpEvent<any>>;
-  public addGroupInvite(
-    requestParameters: AddGroupInviteRequestParams,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<any> {
-    const getGroupInviteRequest = requestParameters.getGroupInviteRequest;
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarCredential: string | undefined;
-    // authentication (api-pilkarzyk-oauth2) required
-    localVarCredential = this.configuration.lookupCredential(
-      'api-pilkarzyk-oauth2'
-    );
-    if (localVarCredential) {
-      localVarHeaders = localVarHeaders.set(
-        'Authorization',
-        'Bearer ' + localVarCredential
-      );
     }
 
-    let localVarHttpHeaderAcceptSelected: string | undefined =
-      options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = [];
-      localVarHttpHeaderAcceptSelected =
-        this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set(
-        'Accept',
-        localVarHttpHeaderAcceptSelected
-      );
+    /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public addMultipleGroupInvite(requestParameters: AddMultipleGroupInviteRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public addMultipleGroupInvite(requestParameters: AddMultipleGroupInviteRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public addMultipleGroupInvite(requestParameters: AddMultipleGroupInviteRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public addMultipleGroupInvite(requestParameters: AddMultipleGroupInviteRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        const getMultipleGroupInviteRequest = requestParameters.getMultipleGroupInviteRequest;
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (api-pilkarzyk-oauth2) required
+        localVarCredential = this.configuration.lookupCredential('api-pilkarzyk-oauth2');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'text/json',
+            'application/*+json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/group-invites/multiple`;
+        return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: getMultipleGroupInviteRequest,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
     }
 
-    let localVarHttpContext: HttpContext | undefined =
-      options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
+    /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public deleteGroupInvite(requestParameters: DeleteGroupInviteRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public deleteGroupInvite(requestParameters: DeleteGroupInviteRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public deleteGroupInvite(requestParameters: DeleteGroupInviteRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public deleteGroupInvite(requestParameters: DeleteGroupInviteRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        const groupInvitedId = requestParameters.groupInvitedId;
+        if (groupInvitedId === null || groupInvitedId === undefined) {
+            throw new Error('Required parameter groupInvitedId was null or undefined when calling deleteGroupInvite.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (api-pilkarzyk-oauth2) required
+        localVarCredential = this.configuration.lookupCredential('api-pilkarzyk-oauth2');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/group-invites/${this.configuration.encodeParam({name: "groupInvitedId", value: groupInvitedId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
+        return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
     }
 
-    // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json',
-      'text/json',
-      'application/*+json',
-    ];
-    const httpContentTypeSelected: string | undefined =
-      this.configuration.selectHeaderContentType(consumes);
-    if (httpContentTypeSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set(
-        'Content-Type',
-        httpContentTypeSelected
-      );
+    /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getGroupInviteById(requestParameters: GetGroupInviteByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<GROUPINVITE>;
+    public getGroupInviteById(requestParameters: GetGroupInviteByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<GROUPINVITE>>;
+    public getGroupInviteById(requestParameters: GetGroupInviteByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<GROUPINVITE>>;
+    public getGroupInviteById(requestParameters: GetGroupInviteByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+        const groupInviteId = requestParameters.groupInviteId;
+        if (groupInviteId === null || groupInviteId === undefined) {
+            throw new Error('Required parameter groupInviteId was null or undefined when calling getGroupInviteById.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (api-pilkarzyk-oauth2) required
+        localVarCredential = this.configuration.lookupCredential('api-pilkarzyk-oauth2');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain',
+                'application/json',
+                'text/json'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/group-invites/${this.configuration.encodeParam({name: "groupInviteId", value: groupInviteId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
+        return this.httpClient.request<GROUPINVITE>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
     }
 
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (
-        this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)
-      ) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
+    /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getGroupInviteByIdUser(requestParameters: GetGroupInviteByIdUserRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<GetGroupInviteResponse>>;
+    public getGroupInviteByIdUser(requestParameters: GetGroupInviteByIdUserRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<GetGroupInviteResponse>>>;
+    public getGroupInviteByIdUser(requestParameters: GetGroupInviteByIdUserRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<GetGroupInviteResponse>>>;
+    public getGroupInviteByIdUser(requestParameters: GetGroupInviteByIdUserRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+        const page = requestParameters.page;
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling getGroupInviteByIdUser.');
+        }
+        const onPage = requestParameters.onPage;
+        if (onPage === null || onPage === undefined) {
+            throw new Error('Required parameter onPage was null or undefined when calling getGroupInviteByIdUser.');
+        }
+        const sortColumn = requestParameters.sortColumn;
+        const sortMode = requestParameters.sortMode;
+        const dateFrom = requestParameters.dateFrom;
+        const dateTo = requestParameters.dateTo;
+        const idUser = requestParameters.idUser;
+        const idGroup = requestParameters.idGroup;
+        const email = requestParameters.email;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (page !== undefined && page !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>page, 'Page');
+        }
+        if (onPage !== undefined && onPage !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>onPage, 'OnPage');
+        }
+        if (sortColumn !== undefined && sortColumn !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sortColumn, 'SortColumn');
+        }
+        if (sortMode !== undefined && sortMode !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sortMode, 'SortMode');
+        }
+        if (dateFrom !== undefined && dateFrom !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>dateFrom, 'DateFrom');
+        }
+        if (dateTo !== undefined && dateTo !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>dateTo, 'DateTo');
+        }
+        if (idUser !== undefined && idUser !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>idUser, 'IdUser');
+        }
+        if (idGroup !== undefined && idGroup !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>idGroup, 'IdGroup');
+        }
+        if (email !== undefined && email !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>email, 'Email');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (api-pilkarzyk-oauth2) required
+        localVarCredential = this.configuration.lookupCredential('api-pilkarzyk-oauth2');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain',
+                'application/json',
+                'text/json'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/group-invites`;
+        return this.httpClient.request<Array<GetGroupInviteResponse>>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
     }
 
-    let localVarPath = `/api/group-invites`;
-    return this.httpClient.request<any>(
-      'post',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        body: getGroupInviteRequest,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        reportProgress: reportProgress,
-      }
-    );
-  }
-
-  /**
-   * @param requestParameters
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public deleteGroupInvite(
-    requestParameters: DeleteGroupInviteRequestParams,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<any>;
-  public deleteGroupInvite(
-    requestParameters: DeleteGroupInviteRequestParams,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<HttpResponse<any>>;
-  public deleteGroupInvite(
-    requestParameters: DeleteGroupInviteRequestParams,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<HttpEvent<any>>;
-  public deleteGroupInvite(
-    requestParameters: DeleteGroupInviteRequestParams,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<any> {
-    const groupInvitedId = requestParameters.groupInvitedId;
-    if (groupInvitedId === null || groupInvitedId === undefined) {
-      throw new Error(
-        'Required parameter groupInvitedId was null or undefined when calling deleteGroupInvite.'
-      );
-    }
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarCredential: string | undefined;
-    // authentication (api-pilkarzyk-oauth2) required
-    localVarCredential = this.configuration.lookupCredential(
-      'api-pilkarzyk-oauth2'
-    );
-    if (localVarCredential) {
-      localVarHeaders = localVarHeaders.set(
-        'Authorization',
-        'Bearer ' + localVarCredential
-      );
-    }
-
-    let localVarHttpHeaderAcceptSelected: string | undefined =
-      options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = [];
-      localVarHttpHeaderAcceptSelected =
-        this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set(
-        'Accept',
-        localVarHttpHeaderAcceptSelected
-      );
-    }
-
-    let localVarHttpContext: HttpContext | undefined =
-      options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (
-        this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)
-      ) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/api/group-invites/${this.configuration.encodeParam({
-      name: 'groupInvitedId',
-      value: groupInvitedId,
-      in: 'path',
-      style: 'simple',
-      explode: false,
-      dataType: 'number',
-      dataFormat: 'int32',
-    })}`;
-    return this.httpClient.request<any>(
-      'delete',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        reportProgress: reportProgress,
-      }
-    );
-  }
-
-  /**
-   * @param requestParameters
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public getGroupInviteById(
-    requestParameters: GetGroupInviteByIdRequestParams,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json';
-      context?: HttpContext;
-    }
-  ): Observable<GROUPINVITE>;
-  public getGroupInviteById(
-    requestParameters: GetGroupInviteByIdRequestParams,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json';
-      context?: HttpContext;
-    }
-  ): Observable<HttpResponse<GROUPINVITE>>;
-  public getGroupInviteById(
-    requestParameters: GetGroupInviteByIdRequestParams,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json';
-      context?: HttpContext;
-    }
-  ): Observable<HttpEvent<GROUPINVITE>>;
-  public getGroupInviteById(
-    requestParameters: GetGroupInviteByIdRequestParams,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: {
-      httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json';
-      context?: HttpContext;
-    }
-  ): Observable<any> {
-    const groupInviteId = requestParameters.groupInviteId;
-    if (groupInviteId === null || groupInviteId === undefined) {
-      throw new Error(
-        'Required parameter groupInviteId was null or undefined when calling getGroupInviteById.'
-      );
-    }
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarCredential: string | undefined;
-    // authentication (api-pilkarzyk-oauth2) required
-    localVarCredential = this.configuration.lookupCredential(
-      'api-pilkarzyk-oauth2'
-    );
-    if (localVarCredential) {
-      localVarHeaders = localVarHeaders.set(
-        'Authorization',
-        'Bearer ' + localVarCredential
-      );
-    }
-
-    let localVarHttpHeaderAcceptSelected: string | undefined =
-      options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = [
-        'text/plain',
-        'application/json',
-        'text/json',
-      ];
-      localVarHttpHeaderAcceptSelected =
-        this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set(
-        'Accept',
-        localVarHttpHeaderAcceptSelected
-      );
-    }
-
-    let localVarHttpContext: HttpContext | undefined =
-      options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (
-        this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)
-      ) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/api/group-invites/${this.configuration.encodeParam({
-      name: 'groupInviteId',
-      value: groupInviteId,
-      in: 'path',
-      style: 'simple',
-      explode: false,
-      dataType: 'number',
-      dataFormat: 'int32',
-    })}`;
-    return this.httpClient.request<GROUPINVITE>(
-      'get',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        reportProgress: reportProgress,
-      }
-    );
-  }
-
-  /**
-   * @param requestParameters
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public getGroupInviteByIdUser(
-    requestParameters: GetGroupInviteByIdUserRequestParams,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json';
-      context?: HttpContext;
-    }
-  ): Observable<Array<GetGroupInviteResponse>>;
-  public getGroupInviteByIdUser(
-    requestParameters: GetGroupInviteByIdUserRequestParams,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json';
-      context?: HttpContext;
-    }
-  ): Observable<HttpResponse<Array<GetGroupInviteResponse>>>;
-  public getGroupInviteByIdUser(
-    requestParameters: GetGroupInviteByIdUserRequestParams,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json';
-      context?: HttpContext;
-    }
-  ): Observable<HttpEvent<Array<GetGroupInviteResponse>>>;
-  public getGroupInviteByIdUser(
-    requestParameters: GetGroupInviteByIdUserRequestParams,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: {
-      httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json';
-      context?: HttpContext;
-    }
-  ): Observable<any> {
-    const page = requestParameters.page;
-    if (page === null || page === undefined) {
-      throw new Error(
-        'Required parameter page was null or undefined when calling getGroupInviteByIdUser.'
-      );
-    }
-    const onPage = requestParameters.onPage;
-    if (onPage === null || onPage === undefined) {
-      throw new Error(
-        'Required parameter onPage was null or undefined when calling getGroupInviteByIdUser.'
-      );
-    }
-    const sortColumn = requestParameters.sortColumn;
-    const sortMode = requestParameters.sortMode;
-    const idUser = requestParameters.idUser;
-    const idGroup = requestParameters.idGroup;
-    const email = requestParameters.email;
-
-    let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
-    if (page !== undefined && page !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>page,
-        'Page'
-      );
-    }
-    if (onPage !== undefined && onPage !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>onPage,
-        'OnPage'
-      );
-    }
-    if (sortColumn !== undefined && sortColumn !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>sortColumn,
-        'SortColumn'
-      );
-    }
-    if (sortMode !== undefined && sortMode !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>sortMode,
-        'SortMode'
-      );
-    }
-    if (idUser !== undefined && idUser !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>idUser,
-        'IdUser'
-      );
-    }
-    if (idGroup !== undefined && idGroup !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>idGroup,
-        'IdGroup'
-      );
-    }
-    if (email !== undefined && email !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>email,
-        'Email'
-      );
-    }
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarCredential: string | undefined;
-    // authentication (api-pilkarzyk-oauth2) required
-    localVarCredential = this.configuration.lookupCredential(
-      'api-pilkarzyk-oauth2'
-    );
-    if (localVarCredential) {
-      localVarHeaders = localVarHeaders.set(
-        'Authorization',
-        'Bearer ' + localVarCredential
-      );
-    }
-
-    let localVarHttpHeaderAcceptSelected: string | undefined =
-      options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = [
-        'text/plain',
-        'application/json',
-        'text/json',
-      ];
-      localVarHttpHeaderAcceptSelected =
-        this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set(
-        'Accept',
-        localVarHttpHeaderAcceptSelected
-      );
-    }
-
-    let localVarHttpContext: HttpContext | undefined =
-      options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (
-        this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)
-      ) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/api/group-invites`;
-    return this.httpClient.request<Array<GetGroupInviteResponse>>(
-      'get',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        params: localVarQueryParameters,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        reportProgress: reportProgress,
-      }
-    );
-  }
 }

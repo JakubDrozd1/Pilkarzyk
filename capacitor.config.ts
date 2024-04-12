@@ -2,10 +2,10 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.proman.JaBall',
-  appName: 'JABALL',
+  appName: 'JaBall',
   webDir: 'dist/pilkarzyk',
   server: {
-    url: 'https://jaball.manowski.pl', //http://192.168.1.114:4200  http://192.168.88.20:4200
+    url: 'https://jaball.manowski.pl',
     cleartext: true,
     androidScheme: 'https',
     allowNavigation: ['https://jaball.manowski.pl:2100'],

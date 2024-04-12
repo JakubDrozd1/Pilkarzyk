@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import {
   AlertController,
   IonicModule,
+  ModalController,
   RefresherEventDetail,
 } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
@@ -16,7 +17,7 @@ import {
   TEAMS,
   TeamsApi,
 } from 'libs/api-client'
-import { forkJoin } from 'rxjs'
+import { Subscription, forkJoin } from 'rxjs'
 import { Alert } from 'src/app/helper/alert'
 import { convertBase64ToFile } from 'src/app/helper/convertBase64ToFile'
 import { UserService } from 'src/app/service/user/user.service'
@@ -25,6 +26,9 @@ import { FormsModule } from '@angular/forms'
 import iro from '@jaames/iro'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { IonRefresherCustomEvent } from '@ionic/core'
+import { AddTeamModalComponent } from 'src/app/modal/add-team-modal/add-team-modal.component'
+import { EditTeamModalComponent } from 'src/app/modal/edit-team-modal/edit-team-modal.component'
+import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 
 @Component({
   selector: 'app-meeting-team',
@@ -38,6 +42,7 @@ import { IonRefresherCustomEvent } from '@ionic/core'
     MeetingTeamListComponent,
     FormsModule,
     SpinnerComponent,
+    EditTeamModalComponent,
   ],
 })
 export class MeetingTeamComponent implements OnInit {
@@ -84,6 +89,9 @@ export class MeetingTeamComponent implements OnInit {
   isUserYes: boolean = false
   colorRegex = /^#(?:[0-9a-fA-F]{3}){1,2}$/
   idGroup: number = 0
+  modalOpened: boolean = false
+  private subscription: Subscription = new Subscription()
+  alertOpened: boolean = false
 
   constructor(
     public translate: TranslateService,
@@ -95,10 +103,45 @@ export class MeetingTeamComponent implements OnInit {
     private alert: Alert,
     private alertCtrl: AlertController,
     private guestsApi: GuestsApi,
-    private router: Router
+    private router: Router,
+    private modalCtrl: ModalController,
+    private refreshDataService: RefreshDataService
   ) {}
 
   ngOnInit() {
+    this.subscription.add(
+      this.refreshDataService.refreshSubject.subscribe((index) => {
+        if (index === 'meeting-team') {
+          this.reload()
+        }
+      })
+    )
+    window.addEventListener('popstate', async () => {
+      if (this.alertOpened) {
+        if (this.alertCtrl.getTop() != null) {
+          this.alertCtrl.dismiss(null, 'cancel')
+        }
+      }
+    })
+    this.reload()
+  }
+
+  async openModalEditTeam(team: TEAMS) {
+    const modal = await this.modalCtrl.create({
+      component: EditTeamModalComponent,
+      componentProps: {
+        idMeeting: this.idMeeting,
+        team: team,
+      },
+      backdropDismiss: false,
+    })
+    this.router.navigateByUrl(this.router.url + '?modalOpened=true')
+    this.modalOpened = true
+    modal.present()
+    await modal.onWillDismiss()
+  }
+
+  reload() {
     this.route.params.subscribe((params) => {
       if (params?.['idMeeting'] > 0) {
         this.idMeeting = parseInt(params?.['idMeeting'])
@@ -249,7 +292,12 @@ export class MeetingTeamComponent implements OnInit {
       buttons: this.changeButtons,
       backdropDismiss: false,
     })
+    this.router.navigateByUrl(this.router.url + '?alertOpened=true')
+    this.alertOpened = true
     alert.present()
+    alert.onDidDismiss().then(() => {
+      this.cancelAlert()
+    })
   }
 
   async save() {
@@ -258,7 +306,21 @@ export class MeetingTeamComponent implements OnInit {
       buttons: this.okButtons,
       backdropDismiss: false,
     })
+    this.router.navigateByUrl(this.router.url + '?alertOpened=true')
+    this.alertOpened = true
     alert.present()
+    alert.onDidDismiss().then(() => {
+      this.cancelAlert()
+    })
+  }
+
+  cancelAlert() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { alertOpened: null },
+      replaceUrl: true,
+    })
+    this.alertOpened = false
   }
 
   saveTeams() {
@@ -340,41 +402,6 @@ export class MeetingTeamComponent implements OnInit {
     this.disabled = true
   }
 
-  setTeam(team: TEAMS) {
-    this.teamColor = team.COLOR ?? ''
-    this.name = team.NAME ?? ''
-  }
-
-  editTeam(team: TEAMS) {
-    if (this.name == '') {
-      this.name = 'Team ' + Math.floor(Math.random() * 100) + 1
-    }
-    if (this.teamColor == '' || !this.colorRegex.test(this.teamColor)) {
-      this.teamColor = this.genHexColor()
-    }
-    this.isReady = false
-    this.teamsApi
-      .updateTeam({
-        idMeeting: this.idMeeting,
-        color: this.teamColor,
-        name: this.name,
-        teamId: team.ID_TEAM ?? 0,
-      })
-      .subscribe({
-        next: () => {
-          this.alert.presentToast('Zaaktualizowano pomyslnie')
-          this.disabled = false
-          this.getDetails()
-          this.isReady = true
-        },
-        error: (error) => {
-          this.alert.handleError(error)
-          this.disabled = false
-          this.isReady = true
-        },
-      })
-  }
-
   genHexColor(): string {
     const randomColor = Math.floor(Math.random() * 16777215).toString(16)
     return `#${randomColor}`
@@ -417,52 +444,5 @@ export class MeetingTeamComponent implements OnInit {
       this.getDetails()
       $event.target.complete()
     }, 2000)
-  }
-
-  async deleteTeam(team: TEAMS) {
-    const alert = await this.alertCtrl.create({
-      header: this.translate.instant(
-        'Are you sure you want to delete the team?'
-      ),
-      buttons: [
-        {
-          text: this.translate.instant('Yes'),
-          role: 'submit',
-          handler: () => {
-            this.isEdit = false
-            this.delete(team)
-          },
-        },
-        {
-          text: this.translate.instant('No'),
-          role: 'cancel',
-        },
-      ],
-      backdropDismiss: false,
-    })
-    alert.present()
-  }
-
-  delete(team: TEAMS) {
-    this.isReady = false
-    this.teamsApi
-      .deleteTeam({
-        teamId: team.ID_TEAM ?? 0,
-      })
-      .subscribe({
-        next: () => {
-          this.alert.presentToast(
-            this.translate.instant('Team successfully deleted.')
-          )
-          this.alertCtrl.dismiss()
-          this.getDetails()
-          this.isReady = true
-        },
-        error: (error) => {
-          this.alert.handleError(error)
-          this.alertCtrl.dismiss()
-          this.isReady = true
-        },
-      })
   }
 }

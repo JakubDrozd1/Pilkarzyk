@@ -18,5 +18,6 @@ export interface GROUPINVITE {
     EMAIL?: string | null;
     IDAUTHOR?: number;
     DATE_ADD?: string | null;
+    PHONE_NUMBER?: number | null;
 }
 

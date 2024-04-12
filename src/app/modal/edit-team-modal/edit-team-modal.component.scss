@@ -1,0 +1,27 @@
+.modal-content {
+  padding: 20px;
+}
+.colors {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+.color {
+  height: 30px;
+  width: 30px;
+  margin: 10px;
+  border-radius: 10px;
+  border-color: var(--ion-color-secondary);
+  border-width: 1px;
+  border-style: solid;
+}
+.headerModal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: larger;
+  margin: 20px;
+}

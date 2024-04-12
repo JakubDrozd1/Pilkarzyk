@@ -72,975 +72,616 @@ export interface UpdateTeamMessageAsyncRequestParams {
 
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class MessagesApi {
-  protected basePath = 'https://jaball.manowski.pl:2100';
-  public defaultHeaders = new HttpHeaders();
-  public configuration = new Configuration();
-  public encoder: HttpParameterCodec;
 
-  constructor(
-    protected httpClient: HttpClient,
-    @Optional() @Inject(BASE_PATH) basePath: string | string[],
-    @Optional() configuration: Configuration
-  ) {
-    if (configuration) {
-      this.configuration = configuration;
-    }
-    if (typeof this.configuration.basePath !== 'string') {
-      if (Array.isArray(basePath) && basePath.length > 0) {
-        basePath = basePath[0];
-      }
+    protected basePath = 'http://192.168.88.20:45455';
+    public defaultHeaders = new HttpHeaders();
+    public configuration = new Configuration();
+    public encoder: HttpParameterCodec;
 
-      if (typeof basePath !== 'string') {
-        basePath = this.basePath;
-      }
-      this.configuration.basePath = basePath;
-    }
-    this.encoder = this.configuration.encoder || new CustomHttpParameterCodec();
-  }
-
-  // @ts-ignore
-  private addToHttpParams(
-    httpParams: HttpParams,
-    value: any,
-    key?: string
-  ): HttpParams {
-    if (typeof value === 'object' && value instanceof Date === false) {
-      httpParams = this.addToHttpParamsRecursive(httpParams, value);
-    } else {
-      httpParams = this.addToHttpParamsRecursive(httpParams, value, key);
-    }
-    return httpParams;
-  }
-
-  private addToHttpParamsRecursive(
-    httpParams: HttpParams,
-    value?: any,
-    key?: string
-  ): HttpParams {
-    if (value == null) {
-      return httpParams;
-    }
-
-    if (typeof value === 'object') {
-      if (Array.isArray(value)) {
-        (value as any[]).forEach(
-          (elem) =>
-            (httpParams = this.addToHttpParamsRecursive(httpParams, elem, key))
-        );
-      } else if (value instanceof Date) {
-        if (key != null) {
-          httpParams = httpParams.append(
-            key,
-            (value as Date).toISOString().substring(0, 10)
-          );
-        } else {
-          throw Error('key may not be null if value is Date');
+    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string|string[], @Optional() configuration: Configuration) {
+        if (configuration) {
+            this.configuration = configuration;
         }
-      } else {
-        Object.keys(value).forEach(
-          (k) =>
-            (httpParams = this.addToHttpParamsRecursive(
-              httpParams,
-              value[k],
-              key != null ? `${key}.${k}` : k
-            ))
+        if (typeof this.configuration.basePath !== 'string') {
+            if (Array.isArray(basePath) && basePath.length > 0) {
+                basePath = basePath[0];
+            }
+
+            if (typeof basePath !== 'string') {
+                basePath = this.basePath;
+            }
+            this.configuration.basePath = basePath;
+        }
+        this.encoder = this.configuration.encoder || new CustomHttpParameterCodec();
+    }
+
+
+    // @ts-ignore
+    private addToHttpParams(httpParams: HttpParams, value: any, key?: string): HttpParams {
+        if (typeof value === "object" && value instanceof Date === false) {
+            httpParams = this.addToHttpParamsRecursive(httpParams, value);
+        } else {
+            httpParams = this.addToHttpParamsRecursive(httpParams, value, key);
+        }
+        return httpParams;
+    }
+
+    private addToHttpParamsRecursive(httpParams: HttpParams, value?: any, key?: string): HttpParams {
+        if (value == null) {
+            return httpParams;
+        }
+
+        if (typeof value === "object") {
+            if (Array.isArray(value)) {
+                (value as any[]).forEach( elem => httpParams = this.addToHttpParamsRecursive(httpParams, elem, key));
+            } else if (value instanceof Date) {
+                if (key != null) {
+                    httpParams = httpParams.append(key, (value as Date).toISOString().substring(0, 10));
+                } else {
+                   throw Error("key may not be null if value is Date");
+                }
+            } else {
+                Object.keys(value).forEach( k => httpParams = this.addToHttpParamsRecursive(
+                    httpParams, value[k], key != null ? `${key}.${k}` : k));
+            }
+        } else if (key != null) {
+            httpParams = httpParams.append(key, value);
+        } else {
+            throw Error("key may not be null if value is not object or array");
+        }
+        return httpParams;
+    }
+
+    /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public addMessage(requestParameters: AddMessageRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public addMessage(requestParameters: AddMessageRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public addMessage(requestParameters: AddMessageRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public addMessage(requestParameters: AddMessageRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        const getMessageRequest = requestParameters.getMessageRequest;
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (api-pilkarzyk-oauth2) required
+        localVarCredential = this.configuration.lookupCredential('api-pilkarzyk-oauth2');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'text/json',
+            'application/*+json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/messages`;
+        return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: getMessageRequest,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
         );
-      }
-    } else if (key != null) {
-      httpParams = httpParams.append(key, value);
-    } else {
-      throw Error('key may not be null if value is not object or array');
-    }
-    return httpParams;
-  }
-
-  /**
-   * @param requestParameters
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public addMessage(
-    requestParameters: AddMessageRequestParams,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<any>;
-  public addMessage(
-    requestParameters: AddMessageRequestParams,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<HttpResponse<any>>;
-  public addMessage(
-    requestParameters: AddMessageRequestParams,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<HttpEvent<any>>;
-  public addMessage(
-    requestParameters: AddMessageRequestParams,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<any> {
-    const getMessageRequest = requestParameters.getMessageRequest;
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarCredential: string | undefined;
-    // authentication (api-pilkarzyk-oauth2) required
-    localVarCredential = this.configuration.lookupCredential(
-      'api-pilkarzyk-oauth2'
-    );
-    if (localVarCredential) {
-      localVarHeaders = localVarHeaders.set(
-        'Authorization',
-        'Bearer ' + localVarCredential
-      );
     }
 
-    let localVarHttpHeaderAcceptSelected: string | undefined =
-      options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = [];
-      localVarHttpHeaderAcceptSelected =
-        this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set(
-        'Accept',
-        localVarHttpHeaderAcceptSelected
-      );
+    /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public deleteMessage(requestParameters: DeleteMessageRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public deleteMessage(requestParameters: DeleteMessageRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public deleteMessage(requestParameters: DeleteMessageRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public deleteMessage(requestParameters: DeleteMessageRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        const messageId = requestParameters.messageId;
+        if (messageId === null || messageId === undefined) {
+            throw new Error('Required parameter messageId was null or undefined when calling deleteMessage.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (api-pilkarzyk-oauth2) required
+        localVarCredential = this.configuration.lookupCredential('api-pilkarzyk-oauth2');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/messages/${this.configuration.encodeParam({name: "messageId", value: messageId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
+        return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
     }
 
-    let localVarHttpContext: HttpContext | undefined =
-      options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
+    /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getAllMessages(requestParameters: GetAllMessagesRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<GetMessagesUsersMeetingsResponse>>;
+    public getAllMessages(requestParameters: GetAllMessagesRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<GetMessagesUsersMeetingsResponse>>>;
+    public getAllMessages(requestParameters: GetAllMessagesRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<GetMessagesUsersMeetingsResponse>>>;
+    public getAllMessages(requestParameters: GetAllMessagesRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+        const page = requestParameters.page;
+        if (page === null || page === undefined) {
+            throw new Error('Required parameter page was null or undefined when calling getAllMessages.');
+        }
+        const onPage = requestParameters.onPage;
+        if (onPage === null || onPage === undefined) {
+            throw new Error('Required parameter onPage was null or undefined when calling getAllMessages.');
+        }
+        const sortColumn = requestParameters.sortColumn;
+        const sortMode = requestParameters.sortMode;
+        const dateFrom = requestParameters.dateFrom;
+        const dateTo = requestParameters.dateTo;
+        const idUser = requestParameters.idUser;
+        const idMeeting = requestParameters.idMeeting;
+        const waitingTime = requestParameters.waitingTime;
+        const isAvatar = requestParameters.isAvatar;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (page !== undefined && page !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>page, 'Page');
+        }
+        if (onPage !== undefined && onPage !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>onPage, 'OnPage');
+        }
+        if (sortColumn !== undefined && sortColumn !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sortColumn, 'SortColumn');
+        }
+        if (sortMode !== undefined && sortMode !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>sortMode, 'SortMode');
+        }
+        if (dateFrom !== undefined && dateFrom !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>dateFrom, 'DateFrom');
+        }
+        if (dateTo !== undefined && dateTo !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>dateTo, 'DateTo');
+        }
+        if (idUser !== undefined && idUser !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>idUser, 'IdUser');
+        }
+        if (idMeeting !== undefined && idMeeting !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>idMeeting, 'IdMeeting');
+        }
+        if (waitingTime !== undefined && waitingTime !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>waitingTime, 'WaitingTime');
+        }
+        if (isAvatar !== undefined && isAvatar !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>isAvatar, 'IsAvatar');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (api-pilkarzyk-oauth2) required
+        localVarCredential = this.configuration.lookupCredential('api-pilkarzyk-oauth2');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain',
+                'application/json',
+                'text/json'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/messages`;
+        return this.httpClient.request<Array<GetMessagesUsersMeetingsResponse>>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
     }
 
-    // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json',
-      'text/json',
-      'application/*+json',
-    ];
-    const httpContentTypeSelected: string | undefined =
-      this.configuration.selectHeaderContentType(consumes);
-    if (httpContentTypeSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set(
-        'Content-Type',
-        httpContentTypeSelected
-      );
+    /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getMessageById(requestParameters: GetMessageByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<MESSAGES>;
+    public getMessageById(requestParameters: GetMessageByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<MESSAGES>>;
+    public getMessageById(requestParameters: GetMessageByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<MESSAGES>>;
+    public getMessageById(requestParameters: GetMessageByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+        const messageId = requestParameters.messageId;
+        if (messageId === null || messageId === undefined) {
+            throw new Error('Required parameter messageId was null or undefined when calling getMessageById.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (api-pilkarzyk-oauth2) required
+        localVarCredential = this.configuration.lookupCredential('api-pilkarzyk-oauth2');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain',
+                'application/json',
+                'text/json'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/messages/${this.configuration.encodeParam({name: "messageId", value: messageId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
+        return this.httpClient.request<MESSAGES>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
     }
 
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (
-        this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)
-      ) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
+    /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public updateAnswerMessage(requestParameters: UpdateAnswerMessageRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public updateAnswerMessage(requestParameters: UpdateAnswerMessageRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public updateAnswerMessage(requestParameters: UpdateAnswerMessageRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public updateAnswerMessage(requestParameters: UpdateAnswerMessageRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        const getMessageRequest = requestParameters.getMessageRequest;
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (api-pilkarzyk-oauth2) required
+        localVarCredential = this.configuration.lookupCredential('api-pilkarzyk-oauth2');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'text/json',
+            'application/*+json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/messages/answer`;
+        return this.httpClient.request<any>('put', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: getMessageRequest,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
     }
 
-    let localVarPath = `/api/messages`;
-    return this.httpClient.request<any>(
-      'post',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        body: getMessageRequest,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        reportProgress: reportProgress,
-      }
-    );
-  }
+    /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public updateMessage(requestParameters: UpdateMessageRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public updateMessage(requestParameters: UpdateMessageRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public updateMessage(requestParameters: UpdateMessageRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public updateMessage(requestParameters: UpdateMessageRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        const messageId = requestParameters.messageId;
+        if (messageId === null || messageId === undefined) {
+            throw new Error('Required parameter messageId was null or undefined when calling updateMessage.');
+        }
+        const getMessageRequest = requestParameters.getMessageRequest;
 
-  /**
-   * @param requestParameters
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public deleteMessage(
-    requestParameters: DeleteMessageRequestParams,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<any>;
-  public deleteMessage(
-    requestParameters: DeleteMessageRequestParams,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<HttpResponse<any>>;
-  public deleteMessage(
-    requestParameters: DeleteMessageRequestParams,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<HttpEvent<any>>;
-  public deleteMessage(
-    requestParameters: DeleteMessageRequestParams,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<any> {
-    const messageId = requestParameters.messageId;
-    if (messageId === null || messageId === undefined) {
-      throw new Error(
-        'Required parameter messageId was null or undefined when calling deleteMessage.'
-      );
-    }
+        let localVarHeaders = this.defaultHeaders;
 
-    let localVarHeaders = this.defaultHeaders;
+        let localVarCredential: string | undefined;
+        // authentication (api-pilkarzyk-oauth2) required
+        localVarCredential = this.configuration.lookupCredential('api-pilkarzyk-oauth2');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
 
-    let localVarCredential: string | undefined;
-    // authentication (api-pilkarzyk-oauth2) required
-    localVarCredential = this.configuration.lookupCredential(
-      'api-pilkarzyk-oauth2'
-    );
-    if (localVarCredential) {
-      localVarHeaders = localVarHeaders.set(
-        'Authorization',
-        'Bearer ' + localVarCredential
-      );
-    }
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
 
-    let localVarHttpHeaderAcceptSelected: string | undefined =
-      options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = [];
-      localVarHttpHeaderAcceptSelected =
-        this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set(
-        'Accept',
-        localVarHttpHeaderAcceptSelected
-      );
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'text/json',
+            'application/*+json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/messages/${this.configuration.encodeParam({name: "messageId", value: messageId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
+        return this.httpClient.request<any>('put', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: getMessageRequest,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
     }
 
-    let localVarHttpContext: HttpContext | undefined =
-      options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
+    /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public updateTeamMessageAsync(requestParameters: UpdateTeamMessageAsyncRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public updateTeamMessageAsync(requestParameters: UpdateTeamMessageAsyncRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public updateTeamMessageAsync(requestParameters: UpdateTeamMessageAsyncRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public updateTeamMessageAsync(requestParameters: UpdateTeamMessageAsyncRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        const getTeamTableMessageRequest = requestParameters.getTeamTableMessageRequest;
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (api-pilkarzyk-oauth2) required
+        localVarCredential = this.configuration.lookupCredential('api-pilkarzyk-oauth2');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json',
+            'text/json',
+            'application/*+json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/messages`;
+        return this.httpClient.request<any>('put', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: getTeamTableMessageRequest,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
     }
 
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (
-        this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)
-      ) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/api/messages/${this.configuration.encodeParam({
-      name: 'messageId',
-      value: messageId,
-      in: 'path',
-      style: 'simple',
-      explode: false,
-      dataType: 'number',
-      dataFormat: 'int32',
-    })}`;
-    return this.httpClient.request<any>(
-      'delete',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        reportProgress: reportProgress,
-      }
-    );
-  }
-
-  /**
-   * @param requestParameters
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public getAllMessages(
-    requestParameters: GetAllMessagesRequestParams,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json';
-      context?: HttpContext;
-    }
-  ): Observable<Array<GetMessagesUsersMeetingsResponse>>;
-  public getAllMessages(
-    requestParameters: GetAllMessagesRequestParams,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json';
-      context?: HttpContext;
-    }
-  ): Observable<HttpResponse<Array<GetMessagesUsersMeetingsResponse>>>;
-  public getAllMessages(
-    requestParameters: GetAllMessagesRequestParams,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json';
-      context?: HttpContext;
-    }
-  ): Observable<HttpEvent<Array<GetMessagesUsersMeetingsResponse>>>;
-  public getAllMessages(
-    requestParameters: GetAllMessagesRequestParams,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: {
-      httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json';
-      context?: HttpContext;
-    }
-  ): Observable<any> {
-    const page = requestParameters.page;
-    if (page === null || page === undefined) {
-      throw new Error(
-        'Required parameter page was null or undefined when calling getAllMessages.'
-      );
-    }
-    const onPage = requestParameters.onPage;
-    if (onPage === null || onPage === undefined) {
-      throw new Error(
-        'Required parameter onPage was null or undefined when calling getAllMessages.'
-      );
-    }
-    const sortColumn = requestParameters.sortColumn;
-    const sortMode = requestParameters.sortMode;
-    const dateFrom = requestParameters.dateFrom;
-    const dateTo = requestParameters.dateTo;
-    const idUser = requestParameters.idUser;
-    const idMeeting = requestParameters.idMeeting;
-    const waitingTime = requestParameters.waitingTime;
-    const isAvatar = requestParameters.isAvatar;
-
-    let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
-    if (page !== undefined && page !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>page,
-        'Page'
-      );
-    }
-    if (onPage !== undefined && onPage !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>onPage,
-        'OnPage'
-      );
-    }
-    if (sortColumn !== undefined && sortColumn !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>sortColumn,
-        'SortColumn'
-      );
-    }
-    if (sortMode !== undefined && sortMode !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>sortMode,
-        'SortMode'
-      );
-    }
-    if (dateFrom !== undefined && dateFrom !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>dateFrom,
-        'DateFrom'
-      );
-    }
-    if (dateTo !== undefined && dateTo !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>dateTo,
-        'DateTo'
-      );
-    }
-    if (idUser !== undefined && idUser !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>idUser,
-        'IdUser'
-      );
-    }
-    if (idMeeting !== undefined && idMeeting !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>idMeeting,
-        'IdMeeting'
-      );
-    }
-    if (waitingTime !== undefined && waitingTime !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>waitingTime,
-        'WaitingTime'
-      );
-    }
-    if (isAvatar !== undefined && isAvatar !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>isAvatar,
-        'IsAvatar'
-      );
-    }
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarCredential: string | undefined;
-    // authentication (api-pilkarzyk-oauth2) required
-    localVarCredential = this.configuration.lookupCredential(
-      'api-pilkarzyk-oauth2'
-    );
-    if (localVarCredential) {
-      localVarHeaders = localVarHeaders.set(
-        'Authorization',
-        'Bearer ' + localVarCredential
-      );
-    }
-
-    let localVarHttpHeaderAcceptSelected: string | undefined =
-      options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = [
-        'text/plain',
-        'application/json',
-        'text/json',
-      ];
-      localVarHttpHeaderAcceptSelected =
-        this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set(
-        'Accept',
-        localVarHttpHeaderAcceptSelected
-      );
-    }
-
-    let localVarHttpContext: HttpContext | undefined =
-      options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (
-        this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)
-      ) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/api/messages`;
-    return this.httpClient.request<Array<GetMessagesUsersMeetingsResponse>>(
-      'get',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        params: localVarQueryParameters,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        reportProgress: reportProgress,
-      }
-    );
-  }
-
-  /**
-   * @param requestParameters
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public getMessageById(
-    requestParameters: GetMessageByIdRequestParams,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json';
-      context?: HttpContext;
-    }
-  ): Observable<MESSAGES>;
-  public getMessageById(
-    requestParameters: GetMessageByIdRequestParams,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json';
-      context?: HttpContext;
-    }
-  ): Observable<HttpResponse<MESSAGES>>;
-  public getMessageById(
-    requestParameters: GetMessageByIdRequestParams,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json';
-      context?: HttpContext;
-    }
-  ): Observable<HttpEvent<MESSAGES>>;
-  public getMessageById(
-    requestParameters: GetMessageByIdRequestParams,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: {
-      httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json';
-      context?: HttpContext;
-    }
-  ): Observable<any> {
-    const messageId = requestParameters.messageId;
-    if (messageId === null || messageId === undefined) {
-      throw new Error(
-        'Required parameter messageId was null or undefined when calling getMessageById.'
-      );
-    }
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarCredential: string | undefined;
-    // authentication (api-pilkarzyk-oauth2) required
-    localVarCredential = this.configuration.lookupCredential(
-      'api-pilkarzyk-oauth2'
-    );
-    if (localVarCredential) {
-      localVarHeaders = localVarHeaders.set(
-        'Authorization',
-        'Bearer ' + localVarCredential
-      );
-    }
-
-    let localVarHttpHeaderAcceptSelected: string | undefined =
-      options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = [
-        'text/plain',
-        'application/json',
-        'text/json',
-      ];
-      localVarHttpHeaderAcceptSelected =
-        this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set(
-        'Accept',
-        localVarHttpHeaderAcceptSelected
-      );
-    }
-
-    let localVarHttpContext: HttpContext | undefined =
-      options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (
-        this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)
-      ) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/api/messages/${this.configuration.encodeParam({
-      name: 'messageId',
-      value: messageId,
-      in: 'path',
-      style: 'simple',
-      explode: false,
-      dataType: 'number',
-      dataFormat: 'int32',
-    })}`;
-    return this.httpClient.request<MESSAGES>(
-      'get',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        reportProgress: reportProgress,
-      }
-    );
-  }
-
-  /**
-   * @param requestParameters
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public updateAnswerMessage(
-    requestParameters: UpdateAnswerMessageRequestParams,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<any>;
-  public updateAnswerMessage(
-    requestParameters: UpdateAnswerMessageRequestParams,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<HttpResponse<any>>;
-  public updateAnswerMessage(
-    requestParameters: UpdateAnswerMessageRequestParams,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<HttpEvent<any>>;
-  public updateAnswerMessage(
-    requestParameters: UpdateAnswerMessageRequestParams,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<any> {
-    const getMessageRequest = requestParameters.getMessageRequest;
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarCredential: string | undefined;
-    // authentication (api-pilkarzyk-oauth2) required
-    localVarCredential = this.configuration.lookupCredential(
-      'api-pilkarzyk-oauth2'
-    );
-    if (localVarCredential) {
-      localVarHeaders = localVarHeaders.set(
-        'Authorization',
-        'Bearer ' + localVarCredential
-      );
-    }
-
-    let localVarHttpHeaderAcceptSelected: string | undefined =
-      options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = [];
-      localVarHttpHeaderAcceptSelected =
-        this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set(
-        'Accept',
-        localVarHttpHeaderAcceptSelected
-      );
-    }
-
-    let localVarHttpContext: HttpContext | undefined =
-      options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json',
-      'text/json',
-      'application/*+json',
-    ];
-    const httpContentTypeSelected: string | undefined =
-      this.configuration.selectHeaderContentType(consumes);
-    if (httpContentTypeSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set(
-        'Content-Type',
-        httpContentTypeSelected
-      );
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (
-        this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)
-      ) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/api/messages/answer`;
-    return this.httpClient.request<any>(
-      'put',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        body: getMessageRequest,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        reportProgress: reportProgress,
-      }
-    );
-  }
-
-  /**
-   * @param requestParameters
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public updateMessage(
-    requestParameters: UpdateMessageRequestParams,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<any>;
-  public updateMessage(
-    requestParameters: UpdateMessageRequestParams,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<HttpResponse<any>>;
-  public updateMessage(
-    requestParameters: UpdateMessageRequestParams,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<HttpEvent<any>>;
-  public updateMessage(
-    requestParameters: UpdateMessageRequestParams,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<any> {
-    const messageId = requestParameters.messageId;
-    if (messageId === null || messageId === undefined) {
-      throw new Error(
-        'Required parameter messageId was null or undefined when calling updateMessage.'
-      );
-    }
-    const getMessageRequest = requestParameters.getMessageRequest;
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarCredential: string | undefined;
-    // authentication (api-pilkarzyk-oauth2) required
-    localVarCredential = this.configuration.lookupCredential(
-      'api-pilkarzyk-oauth2'
-    );
-    if (localVarCredential) {
-      localVarHeaders = localVarHeaders.set(
-        'Authorization',
-        'Bearer ' + localVarCredential
-      );
-    }
-
-    let localVarHttpHeaderAcceptSelected: string | undefined =
-      options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = [];
-      localVarHttpHeaderAcceptSelected =
-        this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set(
-        'Accept',
-        localVarHttpHeaderAcceptSelected
-      );
-    }
-
-    let localVarHttpContext: HttpContext | undefined =
-      options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json',
-      'text/json',
-      'application/*+json',
-    ];
-    const httpContentTypeSelected: string | undefined =
-      this.configuration.selectHeaderContentType(consumes);
-    if (httpContentTypeSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set(
-        'Content-Type',
-        httpContentTypeSelected
-      );
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (
-        this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)
-      ) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/api/messages/${this.configuration.encodeParam({
-      name: 'messageId',
-      value: messageId,
-      in: 'path',
-      style: 'simple',
-      explode: false,
-      dataType: 'number',
-      dataFormat: 'int32',
-    })}`;
-    return this.httpClient.request<any>(
-      'put',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        body: getMessageRequest,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        reportProgress: reportProgress,
-      }
-    );
-  }
-
-  /**
-   * @param requestParameters
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public updateTeamMessageAsync(
-    requestParameters: UpdateTeamMessageAsyncRequestParams,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<any>;
-  public updateTeamMessageAsync(
-    requestParameters: UpdateTeamMessageAsyncRequestParams,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<HttpResponse<any>>;
-  public updateTeamMessageAsync(
-    requestParameters: UpdateTeamMessageAsyncRequestParams,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<HttpEvent<any>>;
-  public updateTeamMessageAsync(
-    requestParameters: UpdateTeamMessageAsyncRequestParams,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<any> {
-    const getTeamTableMessageRequest =
-      requestParameters.getTeamTableMessageRequest;
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarCredential: string | undefined;
-    // authentication (api-pilkarzyk-oauth2) required
-    localVarCredential = this.configuration.lookupCredential(
-      'api-pilkarzyk-oauth2'
-    );
-    if (localVarCredential) {
-      localVarHeaders = localVarHeaders.set(
-        'Authorization',
-        'Bearer ' + localVarCredential
-      );
-    }
-
-    let localVarHttpHeaderAcceptSelected: string | undefined =
-      options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = [];
-      localVarHttpHeaderAcceptSelected =
-        this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set(
-        'Accept',
-        localVarHttpHeaderAcceptSelected
-      );
-    }
-
-    let localVarHttpContext: HttpContext | undefined =
-      options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    // to determine the Content-Type header
-    const consumes: string[] = [
-      'application/json',
-      'text/json',
-      'application/*+json',
-    ];
-    const httpContentTypeSelected: string | undefined =
-      this.configuration.selectHeaderContentType(consumes);
-    if (httpContentTypeSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set(
-        'Content-Type',
-        httpContentTypeSelected
-      );
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (
-        this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)
-      ) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/api/messages`;
-    return this.httpClient.request<any>(
-      'put',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        body: getTeamTableMessageRequest,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        reportProgress: reportProgress,
-      }
-    );
-  }
 }

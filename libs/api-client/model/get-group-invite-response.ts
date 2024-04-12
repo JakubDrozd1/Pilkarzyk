@@ -23,5 +23,6 @@ export interface GetGroupInviteResponse {
     Firstname?: string | null;
     Surname?: string | null;
     Email?: string | null;
+    PhoneNumber?: number | null;
 }
 

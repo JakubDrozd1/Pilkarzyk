@@ -36,315 +36,202 @@ export interface SendRecoveryPasswordEmailRequestParams {
 
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ResetPasswordsApi {
-  protected basePath = 'https://jaball.manowski.pl:2100';
-  public defaultHeaders = new HttpHeaders();
-  public configuration = new Configuration();
-  public encoder: HttpParameterCodec;
 
-  constructor(
-    protected httpClient: HttpClient,
-    @Optional() @Inject(BASE_PATH) basePath: string | string[],
-    @Optional() configuration: Configuration
-  ) {
-    if (configuration) {
-      this.configuration = configuration;
-    }
-    if (typeof this.configuration.basePath !== 'string') {
-      if (Array.isArray(basePath) && basePath.length > 0) {
-        basePath = basePath[0];
-      }
+    protected basePath = 'http://192.168.88.20:45455';
+    public defaultHeaders = new HttpHeaders();
+    public configuration = new Configuration();
+    public encoder: HttpParameterCodec;
 
-      if (typeof basePath !== 'string') {
-        basePath = this.basePath;
-      }
-      this.configuration.basePath = basePath;
-    }
-    this.encoder = this.configuration.encoder || new CustomHttpParameterCodec();
-  }
-
-  // @ts-ignore
-  private addToHttpParams(
-    httpParams: HttpParams,
-    value: any,
-    key?: string
-  ): HttpParams {
-    if (typeof value === 'object' && value instanceof Date === false) {
-      httpParams = this.addToHttpParamsRecursive(httpParams, value);
-    } else {
-      httpParams = this.addToHttpParamsRecursive(httpParams, value, key);
-    }
-    return httpParams;
-  }
-
-  private addToHttpParamsRecursive(
-    httpParams: HttpParams,
-    value?: any,
-    key?: string
-  ): HttpParams {
-    if (value == null) {
-      return httpParams;
-    }
-
-    if (typeof value === 'object') {
-      if (Array.isArray(value)) {
-        (value as any[]).forEach(
-          (elem) =>
-            (httpParams = this.addToHttpParamsRecursive(httpParams, elem, key))
-        );
-      } else if (value instanceof Date) {
-        if (key != null) {
-          httpParams = httpParams.append(
-            key,
-            (value as Date).toISOString().substring(0, 10)
-          );
-        } else {
-          throw Error('key may not be null if value is Date');
+    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string|string[], @Optional() configuration: Configuration) {
+        if (configuration) {
+            this.configuration = configuration;
         }
-      } else {
-        Object.keys(value).forEach(
-          (k) =>
-            (httpParams = this.addToHttpParamsRecursive(
-              httpParams,
-              value[k],
-              key != null ? `${key}.${k}` : k
-            ))
+        if (typeof this.configuration.basePath !== 'string') {
+            if (Array.isArray(basePath) && basePath.length > 0) {
+                basePath = basePath[0];
+            }
+
+            if (typeof basePath !== 'string') {
+                basePath = this.basePath;
+            }
+            this.configuration.basePath = basePath;
+        }
+        this.encoder = this.configuration.encoder || new CustomHttpParameterCodec();
+    }
+
+
+    // @ts-ignore
+    private addToHttpParams(httpParams: HttpParams, value: any, key?: string): HttpParams {
+        if (typeof value === "object" && value instanceof Date === false) {
+            httpParams = this.addToHttpParamsRecursive(httpParams, value);
+        } else {
+            httpParams = this.addToHttpParamsRecursive(httpParams, value, key);
+        }
+        return httpParams;
+    }
+
+    private addToHttpParamsRecursive(httpParams: HttpParams, value?: any, key?: string): HttpParams {
+        if (value == null) {
+            return httpParams;
+        }
+
+        if (typeof value === "object") {
+            if (Array.isArray(value)) {
+                (value as any[]).forEach( elem => httpParams = this.addToHttpParamsRecursive(httpParams, elem, key));
+            } else if (value instanceof Date) {
+                if (key != null) {
+                    httpParams = httpParams.append(key, (value as Date).toISOString().substring(0, 10));
+                } else {
+                   throw Error("key may not be null if value is Date");
+                }
+            } else {
+                Object.keys(value).forEach( k => httpParams = this.addToHttpParamsRecursive(
+                    httpParams, value[k], key != null ? `${key}.${k}` : k));
+            }
+        } else if (key != null) {
+            httpParams = httpParams.append(key, value);
+        } else {
+            throw Error("key may not be null if value is not object or array");
+        }
+        return httpParams;
+    }
+
+    /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getResetPasswordById(requestParameters: GetResetPasswordByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<GetResetPasswordResponse>;
+    public getResetPasswordById(requestParameters: GetResetPasswordByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<GetResetPasswordResponse>>;
+    public getResetPasswordById(requestParameters: GetResetPasswordByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<GetResetPasswordResponse>>;
+    public getResetPasswordById(requestParameters: GetResetPasswordByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+        const resetPasswordId = requestParameters.resetPasswordId;
+        if (resetPasswordId === null || resetPasswordId === undefined) {
+            throw new Error('Required parameter resetPasswordId was null or undefined when calling getResetPasswordById.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (api-pilkarzyk-oauth2) required
+        localVarCredential = this.configuration.lookupCredential('api-pilkarzyk-oauth2');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain',
+                'application/json',
+                'text/json'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/reset-password/${this.configuration.encodeParam({name: "resetPasswordId", value: resetPasswordId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
+        return this.httpClient.request<GetResetPasswordResponse>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
         );
-      }
-    } else if (key != null) {
-      httpParams = httpParams.append(key, value);
-    } else {
-      throw Error('key may not be null if value is not object or array');
-    }
-    return httpParams;
-  }
-
-  /**
-   * @param requestParameters
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public getResetPasswordById(
-    requestParameters: GetResetPasswordByIdRequestParams,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json';
-      context?: HttpContext;
-    }
-  ): Observable<GetResetPasswordResponse>;
-  public getResetPasswordById(
-    requestParameters: GetResetPasswordByIdRequestParams,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json';
-      context?: HttpContext;
-    }
-  ): Observable<HttpResponse<GetResetPasswordResponse>>;
-  public getResetPasswordById(
-    requestParameters: GetResetPasswordByIdRequestParams,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json';
-      context?: HttpContext;
-    }
-  ): Observable<HttpEvent<GetResetPasswordResponse>>;
-  public getResetPasswordById(
-    requestParameters: GetResetPasswordByIdRequestParams,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: {
-      httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json';
-      context?: HttpContext;
-    }
-  ): Observable<any> {
-    const resetPasswordId = requestParameters.resetPasswordId;
-    if (resetPasswordId === null || resetPasswordId === undefined) {
-      throw new Error(
-        'Required parameter resetPasswordId was null or undefined when calling getResetPasswordById.'
-      );
     }
 
-    let localVarHeaders = this.defaultHeaders;
+    /**
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public sendRecoveryPasswordEmail(requestParameters: SendRecoveryPasswordEmailRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public sendRecoveryPasswordEmail(requestParameters: SendRecoveryPasswordEmailRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public sendRecoveryPasswordEmail(requestParameters: SendRecoveryPasswordEmailRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public sendRecoveryPasswordEmail(requestParameters: SendRecoveryPasswordEmailRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        const email = requestParameters.email;
 
-    let localVarCredential: string | undefined;
-    // authentication (api-pilkarzyk-oauth2) required
-    localVarCredential = this.configuration.lookupCredential(
-      'api-pilkarzyk-oauth2'
-    );
-    if (localVarCredential) {
-      localVarHeaders = localVarHeaders.set(
-        'Authorization',
-        'Bearer ' + localVarCredential
-      );
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (email !== undefined && email !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>email, 'email');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (api-pilkarzyk-oauth2) required
+        localVarCredential = this.configuration.lookupCredential('api-pilkarzyk-oauth2');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/reset-password`;
+        return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
     }
 
-    let localVarHttpHeaderAcceptSelected: string | undefined =
-      options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = [
-        'text/plain',
-        'application/json',
-        'text/json',
-      ];
-      localVarHttpHeaderAcceptSelected =
-        this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set(
-        'Accept',
-        localVarHttpHeaderAcceptSelected
-      );
-    }
-
-    let localVarHttpContext: HttpContext | undefined =
-      options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (
-        this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)
-      ) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/api/reset-password/${this.configuration.encodeParam({
-      name: 'resetPasswordId',
-      value: resetPasswordId,
-      in: 'path',
-      style: 'simple',
-      explode: false,
-      dataType: 'number',
-      dataFormat: 'int32',
-    })}`;
-    return this.httpClient.request<GetResetPasswordResponse>(
-      'get',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        reportProgress: reportProgress,
-      }
-    );
-  }
-
-  /**
-   * @param requestParameters
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public sendRecoveryPasswordEmail(
-    requestParameters: SendRecoveryPasswordEmailRequestParams,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<any>;
-  public sendRecoveryPasswordEmail(
-    requestParameters: SendRecoveryPasswordEmailRequestParams,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<HttpResponse<any>>;
-  public sendRecoveryPasswordEmail(
-    requestParameters: SendRecoveryPasswordEmailRequestParams,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<HttpEvent<any>>;
-  public sendRecoveryPasswordEmail(
-    requestParameters: SendRecoveryPasswordEmailRequestParams,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: { httpHeaderAccept?: undefined; context?: HttpContext }
-  ): Observable<any> {
-    const email = requestParameters.email;
-
-    let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
-    if (email !== undefined && email !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>email,
-        'email'
-      );
-    }
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarCredential: string | undefined;
-    // authentication (api-pilkarzyk-oauth2) required
-    localVarCredential = this.configuration.lookupCredential(
-      'api-pilkarzyk-oauth2'
-    );
-    if (localVarCredential) {
-      localVarHeaders = localVarHeaders.set(
-        'Authorization',
-        'Bearer ' + localVarCredential
-      );
-    }
-
-    let localVarHttpHeaderAcceptSelected: string | undefined =
-      options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = [];
-      localVarHttpHeaderAcceptSelected =
-        this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set(
-        'Accept',
-        localVarHttpHeaderAcceptSelected
-      );
-    }
-
-    let localVarHttpContext: HttpContext | undefined =
-      options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (
-        this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)
-      ) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/api/reset-password`;
-    return this.httpClient.request<any>(
-      'post',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        params: localVarQueryParameters,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        reportProgress: reportProgress,
-      }
-    );
-  }
 }

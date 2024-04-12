@@ -16,7 +16,7 @@ import {
   throwError,
 } from 'rxjs'
 import { AuthService } from '../service/auth/auth.service'
-import { AppConfig } from '../service/app-config'
+import { environment } from 'src/environments/environment'
 
 export interface Token {
   access_token: string
@@ -58,7 +58,7 @@ export class TokenInterceptor implements HttpInterceptor {
         if (
           err instanceof HttpErrorResponse &&
           err.status === 401 &&
-          err.url?.startsWith(AppConfig.settings.apiEndpoint) &&
+          err.url?.startsWith(environment.apiEndpoint) &&
           token
         ) {
           return this.handle401Error(request, next)

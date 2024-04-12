@@ -3155,6 +3155,9 @@
           "NAME": {
             "type": "string",
             "nullable": true
+          },
+          "IS_MODERATED": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -3378,6 +3381,9 @@
           "Name": {
             "type": "string",
             "nullable": true
+          },
+          "IsModerated": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -3437,6 +3443,9 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "IsModerated": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

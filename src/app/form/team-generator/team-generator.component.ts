@@ -4,8 +4,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms'
 import { IonicModule, ModalController } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
-import iro from '@jaames/iro'
-import { EditTeamModalComponent } from 'src/app/modal/edit-team-modal/edit-team-modal.component'
 import { Router } from '@angular/router'
 import { EditTeamGeneratorModalComponent } from 'src/app/modal/edit-team-generator-modal/edit-team-generator-modal.component'
 

@@ -13,5 +13,6 @@
 
 export interface GetGroupRequest { 
     Name?: string | null;
+    IsModerated?: boolean;
 }
 

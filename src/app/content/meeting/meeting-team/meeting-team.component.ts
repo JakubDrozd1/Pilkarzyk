@@ -132,6 +132,7 @@ export class MeetingTeamComponent implements OnInit {
       componentProps: {
         idMeeting: this.idMeeting,
         team: team,
+        isOpened: true,
       },
       backdropDismiss: false,
     })

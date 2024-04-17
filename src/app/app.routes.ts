@@ -172,6 +172,13 @@ export const routes: Routes = [
                   ).then((m) => m.GroupsContentComponent),
               },
               {
+                path: 'edit',
+                loadComponent: () =>
+                  import(
+                    './content/groups/groups-edit/groups-edit.component'
+                  ).then((m) => m.GroupsEditComponent),
+              },
+              {
                 path: 'add-meeting',
                 loadComponent: () =>
                   import('./form/meeting/meeting.component').then(

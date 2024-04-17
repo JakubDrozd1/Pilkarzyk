@@ -1,6 +1,14 @@
 <ion-header>
   <ion-toolbar>
     <ion-title slot="end">{{ nameGroup }} </ion-title>
+    <ion-icon
+      style="padding-right: 10px"
+      size="large"
+      class="button"
+      slot="end"
+      name="settings-outline"
+      [routerLink]="['edit']"
+    ></ion-icon>
     <ion-buttons slot="start">
       <ion-button (click)="cancel()"> {{ "Back" | translate }} </ion-button>
     </ion-buttons>

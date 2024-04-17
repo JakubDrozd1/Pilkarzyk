@@ -1,9 +1,15 @@
-<ion-button shape="round" expand="full" color="danger" id="present-alert">
+<ion-button
+  shape="round"
+  expand="full"
+  color="danger"
+  id="present-alert-logout"
+  (click)="openAlert()"
+>
   <ion-icon style="padding-right: 5px" name="log-out-outline"></ion-icon>
   <ion-label>{{ "Log out" | translate }}</ion-label>
 </ion-button>
 <ion-alert
-  trigger="present-alert"
+  trigger="present-alert-logout"
   [header]="'Are you sure?' | translate"
   [buttons]="alertButtons"
 ></ion-alert>

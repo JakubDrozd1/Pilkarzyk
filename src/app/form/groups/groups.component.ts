@@ -64,7 +64,7 @@ export class GroupsComponent implements OnInit {
         .addGroup({
           getCreateGroupRequest: {
             GroupRequest: {
-              Name: this.groupForm.value.name,
+              Name: this.groupForm.value.name.trim(),
               IsModerated: !this.groupForm.value.isModerated,
             },
             User: this.userService.loggedUser,

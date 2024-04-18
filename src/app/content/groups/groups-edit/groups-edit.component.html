@@ -41,7 +41,7 @@
         expand="full"
         style="padding: 10px"
       >
-        Zapisz zmiany
+        {{ "Save changes" | translate }}
       </ion-button>
     </form>
   </div>
@@ -55,13 +55,14 @@
       (click)="openAlert()"
     >
       <ion-icon style="padding-right: 5px" name="log-out-outline"></ion-icon>
-      <ion-label>Opuść grupę</ion-label>
+      <ion-label> {{ "Leave the group" | translate }} </ion-label>
     </ion-button>
     <ion-alert
       trigger="present-alert-leave-group"
-      [header]="'Napewno opuścić grupę?' | translate"
+      [header]="'Are you sure you want to leave the group?' | translate"
       [subHeader]="
-        'Aby ponownie dołączyc organizator będzie musiał jeszcze raz wysłac zaporszenie'
+        'To rejoin, the organizer will have to send the invitation again'
+          | translate
       "
       [buttons]="alertButtons"
     ></ion-alert>

@@ -19,6 +19,7 @@ import {
 import { forkJoin } from 'rxjs'
 import { Alert } from 'src/app/helper/alert'
 import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
+import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 
 @Component({
   selector: 'app-groups-edit',
@@ -63,7 +64,8 @@ export class GroupsEditComponent implements OnInit {
     private groupsApi: GroupsApi,
     private alert: Alert,
     private groupsUsersApi: GroupsUsersApi,
-    private userService: UserService
+    private userService: UserService,
+    private refreshDataService: RefreshDataService
   ) {
     this.editGroupForm = this.fb.group({
       name: ['', Validators.required],
@@ -104,7 +106,9 @@ export class GroupsEditComponent implements OnInit {
       })
       .subscribe({
         next: () => {
-          this.alert.presentToast('Pomyślnie opszczono grupę')
+          this.alert.presentToast(
+            this.translate.instant('Successfully left the group')
+          )
           this.router.navigate(['/groups'])
         },
         error: (error) => {
@@ -125,8 +129,11 @@ export class GroupsEditComponent implements OnInit {
       })
       .subscribe({
         next: () => {
-          this.alert.presentToast('Pomyślnie zapisano zmiany')
+          this.alert.presentToast(
+            this.translate.instant('Changes successfully saved')
+          )
           this.getDetails()
+          this.refreshDataService.refresh('groups-content')
           this.isReady = true
         },
         error: (error) => {

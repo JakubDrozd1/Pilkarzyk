@@ -190,6 +190,11 @@
   "Add a friend from your contacts": "Add a friend from your contacts",
   "There are no contacts to send an invitation to": "There are no contacts to send an invitation to.",
   "Allow all users to create meetings themselves and inviting new participants": "Allow all users to create meetings themselves and inviting new participants.",
+  "Successfully left the group": "Successfully left the group.",
+  "Save changes": "Save changes",
+  "Leave the group": "Leave the group",
+  "Are you sure you want to leave the group?": "Are you sure you want to leave the group?",
+  "To rejoin, the organizer will have to send the invitation again": "To rejoin, the organizer will have to send the invitation again.",
 
   "Group is null": "Group doesn't exist.",
   "User is null": "User doesn't exist",

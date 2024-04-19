@@ -45,7 +45,7 @@ import { EditTeamGeneratorModalComponent } from 'src/app/modal/edit-team-generat
     TranslateModule,
     SpinnerComponent,
     TeamGeneratorComponent,
-    EditTeamGeneratorModalComponent
+    EditTeamGeneratorModalComponent,
   ],
 })
 export class MeetingComponent implements OnInit {
@@ -184,7 +184,9 @@ export class MeetingComponent implements OnInit {
                   DateMeeting: this.meetingForm.value.dateMeeting,
                   Place: this.meetingForm.value.place.trim(),
                   Quantity: this.meetingForm.value.quantity,
-                  Description: this.meetingForm.value.description.trim(),
+                  Description: this.meetingForm.value.description
+                    ? this.meetingForm.value.description.trim()
+                    : null,
                   IdGroup: this.isHome
                     ? this.meetingForm.value.group.IdGroup
                     : this.idGroup,
@@ -225,7 +227,9 @@ export class MeetingComponent implements OnInit {
                   DateMeeting: this.meetingForm.value.dateMeeting,
                   Place: this.meetingForm.value.place.trim(),
                   Quantity: this.meetingForm.value.quantity,
-                  Description: this.meetingForm.value.description.trim(),
+                  Description: this.meetingForm.value.description
+                    ? this.meetingForm.value.description.trim()
+                    : null,
                   IdGroup: this.isHome
                     ? this.meetingForm.value.group.IdGroup
                     : this.idGroup,
@@ -263,7 +267,9 @@ export class MeetingComponent implements OnInit {
               DateMeeting: this.meetingForm.value.dateMeeting,
               Place: this.meetingForm.value.place.trim(),
               Quantity: this.meetingForm.value.quantity,
-              Description: this.meetingForm.value.description.trim(),
+              Description: this.meetingForm.value.description
+                ? this.meetingForm.value.description.trim()
+                : null,
               IsIndependent: this.meetingForm.value.isIndependent,
               Message: {
                 IdMeeting: this.idMeeting,

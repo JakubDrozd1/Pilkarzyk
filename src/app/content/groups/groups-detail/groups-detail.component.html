@@ -1,0 +1,17 @@
+<ion-card>
+  <ion-card-header>
+    {{ group.NAME }}
+  </ion-card-header>
+  <ion-card-content>
+    @if(group.DESCRIPTION){
+    <ion-card-header> {{ "Description" | translate }} </ion-card-header>
+    <ion-list style="border-radius: 20px">
+      <ion-item lines="none">{{ group.DESCRIPTION }}</ion-item>
+    </ion-list>
+    }@else {
+    <ion-card-header>
+      {{ "No description" | translate }}
+    </ion-card-header>
+    }
+  </ion-card-content>
+</ion-card>

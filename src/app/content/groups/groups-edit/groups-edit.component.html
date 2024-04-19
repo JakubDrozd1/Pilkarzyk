@@ -20,7 +20,18 @@
           type="text"
         ></ion-input>
       </ion-item>
-
+      <ion-item lines="none" style="padding: 10px">
+        <ion-textarea
+          class="border"
+          helperText=" "
+          [label]="'Description' | translate"
+          labelPlacement="floating"
+          formControlName="description"
+          type="text"
+          maxlength="300"
+        >
+        </ion-textarea>
+      </ion-item>
       <ion-item lines="none" style="padding: 10px">
         <ion-checkbox
           labelPlacement="end"
@@ -67,4 +78,15 @@
       [buttons]="alertButtons"
     ></ion-alert>
   </div>
+  @if(isReady && permission){ @if(groupsUsers.length>0){
+  <ion-list>
+    @for (item of groupsUsers; track $index) {
+    <app-groups-user-list
+      [user]="item"
+      [counter]="$index"
+      [isEdit]="true"
+    ></app-groups-user-list>
+    }
+  </ion-list>
+  } }
 </ion-content>

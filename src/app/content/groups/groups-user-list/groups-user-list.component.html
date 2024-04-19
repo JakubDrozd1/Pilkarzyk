@@ -33,7 +33,9 @@
         <img alt="img" [src]="images" />
       </ion-avatar>
       }
-      {{ counter + 1 }}.&nbsp;
+      {{ counter + 1 }}.&nbsp; @if(isEdit){
+      <ion-label> {{ user.Firstname }} {{ user.Surname }} </ion-label>
+      } @if(!isEdit){
       <ion-label
         style="cursor: pointer"
         [routerLink]="['profile', user.IdUser]"
@@ -41,10 +43,24 @@
       >
         {{ user.Firstname }} {{ user.Surname }}
       </ion-label>
-      @if(user.PhoneNumber!=null){
+
+      } @if(user.PhoneNumber!=null && !isEdit){
       {{ user.PhoneNumber.toString().slice(0, 3) }}
       {{ user.PhoneNumber.toString().slice(3, 6) }}
       {{ user.PhoneNumber.toString().slice(6) }}
+      } @if(isEdit){
+      <ion-label
+        class="button"
+        style="display: flex; flex-direction: row-reverse"
+        (click)="deleteUser(user)"
+      >
+        <ion-icon
+          slot="end"
+          color="danger"
+          name="close-outline"
+          size="large"
+        ></ion-icon>
+      </ion-label>
       }
     </ion-item>
   </ion-card-content>

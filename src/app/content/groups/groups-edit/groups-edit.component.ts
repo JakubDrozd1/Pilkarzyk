@@ -16,10 +16,11 @@ import {
   GroupsApi,
   GroupsUsersApi,
 } from 'libs/api-client'
-import { forkJoin } from 'rxjs'
+import { Subscription, forkJoin } from 'rxjs'
 import { Alert } from 'src/app/helper/alert'
 import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
+import { GroupsUserListComponent } from '../groups-user-list/groups-user-list.component'
 
 @Component({
   selector: 'app-groups-edit',
@@ -34,6 +35,7 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
     RouterLink,
     FormsModule,
     ReactiveFormsModule,
+    GroupsUserListComponent,
   ],
 })
 export class GroupsEditComponent implements OnInit {
@@ -54,6 +56,11 @@ export class GroupsEditComponent implements OnInit {
   ]
   editGroupForm!: FormGroup
   groupUser!: GetGroupsUsersResponse
+  groupsUsers: GetGroupsUsersResponse[] = []
+  alertOpened: boolean = false
+  isReady: boolean = true
+  permission: boolean = false
+  private subscription: Subscription = new Subscription()
 
   constructor(
     private router: Router,
@@ -70,11 +77,9 @@ export class GroupsEditComponent implements OnInit {
     this.editGroupForm = this.fb.group({
       name: ['', Validators.required],
       isModerated: [],
+      description: [],
     })
   }
-  alertOpened: boolean = false
-  isReady: boolean = true
-  permission: boolean = false
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -83,6 +88,13 @@ export class GroupsEditComponent implements OnInit {
         this.getDetails()
       }
     })
+    this.subscription.add(
+      this.refreshDataService.refreshSubject.subscribe((index) => {
+        if (index === 'groups-edit') {
+          this.getDetails()
+        }
+      })
+    )
 
     window.addEventListener('popstate', async () => {
       if (this.alertOpened) {
@@ -125,6 +137,7 @@ export class GroupsEditComponent implements OnInit {
         getGroupRequest: {
           Name: this.editGroupForm.value.name.trim(),
           IsModerated: !this.editGroupForm.value.isModerated,
+          Description: this.editGroupForm.value.description.trim(),
         },
       })
       .subscribe({
@@ -167,13 +180,31 @@ export class GroupsEditComponent implements OnInit {
       group: this.groupsApi.getGroupById({
         groupId: this.idGroup,
       }),
+      groupsUsers: this.groupsUsersApi.getAllGroupsFromUser({
+        page: 0,
+        onPage: -1,
+        sortColumn: 'SURNAME',
+        sortMode: 'ASC',
+        idGroup: this.idGroup,
+        isAvatar: true,
+      }),
     }).subscribe({
       next: (responses) => {
         this.editGroupForm.get('name')?.setValue(responses.group.NAME)
         this.editGroupForm
           .get('isModerated')
           ?.setValue(!responses.group.IS_MODERATED)
+        this.editGroupForm
+          .get('description')
+          ?.setValue(responses.group.DESCRIPTION)
         this.groupUser = responses.groupUser
+        this.groupsUsers = responses.groupsUsers
+        const index = this.groupsUsers.findIndex(
+          (user) => user.Email === this.userService.loggedUser.EMAIL
+        )
+        if (index !== -1) {
+          this.groupsUsers.splice(index, 1)
+        }
 
         if (this.groupUser != null) {
           if (!this.groupUser.IsModerated) {

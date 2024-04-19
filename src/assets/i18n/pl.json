@@ -195,6 +195,10 @@
   "Leave the group": "Opuść grupę",
   "Are you sure you want to leave the group?": "Napewno opuścić grupę?",
   "To rejoin, the organizer will have to send the invitation again": "Aby ponownie dołączyc, organizator będzie musiał jeszcze raz wysłac zaproszenie.",
+  "Detail": "Szczegóły",
+  "No description": "Brak opisu",
+  "You have successfully removed the user from the group": "Pomyslnie usunieto użytkownika z grupy.",
+  "Are you sure you want to remove the user from the group?": "Czy na pewno usunąć użytkownika z grupy?",
 
   "Group is null": "Grupa nie istnieje.",
   "User is null": "Użytkownik nie istnieje.",

@@ -195,6 +195,10 @@
   "Leave the group": "Leave the group",
   "Are you sure you want to leave the group?": "Are you sure you want to leave the group?",
   "To rejoin, the organizer will have to send the invitation again": "To rejoin, the organizer will have to send the invitation again.",
+  "Detail": "Details",
+  "No description": "No description",
+  "You have successfully removed the user from the group": "You have successfully removed the user from the group.",
+  "Are you sure you want to remove the user from the group?": "Are you sure you want to remove the user from the group?",
 
   "Group is null": "Group doesn't exist.",
   "User is null": "User doesn't exist",

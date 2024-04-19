@@ -137,7 +137,9 @@ export class GroupsEditComponent implements OnInit {
         getGroupRequest: {
           Name: this.editGroupForm.value.name.trim(),
           IsModerated: !this.editGroupForm.value.isModerated,
-          Description: this.editGroupForm.value.description.trim(),
+          Description: this.editGroupForm.value.description
+            ? this.editGroupForm.value.description.trim()
+            : null,
         },
       })
       .subscribe({

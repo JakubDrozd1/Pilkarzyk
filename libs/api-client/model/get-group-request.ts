@@ -14,5 +14,6 @@
 export interface GetGroupRequest { 
     Name?: string | null;
     IsModerated?: boolean;
+    Description?: string | null;
 }
 

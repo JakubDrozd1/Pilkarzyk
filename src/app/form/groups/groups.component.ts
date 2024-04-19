@@ -64,8 +64,9 @@ export class GroupsComponent implements OnInit {
         .addGroup({
           getCreateGroupRequest: {
             GroupRequest: {
-              Name: this.groupForm.value.name,
+              Name: this.groupForm.value.name.trim(),
               IsModerated: !this.groupForm.value.isModerated,
+              Description: this.groupForm.value.description.trim(),
             },
             User: this.userService.loggedUser,
           },
@@ -134,6 +135,7 @@ export class GroupsComponent implements OnInit {
             name: ['', Validators.required],
             organizer: ['', UserValidator(this.users)],
             isModerated: ['false'],
+            description: [],
           })
           this.isReady = true
         },

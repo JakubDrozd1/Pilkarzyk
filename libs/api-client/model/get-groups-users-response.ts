@@ -25,5 +25,6 @@ export interface GetGroupsUsersResponse {
     Avatar?: string | null;
     GroupCounter?: number | null;
     IsModerated?: boolean;
+    Description?: string | null;
 }
 

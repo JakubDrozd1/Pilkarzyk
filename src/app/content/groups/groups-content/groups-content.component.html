@@ -1,6 +1,13 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title slot="end">{{ nameGroup }} </ion-title>
+    <ion-icon
+      style="padding-right: 10px"
+      size="large"
+      class="button"
+      slot="end"
+      name="settings-outline"
+      [routerLink]="['edit']"
+    ></ion-icon>
     <ion-buttons slot="start">
       <ion-button (click)="cancel()"> {{ "Back" | translate }} </ion-button>
     </ion-buttons>
@@ -13,7 +20,7 @@
     <ion-fab-button [routerLink]="['add-meeting']">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
-    } @if (selectedSegment == 'members') {
+    } @if (selectedSegment == 'details') {
     <ion-fab-button [routerLink]="['add-user']">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
@@ -66,11 +73,11 @@
     (ngModelChange)="onSegmentChange(selectedSegment)"
     swipeGesture="true"
   >
+    <ion-segment-button vertical="top" value="details">
+      <ion-label>{{ "Detail" | translate }}</ion-label>
+    </ion-segment-button>
     <ion-segment-button vertical="top" value="meetings">
       <ion-label>{{ "Meetings" | translate }}</ion-label>
-    </ion-segment-button>
-    <ion-segment-button vertical="top" value="members">
-      <ion-label>{{ "Members" | translate }}</ion-label>
     </ion-segment-button>
     <ion-segment-button vertical="top" value="ranking">
       <ion-label>{{ "Ranking" | translate }}</ion-label>
@@ -95,8 +102,29 @@
     appSwiper
   >
     <swiper-slide>
-      @if(isReady){ @if(meetings.length>0){ @for (item of meetings; track
-      $index) {
+      @if(isReady){
+      <app-groups-detail [group]="group"></app-groups-detail>
+      <ion-item lines="full">{{ "Members" | translate }}</ion-item>
+
+      @if(groupsUsers.length>0){
+      <ion-list>
+        @for (item of groupsUsers; track $index) {
+        <app-groups-user-list
+          [user]="item"
+          [counter]="$index"
+          [isEdit]="false"
+        ></app-groups-user-list>
+        }
+      </ion-list>
+      }@else{
+      <ion-item class="header" lines="none">
+        {{ "No members" | translate }}
+      </ion-item>
+      }}
+    </swiper-slide>
+    <swiper-slide>
+      @if(isReady){ @if(meetings.length>0){ @for(item of meetings; track $index)
+      {
       <app-meeting-content
         [meeting]="item"
         component="group-content"
@@ -106,22 +134,6 @@
         {{ "No upcoming meetings" | translate }}
       </ion-item>
       } }
-    </swiper-slide>
-    <swiper-slide>
-      @if(isReady){ @if(groupsUsers.length>0){
-      <ion-list>
-        @for (item of groupsUsers; track $index) {
-        <app-groups-user-list
-          [user]="item"
-          [counter]="$index"
-        ></app-groups-user-list>
-        }
-      </ion-list>
-      }@else{
-      <ion-item class="header" lines="none">
-        {{ "No members" | translate }}
-      </ion-item>
-      }}
     </swiper-slide>
     <swiper-slide>
       <ion-item class="header" lines="none">

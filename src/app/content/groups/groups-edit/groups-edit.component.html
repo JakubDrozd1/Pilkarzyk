@@ -1,0 +1,92 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()"> {{ "Back" | translate }} </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <app-spinner [isReady]="!isReady"></app-spinner>
+  @if(isReady && permission){
+  <div style="padding: 10px">
+    <form [formGroup]="editGroupForm" (ngSubmit)="onSubmitEdit()">
+      <ion-item lines="none" style="padding: 10px">
+        <ion-input
+          class="border"
+          [errorText]="'Group name is required' | translate"
+          [label]="'Group name' | translate"
+          labelPlacement="floating"
+          formControlName="name"
+          type="text"
+        ></ion-input>
+      </ion-item>
+      <ion-item lines="none" style="padding: 10px">
+        <ion-textarea
+          class="border"
+          helperText=" "
+          [label]="'Description' | translate"
+          labelPlacement="floating"
+          formControlName="description"
+          type="text"
+          maxlength="300"
+        >
+        </ion-textarea>
+      </ion-item>
+      <ion-item lines="none" style="padding: 10px">
+        <ion-checkbox
+          labelPlacement="end"
+          justify="start"
+          formControlName="isModerated"
+        >
+          <div class="ion-text-wrap">
+            {{
+              "Allow all users to create meetings themselves and inviting new participants"
+                | translate
+            }}
+          </div>
+        </ion-checkbox>
+      </ion-item>
+      <ion-button
+        shape="round"
+        type="submit"
+        expand="full"
+        style="padding: 10px"
+      >
+        {{ "Save changes" | translate }}
+      </ion-button>
+    </form>
+  </div>
+  }
+  <div style="padding: 20px; margin-top: 20px">
+    <ion-button
+      shape="round"
+      expand="full"
+      color="danger"
+      id="present-alert-leave-group"
+      (click)="openAlert()"
+    >
+      <ion-icon style="padding-right: 5px" name="log-out-outline"></ion-icon>
+      <ion-label> {{ "Leave the group" | translate }} </ion-label>
+    </ion-button>
+    <ion-alert
+      trigger="present-alert-leave-group"
+      [header]="'Are you sure you want to leave the group?' | translate"
+      [subHeader]="
+        'To rejoin, the organizer will have to send the invitation again'
+          | translate
+      "
+      [buttons]="alertButtons"
+    ></ion-alert>
+  </div>
+  @if(isReady && permission){ @if(groupsUsers.length>0){
+  <ion-list>
+    @for (item of groupsUsers; track $index) {
+    <app-groups-user-list
+      [user]="item"
+      [counter]="$index"
+      [isEdit]="true"
+    ></app-groups-user-list>
+    }
+  </ion-list>
+  } }
+</ion-content>

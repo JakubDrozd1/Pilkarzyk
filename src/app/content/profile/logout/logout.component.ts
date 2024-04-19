@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
-import { Router } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { Capacitor } from '@capacitor/core'
 import { PushNotifications } from '@capacitor/push-notifications'
-import { IonicModule } from '@ionic/angular'
+import { AlertController, IonicModule } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { NotificationTokensApi } from 'libs/api-client'
 import { AuthService } from 'src/app/service/auth/auth.service'
@@ -30,16 +30,37 @@ export class LogoutComponent implements OnInit {
       },
     },
   ]
+  alertOpened: boolean = false
 
   constructor(
     private authService: AuthService,
     private router: Router,
     public translate: TranslateService,
     private notificationTokensApi: NotificationTokensApi,
-    private userService: UserService
+    private userService: UserService,
+    private alertCtrl: AlertController,
+    private route: ActivatedRoute
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    window.addEventListener('popstate', async () => {
+      if (this.alertOpened) {
+        if (this.alertCtrl.getTop() != null) {
+          this.alertCtrl.dismiss(null, 'cancel')
+          this.cancelAlert()
+        }
+      }
+    })
+  }
+
+  cancelAlert() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { alertOpened: null },
+      replaceUrl: true,
+    })
+    this.alertOpened = false
+  }
 
   async logout() {
     if (Capacitor.isNativePlatform()) {
@@ -77,5 +98,10 @@ export class LogoutComponent implements OnInit {
     this.authService.logout()
     this.router.navigate(['/form/login'])
     window.location.reload()
+  }
+
+  openAlert() {
+    this.router.navigateByUrl(this.router.url + '?alertOpened=true')
+    this.alertOpened = true
   }
 }

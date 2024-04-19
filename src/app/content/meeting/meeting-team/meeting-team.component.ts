@@ -26,7 +26,6 @@ import { FormsModule } from '@angular/forms'
 import iro from '@jaames/iro'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { IonRefresherCustomEvent } from '@ionic/core'
-import { AddTeamModalComponent } from 'src/app/modal/add-team-modal/add-team-modal.component'
 import { EditTeamModalComponent } from 'src/app/modal/edit-team-modal/edit-team-modal.component'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 

@@ -3158,6 +3158,10 @@
           },
           "IS_MODERATED": {
             "type": "boolean"
+          },
+          "DESCRIPTION": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3384,6 +3388,10 @@
           },
           "IsModerated": {
             "type": "boolean"
+          },
+          "Description": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3446,6 +3454,10 @@
           },
           "IsModerated": {
             "type": "boolean"
+          },
+          "Description": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

@@ -12,7 +12,6 @@ import { GetMeetingUsersResponse, UsersMeetingsApi } from 'libs/api-client'
 import { DataService } from './service/data/data.service'
 import {
   ActionPerformed,
-  PushNotificationActionPerformed,
   PushNotifications,
 } from '@capacitor/push-notifications'
 import { LocalNotifications } from '@capacitor/local-notifications'

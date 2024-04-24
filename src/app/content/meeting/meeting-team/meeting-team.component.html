@@ -4,8 +4,8 @@
     <ion-buttons slot="start">
       <ion-button (click)="cancel()"> {{ "Back" | translate }} </ion-button>
     </ion-buttons>
-    @if(isReady){
-    @if(meeting.IdAuthor===userService.loggedUser.ID_USER||userService.loggedUser.IS_ADMIN){
+    @if(isReady){ @if((meeting.IdAuthor===userService.loggedUser.ID_USER ||
+    userService.loggedUser.IS_ADMIN) && currentDate<(meeting.DateMeeting??0)){
     <ion-label
       style="padding-right: 10px"
       class="click"
@@ -96,8 +96,9 @@
             [style.color]="team.COLOR"
             style="padding: 5px"
           ></ion-icon>
-          @if(userService.loggedUser.ID_USER==meeting.IdAuthor ||
-          userService.loggedUser.IS_ADMIN){
+          @if((userService.loggedUser.ID_USER==meeting.IdAuthor ||
+          userService.loggedUser.IS_ADMIN)&&
+          currentDate<(meeting.DateMeeting??0)){
           <ion-icon
             name="create-outline"
             size="large"

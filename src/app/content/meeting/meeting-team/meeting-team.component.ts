@@ -28,6 +28,7 @@ import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { IonRefresherCustomEvent } from '@ionic/core'
 import { EditTeamModalComponent } from 'src/app/modal/edit-team-modal/edit-team-modal.component'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
+import * as moment from 'moment'
 
 @Component({
   selector: 'app-meeting-team',
@@ -91,6 +92,7 @@ export class MeetingTeamComponent implements OnInit {
   modalOpened: boolean = false
   private subscription: Subscription = new Subscription()
   alertOpened: boolean = false
+  currentDate: any
 
   constructor(
     public translate: TranslateService,
@@ -108,6 +110,7 @@ export class MeetingTeamComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.currentDate = moment().toISOString()
     this.subscription.add(
       this.refreshDataService.refreshSubject.subscribe((index) => {
         if (index === 'meeting-team') {

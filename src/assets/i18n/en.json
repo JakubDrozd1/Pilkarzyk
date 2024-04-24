@@ -199,6 +199,7 @@
   "No description": "No description",
   "You have successfully removed the user from the group": "You have successfully removed the user from the group.",
   "Are you sure you want to remove the user from the group?": "Are you sure you want to remove the user from the group?",
+  "Waiting until": "Waiting: ",
 
   "Group is null": "Group doesn't exist.",
   "User is null": "User doesn't exist",

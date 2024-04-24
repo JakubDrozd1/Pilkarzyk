@@ -2,10 +2,7 @@ import { CommonModule, DatePipe } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { IonicModule, RefresherEventDetail } from '@ionic/angular'
-import {
-  GetMeetingGroupsResponse,
-  MeetingsApi,
-} from 'libs/api-client'
+import { GetMeetingGroupsResponse, MeetingsApi } from 'libs/api-client'
 import { MeetingContentComponent } from '../../content/meeting/meeting-content/meeting-content.component'
 import * as moment from 'moment'
 import { Alert } from 'src/app/helper/alert'
@@ -16,6 +13,8 @@ import { SpinnerComponent } from '../../helper/spinner/spinner.component'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { IonRefresherCustomEvent } from '@ionic/core'
 import { NotificationService } from 'src/app/service/notification/notification.service'
+import { Capacitor } from '@capacitor/core'
+import { Device } from '@capacitor/device'
 
 @Component({
   selector: 'app-calendar-content',
@@ -40,7 +39,7 @@ export class CalendarContentComponent implements OnInit {
   selectedDate: string[] = []
   private subscription: Subscription = new Subscription()
   isReadyRefresh: boolean = false
-  lang: string = ''
+  lang: string | null = ''
 
   constructor(
     private meetingsApi: MeetingsApi,
@@ -60,7 +59,7 @@ export class CalendarContentComponent implements OnInit {
         }
       })
     )
-    this.lang = localStorage.getItem('langUser') ?? 'en'
+    this.setLanguage()
     this.getDetails()
   }
 
@@ -177,5 +176,27 @@ export class CalendarContentComponent implements OnInit {
       this.reload()
       $event.target.complete()
     }, 2000)
+  }
+
+  async setLanguage() {
+    this.lang = localStorage.getItem('langUser')
+    if (this.lang == null) {
+      if (Capacitor.isNativePlatform()) {
+        this.lang = (await Device.getLanguageCode()).value
+      } else {
+        this.lang = window.navigator.language
+      }
+      if (this.lang == 'pl' || this.lang == 'en') {
+        this.translate.setDefaultLang(this.lang)
+        this.translate.use(this.lang)
+      } else {
+        this.lang = 'en'
+        this.translate.setDefaultLang(this.lang)
+        this.translate.use(this.lang)
+      }
+    } else {
+      this.translate.setDefaultLang(this.lang)
+      this.translate.use(this.lang)
+    }
   }
 }

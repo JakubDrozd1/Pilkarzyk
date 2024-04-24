@@ -199,6 +199,7 @@
   "No description": "Brak opisu",
   "You have successfully removed the user from the group": "Pomyslnie usunieto użytkownika z grupy.",
   "Are you sure you want to remove the user from the group?": "Czy na pewno usunąć użytkownika z grupy?",
+  "Waiting until": "Czeka jeszcze: ",
 
   "Group is null": "Grupa nie istnieje.",
   "User is null": "Użytkownik nie istnieje.",

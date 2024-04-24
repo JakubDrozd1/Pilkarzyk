@@ -144,7 +144,7 @@ export class MeetingDetailsComponent implements OnInit {
       component: AddTeamModalComponent,
       componentProps: {
         idMeeting: this.idMeeting,
-        isOpened: true
+        isOpened: true,
       },
       backdropDismiss: false,
     })
@@ -159,7 +159,7 @@ export class MeetingDetailsComponent implements OnInit {
       component: AddGuestModalComponent,
       componentProps: {
         idMeeting: this.idMeeting,
-        isOpened: true
+        isOpened: true,
       },
       backdropDismiss: false,
     })
@@ -366,7 +366,6 @@ export class MeetingDetailsComponent implements OnInit {
           },
         })
     } else if (this.selectedValue == 'wait') {
-      this.selectedValue = ''
       this.setInputs()
       this.answer()
     }
@@ -375,18 +374,22 @@ export class MeetingDetailsComponent implements OnInit {
   answer() {
     var answerPath =
       '/meeting/' + this.idMeeting + '/answer/' + this.defaultAnswer.IdMessage
-
+    var alertConfg = {
+      relativeTo: this.route,
+      queryParams: { alertOpened: null },
+      replaceUrl: true,
+    }
     if (window.location.pathname.includes('home')) {
-      this.router.navigate(['/home' + answerPath])
+      this.router.navigate(['/home' + answerPath], alertConfg)
     }
     if (window.location.pathname.includes('groups')) {
-      this.router.navigate(['/groups/' + this.idGroup + answerPath])
+      this.router.navigate(['/groups/' + this.idGroup + answerPath], alertConfg)
     }
     if (window.location.pathname.includes('notification')) {
-      this.router.navigate(['/notification' + answerPath])
+      this.router.navigate(['/notification' + answerPath], alertConfg)
     }
     if (window.location.pathname.includes('calendar')) {
-      this.router.navigate(['/calendar' + answerPath])
+      this.router.navigate(['/calendar' + answerPath], alertConfg)
     }
   }
 
@@ -401,17 +404,19 @@ export class MeetingDetailsComponent implements OnInit {
     this.alertOpened = true
     alert.present()
     alert.onDidDismiss().then(() => {
-      this.selectedValue = ''
       this.cancelAlert()
     })
   }
 
   cancelAlert() {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { alertOpened: null },
-      replaceUrl: true,
-    })
+    if (this.selectedValue != 'wait') {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { alertOpened: null },
+        replaceUrl: true,
+      })
+    }
+    this.selectedValue = ''
     this.alertOpened = false
   }
 

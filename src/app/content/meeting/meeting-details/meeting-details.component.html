@@ -3,9 +3,8 @@
     <ion-buttons slot="start">
       <ion-button (click)="cancel()"> {{ "Back" | translate }} </ion-button>
     </ion-buttons>
-    @if(isReady){
+    @if(isReady && currentDate<(meeting.DateMeeting??0)){
     <div style="display: flex; flex-direction: row-reverse">
-      @if(currentDate<(meeting.DateMeeting??0)){
       <ion-label class="click" (click)="showAlert()">
         <ion-icon
           [color]="color"
@@ -14,7 +13,7 @@
           name="sync-outline"
         ></ion-icon>
       </ion-label>
-      } @if(userService.loggedUser.ID_USER==meeting.IdAuthor ||
+      @if(userService.loggedUser.ID_USER==meeting.IdAuthor ||
       userService.loggedUser.IS_ADMIN){
       <ion-label class="click" [routerLink]="['edit']">
         <ion-icon slot="end" size="large" name="create-outline"></ion-icon>
@@ -104,8 +103,9 @@
       style="display: flex; justify-content: space-between; align-items: center"
     >
       <ion-card-header> {{ "Teams" | translate }} </ion-card-header>
-      @if(userService.loggedUser.ID_USER==meeting.IdAuthor ||
-      userService.loggedUser.IS_ADMIN){
+      @if(currentDate<(meeting.DateMeeting??0) &&
+      (userService.loggedUser.ID_USER==meeting.IdAuthor ||
+      userService.loggedUser.IS_ADMIN)){
       <div style="padding: 5px">
         <ion-fab-button size="small" (click)="openModalAddTeam()">
           <ion-icon name="add-outline"></ion-icon>
@@ -116,7 +116,6 @@
     <ion-card-content>
       <div class="click" [routerLink]="['team']">
         @if(teams.length>0){ @for(team of teams; track $index){
-
         <ion-item lines="full">
           {{ team.NAME }}
           <ion-icon

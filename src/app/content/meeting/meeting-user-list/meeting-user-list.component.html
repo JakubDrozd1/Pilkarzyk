@@ -17,45 +17,49 @@
       }
       {{ counter + 1 }}.&nbsp; @if(user.IdUser!=null){
       <ion-label [routerLink]="['profile', user.IdUser]" class="click">
-        {{ user.Firstname }} {{ user.Surname }} </ion-label
-      >}@else {
-      <ion-label> {{ user.Firstname }} {{ user.Surname }} </ion-label>
-      }
-      <ion-label
-        style="
-          display: flex;
-          flex-direction: row-reverse;
-          align-items: center;
-          justify-content: flex-start;
-        "
-      >
-        @if(counter+1>(user.Quantity??0)&&user.Answer=='yes'){
-        <ion-icon
-          size="large"
-          color="danger"
-          name="alert-circle-outline"
-        ></ion-icon>
-        } @if(currentDate<(user.DateMeeting??0)){
-        @if(user.IdUser==userService.loggedUser.ID_USER){
-        <ion-icon
-          class="click"
-          (click)="showAlert()"
-          size="large"
-          name="sync-circle-outline"
-        ></ion-icon>
-        }
-        @if((userService.loggedUser.IS_ADMIN||userService.loggedUser.ID_USER==user.IdAuthor)
-        && user.IdUser==null){
-        <ion-icon
-          class="click"
-          color="danger"
-          (click)="deleteGuest(user)"
-          size="large"
-          name="trash-outline"
-        ></ion-icon>
-        }}
+        {{ user.Firstname }} {{ user.Surname }}
       </ion-label>
+      }@else {
+      <ion-label> {{ user.Firstname }} {{ user.Surname }} </ion-label>
+      } @if(counter+1>(user.Quantity??0)&&user.Answer=='yes'){
+      <ion-icon
+        class="click"
+        size="large"
+        color="danger"
+        name="alert-circle-outline"
+      ></ion-icon>
+      } @if(currentDate<(user.DateMeeting??0)){
+      @if(user.IdUser==userService.loggedUser.ID_USER){
+      <ion-icon
+        class="click"
+        (click)="showAlert()"
+        size="large"
+        name="sync-circle-outline"
+      ></ion-icon>
+      }
+      @if((userService.loggedUser.IS_ADMIN||userService.loggedUser.ID_USER==user.IdAuthor)
+      && user.IdUser==null){
+      <ion-icon
+        class="click"
+        color="danger"
+        (click)="deleteGuest(user)"
+        size="large"
+        name="trash-outline"
+      ></ion-icon>
+      }}
     </ion-item>
+    @if(user.WaitingTime){
+    <div>
+      <ion-label>
+        {{ "Waiting until" | translate }}
+        <app-countdown
+          (endTime)="resetMeeting($event)"
+          [startDate]="currentDateCounter"
+          [endDate]="futureDate"
+        ></app-countdown>
+      </ion-label>
+    </div>
+    }
   </ion-card-content>
 </ion-card>
 }

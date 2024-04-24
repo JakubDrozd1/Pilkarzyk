@@ -15,6 +15,7 @@ import { Router, ActivatedRoute, RouterLink } from '@angular/router'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import * as moment from 'moment'
 import { MeetingComponent } from 'src/app/form/meeting/meeting.component'
+import { CountdownComponent } from '../../../helper/countdown/countdown.component'
 
 @Component({
   selector: 'app-meeting-user-list',
@@ -28,6 +29,7 @@ import { MeetingComponent } from 'src/app/form/meeting/meeting.component'
     TranslateModule,
     RouterLink,
     MeetingComponent,
+    CountdownComponent,
   ],
 })
 export class MeetingUserListComponent implements OnInit {
@@ -62,6 +64,8 @@ export class MeetingUserListComponent implements OnInit {
   idGroup: number = 0
   currentDate: any
   alertOpened: boolean = false
+  futureDate!: Date
+  currentDateCounter!: Date
 
   constructor(
     public userService: UserService,
@@ -87,6 +91,11 @@ export class MeetingUserListComponent implements OnInit {
       }
     })
     this.currentDate = moment().toISOString()
+    this.currentDateCounter = moment().toDate()
+    this.futureDate = moment(this.user.WaitingTime).toDate()
+    if (this.currentDate >= this.futureDate) {
+      this.resetMeeting(true)
+    }
     window.addEventListener('popstate', async () => {
       if (this.alertOpened) {
         if (this.alertCtrl.getTop() != null) {
@@ -172,7 +181,6 @@ export class MeetingUserListComponent implements OnInit {
           },
         })
     } else if (this.selectedValue == 'wait') {
-      this.selectedValue = ''
       this.setInputs()
       this.answer()
     }
@@ -184,17 +192,22 @@ export class MeetingUserListComponent implements OnInit {
       this.idMeeting +
       '/message/answer/' +
       this.defaultAnswer.IdMessage
+    var alertConfg = {
+      relativeTo: this.route,
+      queryParams: { alertOpened: null },
+      replaceUrl: true,
+    }
     if (window.location.pathname.includes('home')) {
-      this.router.navigate(['/home' + answerPath])
+      this.router.navigate(['/home' + answerPath], alertConfg)
     }
     if (window.location.pathname.includes('groups')) {
-      this.router.navigate(['/groups/' + this.idGroup + answerPath])
+      this.router.navigate(['/groups/' + this.idGroup + answerPath], alertConfg)
     }
     if (window.location.pathname.includes('notification')) {
-      this.router.navigate(['/notification' + answerPath])
+      this.router.navigate(['/notification' + answerPath], alertConfg)
     }
     if (window.location.pathname.includes('calendar')) {
-      this.router.navigate(['/calendar' + answerPath])
+      this.router.navigate(['/calendar' + answerPath], alertConfg)
     }
   }
 
@@ -209,17 +222,19 @@ export class MeetingUserListComponent implements OnInit {
     this.alertOpened = true
     alert.present()
     alert.onDidDismiss().then(() => {
-      this.selectedValue = ''
       this.cancelAlert()
     })
   }
 
   cancelAlert() {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { alertOpened: null },
-      replaceUrl: true,
-    })
+    if (this.selectedValue != 'wait') {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { alertOpened: null },
+        replaceUrl: true,
+      })
+    }
+    this.selectedValue = ''
     this.alertOpened = false
   }
 
@@ -307,5 +322,26 @@ export class MeetingUserListComponent implements OnInit {
           this.alert.handleError(error)
         },
       })
+  }
+
+  resetMeeting($event: boolean) {
+    if ($event) {
+      this.messagesApi
+        .updateAnswerMessage({
+          getMessageRequest: {
+            IdMeeting: this.user.IdMeeting,
+            IdUser: this.user.IdUser,
+            Answer: 'readed',
+          },
+        })
+        .subscribe({
+          next: () => {
+            this.refreshDataService.refresh('message-user-list')
+          },
+          error: (error) => {
+            this.alert.handleError(error)
+          },
+        })
+    }
   }
 }

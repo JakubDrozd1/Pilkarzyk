@@ -3,6 +3,17 @@
     <ion-buttons slot="start">
       <ion-button (click)="cancel()">{{ "Back" | translate }}</ion-button>
     </ion-buttons>
+    @if(userService.loggedUser.ID_USER==idAuthor ||
+    userService.loggedUser.IS_ADMIN){
+    <ion-label
+      slot="end"
+      class="click"
+      style="padding-right: 10px"
+      (click)="openModalAddGuest()"
+    >
+      <ion-icon size="large" name="person-add-outline"></ion-icon>
+    </ion-label>
+    }
   </ion-toolbar>
 </ion-header>
 <ion-content>

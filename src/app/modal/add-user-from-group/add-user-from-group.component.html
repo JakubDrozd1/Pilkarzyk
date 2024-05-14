@@ -2,7 +2,7 @@
   <app-spinner [isReady]="!isReady"></app-spinner>
   @if(isReady){
   <div style="font-size: larger; margin: 20px">
-    Zaproś znajomego z innej grupy
+    {{ "Invite a friend from another group " | translate }}
   </div>
   @if(groupUsersOther.length>0){ @for(user of groupUsersOther; track $index){
   <ion-card
@@ -27,7 +27,7 @@
   </ion-card>
   }}@else{
   <div style="font-size: medium; margin: 20px; text-align: center">
-    Brak znajomych do zaproszenia
+    {{ "No friends to invite" | translate }}
   </div>
   }
   <div

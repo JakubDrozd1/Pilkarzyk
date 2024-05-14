@@ -3519,6 +3519,11 @@
           "IsIndependent": {
             "type": "boolean",
             "nullable": true
+          },
+          "IdMessage": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4078,6 +4083,10 @@
             "format": "int32",
             "nullable": true
           },
+          "SendInvite": {
+            "type": "boolean",
+            "nullable": true
+          },
           "Avatar": {
             "type": "string",
             "format": "byte",
@@ -4350,6 +4359,9 @@
           "GROUP_COUNTER": {
             "type": "integer",
             "format": "int32"
+          },
+          "SEND_INVITE": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

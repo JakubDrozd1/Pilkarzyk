@@ -19,6 +19,7 @@ export interface GetUpdateUserRequest {
     Surname?: string | null;
     PhoneNumber?: number | null;
     GroupCounter?: number | null;
+    SendInvite?: boolean | null;
     Avatar?: string | null;
     Column?: Array<string> | null;
 }

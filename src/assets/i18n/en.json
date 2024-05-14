@@ -200,6 +200,13 @@
   "You have successfully removed the user from the group": "You have successfully removed the user from the group.",
   "Are you sure you want to remove the user from the group?": "Are you sure you want to remove the user from the group?",
   "Waiting until": "Waiting: ",
+  "Invite a friend from another group": "Invite a friend from another group",
+  "No friends to invite": "No friends to invite",
+  "Privacy": "Privacy",
+  "Allow any user to add you to the group": "Allow any user to add you to the group",
+  "If you uncheck this option, users will be able to send you private invitation.": "If you uncheck this option, users will be able to send you private invitation.",
+  "Currently, anyone can add you to their group. To change this go to": "Currently, anyone can add you to their group. To change this go to",
+  "privacy settings": "privacy settings",
 
   "Group is null": "Group doesn't exist.",
   "User is null": "User doesn't exist",

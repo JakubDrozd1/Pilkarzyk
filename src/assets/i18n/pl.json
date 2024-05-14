@@ -200,6 +200,13 @@
   "You have successfully removed the user from the group": "Pomyslnie usunieto użytkownika z grupy.",
   "Are you sure you want to remove the user from the group?": "Czy na pewno usunąć użytkownika z grupy?",
   "Waiting until": "Czeka jeszcze: ",
+  "Invite a friend from another group": "Zaproś znajomego z innej grupy",
+  "No friends to invite": "Brak znajomych do zaproszenia",
+  "Privacy": "Prywatność",
+  "Allow any user to add you to the group": "Pozwól, aby każdy użytkownik mógł dodać Cię do grupy",
+  "If you uncheck this option, users will be able to send you private invitation.": "W przypadku odznacznia tej opcji, użytkownicy będą mogli Ci wysłać prywatne zaproszenie.",
+  "Currently, anyone can add you to their group. To change this go to": "Aktualnie każdy może Cię dodać do swojej grupy. Aby to zmienić przejdź do",
+  "privacy settings": "ustawień prywatności",
 
   "Group is null": "Grupa nie istnieje.",
   "User is null": "Użytkownik nie istnieje.",

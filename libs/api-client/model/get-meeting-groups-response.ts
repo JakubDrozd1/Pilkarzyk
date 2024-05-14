@@ -21,5 +21,6 @@ export interface GetMeetingGroupsResponse {
     IdAuthor?: number | null;
     IdGroup?: number | null;
     IsIndependent?: boolean | null;
+    IdMessage?: number | null;
 }
 

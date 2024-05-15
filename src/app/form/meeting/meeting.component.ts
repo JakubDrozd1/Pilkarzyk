@@ -8,7 +8,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms'
-import { IonicModule, SelectChangeEventDetail } from '@ionic/angular'
+import {
+  AlertController,
+  IonicModule,
+  SelectChangeEventDetail,
+} from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import {
   GetGroupsUsersResponse,
@@ -81,6 +85,21 @@ export class MeetingComponent implements OnInit {
   }[] = []
   lang: string | null = ''
   teams: TEAMS[] = []
+  public alertButtons = [
+    {
+      text: this.translate.instant('Cancel'),
+      role: 'cancel',
+      handler: () => {},
+    },
+    {
+      text: 'OK',
+      role: 'confirm',
+      handler: () => {
+        this.deleteMeeting()
+      },
+    },
+  ]
+  alertOpened: boolean = false
 
   constructor(
     private fb: FormBuilder,
@@ -93,7 +112,8 @@ export class MeetingComponent implements OnInit {
     private userService: UserService,
     private messagesApi: MessagesApi,
     private teamsApi: TeamsApi,
-    private router: Router
+    private router: Router,
+    private alertCtrl: AlertController
   ) {
     this.meetingForm = this.fb.group({
       dateMeeting: ['', Validators.required],
@@ -142,6 +162,15 @@ export class MeetingComponent implements OnInit {
       ?.setValue(moment().add(this.delay, 'hours').format())
     this.meetingForm.get('quantityTeams')?.valueChanges.subscribe(() => {
       this.collectedData = []
+    })
+
+    window.addEventListener('popstate', async () => {
+      if (this.alertOpened) {
+        if (this.alertCtrl.getTop() != null) {
+          this.alertCtrl.dismiss(null, 'cancel')
+          this.cancelAlert()
+        }
+      }
     })
   }
 
@@ -532,5 +561,41 @@ export class MeetingComponent implements OnInit {
       this.translate.setDefaultLang(this.lang)
       this.translate.use(this.lang)
     }
+  }
+
+  cancelMeeting() {
+    this.router.navigateByUrl(this.router.url + '?alertOpened=true')
+    this.alertOpened = true
+  }
+
+  deleteMeeting() {
+    this.isReady = false
+    this.meetingsApi
+      .deleteMeeting({
+        meetingId: this.idMeeting,
+      })
+      .subscribe({
+        next: () => {
+          if (window.location.pathname.includes('home')) {
+            this.router.navigate(['/home'])
+          }
+          if (window.location.pathname.includes('groups')) {
+            this.router.navigate(['/groups/' + this.idGroup])
+          }
+        },
+        error: (error) => {
+          this.alert.handleError(error)
+          this.isReady = true
+        },
+      })
+  }
+
+  cancelAlert() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { alertOpened: null },
+      replaceUrl: true,
+    })
+    this.alertOpened = false
   }
 }

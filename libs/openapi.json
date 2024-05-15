@@ -1606,6 +1606,13 @@
             "schema": {
               "type": "boolean"
             }
+          },
+          {
+            "name": "Answer",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {

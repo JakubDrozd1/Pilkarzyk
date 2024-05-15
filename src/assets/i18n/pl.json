@@ -205,8 +205,11 @@
   "Privacy": "Prywatność",
   "Allow any user to add you to the group": "Pozwól, aby każdy użytkownik mógł dodać Cię do grupy",
   "If you uncheck this option, users will be able to send you private invitation.": "W przypadku odznacznia tej opcji, użytkownicy będą mogli Ci wysłać prywatne zaproszenie.",
-  "Currently, anyone can add you to their group. To change this go to": "Aktualnie każdy może Cię dodać do swojej grupy. Aby to zmienić przejdź do",
+  "Currently, anyone can add you to their group. To change this go to": "Aktualnie każdy może dodać Cię do swojej grupy. Aby to zmienić przejdź do",
   "privacy settings": "ustawień prywatności",
+  "Cancel meeting": "Anuluj spotkanie",
+  "Are you sure you want to cancel the meeting?": "Na pewno anulować spotkanie?",
+  "This operation cannot be undone": "Tej operacji nie można cofnąć.",
 
   "Group is null": "Grupa nie istnieje.",
   "User is null": "Użytkownik nie istnieje.",

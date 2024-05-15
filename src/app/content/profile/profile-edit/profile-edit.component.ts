@@ -95,7 +95,7 @@ export class ProfileEditComponent implements OnInit {
   onFileSelected(event: any) {
     const selectedFile = event.target.files[0]
     const maxSizeInBytes = 5 * 1024 * 1024
-    const allowedExtensions = ['.jpeg', '.jpg', '.png', '.gif']
+    const allowedExtensions = ['.jpeg', '.jpg', '.png']
 
     if (selectedFile && selectedFile.size <= maxSizeInBytes) {
       const fileExtension = selectedFile.name
@@ -104,7 +104,7 @@ export class ProfileEditComponent implements OnInit {
       if (!allowedExtensions.includes(fileExtension)) {
         this.alert.alertNotOk(
           this.translate.instant(
-            'Invalid file format. Only .jpeg, .jpg, .png, .gif are allowed.'
+            'Invalid file format. Only .jpeg, .jpg, .png are allowed.'
           )
         )
         return

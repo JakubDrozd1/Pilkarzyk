@@ -58,6 +58,12 @@ export class AppComponent implements OnInit {
         'pushNotificationActionPerformed',
         (notification: ActionPerformed) => {
           this.zone.run(() => {
+            if (notification.notification.data.GroupId) {
+              this.router.navigate([
+                '/groups',
+                Number(notification.notification.data.GroupId),
+              ])
+            }
             if (notification.notification.data.NotificationId) {
               this.router.navigate(['/notification'])
             }

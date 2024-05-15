@@ -1,0 +1,55 @@
+<div class="helper-container">
+  <app-spinner [isReady]="!isReady"></app-spinner>
+  @if(isReady){
+  <div style="font-size: larger; margin: 20px">
+    {{ "Invite a friend from another group " | translate }}
+  </div>
+  @if(groupUsersOther.length>0){ @for(user of groupUsersOther; track $index){
+  <ion-card
+    style="
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      padding: 10px;
+    "
+  >
+    <ion-item lines="none" style="--background: var(--ion-card-background)">
+      <ion-checkbox
+        justify="space-between"
+        [value]="user.PhoneNumber"
+        (ionChange)="changeContact($event)"
+      >
+        <ion-chip style="display: flex; justify-content: center">
+          {{ user.Firstname }} {{ user.Surname }}
+        </ion-chip>
+      </ion-checkbox>
+    </ion-item>
+  </ion-card>
+  }}@else{
+  <div style="font-size: medium; margin: 20px; text-align: center">
+    {{ "No friends to invite" | translate }}
+  </div>
+  }
+  <div
+    style="
+      display: flex;
+      margin: 20px;
+      align-items: center;
+      justify-content: center;
+    "
+  >
+    @if(isReady && groupUsersOther.length>0) {
+    <ion-button expand="full" (click)="sendInvites()" shape="round">
+      <ion-label color="success">
+        <ion-icon size="large" name="checkmark-outline"></ion-icon>
+      </ion-label>
+    </ion-button>
+    }
+    <ion-button expand="full" (click)="cancel()" shape="round">
+      <ion-label color="danger">
+        <ion-icon size="large" name="close-outline"></ion-icon>
+      </ion-label>
+    </ion-button>
+  </div>
+  }
+</div>

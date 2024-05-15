@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()"> {{ "Back" | translate }} </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <app-spinner [isReady]="!isReady"></app-spinner>
+  <ion-text style="font-size: x-large">
+    {{ "Groups" | translate }}
+  </ion-text>
+  @if(isReady){
+  <div style="padding: 20px">
+    <ion-checkbox
+      justify="space-between"
+      [checked]="permission"
+      (ionChange)="changePermission($event)"
+    >
+      <div class="ion-text-wrap">
+        {{ "Allow any user to add you to the group" | translate }}
+      </div>
+    </ion-checkbox>
+  </div>
+  <ion-note>
+    {{
+      "If you uncheck this option, users will be able to send you private invitation."
+        | translate
+    }}
+  </ion-note>
+  }
+</ion-content>

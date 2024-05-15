@@ -195,6 +195,24 @@
       {{ "Add" | translate }}
       }
     </ion-button>
+    @if(isEdit){
+    <ion-button
+      style="padding-top: 30px"
+      color="danger"
+      shape="round"
+      expand="full"
+      (click)="cancelMeeting()"
+      id="present-alert-cancel-meeting"
+    >
+      {{ "Cancel meeting" | translate }}
+    </ion-button>
+    <ion-alert
+      trigger="present-alert-cancel-meeting"
+      [header]="'Are you sure you want to cancel the meeting?' | translate"
+      [subHeader]="'This operation cannot be undone' | translate"
+      [buttons]="alertButtons"
+    ></ion-alert>
+    }
   </form>
   }
 </ion-content>

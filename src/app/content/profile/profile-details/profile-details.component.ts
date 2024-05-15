@@ -126,8 +126,11 @@ export class ProfileDetailsComponent implements OnInit {
         this.router.navigate(['/groups'])
       }
     }
-    if (window.location.pathname.includes('notification')) {
+    if (window.location.pathname.includes('notification/meeting')) {
       this.router.navigate(['/notification' + meetingPath])
+    }
+    if (window.location.pathname.includes('notification')) {
+      this.router.navigate(['/notification'])
     }
     if (window.location.pathname.includes('calendar')) {
       this.router.navigate(['/calendar' + meetingPath])

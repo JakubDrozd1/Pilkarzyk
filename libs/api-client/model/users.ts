@@ -23,5 +23,6 @@ export interface USERS {
     SALT?: string | null;
     AVATAR?: string | null;
     GROUP_COUNTER?: number;
+    SEND_INVITE?: boolean;
 }
 

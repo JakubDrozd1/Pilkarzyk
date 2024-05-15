@@ -66,6 +66,7 @@ export class AddGuestModalComponent implements OnInit {
           this.guestName = 'Guest'
           this.isReady = true
           this.refreshDataService.refresh('meeting-details')
+          this.refreshDataService.refresh('message-user-list')
           this.cancel()
         },
         error: (error) => {

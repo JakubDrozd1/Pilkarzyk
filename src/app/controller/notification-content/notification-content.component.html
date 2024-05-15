@@ -59,7 +59,22 @@
     <swiper-slide>
       @if(isReady){ @if(invite.length>0){ @for(item of invite; track $index){
       <app-groups-invite [invite]="item"></app-groups-invite>
-      } }@else {
+      } } @else if(!userService.loggedUser.SEND_INVITE){
+      <div style="font-size: large; padding: 20px; text-align: center">
+        {{
+          "Currently, anyone can add you to their group. To change this go to"
+            | translate
+        }}
+        <ion-button
+          style="padding: 20px"
+          shape="round"
+          [routerLink]="['privacy']"
+        >
+          {{ "privacy settings" | translate }}
+          <ion-icon size="large" name="arrow-redo-outline"> </ion-icon>
+        </ion-button>
+      </div>
+      } @else {
       <ion-item class="header" lines="none">
         {{ "You have no invitations" | translate }}
       </ion-item>

@@ -132,6 +132,20 @@ export const routes: Routes = [
               ).then((m) => m.MessageAnswerModalComponent),
           },
           {
+            path: 'profile/:idUser',
+            loadComponent: () =>
+              import(
+                './content/profile/profile-details/profile-details.component'
+              ).then((m) => m.ProfileDetailsComponent),
+          },
+          {
+            path: 'privacy',
+            loadComponent: () =>
+              import(
+                './content/account/account-privacy/account-privacy.component'
+              ).then((m) => m.AccountPrivacyComponent),
+          },
+          {
             path: 'meeting/:idMeeting',
             children: meetingChildren,
           },
@@ -272,6 +286,13 @@ export const routes: Routes = [
               import(
                 './content/account/account-notification/account-notification.component'
               ).then((m) => m.AccountNotificationComponent),
+          },
+          {
+            path: 'privacy',
+            loadComponent: () =>
+              import(
+                './content/account/account-privacy/account-privacy.component'
+              ).then((m) => m.AccountPrivacyComponent),
           },
           {
             path: 'about',

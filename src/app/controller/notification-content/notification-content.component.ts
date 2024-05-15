@@ -28,6 +28,7 @@ import { SwiperContainer } from 'swiper/element'
 import { IonRefresherCustomEvent } from '@ionic/core'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
+import { RouterLink } from '@angular/router'
 
 @Component({
   selector: 'app-notification-content',
@@ -42,6 +43,7 @@ import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
     GroupsInviteComponent,
     TranslateModule,
     SpinnerComponent,
+    RouterLink,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -68,7 +70,7 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
     private messagesApi: MessagesApi,
     private dataService: DataService,
     private groupInvite: GroupInvitesApi,
-    private userService: UserService,
+    public userService: UserService,
     public translate: TranslateService
   ) {}
 

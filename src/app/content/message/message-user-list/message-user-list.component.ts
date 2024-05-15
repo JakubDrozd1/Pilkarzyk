@@ -1,7 +1,11 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
-import { IonicModule, RefresherEventDetail } from '@ionic/angular'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
+import {
+  IonicModule,
+  ModalController,
+  RefresherEventDetail,
+} from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { MeetingUserListComponent } from '../../meeting/meeting-user-list/meeting-user-list.component'
 import {
@@ -15,6 +19,8 @@ import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { IonRefresherCustomEvent } from '@ionic/core'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { Subscription, forkJoin } from 'rxjs'
+import { UserService } from 'src/app/service/user/user.service'
+import { AddGuestModalComponent } from 'src/app/modal/add-guest-modal/add-guest-modal.component'
 
 @Component({
   selector: 'app-message-user-list',
@@ -27,6 +33,7 @@ import { Subscription, forkJoin } from 'rxjs'
     TranslateModule,
     MeetingUserListComponent,
     SpinnerComponent,
+    RouterLink,
   ],
 })
 export class MessageUserListComponent implements OnInit {
@@ -37,6 +44,8 @@ export class MessageUserListComponent implements OnInit {
   private subscription: Subscription = new Subscription()
   guests: GUESTS[] = []
   idGroup: number = 0
+  idAuthor: number = 0
+  modalOpened: boolean = false
 
   constructor(
     private route: ActivatedRoute,
@@ -45,7 +54,9 @@ export class MessageUserListComponent implements OnInit {
     private refreshDataService: RefreshDataService,
     private guestsApi: GuestsApi,
     public translate: TranslateService,
-    private router: Router
+    private router: Router,
+    public userService: UserService,
+    private modalCtrl: ModalController
   ) {}
 
   ngOnInit() {
@@ -86,6 +97,7 @@ export class MessageUserListComponent implements OnInit {
         }),
       }).subscribe({
         next: (responses) => {
+          this.idAuthor = responses.messages[0].IdAuthor ?? 0
           this.messages = responses.guests.map((guest) => ({
             Answer: 'yes',
             Firstname: guest.NAME,
@@ -97,8 +109,8 @@ export class MessageUserListComponent implements OnInit {
             IdGuest: guest.ID_GUEST,
             DateMeeting: responses.messages[0].DateMeeting,
           }))
-          this.messages = this.messages
-            .concat(responses.messages)
+          this.messages = responses.messages
+            .concat(this.messages)
             .sort((a, b) => {
               const priority: { [key: string]: number } = {
                 yes: 1,
@@ -145,5 +157,20 @@ export class MessageUserListComponent implements OnInit {
       this.getDetails()
       $event.target.complete()
     }, 2000)
+  }
+
+  async openModalAddGuest() {
+    const modal = await this.modalCtrl.create({
+      component: AddGuestModalComponent,
+      componentProps: {
+        idMeeting: this.idMeeting,
+        isOpened: true,
+      },
+      backdropDismiss: false,
+    })
+    this.router.navigateByUrl(this.router.url + '?modalOpened=true')
+    this.modalOpened = true
+    modal.present()
+    await modal.onWillDismiss()
   }
 }

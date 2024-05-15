@@ -46,6 +46,18 @@
     </ion-card-content>
     <ion-card-content>
       <ion-item
+        lines="full"
+        [routerLink]="['privacy']"
+        button
+        detail="true"
+        class="title"
+      >
+        <ion-icon name="eye-off-outline"></ion-icon>
+        <ion-label>{{ "Privacy" | translate }}</ion-label>
+      </ion-item>
+    </ion-card-content>
+    <ion-card-content>
+      <ion-item
         [routerLink]="['edit-pass']"
         lines="full"
         button

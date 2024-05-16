@@ -1955,6 +1955,144 @@
         }
       }
     },
+    "/api/notification": {
+      "post": {
+        "tags": [
+          "Notifications"
+        ],
+        "operationId": "AddNotificationToUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetNotificationRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetNotificationRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetNotificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/notification/{userId}": {
+      "get": {
+        "tags": [
+          "Notifications"
+        ],
+        "operationId": "GetAllNotificationFromUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/NOTIFICATION"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NOTIFICATION"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NOTIFICATION"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Notifications"
+        ],
+        "operationId": "DeletaAllNotificationFromUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/notification/column-{userId}": {
+      "put": {
+        "tags": [
+          "Notifications"
+        ],
+        "operationId": "UpdateColumnNotification",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUpdateNotificationRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUpdateNotificationRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetUpdateNotificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/rankings": {
       "get": {
         "tags": [
@@ -3799,6 +3937,40 @@
         },
         "additionalProperties": false
       },
+      "GetNotificationRequest": {
+        "type": "object",
+        "properties": {
+          "IdUser": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "MeetingNotification": {
+            "type": "boolean"
+          },
+          "GroupInvNotification": {
+            "type": "boolean"
+          },
+          "MeetingOrganizerNotification": {
+            "type": "boolean"
+          },
+          "TeamNotofication": {
+            "type": "boolean"
+          },
+          "UpdateMeetingNotification": {
+            "type": "boolean"
+          },
+          "TeamOrganizerNotification": {
+            "type": "boolean"
+          },
+          "GroupAddNotification": {
+            "type": "boolean"
+          },
+          "MeetingCancelNotification": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
       "GetNotificationTokenRequest": {
         "type": "object",
         "properties": {
@@ -4057,6 +4229,43 @@
         },
         "additionalProperties": false
       },
+      "GetUpdateNotificationRequest": {
+        "type": "object",
+        "properties": {
+          "MeetingNotification": {
+            "type": "boolean"
+          },
+          "GroupInvNotification": {
+            "type": "boolean"
+          },
+          "MeetingOrganizerNotification": {
+            "type": "boolean"
+          },
+          "TeamNotofication": {
+            "type": "boolean"
+          },
+          "UpdateMeetingNotification": {
+            "type": "boolean"
+          },
+          "TeamOrganizerNotification": {
+            "type": "boolean"
+          },
+          "GroupAddNotification": {
+            "type": "boolean"
+          },
+          "MeetingCancelNotification": {
+            "type": "boolean"
+          },
+          "Column": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "GetUpdateUserRequest": {
         "type": "object",
         "properties": {
@@ -4235,6 +4444,44 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "NOTIFICATION": {
+        "type": "object",
+        "properties": {
+          "ID_NOTIFICATION": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "IDUSER": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "MEETING_NOTIFICATION": {
+            "type": "boolean"
+          },
+          "GROUP_INV_NOTIFICATION": {
+            "type": "boolean"
+          },
+          "MEETING_ORGANIZER_NOTIFICATION": {
+            "type": "boolean"
+          },
+          "TEAM_NOTIFICATION": {
+            "type": "boolean"
+          },
+          "UPDATE_MEETING_NOTIFICATION": {
+            "type": "boolean"
+          },
+          "TEAM_ORGANIZER_NOTIFICATION": {
+            "type": "boolean"
+          },
+          "GROUP_ADD_NOTIFICATION": {
+            "type": "boolean"
+          },
+          "MEETING_CANCEL_NOTIFICATION": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

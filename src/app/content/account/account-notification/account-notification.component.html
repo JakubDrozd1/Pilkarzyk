@@ -6,18 +6,110 @@
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
+  <app-spinner [isReady]="!isReady"></app-spinner>
+  @if(isReady){
   <ion-text style="font-size: x-large">
     {{ "Notifications received" | translate }}
   </ion-text>
-  <div style="padding: 20px">
-    <ion-toggle></ion-toggle>
-    <ion-label>{{ "Invitation to the group" | translate }} </ion-label>
-    <br /><br />
-    <ion-toggle></ion-toggle
-    ><ion-label>{{ "Meeting invitation" | translate }}</ion-label
-    ><br /><br />
-    <ion-toggle></ion-toggle>
-    <ion-label>{{ "Changing a decision in a meeting" | translate }}</ion-label>
-    <br /><br />
-  </div>
+  <ion-list>
+    <ion-item>
+      <ion-toggle
+        [checked]="notifications.MEETING_NOTIFICATION"
+        [(ngModel)]="notifications.MEETING_NOTIFICATION"
+        (ionChange)="changeNotification()"
+      >
+        <ion-label class="ion-text-wrap">
+          {{ "Meeting invitation" | translate }}
+        </ion-label>
+      </ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-toggle
+        [checked]="notifications.GROUP_INV_NOTIFICATION"
+        [(ngModel)]="notifications.GROUP_INV_NOTIFICATION"
+        (ionChange)="changeNotification()"
+      >
+        <ion-label class="ion-text-wrap">
+          {{ "Invitation to the group" | translate }}
+        </ion-label>
+      </ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-toggle
+        [checked]="notifications.MEETING_ORGANIZER_NOTIFICATION"
+        [(ngModel)]="notifications.MEETING_ORGANIZER_NOTIFICATION"
+        (ionChange)="changeNotification()"
+      >
+        <ion-label class="ion-text-wrap">
+          {{
+            "Changing a decision in a meeting (for the organizer)" | translate
+          }}
+        </ion-label>
+      </ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-toggle
+        [checked]="notifications.TEAM_NOTIFICATION"
+        [(ngModel)]="notifications.TEAM_NOTIFICATION"
+        (ionChange)="changeNotification()"
+      >
+        <ion-label class="ion-text-wrap">
+          {{ "Adding to the team" | translate }}
+        </ion-label>
+      </ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-toggle
+        [checked]="notifications.UPDATE_MEETING_NOTIFICATION"
+        [(ngModel)]="notifications.UPDATE_MEETING_NOTIFICATION"
+        (ionChange)="changeNotification()"
+      >
+        <ion-label class="ion-text-wrap">
+          {{ "Meeting update" | translate }}
+        </ion-label>
+      </ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-toggle
+        [checked]="notifications.TEAM_ORGANIZER_NOTIFICATION"
+        [(ngModel)]="notifications.TEAM_ORGANIZER_NOTIFICATION"
+        (ionChange)="changeNotification()"
+      >
+        <ion-label class="ion-text-wrap">
+          {{ "Joining the team (for the organizer)" | translate }}
+        </ion-label>
+      </ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-toggle
+        [checked]="notifications.GROUP_ADD_NOTIFICATION"
+        [(ngModel)]="notifications.GROUP_ADD_NOTIFICATION"
+        (ionChange)="changeNotification()"
+      >
+        <ion-label class="ion-text-wrap">
+          {{ "Adding to a group" | translate }}
+        </ion-label>
+      </ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-toggle
+        [checked]="notifications.MEETING_CANCEL_NOTIFICATION"
+        [(ngModel)]="notifications.MEETING_CANCEL_NOTIFICATION"
+        (ionChange)="changeNotification()"
+      >
+        <ion-label class="ion-text-wrap">
+          {{ "Cancellation of the meeting" | translate }}
+        </ion-label>
+      </ion-toggle>
+    </ion-item>
+  </ion-list>
+  @if(areEqual){
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button expand="full" (click)="addNotification()" shape="round">
+      <ion-label color="success" style="margin: 0px">
+        <ion-icon size="large" name="checkmark-outline"></ion-icon>
+      </ion-label>
+    </ion-fab-button>
+  </ion-fab>
+  }}
 </ion-content>

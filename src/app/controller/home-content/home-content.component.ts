@@ -115,7 +115,6 @@ export class HomeContentComponent implements OnInit {
         sortMode: 'DESC',
         dateTo: moment().format(),
         idUser: this.userService.loggedUser.ID_USER,
-        answer: 'yes',
         withMessages: true,
       }),
     }).subscribe({

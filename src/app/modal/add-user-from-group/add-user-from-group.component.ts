@@ -131,7 +131,6 @@ export class AddUserFromGroupComponent implements OnInit {
                 this.groupUsersOther,
                 this.groupUsersActive
               )
-              console.log(this.groupUsers)
             }
             if (this.groupsInvite.length > 0) {
               const idUsersInTablica1 = new Set(
@@ -154,7 +153,6 @@ export class AddUserFromGroupComponent implements OnInit {
   changeContact(
     $event: IonCheckboxCustomEvent<CheckboxChangeEventDetail<any>>
   ) {
-    console.log($event.detail.value)
     if ($event.detail.checked) {
       this.numberArray.push($event.detail.value)
     } else {

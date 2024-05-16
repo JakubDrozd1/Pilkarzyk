@@ -2,7 +2,7 @@
   <app-spinner [isReady]="!isReady"></app-spinner>
   @if(isReady){
   <div style="font-size: larger; margin: 20px">
-    {{ "Invite a friend from another group " | translate }}
+    {{ "Invite a friend from another group" | translate }}
   </div>
   @if(groupUsersOther.length>0){ @for(user of groupUsersOther; track $index){
   <ion-card

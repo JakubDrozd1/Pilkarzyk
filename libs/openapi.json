@@ -4222,9 +4222,6 @@
               "type": "string"
             },
             "nullable": true
-          },
-          "Message": {
-            "$ref": "#/components/schemas/GetMessageRequest"
           }
         },
         "additionalProperties": false

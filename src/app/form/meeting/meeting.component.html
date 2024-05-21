@@ -96,7 +96,7 @@
         >
         </ion-textarea>
       </ion-item>
-
+      @if(!isEdit){
       <ion-item lines="none">
         <ion-checkbox
           labelPlacement="end"
@@ -106,8 +106,7 @@
           {{ "Check if you will also come" | translate }}
         </ion-checkbox>
       </ion-item>
-
-      @if(isEdit){
+      } @if(isEdit){
       <ion-item lines="none">
         <ion-checkbox
           labelPlacement="end"

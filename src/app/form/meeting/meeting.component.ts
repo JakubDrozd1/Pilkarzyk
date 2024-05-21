@@ -300,11 +300,6 @@ export class MeetingComponent implements OnInit {
                 ? this.meetingForm.value.description.trim()
                 : null,
               IsIndependent: this.meetingForm.value.isIndependent,
-              Message: {
-                IdMeeting: this.idMeeting,
-                IdUser: this.userService.loggedUser.ID_USER,
-                Answer: this.meetingForm.value.presence ? 'yes' : 'no',
-              },
               Column: [
                 'DATE_MEETING',
                 'PLACE',
@@ -412,6 +407,15 @@ export class MeetingComponent implements OnInit {
                       this.meetingForm
                         .get('isIndependent')
                         ?.setValue(this.meeting.IsIndependent)
+                      let current = new Date()
+
+                      let date = this.combineDateAndTime(
+                        current,
+                        new Date(this.meeting.DateMeeting ?? 0)
+                      )
+                      this.meetingForm
+                        .get('dateMeeting')
+                        ?.setValue(this.getLocalISOString(date))
                     }
                     this.teams = response
                     if (this.teams.length > 0) {
@@ -597,5 +601,29 @@ export class MeetingComponent implements OnInit {
       replaceUrl: true,
     })
     this.alertOpened = false
+  }
+
+  combineDateAndTime(date1: Date, date2: Date): Date {
+    const year = date1.getFullYear()
+    const month = date1.getMonth()
+    const day = date1.getDate()
+
+    const hours = date2.getHours()
+    const minutes = date2.getMinutes()
+    const seconds = date2.getSeconds()
+    const milliseconds = date2.getMilliseconds()
+
+    return new Date(year, month, day, hours, minutes, seconds, milliseconds)
+  }
+
+  getLocalISOString(date: Date) {
+    const offset = date.getTimezoneOffset()
+    const offsetAbs = Math.abs(offset)
+    const isoString = new Date(
+      date.getTime() - offset * 60 * 1000
+    ).toISOString()
+    return `${isoString.slice(0, -1)}${offset > 0 ? '-' : '+'}${String(
+      Math.floor(offsetAbs / 60)
+    ).padStart(2, '0')}:${String(offsetAbs % 60).padStart(2, '0')}`
   }
 }

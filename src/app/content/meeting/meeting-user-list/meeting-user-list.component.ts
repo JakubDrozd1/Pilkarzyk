@@ -66,6 +66,7 @@ export class MeetingUserListComponent implements OnInit {
   alertOpened: boolean = false
   futureDate!: Date
   currentDateCounter!: Date
+  isExpired: boolean = false
 
   constructor(
     public userService: UserService,
@@ -103,6 +104,13 @@ export class MeetingUserListComponent implements OnInit {
         }
       }
     })
+
+    const currentTime = new Date().getTime()
+    const meetingTime = new Date(this.user.DateMeeting ?? 0).getTime()
+    const decisionTime = new Date(
+      (this.user.WaitingTimeDecision ?? 60) * 60000
+    ).getTime()
+    this.isExpired = meetingTime - decisionTime < currentTime
     this.getDetails()
   }
 

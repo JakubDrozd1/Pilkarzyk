@@ -19,5 +19,6 @@ export interface GetMeetingRequest {
     IdGroup?: number | null;
     IdAuthor?: number | null;
     IsIndependent?: boolean | null;
+    WaitingTimeDecision?: number | null;
 }
 

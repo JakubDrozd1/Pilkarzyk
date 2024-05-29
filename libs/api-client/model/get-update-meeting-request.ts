@@ -17,6 +17,7 @@ export interface GetUpdateMeetingRequest {
     Quantity?: number | null;
     Description?: string | null;
     IsIndependent?: boolean | null;
+    WaitingTimeDecision?: number | null;
     Column?: Array<string> | null;
 }
 

@@ -1,3 +1,4 @@
+import { getLocalISOString } from 'src/app/helper/localISOString'
 import { CommonModule, DatePipe } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { FormsModule } from '@angular/forms'
@@ -98,7 +99,9 @@ export class CalendarContentComponent implements OnInit {
                 backgroundColor = 'var(--ion-color-warning)'
               }
               return {
-                date: this.formatDate(item.DateMeeting),
+                date: this.formatDate(
+                  getLocalISOString(new Date(item.DateMeeting ?? 0))
+                ),
                 textColor: textColor,
                 backgroundColor: backgroundColor,
               }
@@ -129,8 +132,10 @@ export class CalendarContentComponent implements OnInit {
     this.isReadyRefresh = false
     if (newDate != null) {
       for (let date of newDate) {
-        const startOfDay = moment(date).startOf('day').add(1, 'hours').format()
-        const endOfDay = moment(date).endOf('day').add(1, 'hours').format()
+        let start = new Date(date).setHours(0, 0, 0, 0)
+        let end = new Date(date).setHours(23, 59, 59, 999)
+        const startOfDay = getLocalISOString(new Date(start))
+        const endOfDay = getLocalISOString(new Date(end))
         this.meetingsApi
           .getAllMeetings({
             page: 0,

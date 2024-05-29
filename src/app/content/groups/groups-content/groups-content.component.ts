@@ -136,6 +136,7 @@ export class GroupsContentComponent implements OnInit {
   getSegmentDetails() {
     if (this.selectedSegment == 'meetings') {
       this.isReady = false
+      this.isReady = false//???????
       this.meetings = []
       this.meetingsApi
         .getAllMeetings({

@@ -1613,6 +1613,13 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "IsDelayed",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
@@ -3669,6 +3676,11 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "WaitingTimeDecision": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3706,6 +3718,11 @@
           },
           "IsIndependent": {
             "type": "boolean",
+            "nullable": true
+          },
+          "WaitingTimeDecision": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           }
         },
@@ -3910,6 +3927,11 @@
           },
           "IsIndependent": {
             "type": "boolean",
+            "nullable": true
+          },
+          "WaitingTimeDecision": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           }
         },
@@ -4214,6 +4236,11 @@
           },
           "IsIndependent": {
             "type": "boolean",
+            "nullable": true
+          },
+          "WaitingTimeDecision": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           },
           "Column": {

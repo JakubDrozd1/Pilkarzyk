@@ -27,6 +27,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
 import { NotificationService } from 'src/app/service/notification/notification.service'
 import { RouterLink } from '@angular/router'
+import { getLocalISOString } from 'src/app/helper/localISOString'
 
 @Component({
   selector: 'app-home-content',
@@ -93,7 +94,7 @@ export class HomeContentComponent implements OnInit {
         onPage: -1,
         sortColumn: 'DATE_MEETING',
         sortMode: 'ASC',
-        dateFrom: this.formattedDateTime,
+        dateFrom: getLocalISOString(new Date()),
         idUser: this.userService.loggedUser.ID_USER,
         answer: 'yes',
         withMessages: true,
@@ -103,7 +104,7 @@ export class HomeContentComponent implements OnInit {
         onPage: -1,
         sortColumn: 'DATE_MEETING',
         sortMode: 'ASC',
-        dateFrom: this.formattedDateTime,
+        dateFrom: getLocalISOString(new Date()),
         idUser: this.userService.loggedUser.ID_USER,
         answer: 'no',
         withMessages: true,
@@ -113,7 +114,7 @@ export class HomeContentComponent implements OnInit {
         onPage: 5,
         sortColumn: 'DATE_MEETING',
         sortMode: 'DESC',
-        dateTo: moment().format(),
+        dateTo: getLocalISOString(new Date()),
         idUser: this.userService.loggedUser.ID_USER,
         withMessages: true,
       }),

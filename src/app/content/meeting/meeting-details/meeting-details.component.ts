@@ -1,20 +1,14 @@
 import { TeamsApi } from './../../../../../libs/api-client/api/teams.api'
 import { CommonModule } from '@angular/common'
-import { Component, ElementRef, HostListener, OnInit } from '@angular/core'
+import { Component, ElementRef, OnInit } from '@angular/core'
 import {
   AlertController,
   IonicModule,
   ModalController,
-  NavController,
   RefresherEventDetail,
 } from '@ionic/angular'
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  Router,
-  RouterLink,
-} from '@angular/router'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import {
   GUESTS,
   GetMeetingGroupsResponse,
@@ -39,10 +33,10 @@ import * as moment from 'moment'
 import { IonRefresherCustomEvent } from '@ionic/core'
 import { MeetingTeamListComponent } from '../meeting-team-list/meeting-team-list.component'
 import { FormsModule } from '@angular/forms'
-import iro from '@jaames/iro'
 import { AddTeamModalComponent } from 'src/app/modal/add-team-modal/add-team-modal.component'
 import { AddGuestModalComponent } from 'src/app/modal/add-guest-modal/add-guest-modal.component'
 import { MeetingComponent } from 'src/app/form/meeting/meeting.component'
+import { getLocalISOString } from 'src/app/helper/localISOString'
 
 @Component({
   selector: 'app-meeting-details',
@@ -99,6 +93,7 @@ export class MeetingDetailsComponent implements OnInit {
   idGroup: number = 0
   modalOpened: boolean = false
   alertOpened: boolean = false
+  isExpired: boolean = false
 
   constructor(
     private route: ActivatedRoute,
@@ -121,7 +116,7 @@ export class MeetingDetailsComponent implements OnInit {
     this.defaultAnswer = {
       Answer: null,
     }
-    this.currentDate = moment().toISOString()
+    this.currentDate = getLocalISOString(new Date())
     this.subscription.add(
       this.refreshDataService.refreshSubject.subscribe((index) => {
         if (index === 'meeting-details') {
@@ -192,6 +187,12 @@ export class MeetingDetailsComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.meeting = response
+          const currentTime = new Date().getTime()
+          const meetingTime = new Date(this.meeting.DateMeeting ?? 0).getTime()
+          const decisionTime = new Date(
+            (this.meeting.WaitingTimeDecision ?? 60) * 60000
+          ).getTime()
+          this.isExpired = meetingTime - decisionTime < currentTime
           forkJoin({
             messages: this.messagesApi.getAllMessages({
               idMeeting: Number(this.meeting.IdMeeting),

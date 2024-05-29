@@ -59,6 +59,29 @@
       </ion-modal>
 
       <ion-item lines="none">
+        <ion-button style="padding-right: 10px" (click)="removeMinutes()">
+          <ion-icon size="large" name="remove-outline"></ion-icon>
+        </ion-button>
+
+        <ion-input
+          class="border"
+          min="0"
+          helperText=" "
+          [label]="'Time to make a decision' | translate"
+          labelPlacement="floating"
+          formControlName="changeDecisionTime"
+          placeholder="x:xx"
+          [maskito]="timeMask"
+          [maskitoElement]="maskPredicate"
+          style="max-width: 50%"
+        >
+        </ion-input>
+        <ion-button style="padding-left: 10px" (click)="addMinutes()">
+          <ion-icon size="large" name="add-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+
+      <ion-item lines="none">
         <ion-input
           class="border"
           helperText=" "

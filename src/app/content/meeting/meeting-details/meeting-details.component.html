@@ -5,18 +5,16 @@
         <ion-icon size="large" name="arrow-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-    @if(isReady && currentDate<(meeting.DateMeeting??0)){
+    @if(isReady){
     <div style="display: flex; flex-direction: row-reverse">
+      @if(!isExpired){
       <ion-label class="click" (click)="showAlert()">
-        <ion-icon
-          [color]="color"
-          slot="end"
-          size="large"
-          name="sync-outline"
-        ></ion-icon>
+        <ion-icon [color]="color" slot="end" size="large" name="sync-outline">
+        </ion-icon>
       </ion-label>
-      @if(userService.loggedUser.ID_USER==meeting.IdAuthor ||
-      userService.loggedUser.IS_ADMIN){
+      } @if((userService.loggedUser.ID_USER==meeting.IdAuthor ||
+      userService.loggedUser.IS_ADMIN) && currentDate < (meeting.DateMeeting??0)
+      ){
       <ion-label class="click" [routerLink]="['edit']">
         <ion-icon slot="end" size="large" name="create-outline"></ion-icon>
       </ion-label>

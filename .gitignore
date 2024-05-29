@@ -44,3 +44,5 @@ Thumbs.db
 src/environments/environment.development.ts
 src/environments/environment.prod.ts
 capacitor.config.ts
+capacitor.config.develop.ts
+capacitor.config.prod.ts

@@ -45,5 +45,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+  <key>NSContactsUsageDescription</key>
+  <string>Potrzebujemy Twojej zgody, abyś mógł w prosty sposób dodawać znajomych do grupy</string>
 </dict>
 </plist>

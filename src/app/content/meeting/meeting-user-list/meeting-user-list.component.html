@@ -28,15 +28,14 @@
         color="danger"
         name="alert-circle-outline"
       ></ion-icon>
-      } @if(currentDate<(user.DateMeeting??0)){
-      @if(user.IdUser==userService.loggedUser.ID_USER){
+      } @if(user.IdUser==userService.loggedUser.ID_USER && !isExpired){
       <ion-icon
         class="click"
         (click)="showAlert()"
         size="large"
         name="sync-circle-outline"
       ></ion-icon>
-      }
+      } @if(currentDate<(user.DateMeeting??0)){
       @if((userService.loggedUser.IS_ADMIN||userService.loggedUser.ID_USER==user.IdAuthor)
       && user.IdUser==null){
       <ion-icon

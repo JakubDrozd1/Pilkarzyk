@@ -1,3 +1,4 @@
+import { waitForAsync } from '@angular/core/testing'
 import { TeamsApi } from './../../../../libs/api-client/api/teams.api'
 import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
@@ -35,6 +36,13 @@ import { OneToTenValidator } from 'src/app/helper/customValidators'
 import { Capacitor } from '@capacitor/core'
 import { Device } from '@capacitor/device'
 import { EditTeamGeneratorModalComponent } from 'src/app/modal/edit-team-generator-modal/edit-team-generator-modal.component'
+import {
+  convertMinutesToString,
+  convertStringToMinutes,
+  getLocalISOString,
+} from 'src/app/helper/localISOString'
+import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core'
+import { MaskitoModule } from '@maskito/angular'
 
 @Component({
   selector: 'app-meeting',
@@ -50,6 +58,7 @@ import { EditTeamGeneratorModalComponent } from 'src/app/modal/edit-team-generat
     SpinnerComponent,
     TeamGeneratorComponent,
     EditTeamGeneratorModalComponent,
+    MaskitoModule,
   ],
 })
 export class MeetingComponent implements OnInit {
@@ -100,6 +109,11 @@ export class MeetingComponent implements OnInit {
     },
   ]
   alertOpened: boolean = false
+  readonly timeMask: MaskitoOptions = {
+    mask: [/\d/, ':', /\d/, /\d/],
+  }
+  readonly maskPredicate: MaskitoElementPredicateAsync = async (el) =>
+    (el as HTMLIonInputElement).getInputElement()
 
   constructor(
     private fb: FormBuilder,
@@ -124,6 +138,7 @@ export class MeetingComponent implements OnInit {
       teams: [false],
       isIndependent: [false],
       quantityTeams: [],
+      changeDecisionTime: ['1:00', Validators.required],
     })
   }
 
@@ -221,6 +236,9 @@ export class MeetingComponent implements OnInit {
                     : this.idGroup,
                   IdAuthor: this.userService.loggedUser.ID_USER,
                   IsIndependent: this.meetingForm.value.isIndependent,
+                  WaitingTimeDecision: convertStringToMinutes(
+                    this.meetingForm.value.changeDecisionTime
+                  ),
                 },
                 Message: {
                   IdUser: this.userService.loggedUser.ID_USER,
@@ -264,6 +282,9 @@ export class MeetingComponent implements OnInit {
                     : this.idGroup,
                   IdAuthor: this.userService.loggedUser.ID_USER,
                   IsIndependent: this.meetingForm.value.isIndependent,
+                  WaitingTimeDecision: convertStringToMinutes(
+                    this.meetingForm.value.changeDecisionTime
+                  ),
                 },
                 Message: {
                   IdUser: this.userService.loggedUser.ID_USER,
@@ -300,17 +321,16 @@ export class MeetingComponent implements OnInit {
                 ? this.meetingForm.value.description.trim()
                 : null,
               IsIndependent: this.meetingForm.value.isIndependent,
-              Message: {
-                IdMeeting: this.idMeeting,
-                IdUser: this.userService.loggedUser.ID_USER,
-                Answer: this.meetingForm.value.presence ? 'yes' : 'no',
-              },
+              WaitingTimeDecision: convertStringToMinutes(
+                this.meetingForm.value.changeDecisionTime
+              ),
               Column: [
                 'DATE_MEETING',
                 'PLACE',
                 'QUANTITY',
                 'DESCRIPTION',
                 'IS_INDEPENDENT',
+                'WAITING_TIME_DECISION',
               ],
             },
           })
@@ -361,6 +381,11 @@ export class MeetingComponent implements OnInit {
             this.meetingForm
               .get('isIndependent')
               ?.setValue(this.meeting.IsIndependent)
+            this.meetingForm
+              .get('changeDecisionTime')
+              ?.setValue(
+                convertMinutesToString(this.meeting.WaitingTimeDecision ?? 60)
+              )
             this.isReady = true
           },
           error: (error) => {
@@ -379,6 +404,9 @@ export class MeetingComponent implements OnInit {
       this.meetingForm.get('place')?.reset()
       this.meetingForm.get('quantity')?.reset()
       this.meetingForm.get('description')?.reset()
+      this.meetingForm
+        .get('changeDecisionTime')
+        ?.setValue(convertMinutesToString(60))
       this.isReady = false
       this.meetingsApi
         .getAllMeetings({
@@ -412,6 +440,22 @@ export class MeetingComponent implements OnInit {
                       this.meetingForm
                         .get('isIndependent')
                         ?.setValue(this.meeting.IsIndependent)
+                      let current = new Date()
+
+                      let date = this.combineDateAndTime(
+                        current,
+                        new Date(this.meeting.DateMeeting ?? 0)
+                      )
+                      this.meetingForm
+                        .get('dateMeeting')
+                        ?.setValue(getLocalISOString(date))
+                      this.meetingForm
+                        .get('changeDecisionTime')
+                        ?.setValue(
+                          convertMinutesToString(
+                            this.meeting.WaitingTimeDecision ?? 60
+                          )
+                        )
                     }
                     this.teams = response
                     if (this.teams.length > 0) {
@@ -597,5 +641,41 @@ export class MeetingComponent implements OnInit {
       replaceUrl: true,
     })
     this.alertOpened = false
+  }
+
+  combineDateAndTime(date1: Date, date2: Date): Date {
+    const year = date1.getFullYear()
+    const month = date1.getMonth()
+    const day = date1.getDate()
+
+    const hours = date2.getHours()
+    const minutes = date2.getMinutes()
+    const seconds = date2.getSeconds()
+    const milliseconds = date2.getMilliseconds()
+
+    return new Date(year, month, day, hours, minutes, seconds, milliseconds)
+  }
+
+  removeMinutes() {
+    let convertedTime = convertStringToMinutes(
+      this.meetingForm.value.changeDecisionTime
+    )
+    if (convertedTime < 14) {
+      convertedTime = 0
+    } else {
+      convertedTime = convertedTime - 15
+    }
+    this.meetingForm
+      .get('changeDecisionTime')
+      ?.setValue(convertMinutesToString(convertedTime))
+  }
+
+  addMinutes() {
+    let convertedTime = convertStringToMinutes(
+      this.meetingForm.value.changeDecisionTime
+    )
+    this.meetingForm
+      .get('changeDecisionTime')
+      ?.setValue(convertMinutesToString(convertedTime + 15))
   }
 }

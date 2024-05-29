@@ -52,6 +52,7 @@ export interface GetAllMessagesRequestParams {
     waitingTime?: string;
     isAvatar?: boolean;
     answer?: string;
+    isDelayed?: boolean;
 }
 
 export interface GetMessageByIdRequestParams {
@@ -299,6 +300,7 @@ export class MessagesApi {
         const waitingTime = requestParameters.waitingTime;
         const isAvatar = requestParameters.isAvatar;
         const answer = requestParameters.answer;
+        const isDelayed = requestParameters.isDelayed;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (page !== undefined && page !== null) {
@@ -344,6 +346,10 @@ export class MessagesApi {
         if (answer !== undefined && answer !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>answer, 'Answer');
+        }
+        if (isDelayed !== undefined && isDelayed !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>isDelayed, 'IsDelayed');
         }
 
         let localVarHeaders = this.defaultHeaders;

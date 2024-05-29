@@ -11,6 +11,7 @@ import { MeetingUserListComponent } from '../../meeting/meeting-user-list/meetin
 import {
   GUESTS,
   GetMessagesUsersMeetingsResponse,
+  GroupsApi,
   GuestsApi,
   MessagesApi,
 } from 'libs/api-client'
@@ -46,6 +47,7 @@ export class MessageUserListComponent implements OnInit {
   idGroup: number = 0
   idAuthor: number = 0
   modalOpened: boolean = false
+  groupName: string = ''
 
   constructor(
     private route: ActivatedRoute,
@@ -56,7 +58,8 @@ export class MessageUserListComponent implements OnInit {
     public translate: TranslateService,
     private router: Router,
     public userService: UserService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private groupsApi: GroupsApi
   ) {}
 
   ngOnInit() {
@@ -97,6 +100,18 @@ export class MessageUserListComponent implements OnInit {
         }),
       }).subscribe({
         next: (responses) => {
+          this.groupsApi
+            .getGroupById({
+              groupId: responses.messages[0].IdGroup ?? 0,
+            })
+            .subscribe({
+              next: (response) => {
+                this.groupName = response.NAME ?? ''
+              },
+              error: (error) => {
+                this.alert.handleError(error)
+              },
+            })
           this.idAuthor = responses.messages[0].IdAuthor ?? 0
           this.messages = responses.guests.map((guest) => ({
             Answer: 'yes',

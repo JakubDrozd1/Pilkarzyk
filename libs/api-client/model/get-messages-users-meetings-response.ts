@@ -34,5 +34,6 @@ export interface GetMessagesUsersMeetingsResponse {
     IdTeam?: number | null;
     IdGuest?: number | null;
     IsIndependent?: boolean | null;
+    WaitingTimeDecision?: number | null;
 }
 

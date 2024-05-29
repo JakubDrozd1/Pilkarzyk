@@ -22,5 +22,6 @@ export interface GetMeetingGroupsResponse {
     IdGroup?: number | null;
     IsIndependent?: boolean | null;
     IdMessage?: number | null;
+    WaitingTimeDecision?: number | null;
 }
 

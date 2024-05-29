@@ -85,6 +85,7 @@ export class LogoutComponent implements OnInit {
           },
           error: (error) => {
             console.error(error.error)
+            this.refresh()
           },
         })
     })

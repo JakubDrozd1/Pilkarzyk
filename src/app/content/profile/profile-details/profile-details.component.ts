@@ -119,7 +119,7 @@ export class ProfileDetailsComponent implements OnInit {
     }
     if (window.location.pathname.includes('groups')) {
       if (window.location.pathname.includes('meeting')) {
-        this.router.navigate(['/groups' + meetingPath])
+        this.router.navigate(['/groups/' + this.idGroup + meetingPath])
       } else if (this.idGroup > 0) {
         this.router.navigate(['/groups/' + this.idGroup])
       } else {

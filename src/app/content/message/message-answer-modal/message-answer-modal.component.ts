@@ -22,6 +22,7 @@ import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service
 import { SpinnerComponent } from '../../../helper/spinner/spinner.component'
 import { Capacitor } from '@capacitor/core'
 import { Device } from '@capacitor/device'
+import { getLocalISOString } from 'src/app/helper/localISOString'
 
 @Component({
   selector: 'app-message-answer-modal',
@@ -101,10 +102,16 @@ export class MessageAnswerModalComponent implements OnInit {
             })
             .subscribe({
               next: (response) => {
-                this.maxDate = moment(response.DateMeeting)
-                  .clone()
-                  .subtract(2, 'hours')
-                  .format()
+                const meetingTime = new Date(
+                  response.DateMeeting ?? 0
+                ).getTime()
+                const decisionTime = new Date(
+                  (response.WaitingTimeDecision ?? 60) * 60000
+                ).getTime()
+
+                this.maxDate = getLocalISOString(
+                  new Date(meetingTime - decisionTime)
+                )
                 this.isReady = true
               },
               error: (error) => {

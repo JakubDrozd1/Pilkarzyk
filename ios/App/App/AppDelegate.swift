@@ -54,4 +54,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NotificationCenter.default.post(name: .capacitorDidFailToRegisterForRemoteNotifications, object: error)
     }
 
+    func application(_ application: UIApplication,
+                   didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+                    FirebaseApp.configure()
+                    return true
+         }
+    
+    @main
+    struct YourApp: App {
+        @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+        var body: some Scene {
+            WindowGroup {
+                NavigationView {
+                ContentView()
+            }
+        }
+    }
 }

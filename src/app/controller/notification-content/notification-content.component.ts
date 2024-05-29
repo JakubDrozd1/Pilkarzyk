@@ -29,6 +29,7 @@ import { IonRefresherCustomEvent } from '@ionic/core'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
 import { RouterLink } from '@angular/router'
+import { getLocalISOString } from 'src/app/helper/localISOString'
 
 @Component({
   selector: 'app-notification-content',
@@ -167,7 +168,7 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
         onPage: -1,
         sortColumn: 'DATE_MEETING',
         sortMode: 'ASC',
-        dateFrom: moment().add(this.delay, 'hours').format(),
+        dateFrom: getLocalISOString(new Date()),
         isAvatar: false,
       }),
       invites: this.groupInvite.getGroupInviteByIdUser({
@@ -180,6 +181,14 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
     }).subscribe({
       next: (responses) => {
         this.messages = responses.messages
+          .filter((message) => {
+            const currentTime = new Date().getTime()
+            const meetingTime = new Date(message.DateMeeting ?? 0).getTime()
+            const decisionTime = new Date(
+              (message.WaitingTimeDecision ?? 60) * 60000
+            ).getTime()
+            return meetingTime - decisionTime > currentTime
+          })
           .filter(
             (message) =>
               message.Answer === 'readed' ||
@@ -196,6 +205,7 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
             const answerB = b.Answer || 'null'
             return priority[answerA] - priority[answerB]
           })
+        console.log(this.messages)
         this.updateNotification()
         this.invite = responses.invites
         this.isReady = true

@@ -9,7 +9,6 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { GetMessageRequest } from './get-message-request';
 
 
 export interface GetUpdateMeetingRequest { 
@@ -18,7 +17,7 @@ export interface GetUpdateMeetingRequest {
     Quantity?: number | null;
     Description?: string | null;
     IsIndependent?: boolean | null;
+    WaitingTimeDecision?: number | null;
     Column?: Array<string> | null;
-    Message?: GetMessageRequest;
 }
 

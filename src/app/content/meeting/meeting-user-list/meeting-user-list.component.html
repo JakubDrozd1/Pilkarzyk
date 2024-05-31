@@ -3,8 +3,16 @@
 <ion-card>
   <ion-card-content>
     <ion-item [color]="color" lines="full" class="title">
+      @if(user.TeamColor){
+        <ion-icon
+            class="icon"
+            slot="start"
+            name="shirt"
+            [style.color]="user.TeamColor"
+          ></ion-icon>
+      }
       @if(user.Avatar == null){
-      <ion-avatar slot="start">
+      <ion-avatar slot="start" class="avatar">
         <img
           alt="img"
           src="https://ionicframework.com/docs/img/demos/avatar.svg"

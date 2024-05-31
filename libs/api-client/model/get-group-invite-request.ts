@@ -17,5 +17,6 @@ export interface GetGroupInviteRequest {
     IdAuthor?: number;
     Email?: string | null;
     PhoneNumber?: number | null;
+    EmailOrPhoneNumber?: string | null;
 }
 

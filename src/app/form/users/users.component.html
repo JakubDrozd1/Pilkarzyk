@@ -4,50 +4,29 @@
   <div class="padding">
     <ion-text>
       {{ "Invite a new user using email" | translate }}
-    </ion-text>
-  </div>
-  <ion-item lines="none" class="padding">
-    <ion-input
-      class="border"
-      [errorText]="'Incorrect email format' | translate"
-      formControlName="email"
-      inputmode="email"
-      labelPlacement="floating"
-      [label]="'Email' | translate"
-      type="email"
-      placeholder="email@domain.com"
-    >
-    </ion-input>
-  </ion-item>
-  <div class="padding">
-    <ion-text>
       {{ "or phone number" | translate }}
     </ion-text>
   </div>
   <ion-item lines="none" class="padding">
     <ion-input
       class="border"
-      [errorText]="'Number is too short' | translate"
-      formControlName="phoneNumber"
+      [errorText]="'Incorrect email or phone number format' | translate"
+      formControlName="emailOrPhoneNumber"
       labelPlacement="floating"
-      [label]="'Phone number' | translate"
-      placeholder="xxx-xxx-xxx"
-      [maskito]="phoneMask"
-      [maskitoElement]="maskPredicate"
-      type="tel"
+      [label]="label"
+      type="text"
     >
     </ion-input>
     @if(isMobile){
-    <ion-fab-button
+      <ion-fab-button
       size="small"
       slot="end"
       (click)="openModalAddUserFromContact()"
-    >
+      >
       <ion-icon name="book-outline"> </ion-icon>
     </ion-fab-button>
-    }
+  }
   </ion-item>
-
   <ion-button type="submit" shape="round" expand="full" class="padding">
     {{ "Add" | translate }}
   </ion-button>

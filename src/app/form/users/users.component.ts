@@ -41,14 +41,12 @@ export class UsersComponent implements OnInit {
   addNewUserForm: FormGroup
   isReadyNewUser: boolean = true
   isReadyExistingUser: boolean = false
-  readonly phoneMask: MaskitoOptions = {
-    mask: [/\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/],
-  }
-  readonly maskPredicate: MaskitoElementPredicateAsync = async (el) =>
-    (el as HTMLIonInputElement).getInputElement()
+
   intNumber: number = 0
   modalOpened: boolean = false
   isMobile: boolean = false
+
+  label = `${this.translate.instant('Email')} / ${this.translate.instant('Phone number')}`
 
   constructor(
     private fb: FormBuilder,
@@ -61,8 +59,14 @@ export class UsersComponent implements OnInit {
     private router: Router
   ) {
     this.addNewUserForm = this.fb.group({
-      email: ['', [Validators.email]],
-      phoneNumber: ['', [Validators.minLength(11)]],
+      emailOrPhoneNumber: [
+        '', 
+        [
+          Validators.pattern(
+            "^(?:\\d{9}|\\w+@\\w+\\.\\w{2,3}|\\w+.\\w+@\\w+\\.\\w{2,3}\\.\\w{2,3}|\\w+.\\w+@\\w+\\.\\w{2,3})"
+          ),
+        ],
+      ],
     })
   }
 
@@ -76,21 +80,15 @@ export class UsersComponent implements OnInit {
     this.addNewUserForm.markAllAsTouched()
     if (this.addNewUserForm.valid) {
       if (
-        this.addNewUserForm.value.phoneNumber ||
-        this.addNewUserForm.value.email
+        this.addNewUserForm.value.emailOrPhoneNumber
       ) {
         this.isReadyNewUser = false
-        if (this.addNewUserForm.value.phoneNumber) {
-          let str: string = this.addNewUserForm.value.phoneNumber
-          this.intNumber = parseInt(str.replace(/-/g, ''), 10)
-        }
         this.groupInviteApi
           .addGroupInvite({
             getGroupInviteRequest: {
               IdGroup: this.idGroup,
               IdAuthor: this.userService.loggedUser.ID_USER,
-              Email: this.addNewUserForm.value.email?.toLowerCase().trim(),
-              PhoneNumber: this.intNumber,
+              EmailOrPhoneNumber: this.addNewUserForm.value.emailOrPhoneNumber?.toLowerCase().trim(),
             },
           })
           .subscribe({

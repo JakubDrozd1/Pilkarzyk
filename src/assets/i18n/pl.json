@@ -155,7 +155,7 @@
   "ContactInfo2": " lub przez gadu-gadu:",
   "Participated in": "Uczestniczył w",
   "meetings": "spotkaniach",
-  "Frequency:": "Frekfencja:",
+  "Frequency:": "Frekwencja:",
   "Meeting invitation": "Zaproszenie do spotkania",
   "Changing a decision in a meeting (for the organizer)": "Zmiana decyzji w spotkaniu (dla organizatora)",
   "Notifications received": "Otrzymywane powiadomienia",
@@ -217,6 +217,7 @@
   "Adding to a group": "Dodanie do grupy",
   "Cancellation of the meeting": "Odwołanie spotkania",
   "Time to make a decision": "Czas na podjęcie decyzji",
+  "Dark mode": "Ciemny motyw",
 
   "Group is null": "Grupa nie istnieje.",
   "User is null": "Użytkownik nie istnieje.",

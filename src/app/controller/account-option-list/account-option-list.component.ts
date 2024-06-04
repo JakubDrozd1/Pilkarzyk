@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
-import { IonicModule } from '@ionic/angular'
+import { IonicModule, ToggleChangeEventDetail } from '@ionic/angular'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { SpinnerComponent } from 'src/app/helper/spinner/spinner.component'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { LogoutComponent } from '../../content/profile/logout/logout.component'
 import { UserService } from 'src/app/service/user/user.service'
 import { NotificationService } from 'src/app/service/notification/notification.service'
+import { IonToggleCustomEvent } from '@ionic/core'
+import { FormsModule } from '@angular/forms'
 
 @Component({
   selector: 'app-account-option-list',
@@ -20,9 +22,11 @@ import { NotificationService } from 'src/app/service/notification/notification.s
     TranslateModule,
     RouterLink,
     LogoutComponent,
+    FormsModule,
   ],
 })
 export class AccountOptionListComponent implements OnInit {
+  paletteToggle: boolean = false
   pickerColumns = [
     {
       name: 'languages',
@@ -62,6 +66,7 @@ export class AccountOptionListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.inizializeTheme()
     window.addEventListener('popstate', () => {
       if (this.isPickerOpen) {
         this.setOpen(false)
@@ -80,5 +85,24 @@ export class AccountOptionListComponent implements OnInit {
       })
     }
     this.isPickerOpen = isOpen
+  }
+
+  toggleChange($event: IonToggleCustomEvent<ToggleChangeEventDetail<any>>) {
+    let isAlternateTheme = $event.detail.checked
+    if (isAlternateTheme) {
+      localStorage.setItem('theme', 'dark')
+      document.body.classList.add('alternate-theme')
+    } else {
+      localStorage.setItem('theme', 'light')
+      document.body.classList.remove('alternate-theme')
+    }
+  }
+  inizializeTheme() {
+    let theme = localStorage.getItem('theme')
+    if (theme == 'dark') {
+      this.paletteToggle = true
+    } else {
+      this.paletteToggle = false
+    }
   }
 }

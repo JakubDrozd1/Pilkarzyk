@@ -22,11 +22,6 @@
   overflow: hidden;
 }
 
-ion-tab-bar {
-  background-color: var(--ion-color-primary);
-  --background: $var(--ion-color-primary);
-}
-
 ion-tab-button.tab-selected {
   --color-selected: var(--ion-color-secondary) !important;
   font-weight: bold;
@@ -75,7 +70,7 @@ ion-tab-button.tab-selected::before {
 
 ion-tab-button::before {
   content: "";
-  height: 7px;
+  // height: 7px;
   width: 100%;
   background-color: var(--ion-color-secondary);
   position: absolute;
@@ -89,6 +84,10 @@ ion-tab-button::before {
 ion-fab[vertical="bottom"][horizontal="end"] ion-fab-list {
   right: 0;
   align-items: flex-end;
+}
+
+ion-fab{
+    margin-bottom: 10px;
 }
 
 .custom-fab {
@@ -182,6 +181,7 @@ ion-toast::part(button):active {
 
 ion-card {
   border-radius: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, .1);
 }
 ion-textarea {
   --border-radius: 20px;
@@ -210,4 +210,8 @@ ion-modal {
     margin-bottom: env(safe-area-inset-bottom);
     height: calc(100% - constant(safe-area-inset-top));
     height: calc(100% - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+}
+.alternate-theme ion-tab-bar {
+  --ion-background-color: var(--ion-color-primary);
+  --background: var(--ion-color-primary)
 }

@@ -131,9 +131,9 @@ export class MeetingComponent implements OnInit {
   ) {
     this.meetingForm = this.fb.group({
       dateMeeting: ['', Validators.required],
-      place: ['', Validators.required],
+      place: ['', [Validators.required, Validators.maxLength(50)]],
       quantity: ['', Validators.required],
-      description: [''],
+      description: ['', Validators.maxLength(100)],
       presence: [true],
       teams: [false],
       isIndependent: [false],

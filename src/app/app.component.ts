@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, NgZone, OnInit } from '@angular/core'
+import { Component, NgZone, OnInit, Renderer2 } from '@angular/core'
 import { Router, RouterModule } from '@angular/router'
 import { Capacitor } from '@capacitor/core'
 import { IonicModule } from '@ionic/angular'
@@ -50,7 +50,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.setLanguage()
-
+    this.inizializeTheme()
     if (Capacitor.isNativePlatform()) {
       this.registerNotifications()
       this.registerContacts()
@@ -85,6 +85,15 @@ export class AppComponent implements OnInit {
           })
         }
       )
+    }
+  }
+
+  inizializeTheme() {
+    let theme = localStorage.getItem('theme')
+    if (theme == 'dark') {
+      document.body.classList.add('alternate-theme')
+    } else {
+      document.body.classList.remove('alternate-theme')
     }
   }
 

@@ -45,6 +45,18 @@
       </ion-item>
     </ion-card-content>
     <ion-card-content>
+      <ion-item lines="full">
+        <ion-icon name="moon-outline"></ion-icon>
+        <ion-toggle
+          [(ngModel)]="paletteToggle"
+          (ionChange)="toggleChange($event)"
+          justify="space-between"
+        >
+          {{ "Dark mode" | translate }}
+        </ion-toggle>
+      </ion-item>
+    </ion-card-content>
+    <ion-card-content>
       <ion-item
         lines="full"
         [routerLink]="['privacy']"

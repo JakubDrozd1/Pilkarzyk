@@ -62,23 +62,30 @@
   [ngStyle]="{ opacity: !isCurrent ? '0.5' : '1' }"
 >
   <ion-card-header>
-    <ion-card-title>
-      <div style="display: flex">
-        <div style="text-align: left; width: 100%">
-          <ion-label>
-            {{ meeting.Place }}
-          </ion-label>
-        </div>
-        <div style="text-align: right; width: 100%">
-          <ion-label> {{ meeting.Name }}</ion-label>
-        </div>
+    <ion-label color="primary" style="padding-bottom: 10px">
+      {{ meeting.Name }}</ion-label
+    >
+    <div style="display: flex">
+      <div class="text-edit" style="text-align: left; width: 100%">
+        <ion-label style="font-size: 14px; display: flex">
+          <ion-icon
+            style="font-size: 20px"
+            color="primary"
+            name="location-outline"
+          >
+          </ion-icon>
+          {{ meeting.Place }}
+        </ion-label>
       </div>
-    </ion-card-title>
+      <div class="text-edit" style="text-align: right; width: 11rem">
+        <ion-label style="font-size: 14px">
+          {{ meeting.DateMeeting | date : "dd.MM.yyyy HH:mm" }}
+        </ion-label>
+      </div>
+    </div>
   </ion-card-header>
+  <div class="border"></div>
   <ion-card-content>
-    <ion-label>
-      {{ meeting.DateMeeting | date : "dd.MM.yyyy HH:mm" }}
-    </ion-label>
     <div style="display: flex">
       <div style="text-align: left; width: 100%">
         <ion-chip>
@@ -94,11 +101,26 @@
             <img alt="img" [src]="images" />
           </ion-avatar>
           }
-          <ion-label> {{ user.FIRSTNAME }} {{ user.SURNAME }} </ion-label>
+          <div
+            style="
+              display: flex;
+              flex-direction: column-reverse;
+              align-items: center;
+            "
+          >
+            <ion-label style="font-size: 13px"
+              >{{ user.FIRSTNAME }} {{ user.SURNAME }}
+            </ion-label>
+          </div>
         </ion-chip>
       </div>
       <div class="people">
-        <ion-label color="dark" class="label">
+        <ion-label class="text-edit" color="dark" class="label">
+          <ion-icon
+            style="padding-right: 10px; font-size: 20px"
+            color="primary"
+            name="people-outline"
+          ></ion-icon>
           {{ acceptMeeting }} / {{ meeting.Quantity }}
         </ion-label>
       </div>

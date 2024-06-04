@@ -75,9 +75,9 @@ export class GroupsEditComponent implements OnInit {
     private refreshDataService: RefreshDataService
   ) {
     this.editGroupForm = this.fb.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.required, Validators.maxLength(100)]],
       isModerated: [],
-      description: [],
+      description: [Validators.maxLength(300)],
     })
   }
 

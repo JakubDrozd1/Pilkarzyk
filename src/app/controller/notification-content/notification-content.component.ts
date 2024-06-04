@@ -205,7 +205,6 @@ export class NotificationContentComponent implements OnInit, OnDestroy {
             const answerB = b.Answer || 'null'
             return priority[answerA] - priority[answerB]
           })
-        console.log(this.messages)
         this.updateNotification()
         this.invite = responses.invites
         this.isReady = true

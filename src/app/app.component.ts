@@ -90,10 +90,17 @@ export class AppComponent implements OnInit {
 
   inizializeTheme() {
     let theme = localStorage.getItem('theme')
-    if (theme == 'dark') {
-      document.body.classList.add('alternate-theme')
-    } else {
-      document.body.classList.remove('alternate-theme')
+    switch (theme) {
+      case 'dark':
+        document.body.classList.add('alternate-theme')
+        break
+      case 'light':
+        document.body.classList.remove('alternate-theme')
+        break
+      default:
+        document.body.classList.add('alternate-theme')
+        localStorage.setItem('theme', 'dark')
+        break
     }
   }
 

@@ -90,7 +90,7 @@ export class CalendarContentComponent implements OnInit {
               let textColor, backgroundColor
               if (meetingDate.isBefore(currentDate, 'day')) {
                 textColor = 'var(--ion-color-tertiary-contrast)'
-                backgroundColor = 'var( --ion-color-tertiary)'
+                backgroundColor = 'var( --ion-color-secondary-tint)'
               } else if (meetingDate.isAfter(currentDate, 'day')) {
                 textColor = 'var(--ion-color-secondary-contrast)'
                 backgroundColor = 'var(--ion-color-secondary)'

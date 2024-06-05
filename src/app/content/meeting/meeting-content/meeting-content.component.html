@@ -62,15 +62,15 @@
   [ngStyle]="{ opacity: !isCurrent ? '0.5' : '1' }"
 >
   <ion-card-header>
-    <ion-label color="primary" style="padding-bottom: 10px">
-      {{ meeting.Name }}</ion-label
-    >
+    <ion-label class="title-menu">
+      {{ meeting.Name }}
+    </ion-label>
     <div style="display: flex">
       <div class="text-edit" style="text-align: left; width: 100%">
         <ion-label style="font-size: 14px; display: flex">
           <ion-icon
             style="font-size: 20px"
-            color="primary"
+            color="secondary"
             name="location-outline"
           >
           </ion-icon>
@@ -118,7 +118,7 @@
         <ion-label class="text-edit" color="dark" class="label">
           <ion-icon
             style="padding-right: 10px; font-size: 20px"
-            color="primary"
+            color="secondary"
             name="people-outline"
           ></ion-icon>
           {{ acceptMeeting }} / {{ meeting.Quantity }}

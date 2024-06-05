@@ -9,13 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { GetGroupInviteRequest } from './get-group-invite-request';
 
 
-export interface GetGroupInviteRequest { 
-    IdGroup?: number;
-    IdUser?: number | null;
-    IdAuthor?: number;
-    Email?: string | null;
-    PhoneNumber?: number | null;
+export interface GetGroupInviteWithEmailOrPhoneRequest { 
+    GroupInvite?: GetGroupInviteRequest;
+    EmailOrPhoneNumber?: string | null;
 }
 

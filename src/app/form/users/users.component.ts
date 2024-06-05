@@ -46,7 +46,9 @@ export class UsersComponent implements OnInit {
   modalOpened: boolean = false
   isMobile: boolean = false
 
-  label = `${this.translate.instant('Email')} / ${this.translate.instant('Phone number')}`
+  label = `${this.translate.instant('Email')} / ${this.translate.instant(
+    'Phone number'
+  )}`
 
   constructor(
     private fb: FormBuilder,
@@ -60,10 +62,10 @@ export class UsersComponent implements OnInit {
   ) {
     this.addNewUserForm = this.fb.group({
       emailOrPhoneNumber: [
-        '', 
+        '',
         [
           Validators.pattern(
-            "^(?:\\d{9}|\\w+@\\w+\\.\\w{2,3}|\\w+.\\w+@\\w+\\.\\w{2,3}\\.\\w{2,3}|\\w+.\\w+@\\w+\\.\\w{2,3})"
+            '^(?:\\d{9}|\\w+@\\w+\\.\\w{2,3}|\\w+.\\w+@\\w+\\.\\w{2,3}\\.\\w{2,3}|\\w+.\\w+@\\w+\\.\\w{2,3})'
           ),
         ],
       ],
@@ -79,16 +81,18 @@ export class UsersComponent implements OnInit {
   onSubmitNew() {
     this.addNewUserForm.markAllAsTouched()
     if (this.addNewUserForm.valid) {
-      if (
-        this.addNewUserForm.value.emailOrPhoneNumber
-      ) {
+      if (this.addNewUserForm.value.emailOrPhoneNumber) {
         this.isReadyNewUser = false
         this.groupInviteApi
           .addGroupInvite({
-            getGroupInviteRequest: {
-              IdGroup: this.idGroup,
-              IdAuthor: this.userService.loggedUser.ID_USER,
-              EmailOrPhoneNumber: this.addNewUserForm.value.emailOrPhoneNumber?.toLowerCase().trim(),
+            getGroupInviteWithEmailOrPhoneRequest: {
+              GroupInvite: {
+                IdGroup: this.idGroup,
+                IdAuthor: this.userService.loggedUser.ID_USER,
+              },
+              EmailOrPhoneNumber: this.addNewUserForm.value.emailOrPhoneNumber
+                ?.toLowerCase()
+                .trim(),
             },
           })
           .subscribe({

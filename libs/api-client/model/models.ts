@@ -6,6 +6,7 @@ export * from './get-chat-messages-response';
 export * from './get-create-group-request';
 export * from './get-group-invite-request';
 export * from './get-group-invite-response';
+export * from './get-group-invite-with-email-or-phone-request';
 export * from './get-group-request';
 export * from './get-groups-users-response';
 export * from './get-guest-request';

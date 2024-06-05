@@ -385,7 +385,9 @@ export class MeetingTeamComponent implements OnInit {
 
   isUserInTeam(team: TEAMS) {
     for (let user of this.arrays[team.ID_TEAM ?? 0]) {
-      return !(user.IdUser == this.userService.loggedUser.ID_USER)
+      if (user.IdUser == this.userService.loggedUser.ID_USER) {
+        return false
+      }
     }
     return true
   }

@@ -21,9 +21,9 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { GROUPINVITE } from '../model/groupinvite';
 // @ts-ignore
-import { GetGroupInviteRequest } from '../model/get-group-invite-request';
-// @ts-ignore
 import { GetGroupInviteResponse } from '../model/get-group-invite-response';
+// @ts-ignore
+import { GetGroupInviteWithEmailOrPhoneRequest } from '../model/get-group-invite-with-email-or-phone-request';
 // @ts-ignore
 import { GetMultipleGroupInviteRequest } from '../model/get-multiple-group-invite-request';
 
@@ -33,7 +33,7 @@ import { Configuration }                                     from '../configurat
 
 
 export interface AddGroupInviteRequestParams {
-    getGroupInviteRequest?: GetGroupInviteRequest;
+    getGroupInviteWithEmailOrPhoneRequest?: GetGroupInviteWithEmailOrPhoneRequest;
 }
 
 export interface AddMultipleGroupInviteRequestParams {
@@ -134,7 +134,7 @@ export class GroupInvitesApi {
     public addGroupInvite(requestParameters: AddGroupInviteRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
     public addGroupInvite(requestParameters: AddGroupInviteRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
     public addGroupInvite(requestParameters: AddGroupInviteRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
-        const getGroupInviteRequest = requestParameters.getGroupInviteRequest;
+        const getGroupInviteWithEmailOrPhoneRequest = requestParameters.getGroupInviteWithEmailOrPhoneRequest;
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -188,7 +188,7 @@ export class GroupInvitesApi {
         return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: getGroupInviteRequest,
+                body: getGroupInviteWithEmailOrPhoneRequest,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

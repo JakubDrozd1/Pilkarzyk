@@ -261,17 +261,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/GetGroupInviteRequest"
+                "$ref": "#/components/schemas/GetGroupInviteWithEmailOrPhoneRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/GetGroupInviteRequest"
+                "$ref": "#/components/schemas/GetGroupInviteWithEmailOrPhoneRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/GetGroupInviteRequest"
+                "$ref": "#/components/schemas/GetGroupInviteWithEmailOrPhoneRequest"
               }
             }
           }
@@ -1612,13 +1612,6 @@
             "in": "query",
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "IsDelayed",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
             }
           }
         ],
@@ -3531,6 +3524,19 @@
         },
         "additionalProperties": false
       },
+      "GetGroupInviteWithEmailOrPhoneRequest": {
+        "type": "object",
+        "properties": {
+          "GroupInvite": {
+            "$ref": "#/components/schemas/GetGroupInviteRequest"
+          },
+          "EmailOrPhoneNumber": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "GetGroupRequest": {
         "type": "object",
         "properties": {
@@ -3918,6 +3924,10 @@
           "IdTeam": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          },
+          "TeamColor": {
+            "type": "string",
             "nullable": true
           },
           "IdGuest": {

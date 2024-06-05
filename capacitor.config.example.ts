@@ -5,10 +5,10 @@ const config: CapacitorConfig = {
   appName: 'JaBall',
   webDir: 'dist/pilkarzyk',
   server: {
-    url: 'https://jaball.manowski.pl',
+    url: '',
     cleartext: true,
     androidScheme: 'https',
-    allowNavigation: ['https://jaball.manowski.pl:2100'],
+    allowNavigation: [''],
   },
   plugins: {
     Keyboard: {

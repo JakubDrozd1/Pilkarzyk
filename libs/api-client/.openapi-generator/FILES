@@ -26,6 +26,7 @@ model/get-chat-messages-response.ts
 model/get-create-group-request.ts
 model/get-group-invite-request.ts
 model/get-group-invite-response.ts
+model/get-group-invite-with-email-or-phone-request.ts
 model/get-group-request.ts
 model/get-groups-users-response.ts
 model/get-guest-request.ts

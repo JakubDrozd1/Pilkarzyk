@@ -32,9 +32,9 @@ export interface GetMessagesUsersMeetingsResponse {
     IdAuthor?: number | null;
     IdGroup?: number | null;
     IdTeam?: number | null;
+    TeamColor?: string | null;
     IdGuest?: number | null;
     IsIndependent?: boolean | null;
     WaitingTimeDecision?: number | null;
-    TeamColor?: string | null;
 }
 

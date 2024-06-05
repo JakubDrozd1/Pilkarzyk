@@ -16,7 +16,6 @@ import { Alert } from 'src/app/helper/alert'
 import { RefreshDataService } from 'src/app/service/refresh/refresh-data.service'
 import { UserService } from 'src/app/service/user/user.service'
 import { SpinnerComponent } from '../../helper/spinner/spinner.component'
-import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core'
 import { AddUserFromContactComponent } from 'src/app/modal/add-user-from-contact/add-user-from-contact.component'
 import { Capacitor } from '@capacitor/core'
 

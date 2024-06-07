@@ -98,8 +98,8 @@ export class AppComponent implements OnInit {
         document.body.classList.remove('alternate-theme')
         break
       default:
-        document.body.classList.add('alternate-theme')
-        localStorage.setItem('theme', 'dark')
+        document.body.classList.remove('alternate-theme')
+        localStorage.setItem('theme', 'light')
         break
     }
   }
